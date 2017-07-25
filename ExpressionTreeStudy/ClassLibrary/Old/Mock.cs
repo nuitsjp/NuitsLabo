@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace ClassLibrary
+namespace ClassLibrary.Old
 {
     public class Mock : Page, IPageLoadingAware<string>
     {

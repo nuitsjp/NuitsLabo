@@ -1,4 +1,4 @@
-﻿namespace ClassLibrary
+﻿namespace ClassLibrary.Old
 {
     public class Page
     {

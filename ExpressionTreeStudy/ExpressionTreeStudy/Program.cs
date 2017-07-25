@@ -6,7 +6,8 @@ namespace ExpressionTreeStudy
     {
         static void Main(string[] args)
         {
-            Tester.Test();
+            //Tester.Test();
+            TestClient.Invoke();
         }
     }
 }
