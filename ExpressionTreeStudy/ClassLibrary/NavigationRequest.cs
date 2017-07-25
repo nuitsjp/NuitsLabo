@@ -3,23 +3,18 @@ using System.Threading.Tasks;
 
 namespace ClassLibrary
 {
-    public class NavigationRequest<T> : INavigationRequest<T>
+    public class NavigationRequest<T> : INavigationRequest
     {
-        private Func<T, Task> _observer;
+        private INavigationAction _navigationAction;
 
-        public Func<T, Task> Observer
+        public INavigationAction NavigationAction
         {
-            set => _observer = value;
-        }
-
-        Func<object, Task> INavigationRequest.Observer
-        {
-            set => _observer = value as Func<T, Task>;
+            set => _navigationAction = value;
         }
 
         public Task RaiseAsync(T parameter = default(T))
         {
-            return _observer(parameter);
+            return _navigationAction.Navigate(parameter);
         }
 
     }

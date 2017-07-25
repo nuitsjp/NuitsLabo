@@ -5,12 +5,6 @@ namespace ClassLibrary
 {
     public interface INavigationRequest
     {
-        Func<object, Task> Observer { set; }
+        INavigationAction NavigationAction { set; }
     }
-
-    public interface INavigationRequest<out T> : INavigationRequest
-    {
-        new Func<T, Task> Observer { set; }
-    }
-
 }
