@@ -95,10 +95,10 @@ public class ModuleWeaver
             });
 
         //Find Debug.WriteLine(string) method
-        _debugWriteLineMethod = typeof(Console)
+        _debugWriteLineMethod = typeof(System.Diagnostics.Debug)
             .GetTypeInfo()
             .DeclaredMethods
-            .Where(x => x.Name == nameof(Console.WriteLine))
+            .Where(x => x.Name == nameof(System.Diagnostics.Debug.WriteLine))
             .Single(x =>
             {
                 var parameters = x.GetParameters();
@@ -151,7 +151,7 @@ public class ModuleWeaver
 
     private IEnumerable<Instruction> GetInstructions(MethodDefinition method)
     {
-        yield return Instruction.Create(OpCodes.Ldstr, $"DEBUG: {method.Name}({{0}})");
+        yield return Instruction.Create(OpCodes.Ldstr, $"DEBUG: {method.DeclaringType.Name}#{method.Name}()");
         yield return Instruction.Create(OpCodes.Ldstr, ",");
 
         yield return Instruction.Create(OpCodes.Ldc_I4, method.Parameters.Count);

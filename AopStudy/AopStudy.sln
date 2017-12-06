@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealProxyConsole", "RealProxyConsole\RealProxyConsole.csproj", "{CF3A38E2-488E-487E-B5CF-56F8091A81CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FodyConsole", "FodyConsole\FodyConsole.csproj", "{D2A81F47-C439-472B-80E9-CEC6FE2A1768}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CF3A38E2-488E-487E-B5CF-56F8091A81CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF3A38E2-488E-487E-B5CF-56F8091A81CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF3A38E2-488E-487E-B5CF-56F8091A81CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF3A38E2-488E-487E-B5CF-56F8091A81CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2A81F47-C439-472B-80E9-CEC6FE2A1768}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2A81F47-C439-472B-80E9-CEC6FE2A1768}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2A81F47-C439-472B-80E9-CEC6FE2A1768}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2A81F47-C439-472B-80E9-CEC6FE2A1768}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2929084D-F778-4F60-B8D7-67B4DEF6E678}
+	EndGlobalSection
+EndGlobal
