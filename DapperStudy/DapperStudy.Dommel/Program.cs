@@ -17,16 +17,16 @@ namespace DapperStudy.Dommel
             {
                 connection.Open();
 
-                var purchaseOrderDetail = connection.Get(new PurchaseOrderDetail { PurchaseOrderID = 1, PurchaseOrderDetailID = 1 });
+                //var purchaseOrderDetail = connection.Get(new PurchaseOrderDetail { PurchaseOrderID = 1, PurchaseOrderDetailID = 1 });
 
-                foreach (var detail in
-                    connection.Find<PurchaseOrderDetail>(statement => statement
-                        .Where($"{nameof(PurchaseOrderDetail.ProductID):C}=@ProductID")
-                        .OrderBy($"{nameof(PurchaseOrderDetail.PurchaseOrderID)}, {nameof(PurchaseOrderDetail.PurchaseOrderDetailID)}")
-                        .WithParameters(new { ProductID = 1 })))
-                {
-                    Console.WriteLine($"PurchaseOrderID:{detail.PurchaseOrderID} PurchaseOrderDetailID:{detail.PurchaseOrderDetailID}");
-                }
+                //foreach (var detail in
+                //    connection.Find<PurchaseOrderDetail>(statement => statement
+                //        .Where($"{nameof(PurchaseOrderDetail.ProductID):C}=@ProductID")
+                //        .OrderBy($"{nameof(PurchaseOrderDetail.PurchaseOrderID)}, {nameof(PurchaseOrderDetail.PurchaseOrderDetailID)}")
+                //        .WithParameters(new { ProductID = 1 })))
+                //{
+                //    Console.WriteLine($"PurchaseOrderID:{detail.PurchaseOrderID} PurchaseOrderDetailID:{detail.PurchaseOrderDetailID}");
+                //}
             }
         }
 
