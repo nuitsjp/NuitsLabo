@@ -18,7 +18,12 @@ namespace DapperStudy.Extensions
                 connection.Open();
 
                 var purchaseOrderDetail = connection.Get<PurchaseOrderDetail>(new PurchaseOrderDetail { PurchaseOrderID = 1, PurchaseOrderDetailID = 1 });
-                var predicate = Predicates.Field<PurchaseOrderDetail>(f => f.ProductID, Operator.Eq, 1);
+                Console.WriteLine($"PurchaseOrderID:{purchaseOrderDetail.PurchaseOrderID} PurchaseOrderDetailID:{purchaseOrderDetail.PurchaseOrderDetailID}");
+                Console.WriteLine();
+
+                var predicateGroup = new PredicateGroup {Operator = GroupOperator.And, Predicates = new List<IPredicate>()};
+                predicateGroup.Predicates.Add(Predicates.Field<PurchaseOrderDetail>(f => f.ProductID, Operator.Eq, 1));
+                predicateGroup.Predicates.Add(Predicates.Field<PurchaseOrderDetail>(f => f.PurchaseOrderID, Operator.Ge, 1000));
                 var sort = new List<ISort>
                 {
                     Predicates.Sort<PurchaseOrderDetail>(x => x.PurchaseOrderID),
@@ -26,7 +31,7 @@ namespace DapperStudy.Extensions
                 };
 
                 foreach (var detail in
-                    connection.GetList<PurchaseOrderDetail>(predicate, sort))
+                    connection.GetList<PurchaseOrderDetail>(predicateGroup, sort))
                 {
                     Console.WriteLine($"PurchaseOrderID:{detail.PurchaseOrderID} PurchaseOrderDetailID:{detail.PurchaseOrderDetailID}");
                 }
