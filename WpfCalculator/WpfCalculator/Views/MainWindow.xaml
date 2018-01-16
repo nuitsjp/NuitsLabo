@@ -12,9 +12,9 @@
     </Window.DataContext>
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <StackPanel Orientation="Horizontal">
-            <ComboBox ItemsSource="{Binding IntValues}" SelectedItem="{Binding Left.Value}" Width="100" FontSize="40" HorizontalContentAlignment="Center"/>
+            <ComboBox ItemsSource="{Binding IntValues}" SelectedItem="{Binding Left.Value, Mode=TwoWay}" Width="100" FontSize="40" HorizontalContentAlignment="Center"/>
             <Label Content="+" FontSize="40"/>
-            <ComboBox ItemsSource="{Binding IntValues}" SelectedItem="{Binding Right.Value}" Width="100" FontSize="40" HorizontalContentAlignment="Center"/>
+            <ComboBox ItemsSource="{Binding IntValues}" SelectedItem="{Binding Right.Value, Mode=TwoWay}" Width="100" FontSize="40" HorizontalContentAlignment="Center"/>
             <Button Content="=" Margin="10, 0" Width="40" Command="{Binding AddCommand}" FontSize="40"/>
             <Label Content="{Binding Result.Value}" FontSize="40" Width="100"/>
         </StackPanel>
