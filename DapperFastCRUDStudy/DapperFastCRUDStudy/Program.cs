@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -14,9 +15,13 @@ namespace DapperFastCRUDStudy
     {
         static void Main(string[] args)
         {
-            using (var connection = new SqlConnection(GetConnectionString()))
+            var settings = ConfigurationManager.ConnectionStrings["AdventureWorks2017"];
+            var factory = DbProviderFactories.GetFactory(settings.ProviderName);
+            using (var connection = factory.CreateConnection())
             {
+                connection.ConnectionString = settings.ConnectionString;
                 connection.Open();
+
                 var purchaseOrderDetail = connection.Get(new PurchaseOrderDetail { PurchaseOrderID = 1, PurchaseOrderDetailID = 1 });
 
                 foreach (var detail in
@@ -30,11 +35,5 @@ namespace DapperFastCRUDStudy
             }
             Console.ReadLine();
         }
-
-        private static string GetConnectionString()
-        {
-            return ConfigurationManager.ConnectionStrings["AdventureWorks2017"].ConnectionString;
-        }
-
     }
 }

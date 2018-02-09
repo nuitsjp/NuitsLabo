@@ -14,6 +14,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
 
 namespace UwpCalculator
 {
@@ -49,6 +51,8 @@ namespace UwpCalculator
                 rootFrame = new Frame();
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
+
+                AppCenter.Start("a2dc5a60-1fa6-4eb8-b5b6-0ec3828c6f2e", typeof(Analytics));
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
