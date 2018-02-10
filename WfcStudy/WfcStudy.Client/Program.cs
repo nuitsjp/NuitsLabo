@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,11 +13,13 @@ namespace WfcStudy.Client
     {
         static void Main(string[] args)
         {
-            var f = new WebChannelFactory<IEmployeeService>(new Uri("http://localhost:8080/EmployeeService"));
-            var service = f.CreateChannel();
-            var employee = service.GetEmployee(100);
-            Console.WriteLine($"Id:{employee.Id} Name:{employee.Name}");
-            Console.ReadLine();
+            using (var f = new ChannelFactory<IEmployeeService>("EmployeeService"))
+            {
+                var service = f.CreateChannel();
+                var employee = service.GetEmployee(100);
+                Console.WriteLine($"Id:{employee.Id} Name:{employee.Name}");
+                Console.ReadLine();
+            }
         }
     }
 }
