@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9805FF75-F2B7-459A-AE98-00E4EF24A5EF}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>WfcStudy.ServiceHost</RootNamespace>
-    <AssemblyName>WfcStudy.ServiceHost</AssemblyName>
+    <ProjectGuid>{67F96000-3F5E-4827-B1A2-EA60C4C8DB74}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>AdventureWorks.ServiceHost</RootNamespace>
+    <AssemblyName>AdventureWorks.ServiceHost</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -46,39 +46,27 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="EmployeeService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WcfServiceFactory.cs" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AdventureWorks.Services.Impl\AdventureWorks.Services.Impl.csproj">
+      <Project>{1fa4a778-9c8a-4a0d-ab84-1efe25a7beb4}</Project>
+      <Name>AdventureWorks.Services.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AdventureWorks.Services\AdventureWorks.Services.csproj">
+      <Project>{c1e907aa-b109-4554-834c-a5df1951db47}</Project>
+      <Name>AdventureWorks.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WfcStudy.Service", "WfcStudy.Service\WfcStudy.Service.csproj", "{8E8270EB-C23E-4361-A808-6483DA9BB0A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureWorks.Services", "AdventureWorks.Services\AdventureWorks.Services.csproj", "{C1E907AA-B109-4554-834C-A5DF1951DB47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WfcStudy.Client", "WfcStudy.Client\WfcStudy.Client.csproj", "{2BDB8018-1AEE-4F14-A4CC-5AEC70AFCE94}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureWorks.Services.Impl", "AdventureWorks.Services.Impl\AdventureWorks.Services.Impl.csproj", "{1FA4A778-9C8A-4A0D-AB84-1EFE25A7BEB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WfcStudy.ServiceHost", "WfcStudy.ServiceHost\WfcStudy.ServiceHost.csproj", "{9805FF75-F2B7-459A-AE98-00E4EF24A5EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureWorks.ServiceHost", "AdventureWorks.ServiceHost\AdventureWorks.ServiceHost.csproj", "{67F96000-3F5E-4827-B1A2-EA60C4C8DB74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureWorks.Client", "AdventureWorks.Client\AdventureWorks.Client.csproj", "{0541BD13-F2A3-4C13-AECC-16BA67A6264B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,18 +17,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8E8270EB-C23E-4361-A808-6483DA9BB0A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8E8270EB-C23E-4361-A808-6483DA9BB0A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8E8270EB-C23E-4361-A808-6483DA9BB0A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8E8270EB-C23E-4361-A808-6483DA9BB0A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2BDB8018-1AEE-4F14-A4CC-5AEC70AFCE94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2BDB8018-1AEE-4F14-A4CC-5AEC70AFCE94}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2BDB8018-1AEE-4F14-A4CC-5AEC70AFCE94}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2BDB8018-1AEE-4F14-A4CC-5AEC70AFCE94}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9805FF75-F2B7-459A-AE98-00E4EF24A5EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9805FF75-F2B7-459A-AE98-00E4EF24A5EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9805FF75-F2B7-459A-AE98-00E4EF24A5EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9805FF75-F2B7-459A-AE98-00E4EF24A5EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1E907AA-B109-4554-834C-A5DF1951DB47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1E907AA-B109-4554-834C-A5DF1951DB47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1E907AA-B109-4554-834C-A5DF1951DB47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1E907AA-B109-4554-834C-A5DF1951DB47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FA4A778-9C8A-4A0D-AB84-1EFE25A7BEB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FA4A778-9C8A-4A0D-AB84-1EFE25A7BEB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FA4A778-9C8A-4A0D-AB84-1EFE25A7BEB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FA4A778-9C8A-4A0D-AB84-1EFE25A7BEB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67F96000-3F5E-4827-B1A2-EA60C4C8DB74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67F96000-3F5E-4827-B1A2-EA60C4C8DB74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67F96000-3F5E-4827-B1A2-EA60C4C8DB74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67F96000-3F5E-4827-B1A2-EA60C4C8DB74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0541BD13-F2A3-4C13-AECC-16BA67A6264B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0541BD13-F2A3-4C13-AECC-16BA67A6264B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0541BD13-F2A3-4C13-AECC-16BA67A6264B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0541BD13-F2A3-4C13-AECC-16BA67A6264B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
