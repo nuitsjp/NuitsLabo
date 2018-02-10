@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ServiceModel;
 using System.Threading;
+using SimpleInjector.Integration.Wcf;
 
 namespace WfcStudy.ServiceHost
 {
@@ -15,8 +16,9 @@ namespace WfcStudy.ServiceHost
         static void Main()
         {
             // Create a ServiceHost for the CalculatorService type.
+
             using (var serviceHost = 
-                new System.ServiceModel.ServiceHost(typeof(EmployeeService)))
+                new SimpleInjectorServiceHost(Bootstrapper.Container, typeof(EmployeeService)))
             {
                 // Open the ServiceHost to create listeners and start listening for messages.
                 serviceHost.Open();
