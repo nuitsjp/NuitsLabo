@@ -16,7 +16,7 @@ namespace AdventureWorks.Client
             {
                 var service = f.CreateChannel();
                 var employee = service.GetEmployee(100);
-                Console.WriteLine($"Id:{employee.Id} Name:{employee.Name}");
+                Console.WriteLine($"BusinessEntityID:{employee.BusinessEntityID} LoginID:{employee.LoginID}");
                 Console.ReadLine();
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System.ServiceModel;
+// ReSharper disable InconsistentNaming
 
 namespace AdventureWorks.Services
 {
@@ -6,6 +7,6 @@ namespace AdventureWorks.Services
     public interface IEmployeeService
     {
         [OperationContract]
-        Employee GetEmployee(int id);
+        Employee GetEmployee(int businessEntityID);
     }
 }

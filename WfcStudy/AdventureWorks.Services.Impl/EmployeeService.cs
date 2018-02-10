@@ -4,7 +4,7 @@
     {
         public Employee GetEmployee(int id)
         {
-            return new Employee{Id = id, Name = "Taro Yamada"};
+            return new Employee{BusinessEntityID = id, LoginID = "Taro Yamada"};
         }
     }
 }
