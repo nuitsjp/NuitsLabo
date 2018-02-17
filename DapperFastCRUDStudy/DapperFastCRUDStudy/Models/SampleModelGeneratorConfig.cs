@@ -6,7 +6,7 @@
 // 
 //     Connection String Name: `AdventureWorks2017`
 //     Provider:               `System.Data.SqlClient`
-//     Connection String:      `Data Source=localhost\SQLEXPRESS;Initial Catalog=AdventureWorks2017;Integrated Security=True;`
+//     Connection String:      `Data Source=localhost;Initial Catalog=AdventureWorks2017;Integrated Security=True;`
 //     Include Views:          `True`
 
 namespace DapperFastCRUDStudy.Models
@@ -19,7 +19,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the EmployeePayHistory table.
     /// </summary>
-	[Table("EmployeePayHistory", Schema = "HumanResources")]
+	[Table("EmployeePayHistory")]
 	public partial class EmployeePayHistory
 	{
 		[Key]
@@ -34,7 +34,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the SalesOrderHeaderSalesReason table.
     /// </summary>
-	[Table("SalesOrderHeaderSalesReason", Schema = "Sales")]
+	[Table("SalesOrderHeaderSalesReason")]
 	public partial class SalesOrderHeaderSalesReason
 	{
 		[Key]
@@ -47,7 +47,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the SalesPerson table.
     /// </summary>
-	[Table("SalesPerson", Schema = "Sales")]
+	[Table("SalesPerson")]
 	public partial class SalesPerson
 	{
 		[Key]
@@ -65,7 +65,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the Illustration table.
     /// </summary>
-	[Table("Illustration", Schema = "Production")]
+	[Table("Illustration")]
 	public partial class Illustration
 	{
 		[Key]
@@ -78,7 +78,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the JobCandidate table.
     /// </summary>
-	[Table("JobCandidate", Schema = "HumanResources")]
+	[Table("JobCandidate")]
 	public partial class JobCandidate
 	{
 		[Key]
@@ -92,7 +92,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the Location table.
     /// </summary>
-	[Table("Location", Schema = "Production")]
+	[Table("Location")]
 	public partial class Location
 	{
 		[Key]
@@ -107,7 +107,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the Password table.
     /// </summary>
-	[Table("Password", Schema = "Person")]
+	[Table("Password")]
 	public partial class Password
 	{
 		[Key]
@@ -121,7 +121,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the SalesPersonQuotaHistory table.
     /// </summary>
-	[Table("SalesPersonQuotaHistory", Schema = "Sales")]
+	[Table("SalesPersonQuotaHistory")]
 	public partial class SalesPersonQuotaHistory
 	{
 		[Key]
@@ -158,7 +158,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the SalesReason table.
     /// </summary>
-	[Table("SalesReason", Schema = "Sales")]
+	[Table("SalesReason")]
 	public partial class SalesReason
 	{
 		[Key]
@@ -172,7 +172,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the SalesTaxRate table.
     /// </summary>
-	[Table("SalesTaxRate", Schema = "Sales")]
+	[Table("SalesTaxRate")]
 	public partial class SalesTaxRate
 	{
 		[Key]
@@ -189,7 +189,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the PersonCreditCard table.
     /// </summary>
-	[Table("PersonCreditCard", Schema = "Sales")]
+	[Table("PersonCreditCard")]
 	public partial class PersonCreditCard
 	{
 		[Key]
@@ -202,7 +202,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vAdditionalContactInfo view.
     /// </summary>
-	[Table("vAdditionalContactInfo", Schema = "Person")]
+	[Table("vAdditionalContactInfo")]
 	public partial class vAdditionalContactInfo
 	{
 	    public virtual int BusinessEntityID { get; set; }
@@ -227,7 +227,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the PersonPhone table.
     /// </summary>
-	[Table("PersonPhone", Schema = "Person")]
+	[Table("PersonPhone")]
 	public partial class PersonPhone
 	{
 		[Key]
@@ -242,7 +242,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vEmployee view.
     /// </summary>
-	[Table("vEmployee", Schema = "HumanResources")]
+	[Table("vEmployee")]
 	public partial class vEmployee
 	{
 	    public virtual int BusinessEntityID { get; set; }
@@ -268,7 +268,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the SalesTerritory table.
     /// </summary>
-	[Table("SalesTerritory", Schema = "Sales")]
+	[Table("SalesTerritory")]
 	public partial class SalesTerritory
 	{
 		[Key]
@@ -288,7 +288,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vEmployeeDepartment view.
     /// </summary>
-	[Table("vEmployeeDepartment", Schema = "HumanResources")]
+	[Table("vEmployeeDepartment")]
 	public partial class vEmployeeDepartment
 	{
 	    public virtual int BusinessEntityID { get; set; }
@@ -306,7 +306,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the PhoneNumberType table.
     /// </summary>
-	[Table("PhoneNumberType", Schema = "Person")]
+	[Table("PhoneNumberType")]
 	public partial class PhoneNumberType
 	{
 		[Key]
@@ -319,7 +319,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vEmployeeDepartmentHistory view.
     /// </summary>
-	[Table("vEmployeeDepartmentHistory", Schema = "HumanResources")]
+	[Table("vEmployeeDepartmentHistory")]
 	public partial class vEmployeeDepartmentHistory
 	{
 	    public virtual int BusinessEntityID { get; set; }
@@ -338,7 +338,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vIndividualCustomer view.
     /// </summary>
-	[Table("vIndividualCustomer", Schema = "Sales")]
+	[Table("vIndividualCustomer")]
 	public partial class vIndividualCustomer
 	{
 	    public virtual int BusinessEntityID { get; set; }
@@ -364,7 +364,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the Product table.
     /// </summary>
-	[Table("Product", Schema = "Production")]
+	[Table("Product")]
 	public partial class Product
 	{
 		[Key]
@@ -399,7 +399,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vPersonDemographics view.
     /// </summary>
-	[Table("vPersonDemographics", Schema = "Sales")]
+	[Table("vPersonDemographics")]
 	public partial class vPersonDemographic
 	{
 	    public virtual int BusinessEntityID { get; set; }
@@ -420,7 +420,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vJobCandidate view.
     /// </summary>
-	[Table("vJobCandidate", Schema = "HumanResources")]
+	[Table("vJobCandidate")]
 	public partial class vJobCandidate
 	{
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -445,7 +445,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vJobCandidateEmployment view.
     /// </summary>
-	[Table("vJobCandidateEmployment", Schema = "HumanResources")]
+	[Table("vJobCandidateEmployment")]
 	public partial class vJobCandidateEmployment
 	{
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -465,7 +465,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vJobCandidateEducation view.
     /// </summary>
-	[Table("vJobCandidateEducation", Schema = "HumanResources")]
+	[Table("vJobCandidateEducation")]
 	public partial class vJobCandidateEducation
 	{
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -487,7 +487,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vProductAndDescription view.
     /// </summary>
-	[Table("vProductAndDescription", Schema = "Production")]
+	[Table("vProductAndDescription")]
 	public partial class vProductAndDescription
 	{
 		[Key]
@@ -502,7 +502,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vProductModelCatalogDescription view.
     /// </summary>
-	[Table("vProductModelCatalogDescription", Schema = "Production")]
+	[Table("vProductModelCatalogDescription")]
 	public partial class vProductModelCatalogDescription
 	{
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -536,7 +536,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vProductModelInstructions view.
     /// </summary>
-	[Table("vProductModelInstructions", Schema = "Production")]
+	[Table("vProductModelInstructions")]
 	public partial class vProductModelInstruction
 	{
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -556,7 +556,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vSalesPerson view.
     /// </summary>
-	[Table("vSalesPerson", Schema = "Sales")]
+	[Table("vSalesPerson")]
 	public partial class vSalesPerson
 	{
 	    public virtual int BusinessEntityID { get; set; }
@@ -586,7 +586,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the SalesTerritoryHistory table.
     /// </summary>
-	[Table("SalesTerritoryHistory", Schema = "Sales")]
+	[Table("SalesTerritoryHistory")]
 	public partial class SalesTerritoryHistory
 	{
 		[Key]
@@ -603,7 +603,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vSalesPersonSalesByFiscalYears view.
     /// </summary>
-	[Table("vSalesPersonSalesByFiscalYears", Schema = "Sales")]
+	[Table("vSalesPersonSalesByFiscalYears")]
 	public partial class vSalesPersonSalesByFiscalYear
 	{
 	    public virtual int? SalesPersonID { get; set; }
@@ -618,7 +618,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vStateProvinceCountryRegion view.
     /// </summary>
-	[Table("vStateProvinceCountryRegion", Schema = "Person")]
+	[Table("vStateProvinceCountryRegion")]
 	public partial class vStateProvinceCountryRegion
 	{
 		[Key]
@@ -635,7 +635,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vStoreWithDemographics view.
     /// </summary>
-	[Table("vStoreWithDemographics", Schema = "Sales")]
+	[Table("vStoreWithDemographics")]
 	public partial class vStoreWithDemographic
 	{
 	    public virtual int BusinessEntityID { get; set; }
@@ -655,7 +655,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vStoreWithContacts view.
     /// </summary>
-	[Table("vStoreWithContacts", Schema = "Sales")]
+	[Table("vStoreWithContacts")]
 	public partial class vStoreWithContact
 	{
 	    public virtual int BusinessEntityID { get; set; }
@@ -675,7 +675,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ScrapReason table.
     /// </summary>
-	[Table("ScrapReason", Schema = "Production")]
+	[Table("ScrapReason")]
 	public partial class ScrapReason
 	{
 		[Key]
@@ -688,7 +688,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vStoreWithAddresses view.
     /// </summary>
-	[Table("vStoreWithAddresses", Schema = "Sales")]
+	[Table("vStoreWithAddresses")]
 	public partial class vStoreWithAddress
 	{
 	    public virtual int BusinessEntityID { get; set; }
@@ -705,7 +705,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vVendorWithContacts view.
     /// </summary>
-	[Table("vVendorWithContacts", Schema = "Purchasing")]
+	[Table("vVendorWithContacts")]
 	public partial class vVendorWithContact
 	{
 	    public virtual int BusinessEntityID { get; set; }
@@ -725,7 +725,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the Shift table.
     /// </summary>
-	[Table("Shift", Schema = "HumanResources")]
+	[Table("Shift")]
 	public partial class Shift
 	{
 		[Key]
@@ -740,7 +740,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the vVendorWithAddresses view.
     /// </summary>
-	[Table("vVendorWithAddresses", Schema = "Purchasing")]
+	[Table("vVendorWithAddresses")]
 	public partial class vVendorWithAddress
 	{
 	    public virtual int BusinessEntityID { get; set; }
@@ -757,7 +757,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ProductCategory table.
     /// </summary>
-	[Table("ProductCategory", Schema = "Production")]
+	[Table("ProductCategory")]
 	public partial class ProductCategory
 	{
 		[Key]
@@ -771,7 +771,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ShipMethod table.
     /// </summary>
-	[Table("ShipMethod", Schema = "Purchasing")]
+	[Table("ShipMethod")]
 	public partial class ShipMethod
 	{
 		[Key]
@@ -787,7 +787,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ProductCostHistory table.
     /// </summary>
-	[Table("ProductCostHistory", Schema = "Production")]
+	[Table("ProductCostHistory")]
 	public partial class ProductCostHistory
 	{
 		[Key]
@@ -802,7 +802,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ProductDescription table.
     /// </summary>
-	[Table("ProductDescription", Schema = "Production")]
+	[Table("ProductDescription")]
 	public partial class ProductDescription
 	{
 		[Key]
@@ -816,7 +816,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ShoppingCartItem table.
     /// </summary>
-	[Table("ShoppingCartItem", Schema = "Sales")]
+	[Table("ShoppingCartItem")]
 	public partial class ShoppingCartItem
 	{
 		[Key]
@@ -832,7 +832,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ProductDocument table.
     /// </summary>
-	[Table("ProductDocument", Schema = "Production")]
+	[Table("ProductDocument")]
 	public partial class ProductDocument
 	{
 		[Key]
@@ -845,7 +845,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the DatabaseLog table.
     /// </summary>
-	[Table("DatabaseLog", Schema = "dbo")]
+	[Table("DatabaseLog")]
 	public partial class DatabaseLog
 	{
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -862,7 +862,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ProductInventory table.
     /// </summary>
-	[Table("ProductInventory", Schema = "Production")]
+	[Table("ProductInventory")]
 	public partial class ProductInventory
 	{
 		[Key]
@@ -879,7 +879,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the SpecialOffer table.
     /// </summary>
-	[Table("SpecialOffer", Schema = "Sales")]
+	[Table("SpecialOffer")]
 	public partial class SpecialOffer
 	{
 		[Key]
@@ -900,7 +900,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ErrorLog table.
     /// </summary>
-	[Table("ErrorLog", Schema = "dbo")]
+	[Table("ErrorLog")]
 	public partial class ErrorLog
 	{
 		[Key]
@@ -919,7 +919,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ProductListPriceHistory table.
     /// </summary>
-	[Table("ProductListPriceHistory", Schema = "Production")]
+	[Table("ProductListPriceHistory")]
 	public partial class ProductListPriceHistory
 	{
 		[Key]
@@ -934,7 +934,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the Address table.
     /// </summary>
-	[Table("Address", Schema = "Person")]
+	[Table("Address")]
 	public partial class Address
 	{
 		[Key]
@@ -953,7 +953,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the SpecialOfferProduct table.
     /// </summary>
-	[Table("SpecialOfferProduct", Schema = "Sales")]
+	[Table("SpecialOfferProduct")]
 	public partial class SpecialOfferProduct
 	{
 		[Key]
@@ -967,7 +967,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ProductModel table.
     /// </summary>
-	[Table("ProductModel", Schema = "Production")]
+	[Table("ProductModel")]
 	public partial class ProductModel
 	{
 		[Key]
@@ -983,7 +983,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the AddressType table.
     /// </summary>
-	[Table("AddressType", Schema = "Person")]
+	[Table("AddressType")]
 	public partial class AddressType
 	{
 		[Key]
@@ -997,7 +997,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the StateProvince table.
     /// </summary>
-	[Table("StateProvince", Schema = "Person")]
+	[Table("StateProvince")]
 	public partial class StateProvince
 	{
 		[Key]
@@ -1015,7 +1015,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ProductModelIllustration table.
     /// </summary>
-	[Table("ProductModelIllustration", Schema = "Production")]
+	[Table("ProductModelIllustration")]
 	public partial class ProductModelIllustration
 	{
 		[Key]
@@ -1028,7 +1028,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the AWBuildVersion table.
     /// </summary>
-	[Table("AWBuildVersion", Schema = "dbo")]
+	[Table("AWBuildVersion")]
 	public partial class AWBuildVersion
 	{
 		[Key]
@@ -1042,7 +1042,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ProductModelProductDescriptionCulture table.
     /// </summary>
-	[Table("ProductModelProductDescriptionCulture", Schema = "Production")]
+	[Table("ProductModelProductDescriptionCulture")]
 	public partial class ProductModelProductDescriptionCulture
 	{
 		[Key]
@@ -1057,7 +1057,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the BillOfMaterials table.
     /// </summary>
-	[Table("BillOfMaterials", Schema = "Production")]
+	[Table("BillOfMaterials")]
 	public partial class BillOfMaterial
 	{
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -1078,7 +1078,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the Store table.
     /// </summary>
-	[Table("Store", Schema = "Sales")]
+	[Table("Store")]
 	public partial class Store
 	{
 		[Key]
@@ -1093,7 +1093,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ProductPhoto table.
     /// </summary>
-	[Table("ProductPhoto", Schema = "Production")]
+	[Table("ProductPhoto")]
 	public partial class ProductPhoto
 	{
 		[Key]
@@ -1109,7 +1109,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ProductProductPhoto table.
     /// </summary>
-	[Table("ProductProductPhoto", Schema = "Production")]
+	[Table("ProductProductPhoto")]
 	public partial class ProductProductPhoto
 	{
 	    public virtual int ProductID { get; set; }
@@ -1121,7 +1121,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the TransactionHistory table.
     /// </summary>
-	[Table("TransactionHistory", Schema = "Production")]
+	[Table("TransactionHistory")]
 	public partial class TransactionHistory
 	{
 		[Key]
@@ -1138,9 +1138,43 @@ namespace DapperFastCRUDStudy.Models
 	}
 
     /// <summary>
+    /// A class which represents the ProductOverview view.
+    /// </summary>
+	[Table("ProductOverview")]
+	public partial class ProductOverview
+	{
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+	    public virtual int ProductID { get; set; }
+	    public virtual string Name { get; set; }
+	    public virtual string ProductNumber { get; set; }
+	    public virtual bool MakeFlag { get; set; }
+	    public virtual bool FinishedGoodsFlag { get; set; }
+	    public virtual string Color { get; set; }
+	    public virtual short SafetyStockLevel { get; set; }
+	    public virtual short ReorderPoint { get; set; }
+	    public virtual decimal StandardCost { get; set; }
+	    public virtual decimal ListPrice { get; set; }
+	    public virtual string Size { get; set; }
+	    public virtual string SizeUnitMeasureCode { get; set; }
+	    public virtual string WeightUnitMeasureCode { get; set; }
+	    public virtual decimal? Weight { get; set; }
+	    public virtual int DaysToManufacture { get; set; }
+	    public virtual string ProductLine { get; set; }
+	    public virtual string Class { get; set; }
+	    public virtual string Style { get; set; }
+	    public virtual int? ProductSubcategoryID { get; set; }
+	    public virtual int? ProductModelID { get; set; }
+	    public virtual DateTime SellStartDate { get; set; }
+	    public virtual DateTime? SellEndDate { get; set; }
+	    public virtual DateTime? DiscontinuedDate { get; set; }
+	    public virtual Guid rowguid { get; set; }
+	    public virtual DateTime ModifiedDate { get; set; }
+	}
+
+    /// <summary>
     /// A class which represents the ProductReview table.
     /// </summary>
-	[Table("ProductReview", Schema = "Production")]
+	[Table("ProductReview")]
 	public partial class ProductReview
 	{
 		[Key]
@@ -1158,7 +1192,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the BusinessEntity table.
     /// </summary>
-	[Table("BusinessEntity", Schema = "Person")]
+	[Table("BusinessEntity")]
 	public partial class BusinessEntity
 	{
 		[Key]
@@ -1171,7 +1205,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the TransactionHistoryArchive table.
     /// </summary>
-	[Table("TransactionHistoryArchive", Schema = "Production")]
+	[Table("TransactionHistoryArchive")]
 	public partial class TransactionHistoryArchive
 	{
 		[Key]
@@ -1189,7 +1223,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ProductSubcategory table.
     /// </summary>
-	[Table("ProductSubcategory", Schema = "Production")]
+	[Table("ProductSubcategory")]
 	public partial class ProductSubcategory
 	{
 		[Key]
@@ -1204,7 +1238,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the BusinessEntityAddress table.
     /// </summary>
-	[Table("BusinessEntityAddress", Schema = "Person")]
+	[Table("BusinessEntityAddress")]
 	public partial class BusinessEntityAddress
 	{
 		[Key]
@@ -1220,7 +1254,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ProductVendor table.
     /// </summary>
-	[Table("ProductVendor", Schema = "Purchasing")]
+	[Table("ProductVendor")]
 	public partial class ProductVendor
 	{
 		[Key]
@@ -1241,7 +1275,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the BusinessEntityContact table.
     /// </summary>
-	[Table("BusinessEntityContact", Schema = "Person")]
+	[Table("BusinessEntityContact")]
 	public partial class BusinessEntityContact
 	{
 		[Key]
@@ -1257,7 +1291,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the UnitMeasure table.
     /// </summary>
-	[Table("UnitMeasure", Schema = "Production")]
+	[Table("UnitMeasure")]
 	public partial class UnitMeasure
 	{
 		[Key]
@@ -1269,7 +1303,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the Vendor table.
     /// </summary>
-	[Table("Vendor", Schema = "Purchasing")]
+	[Table("Vendor")]
 	public partial class Vendor
 	{
 		[Key]
@@ -1286,7 +1320,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the ContactType table.
     /// </summary>
-	[Table("ContactType", Schema = "Person")]
+	[Table("ContactType")]
 	public partial class ContactType
 	{
 		[Key]
@@ -1299,7 +1333,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the CountryRegionCurrency table.
     /// </summary>
-	[Table("CountryRegionCurrency", Schema = "Sales")]
+	[Table("CountryRegionCurrency")]
 	public partial class CountryRegionCurrency
 	{
 		[Key]
@@ -1312,7 +1346,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the CountryRegion table.
     /// </summary>
-	[Table("CountryRegion", Schema = "Person")]
+	[Table("CountryRegion")]
 	public partial class CountryRegion
 	{
 		[Key]
@@ -1324,7 +1358,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the WorkOrder table.
     /// </summary>
-	[Table("WorkOrder", Schema = "Production")]
+	[Table("WorkOrder")]
 	public partial class WorkOrder
 	{
 		[Key]
@@ -1345,7 +1379,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the PurchaseOrderDetail table.
     /// </summary>
-	[Table("PurchaseOrderDetail", Schema = "Purchasing")]
+	[Table("PurchaseOrderDetail")]
 	public partial class PurchaseOrderDetail
 	{
 		[Key]
@@ -1369,7 +1403,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the CreditCard table.
     /// </summary>
-	[Table("CreditCard", Schema = "Sales")]
+	[Table("CreditCard")]
 	public partial class CreditCard
 	{
 		[Key]
@@ -1385,7 +1419,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the Culture table.
     /// </summary>
-	[Table("Culture", Schema = "Production")]
+	[Table("Culture")]
 	public partial class Culture
 	{
 		[Key]
@@ -1395,9 +1429,52 @@ namespace DapperFastCRUDStudy.Models
 	}
 
     /// <summary>
+    /// A class which represents the SalesOrderHeaderDetail view.
+    /// </summary>
+	[Table("SalesOrderHeaderDetail", Schema = "Sales")]
+	public partial class SalesOrderHeaderDetail
+	{
+	    public virtual int SalesOrderID { get; set; }
+	    public virtual byte RevisionNumber { get; set; }
+	    public virtual DateTime OrderDate { get; set; }
+	    public virtual DateTime DueDate { get; set; }
+	    public virtual DateTime? ShipDate { get; set; }
+	    public virtual byte Status { get; set; }
+	    public virtual bool OnlineOrderFlag { get; set; }
+	    public virtual string SalesOrderNumber { get; set; }
+	    public virtual string PurchaseOrderNumber { get; set; }
+	    public virtual string AccountNumber { get; set; }
+	    public virtual int CustomerID { get; set; }
+	    public virtual int? SalesPersonID { get; set; }
+	    public virtual int? TerritoryID { get; set; }
+	    public virtual int BillToAddressID { get; set; }
+	    public virtual int ShipToAddressID { get; set; }
+	    public virtual int ShipMethodID { get; set; }
+	    public virtual int? CreditCardID { get; set; }
+	    public virtual string CreditCardApprovalCode { get; set; }
+	    public virtual int? CurrencyRateID { get; set; }
+	    public virtual decimal SubTotal { get; set; }
+	    public virtual decimal TaxAmt { get; set; }
+	    public virtual decimal Freight { get; set; }
+	    public virtual decimal TotalDue { get; set; }
+	    public virtual string Comment { get; set; }
+	    public virtual Guid rowguid { get; set; }
+	    public virtual DateTime HeaderModifiedDate { get; set; }
+	    public virtual int SalesOrderDetailID { get; set; }
+	    public virtual string CarrierTrackingNumber { get; set; }
+	    public virtual short OrderQty { get; set; }
+	    public virtual int ProductID { get; set; }
+	    public virtual int SpecialOfferID { get; set; }
+	    public virtual decimal UnitPrice { get; set; }
+	    public virtual decimal UnitPriceDiscount { get; set; }
+	    public virtual decimal LineTotal { get; set; }
+	    public virtual DateTime DetailModifiedDate { get; set; }
+	}
+
+    /// <summary>
     /// A class which represents the WorkOrderRouting table.
     /// </summary>
-	[Table("WorkOrderRouting", Schema = "Production")]
+	[Table("WorkOrderRouting")]
 	public partial class WorkOrderRouting
 	{
 		[Key]
@@ -1420,7 +1497,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the Currency table.
     /// </summary>
-	[Table("Currency", Schema = "Sales")]
+	[Table("Currency")]
 	public partial class Currency
 	{
 		[Key]
@@ -1432,7 +1509,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the PurchaseOrderHeader table.
     /// </summary>
-	[Table("PurchaseOrderHeader", Schema = "Purchasing")]
+	[Table("PurchaseOrderHeader")]
 	public partial class PurchaseOrderHeader
 	{
 		[Key]
@@ -1456,7 +1533,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the CurrencyRate table.
     /// </summary>
-	[Table("CurrencyRate", Schema = "Sales")]
+	[Table("CurrencyRate")]
 	public partial class CurrencyRate
 	{
 		[Key]
@@ -1473,7 +1550,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the Customer table.
     /// </summary>
-	[Table("Customer", Schema = "Sales")]
+	[Table("Customer")]
 	public partial class Customer
 	{
 		[Key]
@@ -1491,7 +1568,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the Department table.
     /// </summary>
-	[Table("Department", Schema = "HumanResources")]
+	[Table("Department")]
 	public partial class Department
 	{
 		[Key]
@@ -1505,7 +1582,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the Document table.
     /// </summary>
-	[Table("Document", Schema = "Production")]
+	[Table("Document")]
 	public partial class Document
 	{
 		[Key]
@@ -1529,7 +1606,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the SalesOrderDetail table.
     /// </summary>
-	[Table("SalesOrderDetail", Schema = "Sales")]
+	[Table("SalesOrderDetail")]
 	public partial class SalesOrderDetail
 	{
 		[Key]
@@ -1552,7 +1629,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the EmailAddress table.
     /// </summary>
-	[Table("EmailAddress", Schema = "Person")]
+	[Table("EmailAddress")]
 	public partial class EmailAddress
 	{
 		[Key]
@@ -1594,7 +1671,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the SalesOrderHeader table.
     /// </summary>
-	[Table("SalesOrderHeader", Schema = "Sales")]
+	[Table("SalesOrderHeader")]
 	public partial class SalesOrderHeader
 	{
 		[Key]
@@ -1632,7 +1709,7 @@ namespace DapperFastCRUDStudy.Models
     /// <summary>
     /// A class which represents the EmployeeDepartmentHistory table.
     /// </summary>
-	[Table("EmployeeDepartmentHistory", Schema = "HumanResources")]
+	[Table("EmployeeDepartmentHistory")]
 	public partial class EmployeeDepartmentHistory
 	{
 		[Key]

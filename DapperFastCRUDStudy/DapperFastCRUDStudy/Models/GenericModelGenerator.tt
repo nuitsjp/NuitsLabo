@@ -44,7 +44,7 @@ foreach(Table tbl in tables.Where(t=> !t.Ignore)){
     /// <summary>
     /// A class which represents the <#=tbl.Name#> <#=(tbl.IsView)?"view":"table"#>.
     /// </summary>
-	[Table("<#=tbl.Name#>", Schema = "<#=tbl.Schema#>")]
+	[Table("<#=tbl.Name#>")]
 	public partial class <#=tbl.ClassName#>
 	{
 <#foreach(Column col in from c in tbl.Columns where !c.Ignore select c)
