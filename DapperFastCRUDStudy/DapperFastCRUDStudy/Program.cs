@@ -35,13 +35,13 @@ namespace DapperFastCRUDStudy
                 //}
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-                var values = connection.Find<SalesOrderHeaderDetail>(statement => statement
-                    .OrderBy($"{nameof(SalesOrderHeaderDetail.SalesOrderID)}")
-                    .Top(10000)).ToList();
+                var values = connection.Find<vSalesPersonSalesByFiscalYear>().ToList();
                 stopwatch.Stop();
                 Console.WriteLine($"Elapsed:{stopwatch.Elapsed}");
             }
             Console.ReadLine();
         }
+
+        //public int 2018 { get; set; }
     }
 }

@@ -44,7 +44,7 @@ foreach(Table tbl in tables.Where(t=> !t.Ignore)){
     /// <summary>
     /// A class which represents the <#=tbl.Name#> <#=(tbl.IsView)?"view":"table"#>.
     /// </summary>
-	[Table("<#=tbl.Name#>")]
+	[Table("<#=tbl.Name#>", Schema = "<#=tbl.Schema#>")]
 	public partial class <#=tbl.ClassName#>
 	{
 <#foreach(Column col in from c in tbl.Columns where !c.Ignore select c)
@@ -68,7 +68,11 @@ foreach(Table tbl in tables.Where(t=> !t.Ignore)){
 		var tableKey = (from key in tbl.OuterKeys where col.PropertyName==tbl[key.ReferencingTableColumnName].PropertyName select key).FirstOrDefault();
 		if(tableKey != null){#>    [ForeignKey("<#=tables[tableKey.ReferencedTableName].ClassName#>")]
     <#}
-	}#>    public virtual <#=col.PropertyType #><#=CheckNullable(col)#> <#=col.PropertyName #> { get; set; }
+	}
+	if (col.Name != col.PropertyName) {#>
+	[Column("<#=col.Name #>")]
+	<#}
+	#>    public virtual <#=col.PropertyType #><#=CheckNullable(col)#> <#=col.PropertyName #> { get; set; }
 <#}#>
 <# if (IncludeRelationships) { #>
 <#foreach(var tableKey in from k in tbl.OuterKeys group k by k.ReferencedTableName into gk select new {ReferencedTableName=gk.Key, Keys=gk})
@@ -91,6 +95,7 @@ string ConfigPath = "";
 string Namespace = "";
 string ClassPrefix = "";
 string ClassSuffix = "";
+static string SpecialPropertyPrefix = "";
 string SchemaName = null;
 bool IncludeViews;
 bool IncludeRelationships = false;
@@ -187,6 +192,22 @@ static Func<string, string> CleanUp = (str) =>
 
 	if (char.IsDigit(str[0]) || cs_keywords.Contains(str))
 		str = "@" + str;
+	
+    return str;
+};
+
+static Func<string, string> CleanUpPropertyName = (str) =>
+{
+	str = rxCleanUp.Replace(str, "_");
+
+	if (cs_keywords.Contains(str))
+	{
+		str = "@" + str;
+	}
+	else if(char.IsDigit(str[0]))
+	{
+		str = SpecialPropertyPrefix + str;
+	}
 	
     return str;
 };
@@ -588,7 +609,7 @@ class SqlServerSchemaReader : SchemaReader
 					Column col=new Column();
 					col.Name=rdr["ColumnName"].ToString();
 					col.IsComputed=((int)rdr["IsComputed"])==1;
-					col.PropertyName=CleanUp(col.Name);
+					col.PropertyName=CleanUpPropertyName(col.Name);
 					col.PropertyType=GetPropertyType(rdr["DataType"].ToString());
 					col.IsNullable=rdr["IsNullable"].ToString()=="YES";
 					col.IsAutoIncrement=((int)rdr["IsIdentity"])==1;
