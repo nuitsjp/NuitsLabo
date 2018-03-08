@@ -1,0 +1,36 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".cs" #>
+<#@ Assembly Name="System.Core.dll" #>
+<#@ Assembly Name="$(ProjectDir)\bin\Debug\Xamarin.Forms.Core.dll" #>
+<#@ Assembly Name="$(ProjectDir)\bin\Debug\Xamarin.Forms.Platform.dll" #>
+<#@ Assembly Name="$(ProjectDir)\bin\Debug\Xamarin.Forms.Xaml.dll" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="Xamarin.Forms" #>
+<#   
+    var assembly = typeof(Page).Assembly;
+    var types = assembly.ExportedTypes
+        .Where(
+            x => !x.IsInterface
+                && !x.IsGenericType
+                && x.IsSubclassOf(typeof(BindableObject)))
+        .OrderBy(x => x.FullName);
+#>
+// This is the output code from your template
+// you only get syntax-highlighting here - not intellisense
+namespace EventInfoAnalizerConsole {
+	class EventWriter {
+		public static void WriteInfo (){
+<#
+	foreach (var type in types)
+    {
+		foreach (var eventInfo in type.GetEvents().Where(x => x.DeclaringType == type).OrderBy(x => x.Name))
+        {
+#>
+			System.Console.WriteLine("<#= type.Name #>");
+<#
+        }
+    }
+#>
+		}
+    }
+}

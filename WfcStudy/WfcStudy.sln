@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureWorks.Client", "Ad
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureWorks.WindowsService", "AdventureWorks.WindowsService\AdventureWorks.WindowsService.csproj", "{C78C26BD-7AA1-46B2-96BC-E2CED73D12D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureWorks.IisHost", "AdventureWorks.IisHost\AdventureWorks.IisHost.csproj", "{97BED6E5-E4F0-42B1-8FE5-5521CEA95CD8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{C78C26BD-7AA1-46B2-96BC-E2CED73D12D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C78C26BD-7AA1-46B2-96BC-E2CED73D12D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C78C26BD-7AA1-46B2-96BC-E2CED73D12D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97BED6E5-E4F0-42B1-8FE5-5521CEA95CD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97BED6E5-E4F0-42B1-8FE5-5521CEA95CD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97BED6E5-E4F0-42B1-8FE5-5521CEA95CD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97BED6E5-E4F0-42B1-8FE5-5521CEA95CD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

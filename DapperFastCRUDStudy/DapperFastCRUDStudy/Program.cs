@@ -4,11 +4,13 @@ using System.Configuration;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dapper.FastCrud;
 using DapperFastCRUDStudy.Models;
+using Newtonsoft.Json;
 
 namespace DapperFastCRUDStudy
 {
@@ -34,9 +36,15 @@ namespace DapperFastCRUDStudy
                 //    Console.WriteLine($"PurchaseOrderID:{detail.PurchaseOrderID} PurchaseOrderDetailID:{detail.PurchaseOrderDetailID}");
                 //}
                 var stopwatch = new Stopwatch();
+                var count = 100;
                 stopwatch.Start();
-                var values = connection.Find<vSalesPersonSalesByFiscalYear>().ToList();
+                var values = connection.Find<SalesOrderHeaderDetail>(statement => 
+                    statement
+                        .OrderBy($"{nameof(SalesOrderHeaderDetail.SalesOrderID)}, {nameof(SalesOrderHeaderDetail.SalesOrderDetailID)}")
+                        .Top(count)
+                    ).ToList();
                 stopwatch.Stop();
+                File.WriteAllText($"SalesOrderHeaderDetail_{count}.json", JsonConvert.SerializeObject(values));
                 Console.WriteLine($"Elapsed:{stopwatch.Elapsed}");
             }
             Console.ReadLine();
