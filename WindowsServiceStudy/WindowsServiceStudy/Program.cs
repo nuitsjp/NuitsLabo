@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NLog;
+using NLog.Extensions.Hosting;
 
 namespace WindowsServiceStudy
 {
@@ -12,11 +15,27 @@ namespace WindowsServiceStudy
         {
             var isService = !(Debugger.IsAttached || args.Contains("--console"));
 
+            var logger = LogManager.GetCurrentClassLogger();
+            try
+            {
+                await RunAsync(isService);
+            }
+            catch (Exception e)
+            {
+                logger.Fatal(e, "Stopped program because of exception");
+                throw;
+            }
+            finally
+            {
+                LogManager.Shutdown();
+            }
+        }
+
+        private static async Task RunAsync(bool isService)
+        {
             var builder = new HostBuilder()
-                .ConfigureServices((hostContext, services) =>
-                {
-                    services.AddHostedService<FileWriterService>();
-                });
+                .UseNLog()
+                .ConfigureServices((hostContext, services) => { services.AddHostedService<FileWriterService>(); });
 
             if (isService)
             {

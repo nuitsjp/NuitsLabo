@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace WindowsServiceStudy
 {
@@ -14,6 +15,13 @@ namespace WindowsServiceStudy
         /// 定期実行処理を行うTimerオブジェクト
         /// </summary>
         private Timer _timer;
+
+        public FileWriterService(ILogger<FileWriterService> logger)
+        {
+            Logger = logger;
+        }
+
+        private ILogger<FileWriterService> Logger { get; }
 
         /// <summary>
         /// Windowsサービスを開始する
@@ -56,8 +64,7 @@ namespace WindowsServiceStudy
 
         private void WriteLog([CallerMemberName] string memberName = null)
         {
-            Debug.WriteLine(memberName);
-            Console.WriteLine(memberName);
+            Logger.LogInformation(memberName);
         }
 
         public void Dispose()
