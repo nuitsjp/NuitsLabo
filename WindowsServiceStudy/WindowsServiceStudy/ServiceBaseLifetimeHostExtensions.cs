@@ -16,5 +16,12 @@ namespace WindowsServiceStudy
         {
             return hostBuilder.UseServiceBaseLifetime().Build().RunAsync(cancellationToken);
         }
+
+        public static IHost Build(this IHostBuilder hostBuilder, bool isService)
+        {
+            return isService
+                ? hostBuilder.UseServiceBaseLifetime().Build()
+                : hostBuilder.UseConsoleLifetime().Build();
+        }
     }
 }
