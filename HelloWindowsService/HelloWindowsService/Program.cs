@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.ServiceProcess;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting.Internal;
 
 namespace HelloWindowsService
 {
@@ -13,8 +15,12 @@ namespace HelloWindowsService
         static async Task Main(string[] args)
         {
             var builder = new HostBuilder()
-                .ConfigureServices((hostContext, services) => { services.AddHostedService<LoggingService>(); });
-            await builder.RunConsoleAsync();
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddHostedService<LoggingService>();
+                    //services.AddSingleton<IHostLifetime, ConsoleLifetime>();
+                });
+            await builder.Build().RunAsync();
         }
     }
 
@@ -47,14 +53,13 @@ namespace HelloWindowsService
             return Task.CompletedTask;
         }
 
-        public void Dispose()
-        {
-            Timer?.Dispose();
-        }
+        public void Dispose() => Timer?.Dispose();
 
         private void Logging([CallerMemberName] string memberName = null)
         {
-            File.AppendAllText("log.txt", $"{DateTime.Now} - {memberName}{Environment.NewLine}");
+            var message = $"{DateTime.Now} - {memberName}{Environment.NewLine}";
+            File.AppendAllText("log.txt", message);
+            Console.Write(message);
         }
     }
 }

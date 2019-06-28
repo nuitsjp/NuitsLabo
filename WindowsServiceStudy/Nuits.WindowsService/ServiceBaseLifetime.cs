@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 
-namespace WindowsServiceStudy
+namespace Nuits.WindowsService
 {
     public class ServiceBaseLifetime : ServiceBase, IHostLifetime
     {

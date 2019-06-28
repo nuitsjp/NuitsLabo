@@ -13,6 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Nuits.WindowsService.SimpleInjector\Nuits.WindowsService.SimpleInjector.csproj" />
+    <ProjectReference Include="..\Nuits.WindowsService\Nuits.WindowsService.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

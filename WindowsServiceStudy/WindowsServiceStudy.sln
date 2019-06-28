@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsServiceStudy", "WindowsServiceStudy\WindowsServiceStudy.csproj", "{F0B5CB6F-1EA5-46E2-B5D3-5A166DAD4FFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsServiceStudy", "WindowsServiceStudy\WindowsServiceStudy.csproj", "{F0B5CB6F-1EA5-46E2-B5D3-5A166DAD4FFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nuits.WindowsService", "Nuits.WindowsService\Nuits.WindowsService.csproj", "{6B7B7C0C-D160-4847-8028-9F42A1AB53D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nuits.WindowsService.SimpleInjector", "Nuits.WindowsService.SimpleInjector\Nuits.WindowsService.SimpleInjector.csproj", "{38430993-E101-4965-9950-7A0A4573DE29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{F0B5CB6F-1EA5-46E2-B5D3-5A166DAD4FFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0B5CB6F-1EA5-46E2-B5D3-5A166DAD4FFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0B5CB6F-1EA5-46E2-B5D3-5A166DAD4FFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B7B7C0C-D160-4847-8028-9F42A1AB53D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B7B7C0C-D160-4847-8028-9F42A1AB53D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B7B7C0C-D160-4847-8028-9F42A1AB53D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B7B7C0C-D160-4847-8028-9F42A1AB53D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38430993-E101-4965-9950-7A0A4573DE29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38430993-E101-4965-9950-7A0A4573DE29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38430993-E101-4965-9950-7A0A4573DE29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38430993-E101-4965-9950-7A0A4573DE29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
