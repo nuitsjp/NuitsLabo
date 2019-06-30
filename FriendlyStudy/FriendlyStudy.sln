@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendlyStudy", "FriendlyStudy\FriendlyStudy.csproj", "{614FE4C4-4177-45D7-8B05-5D459D77BEBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendlyStudy.Test", "FriendlyStudy.Test\FriendlyStudy.Test.csproj", "{FC846DF2-19DD-4779-8B95-1EDC98D62617}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{614FE4C4-4177-45D7-8B05-5D459D77BEBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{614FE4C4-4177-45D7-8B05-5D459D77BEBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{614FE4C4-4177-45D7-8B05-5D459D77BEBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{614FE4C4-4177-45D7-8B05-5D459D77BEBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC846DF2-19DD-4779-8B95-1EDC98D62617}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC846DF2-19DD-4779-8B95-1EDC98D62617}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC846DF2-19DD-4779-8B95-1EDC98D62617}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC846DF2-19DD-4779-8B95-1EDC98D62617}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {03366AB3-C48D-4C40-BC02-02660142FA73}
+	EndGlobalSection
+EndGlobal
