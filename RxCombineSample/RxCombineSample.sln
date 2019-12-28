@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29409.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RxCombineSample", "RxCombineSample\RxCombineSample.csproj", "{A6CA0B81-61B9-4FD5-A924-383EB080704C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A6CA0B81-61B9-4FD5-A924-383EB080704C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6CA0B81-61B9-4FD5-A924-383EB080704C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6CA0B81-61B9-4FD5-A924-383EB080704C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6CA0B81-61B9-4FD5-A924-383EB080704C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {21CB1ED8-6364-45E3-9A55-46E2DD9C31B5}
+	EndGlobalSection
+EndGlobal
