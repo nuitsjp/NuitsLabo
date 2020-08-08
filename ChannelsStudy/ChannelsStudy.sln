@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChannelsStudy", "ChannelsStudy\ChannelsStudy.csproj", "{DDCC8710-CA8B-4D6C-B327-D35861101858}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniqueChannels", "UniqueChannels\UniqueChannels.csproj", "{CBBC16C4-53AE-4296-AABE-F968128DA0C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniqueChannels.Test", "UniqueChannels.Test\UniqueChannels.Test.csproj", "{DE6A1AA3-F9F8-4277-A869-2879F56302E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{DDCC8710-CA8B-4D6C-B327-D35861101858}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDCC8710-CA8B-4D6C-B327-D35861101858}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDCC8710-CA8B-4D6C-B327-D35861101858}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBBC16C4-53AE-4296-AABE-F968128DA0C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBBC16C4-53AE-4296-AABE-F968128DA0C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBBC16C4-53AE-4296-AABE-F968128DA0C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBBC16C4-53AE-4296-AABE-F968128DA0C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE6A1AA3-F9F8-4277-A869-2879F56302E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE6A1AA3-F9F8-4277-A869-2879F56302E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE6A1AA3-F9F8-4277-A869-2879F56302E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE6A1AA3-F9F8-4277-A869-2879F56302E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
