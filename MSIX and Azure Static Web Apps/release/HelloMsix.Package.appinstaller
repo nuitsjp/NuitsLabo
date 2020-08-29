@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AppInstaller
+	Uri="https://calm-mud-0a0361900.azurestaticapps.net/HelloMsix.Package.appinstaller"
+	Version="1.0.5.0" xmlns="http://schemas.microsoft.com/appx/appinstaller/2017/2">
+	<MainBundle
+		Name="8cf52915-7c43-4a41-b801-3f43e2ded425"
+		Version="1.0.5.0"
+		Publisher="CN=nuits.jp"
+		Uri="https://calm-mud-0a0361900.azurestaticapps.net/HelloMsix.Package_1.0.5.0_Test/HelloMsix.Package_1.0.5.0_AnyCPU.msixbundle" />
+	<UpdateSettings>
+		<OnLaunch
+			HoursBetweenUpdateChecks="0" />
+	</UpdateSettings>
+</AppInstaller>
