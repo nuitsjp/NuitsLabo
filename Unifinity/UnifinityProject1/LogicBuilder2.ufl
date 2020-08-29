@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Method xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" UniId="8390061777997205874" MajorVersion="0" MinorVersion="0" Name="LogicBuilder2" GroupName="">
+  <Logic IsComment="false" UniId="-6264735877621696815" MajorVersion="0" MinorVersion="0" ComponentId="33554448" Name="テキスト内容の取得" ComponentName="コントロール/内容取得" AutoExplanation="true" Explanation="「00_TOP」画面の「テキストテスト」の内容を取得する。" Indent="0" ForegroundColor="-16777216">
+    <Param UniId="6073956838469516351" ParamType="52" TargetId1="2986198428676584599" TargetId2="-619140460117985560" Text="" />
+  </Logic>
+  <Logic IsComment="false" UniId="-7470633835764899113" MajorVersion="0" MinorVersion="0" ComponentId="1048624" Name="#2" ComponentName="制御文/If(開始)" AutoExplanation="true" Explanation="【テキスト内容の取得】の結果≠《》が真の場合は以降の処理を、偽の場合は次の[ElseIf]または[Else]または[If(終了)]へ移動する。" Indent="0" ForegroundColor="-16711808">
+    <Param UniId="6215982836245236248" ParamType="1" TargetId1="2" TargetId2="-6264735877621696815" Text="" />
+    <Param UniId="-7595818016178092397" ParamType="31" TargetId1="5" TargetId2="0" Text="" />
+    <Param UniId="322926032401679865" ParamType="1" TargetId1="11" TargetId2="0" Text="" />
+  </Logic>
+  <Logic IsComment="false" UniId="8043990336276233918" MajorVersion="0" MinorVersion="0" ComponentId="52428816" Name="#3" ComponentName="メッセージ/メッセージボックス表示" AutoExplanation="true" Explanation="タイトル《入力内容の表示》、メッセージ【テキスト内容の取得】の結果、ボタン種類「OK」とするメッセージボックスを表示する。" Indent="1" ForegroundColor="-16777216">
+    <Param UniId="1648178149769993414" ParamType="21" TargetId1="1" TargetId2="0" Text="入力内容の表示" />
+    <Param UniId="-6881833403140739326" ParamType="21" TargetId1="2" TargetId2="-6264735877621696815" Text="" />
+    <Param UniId="-4544139017096460315" ParamType="31" TargetId1="0" TargetId2="0" Text="" />
+  </Logic>
+  <Logic IsComment="false" UniId="-4172819186916919282" MajorVersion="0" MinorVersion="0" ComponentId="1048656" Name="#4" ComponentName="制御文/If(終了)" AutoExplanation="true" Explanation="If文の終了。" Indent="0" ForegroundColor="-16711808" />
+</Method>

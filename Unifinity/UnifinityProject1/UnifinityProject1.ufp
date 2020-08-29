@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ProjectName="UnifinityProject1" MajorVersion="0" MinorVersion="0" BuildVersion="0" RevisionVersion="0" ShowTitleBar="false" ShowStatusBar="true" ShowNavigationBar="false" ShowWindowsMenuBar="true" Orientation="UNSPECIFIED" Fit="FILL" OutputDebugLog="true" SqliteInMemory="false" AcceptsTab="false" FocusMoveWithEnter="false" DialogCancelTouchOutside="false" DialogClearVisible="false" DialogPopover="true" StartFormId="-98693448705531651" OpenMethodId="0" CloseMethodId="0">
+  <Form path="FormDesigner1.uff" />
+  <Form path="FormDesigner2.uff" />
+  <Form path="FormDesigner3.uff" />
+  <Form path="FormDesigner4.uff" />
+  <Form path="FormDesigner5.uff" />
+  <Table path="DataSchemer1.ufs" />
+  <Method path="LogicBuilder1.ufl" />
+  <Method path="LogicBuilder2.ufl" />
+  <Method path="LogicBuilder3.ufl" />
+</Project>

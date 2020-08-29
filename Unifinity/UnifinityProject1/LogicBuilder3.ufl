@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Method xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" UniId="-3349475184165849798" MajorVersion="0" MinorVersion="0" Name="データ取得ロジック" GroupName="">
+  <Logic IsComment="false" UniId="-5835765796654664487" MajorVersion="0" MinorVersion="0" ComponentId="68681840" Name="#1" ComponentName="データセット/現在行取得" AutoExplanation="true" Explanation="「FormDesigner3」「表1」に連携したテーブルの現在行を取得する。" Indent="0" ForegroundColor="-16777216">
+    <Param UniId="8475158564771446163" ParamType="52" TargetId1="-98693448705531651" TargetId2="-8412228176710587108" Text="" />
+  </Logic>
+  <Logic IsComment="false" UniId="3770466116115792074" MajorVersion="0" MinorVersion="0" ComponentId="19922976" Name="#2" ComponentName="ディクショナリー/取得" AutoExplanation="true" Explanation="【#1】の結果からキー《use》を条件に取得する。" Indent="0" ForegroundColor="-16777216">
+    <Param UniId="-7547932768099261153" ParamType="28" TargetId1="2" TargetId2="-5835765796654664487" Text="" />
+    <Param UniId="2752798288979482455" ParamType="1" TargetId1="11" TargetId2="0" Text="use" />
+  </Logic>
+  <Logic IsComment="false" UniId="-7068073233143014884" MajorVersion="0" MinorVersion="0" ComponentId="52428832" Name="#3" ComponentName="メッセージ/トースト表示" AutoExplanation="true" Explanation="【#2】の結果をトースト表示する。" Indent="0" ForegroundColor="-16777216">
+    <Param UniId="2452124228279708920" ParamType="21" TargetId1="2" TargetId2="3770466116115792074" Text="" />
+  </Logic>
+</Method>

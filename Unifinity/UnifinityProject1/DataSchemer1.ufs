@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" UniId="1978313262922890063" MajorVersion="0" MinorVersion="0" Name="アイテムデータ" PhysicalName="item" BootInitialize="false" DataNotes="" GroupName="">
+  <Field UniId="-3239257885583741326" Name="id" PhysicalName="id" ColumnType="67" Length="0" IsNullOk="false" IsPrimaryKey="false" />
+  <Field UniId="-2627183965621395444" Name="タイトル" PhysicalName="title" ColumnType="67" Length="0" IsNullOk="false" IsPrimaryKey="false" />
+  <Field UniId="-105336886679176980" Name="使用中" PhysicalName="use" ColumnType="78" Length="0" IsNullOk="false" IsPrimaryKey="false" />
+  <InitData>
+    <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+      <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:MainDataTable="Table1" msdata:UseCurrentLocale="true">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="Table1">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="id" type="xs:string" minOccurs="0" />
+                  <xs:element name="タイトル" type="xs:string" minOccurs="0" />
+                  <xs:element name="使用中" type="xs:string" minOccurs="0" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" />
+  </InitData>
+</Table>
