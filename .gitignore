@@ -22,9 +22,6 @@ bld/
 [Bb]in/
 [Oo]bj/
 
-# MSIX and Azure Static Web Apps
-!MSIX*and*Azure*Static*Web*Apps/release
-
 # Visual Studio 2015 cache/options directory
 .vs/
 # Uncomment if you have tasks that create the project's static files in wwwroot
@@ -243,3 +240,7 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+# MSIX and Azure Static Web Apps
+!MSIX*and*Azure*Static*Web*Apps/release
+!**/nuits.jp.pfx
