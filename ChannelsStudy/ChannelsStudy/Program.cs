@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
@@ -8,11 +10,87 @@ namespace ChannelsStudy
 {
     class Program
     {
+        private static readonly int ConsumerCount = 3;
+        private static readonly int Concurrency = ConsumerCount;
+        private static bool _isRunning = true;
+        private static readonly Random Random = new Random();
+        private static readonly List<int> Queue = new List<int>(Enumerable.Range(0, 20));
+
         static async Task Main(string[] args)
         {
             //await SingleProducerSingleConsumer();
             //await SingleProducerMultiConsumer();
-            await MultiProducerSingleConsumer();
+            //await MultiProducerSingleConsumer();
+
+            var semaphore = new SemaphoreSlim(Concurrency);
+            var tasks = Enumerable
+                .Range(0, ConsumerCount)
+                .Select(x => Task.Run(async () =>
+                {
+                    while (_isRunning)
+                    {
+                        await semaphore.WaitAsync();
+                        try
+                        {
+                            NewMethod(x);
+                        }
+                        finally
+                        {
+                            semaphore.Release();
+                            // await Task.Delay(TimeSpan.FromSeconds(_random.Next(2)));
+                        }
+                    }
+                }))
+                .ToList();
+
+            Console.ReadLine();
+
+            _isRunning = false;
+            
+            await Task.WhenAll(tasks);
+        }
+
+        private static void NewMethod(int x)
+        {
+            var item = Take(x);
+            try
+            {
+                Thread.Sleep(item.delay);
+                Console.WriteLine($"consumer:{x} item:{item.item} delay:{item.delay}");
+            }
+            finally
+            {
+                Add(x, item.item);
+                Thread.Sleep(item.delay);
+            }
+        }
+
+        private static (int item, int delay) Take(int consumer)
+        {
+            lock (Queue)
+            {
+                if (true)
+                {
+                    var item = Queue[0];
+                    Queue.RemoveAt(0);
+                    var result = (item : item, delay : Random.Next(100, 1000));
+                    Console.WriteLine($"Take consumer:{consumer}, item:{result.item}, delay:{result.delay}, _queue:{string.Join(", ", Queue)}");
+                    return result;
+                }
+                else
+                {
+                    return default;
+                }
+            }
+        }
+
+        private static void Add(int consumer, int item)
+        {
+            Console.WriteLine($"Add consumer:{consumer}, item:{item}");
+            lock (Queue)
+            {
+                Queue.Add(item);
+            }
         }
 
         private static async Task SingleProducerSingleConsumer()
