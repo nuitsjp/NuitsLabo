@@ -240,3 +240,7 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+# MSIX and Azure Static Web Apps
+!MSIX*and*Azure*Static*Web*Apps/release
+!**/nuits.jp.pfx

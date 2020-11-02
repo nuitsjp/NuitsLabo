@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Method xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" UniId="4985183316557225970" MajorVersion="0" MinorVersion="0" Name="LogicBuilder1" GroupName="">
+  <Logic IsComment="false" UniId="8786463127464144559" MajorVersion="0" MinorVersion="0" ComponentId="52428816" Name="#1" ComponentName="メッセージ/メッセージボックス表示" AutoExplanation="true" Explanation="タイトル《②タイトルテスト》、メッセージ《③メッセージテスト》、ボタン種類「YesNoCancel」とするメッセージボックスを表示する。" Indent="0" ForegroundColor="-16777216">
+    <Param UniId="1235603658019466721" ParamType="21" TargetId1="1" TargetId2="0" Text="②タイトルテスト" />
+    <Param UniId="4301843161002567948" ParamType="21" TargetId1="1" TargetId2="0" Text="③メッセージテスト" />
+    <Param UniId="7023965776113194185" ParamType="31" TargetId1="3" TargetId2="0" Text="" />
+  </Logic>
+</Method>
