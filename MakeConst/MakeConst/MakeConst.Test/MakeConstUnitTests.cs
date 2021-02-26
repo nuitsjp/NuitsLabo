@@ -16,10 +16,9 @@ namespace MakeConst.Test
         }
 
         [Theory]
-        [InlineData(LocalIntCouldBeConstant, LocalIntCouldBeConstantFixed, 10, 13)]
+        [InlineData(LocalIntCouldBeConstant, 12, 13)]
         public async Task WhenDiagnosticIsRaisedFixUpdatesCode(
             string test,
-            string fixTest,
             int line,
             int column)
         {
@@ -31,9 +30,11 @@ namespace MakeConst.Test
 
         private const string LocalIntCouldBeConstant = @"
 using System;
+using MakeConst;
 
 namespace MakeConstTest
 {
+    [MakeConstAttribute]
     class Program
     {
         static void Main(string[] args)
@@ -42,19 +43,16 @@ namespace MakeConstTest
             Console.WriteLine(i);
         }
     }
-}";
 
-        private const string LocalIntCouldBeConstantFixed = @"
-using System;
-
-namespace MakeConstTest
-{
-    class Program
-    {
-        static void Main(string[] args)
+    class A 
+    { 
+        [System.Flags] 
+        enum Day 
         {
-            const int i = 0;
-            Console.WriteLine(i);
+            sunday = 0,
+            Monday = 1,
+            Tuesday = 2
+                                           
         }
     }
 }";

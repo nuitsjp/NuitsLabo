@@ -31,6 +31,9 @@ namespace MakeConst.Test
                 TestCode = source,
             };
 
+            var makeConstReference = MetadataReference.CreateFromFile(typeof(MakeConstAttribute).Assembly.Location);
+            test.TestState.AdditionalReferences.Add(makeConstReference);
+
             test.ExpectedDiagnostics.AddRange(expected);
             await test.RunAsync(CancellationToken.None);
         }
