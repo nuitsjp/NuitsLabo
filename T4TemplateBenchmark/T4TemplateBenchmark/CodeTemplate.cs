@@ -88,10 +88,11 @@ if(1 < Members.Count)
             this.Write("            int compared;\r\n\r\n");
 
 }
+var last = Members.Last();
 foreach(var member in Members) { 
 
  
-    if(member == Members.Last()) { 
+    if(ReferenceEquals(member, last)) { 
         if(Type == "class") {
 
             this.Write("            return LocalCompareTo(");

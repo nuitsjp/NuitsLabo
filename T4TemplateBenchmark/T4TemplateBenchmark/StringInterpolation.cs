@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Diagnostics.Runtime.Interop;
 
 namespace T4TemplateBenchmark
 {
@@ -67,10 +68,11 @@ namespace {Namespace}
         {
             var builder = new StringBuilder();
 
+            var last = Members.Last();
             foreach (var member in Members)
             {
                 builder.Append($@"
-{(member == Members.Last() 
+{(ReferenceEquals(last, member) 
                     ? Type == "class"
                         ? $"return LocalCompareTo({member}, other.{member});"
                         : $"return {member}.CompareTo(other.{member});"

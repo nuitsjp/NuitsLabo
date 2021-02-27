@@ -1,18 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Diagnostics.Runtime.Interop;
 
 namespace T4TemplateBenchmark
 {
     public class GenerateByStringBuilder
     {
+        public static int Size { get; set; }
         public string? Namespace { get; set; }
         public string? Name { get; set; }
         public string? Type { get; set; }
         public string? Accessibility { get; set; }
         public List<string> Members { get; set; } = new();
 
-        private StringBuilder GenerationEnvironment { get; } = new();
+        private StringBuilder GenerationEnvironment { get; } = new(2048);
 
         /// <summary>
         /// Create the template output
@@ -82,11 +84,13 @@ namespace T4TemplateBenchmark
                 GenerationEnvironment.Append("            int compared;\r\n\r\n");
 
             }
+
+            var last = Members.Last();
             foreach (var member in Members)
             {
 
 
-                if (member == Members.Last())
+                if (ReferenceEquals(last, member))
                 {
                     if (Type == "class")
                     {

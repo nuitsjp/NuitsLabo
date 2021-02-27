@@ -65,10 +65,11 @@ if(1 < Members.Count)
 
 <#
 }
+var last = Members.Last();
 foreach(var member in Members) { 
 #>
 <# 
-    if(member == Members.Last()) { 
+    if(ReferenceEquals(member, last)) { 
         if(Type == "class") {
 #>
             return LocalCompareTo(<#= member #>, other.<#= member #>);

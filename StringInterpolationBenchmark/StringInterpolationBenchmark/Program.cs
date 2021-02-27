@@ -1,13 +1,14 @@
 ﻿using System;
+using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Running;
 
-namespace T4TemplateBenchmark
+namespace StringInterpolationBenchmark
 {
     class Program
     {
         static void Main(string[] args)
         {
-            //new GenerateSource().CustomT4Template();
+            new Benchmark().StringBuilder10();
             var summary = BenchmarkRunner.Run(typeof(Program).Assembly);
         }
     }
