@@ -4,7 +4,7 @@ using System.Text;
 
 namespace T4TemplateBenchmark
 {
-    public abstract class MyBaseTemplate
+    public abstract class MyBaseTemplate02
     {
         public static int Size { get; set; }
         public string? Namespace { get; set; }
@@ -24,9 +24,9 @@ namespace T4TemplateBenchmark
 
         public class ToStringInstanceHelper
         {
-            public string ToStringWithCulture(object objectToConvert)
+            public string ToStringWithCulture(string value)
             {
-                return (string) objectToConvert;
+                return value;
             }
         }
 

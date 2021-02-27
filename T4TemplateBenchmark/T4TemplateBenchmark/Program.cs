@@ -7,8 +7,10 @@ namespace T4TemplateBenchmark
     {
         static void Main(string[] args)
         {
-            //new GenerateSource().CustomT4Template();
-            var summary = BenchmarkRunner.Run(typeof(Program).Assembly);
+            //new SourceGeneratorBenchmarks().CustomT4Template01();
+            //var summary = BenchmarkRunner.Run(typeof(Program).Assembly);
+            //BenchmarkRunner.Run<ToStringBenchmarks>();
+            BenchmarkRunner.Run<SourceGeneratorBenchmarks>();
         }
     }
 }

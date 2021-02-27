@@ -8,10 +8,10 @@ using Microsoft.Diagnostics.Tracing.Parsers;
 namespace T4TemplateBenchmark
 {
     [SimpleJob(RuntimeMoniker.NetCoreApp31)]
-    [SimpleJob(RuntimeMoniker.NetCoreApp50)]
-    public class GenerateSource
+    //[SimpleJob(RuntimeMoniker.NetCoreApp50)]
+    public class SourceGeneratorBenchmarks
     {
-        [Params(1024, 2048)] 
+        [Params(2048)] 
         public int Capacity;
 
         [Benchmark]
@@ -31,10 +31,27 @@ namespace T4TemplateBenchmark
         }
 
         [Benchmark]
-        public void CustomT4Template()
+        public void CustomT4Template01()
         {
-            MyBaseTemplate.Size = Capacity;
-            var source = new CodeTemplateWithMyBaseTemplate()
+            MyBaseTemplate01.Size = Capacity;
+            var source = new CustomT4Template01()
+            {
+                Namespace = "MyNamespace",
+                Name = "MyClass",
+                Type = "class",
+                Accessibility = "public",
+                Members = new List<string>
+                {
+                    "Value1", "Value2", "Value3"
+                }
+            }.TransformText();
+        }
+
+        [Benchmark]
+        public void CustomT4Template02()
+        {
+            MyBaseTemplate01.Size = Capacity;
+            var source = new CustomT4Template02()
             {
                 Namespace = "MyNamespace",
                 Name = "MyClass",
@@ -80,21 +97,21 @@ namespace T4TemplateBenchmark
             }.TransformText();
         }
 
-        [Benchmark]
-        public void NoGenerate()
-        {
-            var source = new CodeTemplate()
-            {
-                Namespace = "MyNamespace",
-                Name = "MyClass",
-                Type = "class",
-                Accessibility = "public",
-                Members = new List<string>
-                {
-                    "Value1", "Value2", "Value3"
-                }
-            };
-        }
+        //[Benchmark]
+        //public void NoGenerate()
+        //{
+        //    var source = new CodeTemplate()
+        //    {
+        //        Namespace = "MyNamespace",
+        //        Name = "MyClass",
+        //        Type = "class",
+        //        Accessibility = "public",
+        //        Members = new List<string>
+        //        {
+        //            "Value1", "Value2", "Value3"
+        //        }
+        //    };
+        //}
 //        private string Namespace = "MyNamespace";
 //        private string Name = "MyClass";
 

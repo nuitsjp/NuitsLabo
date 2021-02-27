@@ -16,9 +16,13 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>CodeTemplate.cs</LastGenOutput>
     </None>
-    <None Update="CodeTemplateWithMyBaseTemplate.tt">
+    <None Update="CustomT4Template02.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>CodeTemplateWithMyBaseTemplate.cs</LastGenOutput>
+      <LastGenOutput>CustomT4Template02.cs</LastGenOutput>
+    </None>
+    <None Update="CustomT4Template01.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>CustomT4Template01.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
@@ -32,10 +36,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>CodeTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="CodeTemplateWithMyBaseTemplate.cs">
+    <Compile Update="CustomT4Template01.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>CodeTemplateWithMyBaseTemplate.tt</DependentUpon>
+      <DependentUpon>CustomT4Template01.tt</DependentUpon>
+    </Compile>
+    <Compile Update="CustomT4Template02.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CustomT4Template02.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

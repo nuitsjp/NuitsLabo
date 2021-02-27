@@ -18,7 +18,7 @@ namespace T4TemplateBenchmark
     /// Class to produce the template output
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class CodeTemplateWithMyBaseTemplate : MyBaseTemplate
+    public partial class CustomT4Template01 : MyBaseTemplate01
     {
         /// <summary>
         /// Create the template output
