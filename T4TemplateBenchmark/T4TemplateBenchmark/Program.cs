@@ -1,5 +1,6 @@
 ﻿using System;
 using BenchmarkDotNet.Running;
+using Benchmarks;
 
 namespace T4TemplateBenchmark
 {
@@ -9,8 +10,8 @@ namespace T4TemplateBenchmark
         {
             //new SourceGeneratorBenchmarks().CustomT4Template01();
             //var summary = BenchmarkRunner.Run(typeof(Program).Assembly);
-            //BenchmarkRunner.Run<ToStringBenchmarks>();
-            BenchmarkRunner.Run<SourceGeneratorBenchmarks>();
+            BenchmarkRunner.Run<T4Benchmarks>();
+            //BenchmarkRunner.Run<SourceGeneratorBenchmarks>();
         }
     }
 }
