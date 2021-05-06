@@ -1,0 +1,107 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" linePragmas="false" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using System;
+
+namespace <#= Namespace #>
+{
+    <#= Accessibility #> partial <#= Type #> <#= Name #> : IComparable, IComparable<<#= Name #>>
+    {
+#nullable disable
+        public int CompareTo(object other)
+#nullable enable
+        {
+            if (other is null) return 1;
+
+            if (other is <#= Name #> concreteObject)
+            {
+                return CompareTo(concreteObject);
+            }
+
+            throw new ArgumentException("Object is not a <#= Namespace #>.<#= Name #>.");
+        }
+
+<#
+if(Type == "class") {
+#>
+#nullable disable
+<#
+}
+#>
+        public int CompareTo(<#= Name #> other)
+<#
+if(Type == "class") {
+#>
+#nullable enable
+<#
+}
+#>
+        {
+<#
+if(Type == "class") {
+#>
+            if (other is null) return 1;
+
+            static int LocalCompareTo<T>(T? left, T? right) where T : IComparable
+            {
+                if (left is null && right is null) return 0;
+
+                if (left is null) return -1;
+
+                if (right is null) return 1;
+
+                return left.CompareTo(right);
+            }
+
+<#
+}
+if(1 < Members.Count)
+{
+#>
+            int compared;
+
+<#
+}
+var last = Members.Last();
+foreach(var member in Members) { 
+#>
+<# 
+    if(ReferenceEquals(member, last)) { 
+        if(Type == "class") {
+#>
+            return LocalCompareTo(<#= member #>, other.<#= member #>);
+<# 
+        } 
+        else 
+        {
+#>
+            return <#= member #>.CompareTo(other.<#= member #>);
+<#
+        }
+    } 
+    else 
+    { 
+        if(Type == "class") {
+#>
+            compared = LocalCompareTo(<#= member #>, other.<#= member #>);
+<#
+        }
+        else 
+        {
+#>
+            compared = <#= member #>.CompareTo(other.<#= member #>);
+<#
+        }
+#>
+            if (compared != 0) return compared;
+
+<# 
+    }
+}
+#>
+        }
+    }
+}
