@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -8,87 +9,56 @@ namespace SystemTextJsonStudy
     {
         static void Main(string[] args)
         {
+            var employee = (IEmployee)new Employee(100);
+
             var options = new JsonSerializerOptions
             {
-                Converters = {new UnitIdConverter()}
+                Converters =
+                {
+                    new InterfaceConverter<IEmployee, Employee>()
+                }
             };
 
-            var unit = (IUnit)new Unit(new UnitId(100));
-            var unitString = JsonSerializer.Serialize(unit, options);
-            Console.WriteLine(unitString);
-            var deserializedUnit = JsonSerializer.Deserialize<Unit>(unitString, options);
-            Console.WriteLine(deserializedUnit);
+            var employeeString = JsonSerializer.Serialize(employee, options);
+            Console.WriteLine(employeeString);
+            var deserializedUnit = JsonSerializer.Deserialize<IEmployee>(employeeString, options);
         }
     }
 
-    public class UnitIdConverter : JsonConverter<IUnitId>
+    public class InterfaceConverter<TInterface, TImplement> 
+        : JsonConverter<TInterface> where TImplement : TInterface
     {
-        public override IUnitId Read(
-            ref Utf8JsonReader reader,
-            Type typeToConvert,
+        public override TInterface Read(
+            ref Utf8JsonReader reader, 
+            Type typeToConvert, 
             JsonSerializerOptions options)
         {
-            if (reader.TryGetInt32(out var value))
-            {
-                return new UnitId(value);
-            }
-            else
-            {
-                return null;
-            }
+            return (TInterface)JsonSerializer.Deserialize(
+                ref reader, typeof(TImplement), options);
         }
 
         public override void Write(
-            Utf8JsonWriter writer,
-            IUnitId value,
+            Utf8JsonWriter writer, 
+            TInterface value, 
             JsonSerializerOptions options)
         {
-            switch (value)
-            {
-                case null:
-                    JsonSerializer.Serialize(writer, (IUnitId)null, options);
-                    break;
-                default:
-                {
-                    writer.WriteNumberValue(((UnitId)value).Value);
-                    //JsonSerializer.Serialize(writer, value, value.GetType(), options);
-                    break;
-                }
-            }
+            JsonSerializer.Serialize(writer, value, typeof(TImplement), options);
         }
+
     }
 
-    public interface IUnitId
+    public interface IEmployee
     {
-        int Value { get; }
+        int EmployeeId { get; }
     }
 
-    public interface IUnit
+    public class Employee : IEmployee
     {
-        IUnitId UnitId { get; }
-    }
-
-    public class UnitId : IUnitId
-    {
-        public UnitId(int value)
+        public Employee(int employeeId)
         {
-            Value = value;
+            EmployeeId = employeeId;
         }
 
-        public int Value { get; }
+        public int EmployeeId { get; }
     }
-
-    public class Unit : IUnit
-    {
-        public Unit(IUnitId unitId)
-        {
-            UnitId = unitId;
-        }
-
-        public IUnitId UnitId { get; }
-
-        public override string ToString() => $"{{\"UnitId\":{UnitId.Value}}}";
-    }
-
-
 }
