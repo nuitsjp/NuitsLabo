@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Drawing;
 using DddAdventureWorks.Repository;
 using Microsoft.Data.SqlClient;
 
@@ -8,6 +10,8 @@ namespace DddAdventureWorks.App
     {
         static void Main(string[] args)
         {
+            var salesOrderId = (ISalesOrderID)TypeDescriptor.GetConverter(typeof(ISalesOrderID)).ConvertFromString("1");
+
             var connectionString = new SqlConnectionStringBuilder
             {
                 DataSource = "localhost, 1444",
