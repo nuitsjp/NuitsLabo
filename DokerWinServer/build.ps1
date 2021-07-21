@@ -1,1 +1,1 @@
-docker build -t nuitsjp/server-core-dotnet:6.0 .
+docker build -t nuitsjp/server-core-dotnet-6.0:latest .
