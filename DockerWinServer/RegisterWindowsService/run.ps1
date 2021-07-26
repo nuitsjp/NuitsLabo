@@ -1,0 +1,1 @@
+docker run -v ${pwd}:c:\work --rm -it --isolation=hyperv nuitsjp/server-core-dotnet-6.0-win-service:latest pwsh

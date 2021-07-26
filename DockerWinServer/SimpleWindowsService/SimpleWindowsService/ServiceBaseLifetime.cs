@@ -14,12 +14,12 @@ namespace SimpleWindowsService
     {
         private readonly TaskCompletionSource<object> _delayStart = new TaskCompletionSource<object>();
 
-        public ServiceBaseLifetime(IHostApplicationLifetime applicationLifetime)
+        public ServiceBaseLifetime(IApplicationLifetime applicationLifetime)
         {
             ApplicationLifetime = applicationLifetime ?? throw new ArgumentNullException(nameof(applicationLifetime));
         }
 
-        private IHostApplicationLifetime ApplicationLifetime { get; }
+        private IApplicationLifetime ApplicationLifetime { get; }
 
         [SupportedOSPlatform("windows")]
         public Task WaitForStartAsync(CancellationToken cancellationToken)
