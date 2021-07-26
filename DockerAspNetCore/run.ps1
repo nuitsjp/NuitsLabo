@@ -1,0 +1,1 @@
+docker run --name aspnetmvc_sample --rm -it -p 8000:8000 aspnetmvcapp
