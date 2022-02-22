@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\PlugInA\PlugInA.csproj" />
+		<ProjectReference Include="..\PlugInB\PlugInB.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="..\lib\library1.0\Library.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>library1.0\Library.dll</Link>
+		</Content>
+		<Content Include="..\lib\library1.1\Library.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>library1.1\Library.dll</Link>
+		</Content>
+	</ItemGroup>
+
+</Project>
