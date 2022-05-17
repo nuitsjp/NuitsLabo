@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>1.0.3</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="Templates\Scaffold.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Scaffold.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup Label="Packaging">
+    <Content Include="SampleNugetProject.targets" PackagePath="build\SampleNugetProject.targets" />
+    <Content Include="Templates\Scaffold.tt" PackagePath="content\Scaffold.tt" />
+    <Content Include="Templates\Scaffold.csv" PackagePath="content\Scaffold.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Templates\Scaffold.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Scaffold.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Templates\Scaffold.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Scaffold.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>
