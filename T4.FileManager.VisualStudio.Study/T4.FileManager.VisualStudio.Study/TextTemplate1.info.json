@@ -1,0 +1,16 @@
+{
+  "FilesToGenerate": [
+    {
+      "Filename": "OrderDto.Partial.cs",
+      "Project": "",
+      "Path": "",
+      "Properties": {}
+    },
+    {
+      "Filename": "FooDto.Partial.cs",
+      "Project": "",
+      "Path": "",
+      "Properties": {}
+    }
+  ]
+}

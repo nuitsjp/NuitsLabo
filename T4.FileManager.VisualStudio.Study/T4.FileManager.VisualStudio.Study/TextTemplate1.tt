@@ -1,0 +1,28 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".txt" #>
+
+<#@ include file="$(TargetDir)\T4.FileManager.VisualStudio.ttinclude" #>
+
+<#
+var files = new string[] { "OrderDto", "FooDto" };
+
+var fileManager = T4FileManager.Create(this).EnableAutoIndent();
+
+foreach(var itm in files)
+{
+    fileManager.StartNewFile(itm + ".Partial.cs", "","");
+#>
+namespace Test
+{
+    public class <#= itm #>
+    {
+    }
+}
+<#
+}
+    fileManager.Process();
+#>
