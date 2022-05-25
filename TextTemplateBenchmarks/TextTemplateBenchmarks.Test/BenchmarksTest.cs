@@ -17,5 +17,33 @@ where
 	and LastName = @LastName
 ");
         }
+
+        [Fact]
+        public void Razor()
+        {
+            new Benchmarks().Razor().Should().Be(@"
+select
+	*
+from
+	Employee
+where
+	1 = 1
+FirstNameLastName");
+
+        }
+
+        [Fact]
+        public void RazorWithCompile()
+        {
+            new Benchmarks().RazorWithCompile().Should().Be(@"
+select
+	*
+from
+	Employee
+where
+	1 = 1
+FirstNameLastName");
+
+        }
     }
 }

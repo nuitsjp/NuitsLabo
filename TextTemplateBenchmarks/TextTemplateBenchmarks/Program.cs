@@ -1,2 +1,9 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Running;
+using TextTemplateBenchmarks;
+
+var summary = BenchmarkRunner
+    .Run<Benchmarks>(
+        ManualConfig
+            .Create(DefaultConfig.Instance)
+            .WithOptions(ConfigOptions.DisableOptimizationsValidator));
