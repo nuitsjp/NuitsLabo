@@ -65,6 +65,29 @@ where
     }
 
     [Benchmark]
+    public string RazorWithCompile()
+    {
+        var template = @"
+select
+	*
+from
+	Employy
+where
+	1 = 1
+@if (@Model.FirstName != null) {
+	@Model.FirstName
+}
+@if (@Model.LastName != null) {
+	@Model.LastName
+}
+";
+        return Engine
+            .Razor
+            .RunCompile(template, "SqlTemplate", typeof(RazorModel), new RazorModel("FirstName", "LastName"));
+    }
+
+
+    [Benchmark]
     public string DotLiquid()
     {
         return _template.Render(
