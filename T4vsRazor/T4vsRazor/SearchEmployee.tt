@@ -1,0 +1,18 @@
+﻿﻿<#@ template debug="false" hostspecific="false" language="C#" inherits="TemplateBase" linePragmas="false" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+select
+	*
+from
+	Employy
+where
+	1 = 1
+<# if (FirstName is not null) { #>
+	and FirstName = @FirstName
+<# } #>
+<# if (LastName is not null) { #>
+	and LastName = @LastName
+<# } #>
