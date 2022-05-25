@@ -1,26 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Policy;
 using BenchmarkDotNet.Attributes;
 using DotLiquid;
+using HandlebarsDotNet;
 using RazorEngine;
 using RazorEngine.Templating;
+using Hash = DotLiquid.Hash;
 
 namespace T4vsRazor;
 
-public class T4vsRazorBench
+public class T4VsRazorBench
 {
-    private Template _template;
-    public T4vsRazorBench()
+    private readonly Template _template;
+    private readonly Scriban.Template _scriban;
+
+    public T4VsRazorBench()
     {
         var template = @"
 select
 	*
 from
-	Employy
+	Employee
 where
 	1 = 1
 @if (@Model.FirstName != null) {
@@ -36,7 +35,7 @@ where
 select
 	*
 from
-	Employy
+	Employee
 where
 	1 = 1
 {% if FirstName %}
@@ -47,6 +46,34 @@ where
 {% endif %}
 ");  // Parses and compiles the template
 
+        _scriban = Scriban.Template.Parse(@"
+select
+	*
+from
+	Employee
+where
+	1 = 1
+{{ if firstname }}
+	and FirstName = {{firstname}}
+{{ end }}
+{{ if lastname }}
+	and LastName = {{lastname}}
+{{ end }}
+");
+        _handlebars = Handlebars.Compile(@"
+select
+	*
+from
+	Employee
+where
+	1 = 1
+{{ #if FirstName }}
+	and FirstName = {{FirstName}}
+{{ /if }}
+{{ #if LastName }}
+	and LastName = {{LastName}}
+{{ /if }}
+");
     }
 
     [Benchmark]
@@ -71,7 +98,7 @@ where
 select
 	*
 from
-	Employy
+	Employee
 where
 	1 = 1
 @if (@Model.FirstName != null) {
@@ -84,6 +111,41 @@ where
         return Engine
             .Razor
             .RunCompile(template, "SqlTemplate", typeof(RazorModel), new RazorModel("FirstName", "LastName"));
+    }
+
+    [Benchmark(Description = "Scriban")]
+    public string ScribanRender()
+    {
+        return _scriban.Render(
+            new
+            {
+                Firstname = "FirstName",
+                Lastname = "LastName"
+            });
+    }
+
+    public string ScribanWithParse()
+    {
+        var scriban = Scriban.Template.Parse(@"
+select
+	*
+from
+	Employee
+where
+	1 = 1
+{{ if firstname }}
+	and FirstName = {{firstname}}
+{{ end }}
+{{ if lastname }}
+	and LastName = {{lastname}}
+{{ end }}
+");
+        return scriban.Render(
+            new
+            {
+                Firstname = "FirstName",
+                Lastname = "LastName"
+            });
     }
 
 
@@ -102,7 +164,7 @@ where
 select
 	*
 from
-	Employy
+	Employee
 where
 	1 = 1
 {% if FirstName %}
@@ -115,6 +177,42 @@ where
         return template.Render(
             Hash.FromAnonymousObject(
                 new RazorModel("FirstName", "LastName"))); // Renders the output => "hi tobi"
+    }
+
+
+    private readonly HandlebarsTemplate<object, object> _handlebars;
+
+    [Benchmark(Description = "Handlebars")]
+    public string HandlebarsInvoke()
+    {
+        return _handlebars(new
+        {
+            FirstName = "FirstName",
+            LastName = "LastName"
+        });
+    }
+
+    [Benchmark]
+    public string HandlebarsWithParse()
+    {
+        return Handlebars.Compile(@"
+select
+	*
+from
+	Employee
+where
+	1 = 1
+{{ #if FirstName }}
+	and FirstName = {{FirstName}}
+{{ /if }}
+{{ #if LastName }}
+	and LastName = {{LastName}}
+{{ /if }}
+")(new
+        {
+            FirstName = "FirstName",
+            LastName = "LastName"
+        });
     }
 }
 

@@ -18,10 +18,21 @@
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
     <PackageReference Include="DotLiquid" Version="2.2.656" />
+    <PackageReference Include="Handlebars.Net" Version="2.1.2" />
     <PackageReference Include="RazorEngine.NetCore" Version="3.1.0" />
+    <PackageReference Include="Scriban" Version="5.4.5" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="GenerateSql.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>GenerateSql.txt</LastGenOutput>
+    </None>
+    <None Update="GenerateSql.txt">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GenerateSql.tt</DependentUpon>
+    </None>
     <None Update="SearchEmployee.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>SearchEmployee.cs</LastGenOutput>

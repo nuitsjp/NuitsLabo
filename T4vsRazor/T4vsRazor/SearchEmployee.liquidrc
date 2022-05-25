@@ -1,0 +1,13 @@
+select
+	*
+from
+	Employee
+where
+	1 = 1
+{% if FirstName %}
+	and FirstName = {{FirstName}}
+{% endif %}
+{% if LastName %}
+	and LastName = {{LastName}}
+{% endif %}
+

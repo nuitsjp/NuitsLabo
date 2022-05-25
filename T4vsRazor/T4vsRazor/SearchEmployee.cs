@@ -9,9 +9,6 @@
 // ------------------------------------------------------------------------------
 namespace T4vsRazor
 {
-    using System.Linq;
-    using System.Text;
-    using System.Collections.Generic;
     using System;
     
     /// <summary>
@@ -26,7 +23,7 @@ namespace T4vsRazor
         public override string TransformText()
         {
             this.Write("﻿");
-            this.Write("select\r\n\t*\r\nfrom\r\n\tEmployy\r\nwhere\r\n\t1 = 1\r\n");
+            this.Write("select\r\n\t*\r\nfrom\r\n\tEmployee\r\nwhere\r\n\t1 = 1\r\n");
  if (FirstName is not null) { 
             this.Write("\tand FirstName = @FirstName\r\n");
  } 
