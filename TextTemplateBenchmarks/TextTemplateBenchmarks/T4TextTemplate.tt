@@ -1,0 +1,13 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" inherits="TemplateBase" linePragmas="false" #>
+select
+	*
+from
+	Employee
+where
+	1 = 1
+<# if (FirstName is not null) { #>
+	and FirstName = @FirstName
+<# } #>
+<# if (LastName is not null) { #>
+	and LastName = @LastName
+<# } #>

@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="T4TextTemplate.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>T4TextTemplate.tt</DependentUpon>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
+		<PackageReference Include="DotLiquid" Version="2.2.656" />
+		<PackageReference Include="Handlebars.Net" Version="2.1.2" />
+		<PackageReference Include="RazorEngine.NetCore" Version="3.1.0" />
+		<PackageReference Include="Scriban" Version="5.4.5" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="T4TextTemplate.tt">
+			<Generator>TextTemplatingFilePreprocessor</Generator>
+			<LastGenOutput>T4TextTemplate.cs</LastGenOutput>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="T4TextTemplate.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>T4TextTemplate.tt</DependentUpon>
+		</Compile>
+		<Compile Update="T4TextTemplate.Partial.cs">
+			<DependentUpon>T4TextTemplate.tt</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+</Project>
