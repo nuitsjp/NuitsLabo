@@ -4,7 +4,7 @@ using Dapper;
 
 namespace T4SqlTemplate;
 
-public abstract class QueryAsyncBase : IQueryAsync
+public abstract class QueryAsyncBase<T> : IQueryAsync<T>
 {
     protected StringBuilder GenerationEnvironment { get; } = new();
 
@@ -25,7 +25,7 @@ public abstract class QueryAsyncBase : IQueryAsync
 
     public ToStringInstanceHelper ToStringHelper { get; } = new();
 
-    public Task<IEnumerable<T>> QueryAsync<T>(
+    public Task<IEnumerable<T>> QueryAsync(
         IDbConnection cnn, 
         object? param = null, 
         IDbTransaction? transaction = null, 
@@ -36,9 +36,9 @@ public abstract class QueryAsyncBase : IQueryAsync
     }
 }
 
-public interface IQueryAsync
+public interface IQueryAsync<T>
 {
-    public Task<IEnumerable<T>> QueryAsync<T>(
+    public Task<IEnumerable<T>> QueryAsync(
         IDbConnection cnn,
         object? param = null,
         IDbTransaction? transaction = null,

@@ -2,10 +2,13 @@
 
 public partial class SearchProductsAsync
 {
-    public SearchProductsAsync(string name)
+    public SearchProductsAsync(long? productId, string? name)
     {
+        ProductID = productId;
         Name = $"{name}%";
     }
 
-    public string Name { get; }
+    // ReSharper disable once InconsistentNaming
+    private long? ProductID { get; }
+    private string? Name { get; }
 }

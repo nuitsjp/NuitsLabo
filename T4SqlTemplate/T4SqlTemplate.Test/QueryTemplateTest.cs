@@ -16,8 +16,8 @@ namespace T4SqlTemplate.Test
             await using var connection = new SQLiteConnection(connectionString);
             connection.Open();
 
-            var query = new SearchProductsAsync("AWC Logo");
-            var products = (await query.QueryAsync<Product>(connection)).ToArray();
+            var query = new SearchProductsAsync(null, "AWC Logo");
+            var products = (await query.QueryAsync(connection)).ToArray();
 
             products.Should().NotBeNull()
                 .And.HaveCount(1);
