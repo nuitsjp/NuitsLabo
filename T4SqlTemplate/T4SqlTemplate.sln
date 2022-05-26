@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T4SqlTemplate", "T4SqlTemplate\T4SqlTemplate.csproj", "{A32CB587-CA14-4D7F-B9CD-A6E7651AE7A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T4SqlTemplate.Test", "T4SqlTemplate.Test\T4SqlTemplate.Test.csproj", "{6E6AD8EC-EB88-4208-93AB-501BD9D32DB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A32CB587-CA14-4D7F-B9CD-A6E7651AE7A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A32CB587-CA14-4D7F-B9CD-A6E7651AE7A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A32CB587-CA14-4D7F-B9CD-A6E7651AE7A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E6AD8EC-EB88-4208-93AB-501BD9D32DB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E6AD8EC-EB88-4208-93AB-501BD9D32DB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E6AD8EC-EB88-4208-93AB-501BD9D32DB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E6AD8EC-EB88-4208-93AB-501BD9D32DB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
