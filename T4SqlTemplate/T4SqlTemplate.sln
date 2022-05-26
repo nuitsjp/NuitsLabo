@@ -3,11 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T4SqlTemplate", "T4SqlTemplate\T4SqlTemplate.csproj", "{A32CB587-CA14-4D7F-B9CD-A6E7651AE7A4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorSqlTemplate", "RazorSqlTemplate\RazorSqlTemplate.csproj", "{A704A5DF-6707-4F5E-B10E-841BF2E22A1D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorSqlTemplate.Test", "RazorSqlTemplate.Test\RazorSqlTemplate.Test.csproj", "{B824BC51-6261-4ECF-9AA3-644A28F1C713}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T4SqlTemplate", "T4SqlTemplate\T4SqlTemplate.csproj", "{A32CB587-CA14-4D7F-B9CD-A6E7651AE7A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +15,6 @@ Global
 		{A32CB587-CA14-4D7F-B9CD-A6E7651AE7A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A32CB587-CA14-4D7F-B9CD-A6E7651AE7A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A32CB587-CA14-4D7F-B9CD-A6E7651AE7A4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A704A5DF-6707-4F5E-B10E-841BF2E22A1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A704A5DF-6707-4F5E-B10E-841BF2E22A1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A704A5DF-6707-4F5E-B10E-841BF2E22A1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A704A5DF-6707-4F5E-B10E-841BF2E22A1D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B824BC51-6261-4ECF-9AA3-644A28F1C713}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B824BC51-6261-4ECF-9AA3-644A28F1C713}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B824BC51-6261-4ECF-9AA3-644A28F1C713}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B824BC51-6261-4ECF-9AA3-644A28F1C713}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

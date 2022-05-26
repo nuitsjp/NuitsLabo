@@ -14,22 +14,22 @@
     <None Update="AdventureWorksLT.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="RuntimeTextTemplate1.sql">
+    <None Update="SearchProductsAsync.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>RuntimeTextTemplate1.cs</LastGenOutput>
+      <LastGenOutput>SearchProductsAsync.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
 	<ItemGroup>
-		<Compile Update="RuntimeTextTemplate1.cs">
+		<Compile Update="SearchProductsAsync.cs">
 			<DesignTime>True</DesignTime>
 			<AutoGen>True</AutoGen>
-			<DependentUpon>RuntimeTextTemplate1.sql</DependentUpon>
+			<DependentUpon>SearchProductsAsync.tt</DependentUpon>
 		</Compile>
-		<Compile Update="RuntimeTextTemplate1.Partial.cs">
+		<Compile Update="SearchProductsAsync.Partial.cs">
 			<DesignTime>True</DesignTime>
 			<AutoGen>True</AutoGen>
-			<DependentUpon>RuntimeTextTemplate1.sql</DependentUpon>
+			<DependentUpon>SearchProductsAsync.tt</DependentUpon>
 		</Compile>
 	</ItemGroup>
 
