@@ -1,4 +1,4 @@
-﻿namespace AdventureWorks.Repository;
+﻿namespace AdventureWorks.Repository.ProductQuery;
 
 public partial class SearchAsync
 {

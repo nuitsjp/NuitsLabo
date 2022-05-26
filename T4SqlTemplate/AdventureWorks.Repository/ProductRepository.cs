@@ -1,4 +1,5 @@
 ﻿using System.Data.SQLite;
+using AdventureWorks.Repository.ProductQuery;
 
 namespace AdventureWorks.Repository
 {

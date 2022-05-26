@@ -7,17 +7,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="SearchAsync.cs">
+		<None Include="ProductQuery\SearchAsync.cs">
 			<DesignTime>True</DesignTime>
 			<AutoGen>True</AutoGen>
-			<DependentUpon>SearchAsync.tt</DependentUpon>
+			<DependentUpon>ProductQuery\SearchAsync.tt</DependentUpon>
 		</None>
-		<None Include="SearchAsync.Partial.cs">
-			<DependentUpon>SearchAsync.tt</DependentUpon>
+		<None Include="ProductQuery\SearchAsync.Partial.cs">
+			<DependentUpon>ProductQuery\SearchAsync.tt</DependentUpon>
 		</None>
-		<None Update="SearchAsync.tt">
+		<None Update="ProductQuery\SearchAsync.tt">
 			<Generator>TextTemplatingFilePreprocessor</Generator>
-			<LastGenOutput>SearchAsync.cs</LastGenOutput>
+			<LastGenOutput>ProductQuery\SearchAsync.cs</LastGenOutput>
 		</None>
 	</ItemGroup>
 
@@ -27,35 +27,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="FindByIdAsync.cs">
+		<None Include="ProductQuery\FindByIdAsync.cs">
 			<DesignTime>True</DesignTime>
 			<AutoGen>True</AutoGen>
-			<DependentUpon>FindByIdAsync.tt</DependentUpon>
+			<DependentUpon>ProductQuery\FindByIdAsync.tt</DependentUpon>
 		</None>
-		<None Include="FindByIdAsync.Partial.cs">
-			<DependentUpon>FindByIdAsync.tt</DependentUpon>
+		<None Include="ProductQuery\FindByIdAsync.Partial.cs">
+			<DependentUpon>ProductQuery\FindByIdAsync.tt</DependentUpon>
 		</None>
-		<None Update="FindByIdAsync.tt">
+		<None Update="ProductQuery\FindByIdAsync.tt">
 			<Generator>TextTemplatingFilePreprocessor</Generator>
-			<LastGenOutput>FindByIdAsync.cs</LastGenOutput>
+			<LastGenOutput>ProductQuery\FindByIdAsync.cs</LastGenOutput>
 		</None>
 	</ItemGroup>
 
 	<ItemGroup>
 		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Update="FindByIdAsync.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>FindByIdAsync.tt</DependentUpon>
-	  </Compile>
-	  <Compile Update="SearchAsync.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>SearchAsync.tt</DependentUpon>
-	  </Compile>
 	</ItemGroup>
 
 </Project>
