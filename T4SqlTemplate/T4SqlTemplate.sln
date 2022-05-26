@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T4SqlTemplate", "T4SqlTemplate\T4SqlTemplate.csproj", "{A32CB587-CA14-4D7F-B9CD-A6E7651AE7A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureWorks", "AdventureWorks\AdventureWorks.csproj", "{3E3E6762-9BC3-4818-91B0-8A164E5E6A15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T4SqlTemplate.Test", "T4SqlTemplate.Test\T4SqlTemplate.Test.csproj", "{6E6AD8EC-EB88-4208-93AB-501BD9D32DB5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureWorks.Repository", "AdventureWorks.Repository\AdventureWorks.Repository.csproj", "{2853D9B6-B171-4D49-879D-AD47621EEFAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dapper.QueryTemplate", "QueryTemplate\Dapper.QueryTemplate.csproj", "{89171C20-928B-41A7-99D1-2DF8D0BCF1D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureWorks.Repository.Test", "AdventureWorks.Repository.Test\AdventureWorks.Repository.Test.csproj", "{12DBF97F-12CC-48A0-B0C4-A5BAFC6E15E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +17,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A32CB587-CA14-4D7F-B9CD-A6E7651AE7A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A32CB587-CA14-4D7F-B9CD-A6E7651AE7A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A32CB587-CA14-4D7F-B9CD-A6E7651AE7A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A32CB587-CA14-4D7F-B9CD-A6E7651AE7A4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6E6AD8EC-EB88-4208-93AB-501BD9D32DB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6E6AD8EC-EB88-4208-93AB-501BD9D32DB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6E6AD8EC-EB88-4208-93AB-501BD9D32DB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6E6AD8EC-EB88-4208-93AB-501BD9D32DB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E3E6762-9BC3-4818-91B0-8A164E5E6A15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E3E6762-9BC3-4818-91B0-8A164E5E6A15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E3E6762-9BC3-4818-91B0-8A164E5E6A15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E3E6762-9BC3-4818-91B0-8A164E5E6A15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2853D9B6-B171-4D49-879D-AD47621EEFAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2853D9B6-B171-4D49-879D-AD47621EEFAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2853D9B6-B171-4D49-879D-AD47621EEFAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2853D9B6-B171-4D49-879D-AD47621EEFAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89171C20-928B-41A7-99D1-2DF8D0BCF1D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89171C20-928B-41A7-99D1-2DF8D0BCF1D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89171C20-928B-41A7-99D1-2DF8D0BCF1D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89171C20-928B-41A7-99D1-2DF8D0BCF1D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12DBF97F-12CC-48A0-B0C4-A5BAFC6E15E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12DBF97F-12CC-48A0-B0C4-A5BAFC6E15E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12DBF97F-12CC-48A0-B0C4-A5BAFC6E15E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12DBF97F-12CC-48A0-B0C4-A5BAFC6E15E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

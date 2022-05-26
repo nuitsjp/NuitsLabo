@@ -1,0 +1,10 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" inherits="QuerySingleTemplate<Product>" linePragmas="false" #>
+<#@ import namespace="Dapper.QueryTemplate" #>
+
+select
+	ProductID as Id,
+	Name
+from
+	Product
+where
+	ProductID = @Id

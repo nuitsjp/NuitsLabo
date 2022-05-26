@@ -1,0 +1,61 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="SearchAsync.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>SearchAsync.tt</DependentUpon>
+		</None>
+		<None Include="SearchAsync.Partial.cs">
+			<DependentUpon>SearchAsync.tt</DependentUpon>
+		</None>
+		<None Update="SearchAsync.tt">
+			<Generator>TextTemplatingFilePreprocessor</Generator>
+			<LastGenOutput>SearchAsync.cs</LastGenOutput>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\AdventureWorks\AdventureWorks.csproj" />
+		<ProjectReference Include="..\QueryTemplate\Dapper.QueryTemplate.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="FindByIdAsync.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>FindByIdAsync.tt</DependentUpon>
+		</None>
+		<None Include="FindByIdAsync.Partial.cs">
+			<DependentUpon>FindByIdAsync.tt</DependentUpon>
+		</None>
+		<None Update="FindByIdAsync.tt">
+			<Generator>TextTemplatingFilePreprocessor</Generator>
+			<LastGenOutput>FindByIdAsync.cs</LastGenOutput>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="FindByIdAsync.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>FindByIdAsync.tt</DependentUpon>
+	  </Compile>
+	  <Compile Update="SearchAsync.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>SearchAsync.tt</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+</Project>

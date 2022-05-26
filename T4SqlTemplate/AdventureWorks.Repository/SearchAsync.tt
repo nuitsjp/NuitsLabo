@@ -1,0 +1,18 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" inherits="QueryAsyncTemplate<Product>" linePragmas="false" #>
+<#@ import namespace="Dapper.QueryTemplate" #>
+
+select
+	ProductID as Id,
+	Name
+from
+	Product
+where
+	1 = 1
+<# if (Name is not null) { #>
+	and Name = @Name
+<# }#>
+<# if (CategoryId is not null) { #>
+	and ProductCategoryId = @CategoryId
+<# }#>
+order by
+	Id
