@@ -23,7 +23,9 @@ namespace AdventureWorks.Repository.ProductQuery
         /// </summary>
         public override string TransformText()
         {
-            this.Write("\r\nselect\r\n\tProductID as Id,\r\n\tName\r\nfrom\r\n\tProduct\r\nwhere\r\n\tProductID = @Id\r\n");
+            this.Write("\r\nselect\r\n\tProductID as Id,\r\n\t");
+            this.Write(this.ToStringHelper.ToStringWithCulture(nameof(Product.Name)));
+            this.Write("\r\nfrom\r\n\tProduct\r\nwhere\r\n\tProductID = @Id\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }

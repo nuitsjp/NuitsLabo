@@ -1,7 +1,3 @@
 ﻿namespace Dapper.QueryTemplate;
 
-public class CompilerError
-{
-    public string? ErrorText { get; set; }
-    public bool IsWarning { get; set; }
-}
+public record CompilerError(string ErrorText, bool IsWarning = false);

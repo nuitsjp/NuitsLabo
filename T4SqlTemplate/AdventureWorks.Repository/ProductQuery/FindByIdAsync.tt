@@ -3,7 +3,7 @@
 
 select
 	ProductID as Id,
-	Name
+	<#= nameof(Product.Name) #>
 from
 	Product
 where
