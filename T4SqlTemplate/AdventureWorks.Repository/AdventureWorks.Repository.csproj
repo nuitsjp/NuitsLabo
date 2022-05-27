@@ -10,10 +10,10 @@
 		<None Include="ProductQuery\SearchAsync.cs">
 			<DesignTime>True</DesignTime>
 			<AutoGen>True</AutoGen>
-			<DependentUpon>ProductQuery\SearchAsync.tt</DependentUpon>
+			<DependentUpon>SearchAsync.tt</DependentUpon>
 		</None>
 		<None Include="ProductQuery\SearchAsync.Partial.cs">
-			<DependentUpon>ProductQuery\SearchAsync.tt</DependentUpon>
+			<DependentUpon>SearchAsync.tt</DependentUpon>
 		</None>
 		<None Update="ProductQuery\SearchAsync.tt">
 			<Generator>TextTemplatingFilePreprocessor</Generator>
@@ -30,10 +30,10 @@
 		<None Include="ProductQuery\FindByIdAsync.cs">
 			<DesignTime>True</DesignTime>
 			<AutoGen>True</AutoGen>
-			<DependentUpon>ProductQuery\FindByIdAsync.tt</DependentUpon>
+			<DependentUpon>FindByIdAsync.tt</DependentUpon>
 		</None>
 		<None Include="ProductQuery\FindByIdAsync.Partial.cs">
-			<DependentUpon>ProductQuery\FindByIdAsync.tt</DependentUpon>
+			<DependentUpon>FindByIdAsync.tt</DependentUpon>
 		</None>
 		<None Update="ProductQuery\FindByIdAsync.tt">
 			<Generator>TextTemplatingFilePreprocessor</Generator>
