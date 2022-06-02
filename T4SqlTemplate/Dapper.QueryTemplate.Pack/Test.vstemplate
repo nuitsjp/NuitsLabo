@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>Test.cs</Name>
+		<Description>Test.cs</Description>
+		<Icon>Dapper.QueryTemplate.Pack.ico</Icon>
+		<TemplateID>30942899-E999-4CF9-936C-2EB7A898A671</TemplateID>
+		<ProjectType>CSharp</ProjectType>
+		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+		<NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+		<DefaultName>Test.cs</DefaultName>
+	</TemplateData>
+	<TemplateContent>
+		<References>
+			<Reference>
+				<Assembly>System</Assembly>
+			</Reference>
+		</References>
+		<ProjectItem SubType="Code" TargetFileName="$fileinputname$.cs" ReplaceParameters="true">Test.cs</ProjectItem>
+		<ProjectItem SubType="Code" TargetFileName="$fileinputname$.cs\$fileinputname$Dependent.cs" ReplaceParameters="true">TestDependent.cs</ProjectItem>
+	</TemplateContent>
+</VSTemplate>
