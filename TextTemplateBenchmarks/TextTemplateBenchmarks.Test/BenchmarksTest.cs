@@ -28,7 +28,9 @@ from
 	Employee
 where
 	1 = 1
-FirstNameLastName");
+	and FirstName = @FirstName
+	and LastName = @LastName
+");
 
         }
 

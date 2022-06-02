@@ -13,10 +13,10 @@ from
 where
 	1 = 1
 @if (@Model.FirstName != null) {
-	@Model.FirstName
+@:	and FirstName = @@FirstName
 }
 @if (@Model.LastName != null) {
-	@Model.LastName
+@:	and LastName = @@LastName
 }";
 
     public RazorBenchmarks()
