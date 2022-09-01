@@ -1,0 +1,45 @@
+﻿<Window x:Class="PDFViewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PDFViewer"
+        xmlns:pdf="clr-namespace:Xfinium.Pdf.View;assembly=Xfinium.Pdf.View.Wpf"
+        mc:Ignorable="d"
+        Title="XFINIUM.PDF Samples - PDF Viewer" Height="350" Width="525" Loaded="Window_Loaded">
+    <Window.CommandBindings>
+        <CommandBinding Command="Open" Executed="Open_Executed" />
+        <CommandBinding Command="Save" Executed="Save_Executed" />
+        <CommandBinding Command="{x:Static local:MainWindow.FitWidthCommand}" Executed="FitWidth_Executed" />
+        <CommandBinding Command="{x:Static local:MainWindow.FitWidthOnDoubleClickCommand}" Executed="FitWidthOnDoubleClick_Executed" />
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ToolBarTray Grid.Row="0">
+            <ToolBar>
+                <Button Command="Open" ToolTip="Open PDF file" >
+                    <Image Source="/Resources/OpenFolder_16x_24.png" />
+                </Button>
+                <Button Command="Save" ToolTip="Save PDF file" >
+                    <Image Source="/Resources/Save_16x_24.png" />
+                </Button>
+                <Separator />
+                <Label>Zoom:</Label>
+                <ComboBox x:Name="cbxZoom" DropDownClosed="cbxZoom_DropDownClosed">
+                </ComboBox>
+                <ToggleButton x:Name="tgbtnZoomMode" Command="{x:Static local:MainWindow.FitWidthCommand}" CommandParameter="{Binding IsChecked,RelativeSource={RelativeSource Self}}" ToolTip="Set ZoomMode to FitWidth">
+                    <Image Source="/Resources/FitWidth_16x.png" />
+                </ToggleButton>
+                <ToggleButton Command="{x:Static local:MainWindow.FitWidthOnDoubleClickCommand}" CommandParameter="{Binding IsChecked,RelativeSource={RelativeSource Self}}" ToolTip="FitWidth on Page Double Click - Scroll the double clicked page to top and set the ZoomMode to FitWidth">
+                    <Image Source="/Resources/FitWidthOnDoubleClick_16x.png" />
+                </ToggleButton>
+            </ToolBar>
+        </ToolBarTray>
+        <ScrollViewer Grid.Row="1" Margin="4,4,4,4" CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <pdf:PdfCoreView x:Name="pdfView" Background="LightGray" ZoomModeChanged="pdfView_ZoomModeChanged" />
+        </ScrollViewer>
+    </Grid>
+</Window>

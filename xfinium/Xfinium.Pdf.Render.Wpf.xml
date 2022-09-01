@@ -1,0 +1,703 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>Xfinium.Pdf.Render.NetStandard</name>
+  </assembly>
+  <members>
+    <member name="T:Xfinium.Pdf.Rendering.PdfPageImageFormat">
+      <summary>Specifies the supported formats for saving the page image.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfPageImageFormat.Tiff">
+      <summary>The image is saved in TIFF format. B/W images are compressed using CCITT G4, color images are uncompressed.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfPageImageFormat.TiffZipCompressed">
+      <summary>The image is saved in TIFF format usinng Zip compression. Applies only to color images.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfPageImageFormat.TiffLzwCompressed">
+      <summary>The image is saved in TIFF format usinng LZW compression. Applies only to color images.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfPageImageFormat.Png">
+      <summary>The image is saved in PNG format.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfPageImageFormat.Raw">
+      <summary>The image is saved in RAW format. The byte order is specified by the rendering surface.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.PdfRenderingErrorHandling">
+      <summary>Specifies how the errors during page rendering should be handled.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfRenderingErrorHandling.ThrowException">
+      <summary>An exception is thrown if the page content has errors.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfRenderingErrorHandling.ThrowExceptionForAnyErrors">
+      <summary>An exception is thrown if there are any PDF errors.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfRenderingErrorHandling.IgnorePageContentErrors">
+      <summary>Page content errors are ignored and the page is rendered till the first invalid token is encountered.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfRenderingErrorHandling.IgnoreAllErrors">
+      <summary>PDF errors are ignored and the page is rendered till the first PDF error is encountered.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfRenderingErrorHandling.IgnorePageContentErrorsAndContinue">
+      <summary>Page content errors are ignored and the page is rendered, skipping the found invalid tokens.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfRenderingErrorHandling.IgnoreAllErrorsAndContinue">
+      <summary>PDF errors are ignored and the page is rendered, skipping the encountered PDF errors.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.PdfRenderingErrorType">
+      <summary>Specifies the supported error types for reporting.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfRenderingErrorType.GenericError">
+      <summary>Generic PDF error.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfRenderingErrorType.MissingObject">
+      <summary>Object is missing.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfRenderingErrorType.InvalidObjectType">
+      <summary>The type of an object is not of the expected type.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfRenderingErrorType.InvalidPageContentToken">
+      <summary>Page content contains an invalid token.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfRenderingErrorType.InvalidPageContentOperator">
+      <summary>Page content contains a PDF operator with invalid parameters.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfRenderingErrorType.TooManyGraphicsStateRestores">
+      <summary>Page content contains too many Q operators.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfRenderingErrorType.MissingImageData">
+      <summary>Image object has no data.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.PdfRenderingErrorType.InsufficientImageData">
+      <summary>Image data is incomplete.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.PdfDocumentRenderer">
+      <summary>Defines a renderer for a PDF document.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.PdfFontSubstitution">
+      <summary>Defines the rules for substituting fonts when rendering text.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.PdfPageRenderer">
+      <summary>Defines a renderer for a PDF page.Defines a renderer for a PDF page.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.PdfRendererSettings">
+      <summary>Settings class for PDF rendering process.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.PdfRenderingError">
+      <summary>Defines an error that can appear during the page rendering.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfDocumentRenderer.#ctor(Xfinium.Pdf.PdfFixedDocument)">
+      <summary>Initializes a new  object.</summary>
+      <param name="document">The document to be rendered.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfDocumentRenderer.ConvertToMultipageImage(Xfinium.Pdf.Rendering.PdfRendererSettings,System.IO.Stream)">
+      <summary>Converts the entire PDF document to a multipage TIFF image.</summary>
+      <param name="settings">Settings used during the rendering process.</param>
+      <param name="output">Output stream where the image will be stored.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfDocumentRenderer.ConvertToMultipageImage(System.String,Xfinium.Pdf.Rendering.PdfRendererSettings,System.IO.Stream)">
+      <summary>Converts the PDF document to a multipage TIFF image.</summary>
+      <param name="pageRange">Range of pages to convert to image.</param>
+      <param name="settings">Settings used during the rendering process.</param>
+      <param name="output">Output stream where the image will be stored.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfDocumentRenderer.ConvertToMultipageImage(System.String,Xfinium.Pdf.Rendering.PdfRendererSettings,Xfinium.Pdf.Rendering.PdfPageImageFormat,System.IO.Stream)">
+      <summary>Converts the PDF document to a multipage TIFF image.</summary>
+      <param name="pageRange">Range of pages to convert to image.</param>
+      <param name="settings">Settings used during the rendering process.</param>
+      <param name="imageFormat">The type of the output TIFF image</param>
+      <param name="output">Output stream where the image will be stored.</param>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfDocumentRenderer.GraphicRenderer">
+      <summary>Gets or sets the graphic renderer.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfDocumentRenderer.RenderingErrors">
+      <summary>Gets the errors that appeared during rendering.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfFontSubstitution.#ctor">
+      <summary>Initializes a new  object.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfFontSubstitution.Mappings">
+      <summary>Gets the font mappings dictionary.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfPageRenderer.#ctor(Xfinium.Pdf.PdfPage)">
+      <summary>Initializes a new  object.</summary>
+      <param name="page">The page to be rendered on a raster surface.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfPageRenderer.ConvertRenderListToImage(Xfinium.Pdf.Rendering.PdfRenderList,System.IO.Stream,Xfinium.Pdf.Rendering.PdfPageImageFormat,Xfinium.Pdf.Rendering.PdfRendererSettings)">
+      <summary>Converts the render list to an image.</summary>
+      <returns>Image size in pixels.</returns>
+      <param name="renderList">The render list to be converted.</param>
+      <param name="stream">Output stream where the image will be saved.</param>
+      <param name="pageImageFormat">The format used for saving the page image.</param>
+      <param name="settings">Settings for the rendering process.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfPageRenderer.CreateRenderingSurface``1(System.Double,System.Double)">
+      <summary>Creates a rendering surface fit for rendering the current page.</summary>
+      <returns>The rendering surface</returns>
+      <typeparam name="T">A rendering surface class.</typeparam>
+      <param name="dpiX">The horizontal resolution used for converting the vector PDF page to raster.</param>
+      <param name="dpiY">The vertical resolution used for converting the vector PDF page to raster.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfPageRenderer.GetPageImageBox(System.Double,System.Double)">
+      <summary>Gets the size in pixels of the page when converted to image at the specified resolution.</summary>
+      <returns>Image size in pixels.</returns>
+      <param name="dpiX">The horizontal resolution used for converting the vector PDF page to raster.</param>
+      <param name="dpiY">The vertical resolution used for converting the vector PDF page to raster.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfPageRenderer.StopPageToRenderListConversion">
+      <summary>Stops the conversion of page content to render list launched by the  method.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfPageRenderer.ConvertPageToImage(Xfinium.Pdf.Rendering.PdfRendererSettings)">
+      <summary>Converts the PDF page to an image.</summary>
+      <returns>Image size in pixels.</returns>
+      <param name="settings">Settings for the rendering process.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfPageRenderer.ConvertPageToImage(System.Double,System.IO.Stream,Xfinium.Pdf.Rendering.PdfPageImageFormat)">
+      <summary>Converts the PDF page to an image.</summary>
+      <returns>Image size in pixels.</returns>
+      <param name="resolution">The resolution used for converting the vector PDF page to raster.</param>
+      <param name="stream">Output stream where the image will be saved.</param>
+      <param name="pageImageFormat">The format used for saving the page image.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfPageRenderer.ConvertPageToImage(System.IO.Stream,Xfinium.Pdf.Rendering.PdfPageImageFormat,Xfinium.Pdf.Rendering.PdfRendererSettings)">
+      <summary>Converts the PDF page to an image.</summary>
+      <returns>Image size in pixels.</returns>
+      <param name="stream">Output stream where the image will be saved.</param>
+      <param name="pageImageFormat">The format used for saving the page image.</param>
+      <param name="settings">Settings for the rendering process.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfPageRenderer.ConvertPageToRenderList">
+      <summary>Coverts the page to a render list.</summary>
+      <returns>The page content as a render list.</returns>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfPageRenderer.ConvertPageToRenderList(Xfinium.Pdf.Rendering.PdfRendererSettings)">
+      <summary>Coverts the page to a render list.</summary>
+      <returns>The page content as a render list.</returns>
+      <param name="settings">Settings for the rendering process.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfPageRenderer.GetPageImageSize(System.Double)">
+      <summary>Gets the size in pixels of the page when converted to image at the specified resolution.</summary>
+      <returns>Image size in pixels.</returns>
+      <param name="dpi">The resolution used for converting the vector PDF page to raster.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfPageRenderer.GetPageImageSize(System.Double,System.Double)">
+      <summary>Gets the size in pixels of the page when converted to image at the specified resolution.</summary>
+      <returns>Image size in pixels.</returns>
+      <param name="dpiX">The horizontal resolution used for converting the vector PDF page to raster.</param>
+      <param name="dpiY">The vertical resolution used for converting the vector PDF page to raster.</param>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfPageRenderer.GraphicRenderer">
+      <summary>Gets or sets the graphic renderer.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfPageRenderer.RenderingErrors">
+      <summary>Gets the errors that appeared during rendering.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfRendererSettings.#ctor">
+      <summary>Initializes a new  object.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfRendererSettings.#ctor(System.Double,System.Double)">
+      <summary>Initializes a new  object.</summary>
+      <param name="dpiX">Horizontal resolution used for converting the PDF page to image.</param>
+      <param name="dpiY">Vertical resolution used for converting the PDF page to image.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.PdfRendererSettings.#ctor(System.Double,System.Double,Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurface)">
+      <summary>Initializes a new  object.</summary>
+      <param name="dpiX">Horizontal resolution used for converting the PDF page to image.</param>
+      <param name="dpiY">Vertical resolution used for converting the PDF page to image.</param>
+      <param name="renderingSurface">Surface used for rendering the page content.</param>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRendererSettings.BackgroundColor">
+      <summary>Gets or sets the background color of the rendered page.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRendererSettings.DpiX">
+      <summary>Gets or sets the horizontal resolution.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRendererSettings.DpiY">
+      <summary>Gets or sets the vertical resolution.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRendererSettings.EnableRenderingCache">
+      <summary>Gets or sets a value indicating whether the rendering cache should be enabled.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRendererSettings.ErrorHandling">
+      <summary>Gets of sets a value specifying how the rendering errors are handled.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRendererSettings.FontSubstitution">
+      <summary>Gets or sets the font substitution rules.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRendererSettings.InfoDpiX">
+      <summary>Gets or sets the horizontal resolution of the output TIFF image.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRendererSettings.InfoDpiY">
+      <summary>Gets or sets the vertical resolution of the output TIFF image.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRendererSettings.RenderAnnotations">
+      <summary>Gets or sets the value indicating whether the page annotations should be rendered.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRendererSettings.RenderFormFields">
+      <summary>Gets or sets the value indicating whether the form fields should be rendered.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRendererSettings.RenderGraphics">
+      <summary>Gets or sets the value indicating whether the vector graphics should be rendered.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRendererSettings.RenderImages">
+      <summary>Gets or sets the value indicating whether the images should be rendered.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRendererSettings.RenderingSurface">
+      <summary>Gets or sets the rendering surface.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRendererSettings.RenderText">
+      <summary>Gets or sets the value indicating whether the text should be rendered.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRendererSettings.SnapRectanglesToGrid">
+      <summary>Gets or sets a value indicating whether the rendered rectangles should be aligned to pixel grid.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRenderingError.ErrorType">
+      <summary>Gets the error type.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRenderingError.Message">
+      <summary>Gets the error message.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.PdfRenderingError.PageNumber">
+      <summary>Gets the page number where the error appeared.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.Imaging.PdfAtkinsonDitheringFilter">
+      <summary>Defines a binarization filter that uses error diffusion dithering to convert grayscale data to black and white.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.Imaging.PdfBayerDitheringFilter">
+      <summary>Defines a binarization filter that uses a matrix of threshold values to convert grayscale data to black and white.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.Imaging.PdfBinarizationFilter">
+      <summary>The base class for binarization filters.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.Imaging.PdfBurkesDitheringFilter">
+      <summary>Defines a binarization filter that uses error diffusion dithering to convert grayscale data to black and white.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.Imaging.PdfErrorDiffusionDitheringFilter">
+      <summary>Defines a binarization filter that uses error diffusion dithering to convert grayscale data to black and white.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.Imaging.PdfFloydSteinbergDitheringFilter">
+      <summary>Defines a binarization filter that uses error diffusion dithering to convert grayscale data to black and white.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.Imaging.PdfJarvisJudiceNinkeDitheringFilter">
+      <summary>Defines a binarization filter that uses error diffusion dithering to convert grayscale data to black and white.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.Imaging.PdfOrderedDitheringFilter">
+      <summary>Defines a binarization filter that uses a matrix of threshold values to convert grayscale data to black and white.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.Imaging.PdfSierraDitheringFilter">
+      <summary>Defines a binarization filter that uses error diffusion dithering to convert grayscale data to black and white.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.Imaging.PdfSierraLiteDitheringFilter">
+      <summary>Defines a binarization filter that uses error diffusion dithering to convert grayscale data to black and white.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.Imaging.PdfSierraTwoRowDitheringFilter">
+      <summary>Defines a binarization filter that uses error diffusion dithering to convert grayscale data to black and white.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.Imaging.PdfStuckiDitheringFilter">
+      <summary>Defines a binarization filter that uses error diffusion dithering to convert grayscale data to black and white.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.Imaging.PdfThresholdFilter">
+      <summary>Defines a binarization filter that uses a fixed threshold to convert grayscale data to black and white.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.Imaging.PdfAtkinsonDitheringFilter.#ctor">
+      <summary>Initializes a new  object.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.Imaging.PdfBayerDitheringFilter.#ctor">
+      <summary>Initializes a new  object.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.Imaging.PdfBurkesDitheringFilter.#ctor">
+      <summary>Initializes a new  object.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.Imaging.PdfFloydSteinbergDitheringFilter.#ctor">
+      <summary>Initializes a new  object.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.Imaging.PdfJarvisJudiceNinkeDitheringFilter.#ctor">
+      <summary>Initializes a new  object.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.Imaging.PdfOrderedDitheringFilter.#ctor">
+      <summary>Initializes a new  object.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.Imaging.PdfSierraDitheringFilter.#ctor">
+      <summary>Initializes a new  object.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.Imaging.PdfSierraLiteDitheringFilter.#ctor">
+      <summary>Initializes a new  object.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.Imaging.PdfSierraTwoRowDitheringFilter.#ctor">
+      <summary>Initializes a new  object.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.Imaging.PdfStuckiDitheringFilter.#ctor">
+      <summary>Initializes a new  object.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.Imaging.PdfThresholdFilter.#ctor(System.Byte)">
+      <summary>Initializes a new  object.</summary>
+      <param name="threshold">The filter threshold.</param>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.IMaskRenderingSurface">
+      <summary> supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.IMaskRenderingSurface.Merge(Xfinium.Pdf.Rendering.RenderingSurfaces.IMaskRenderingSurface,Xfinium.Pdf.Rendering.Core.BoundingBox)">
+      <summary>Merges the top mask into the current mask. The top mask is clipped to current mask.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.IMaskRenderingSurface.Merge(Xfinium.Pdf.Rendering.RenderingSurfaces.IMaskRenderingSurface,Xfinium.Pdf.Rendering.RenderingSurfaces.IMaskRenderingSurface,Xfinium.Pdf.Rendering.Core.BoundingBox)">
+      <summary>Merges the top mask into the current mask. The top mask is clipped to current mask.</summary>
+      <param name="mergedMask">The result merged mask</param>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurfaceType">
+      <summary>Supported rendering surface types.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurfaceType.Unknown">
+      <summary>Unknown rendering surface.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurfaceType.ArgbInt">
+      <summary>ARGB rendering surface backed by an array of integers.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurfaceType.ArgbByte">
+      <summary>ARGB rendering surface backed by an array of bytes.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurfaceType.RgbaInt">
+      <summary>RGBA rendering surface backed by an array of integers.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurfaceType.RgbaByte">
+      <summary>RGBA rendering surface backed by an array of bytes.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurfaceType.RgbByte">
+      <summary>RGB rendering surface backed by an array of bytes.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurfaceType.BgraInt">
+      <summary>BGRA rendering surface backed by an array of integers.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurfaceType.BgraByte">
+      <summary>BGRA rendering surface backed by an array of bytes.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurfaceType.BgrByte">
+      <summary>BGR rendering surface backed by an array of bytes.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurfaceType.Gray8">
+      <summary>Grayscale rendering surface backed by an array of bytes.</summary>
+    </member>
+    <member name="F:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurfaceType.BlackWhite">
+      <summary>Black and white rendering surface backed by an array of bytes.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfArgbIntRenderingSurface">
+      <summary>Defines an ARGB rendering surface that uses an array of integers as storage.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfArgbRenderingSurface`1">
+      <summary>Defines an ARGB rendering surface that uses an array of integers or bytes as storage.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfArgbStripRenderingSurface`1">
+      <summary>Defines an ARGB strip based rendering surface</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBgraByteRenderingSurface">
+      <summary>Defines a BGRA rendering surface that uses an array of bytes as storage.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBgraRenderingSurface`1">
+      <summary>Defines an BGRA rendering surface that uses an array of integers or bytes as storage.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBgraStripRenderingSurface`1">
+      <summary>Defines a BGRA strip based rendering surface</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBgrRenderingSurface">
+      <summary>Defines a BGR rendering surface that uses an array of bytes as storage.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBgrStripRenderingSurface">
+      <summary>Defines a BGR strip based rendering surface</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBlackWhiteRenderingSurface">
+      <summary>Defines a black and white rendering surface that uses an array of bytes as storage.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBlackWhiteStripRenderingSurface">
+      <summary>Defines a black and white strip based rendering surface</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8RenderingSurface">
+      <summary>Defines a Gray8 rendering surface that uses an array of bytes as storage.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8StripRenderingSurface">
+      <summary>Defines a Gray8 strip based rendering surface</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGrayscaleByteRenderingSurface">
+      <summary>Defines a Grayscale rendering surface that uses an array of bytes as storage.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfIntRenderingSurface">
+      <summary>Defines a rendering surface that uses an int array as storage.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurface">
+      <summary>Defines an abstract rendering surface.Defines an abstract rendering surface.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbaByteRenderingSurface">
+      <summary>Defines an RGBA rendering surface that uses an array of bytes as storage.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbaIntRenderingSurface">
+      <summary>Defines an RGBA rendering surface that uses an array of integers as storage.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbaRenderingSurface`1">
+      <summary>Defines an RGBA rendering surface that uses an array of integers or bytes as storage.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbaStripRenderingSurface`1">
+      <summary>Defines a RGBA strip based rendering surface</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbRenderingSurface">
+      <summary>Defines an RGB rendering surface that uses an array of bytes as storage.</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbStripRenderingSurface">
+      <summary>Defines a RGB strip based rendering surface</summary>
+    </member>
+    <member name="T:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfStripRenderingSurface`1">
+      <summary>Defines a strip based rendering surface</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfArgbIntRenderingSurface.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfArgbIntRenderingSurface.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfArgbRenderingSurface`1.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfArgbRenderingSurface`1.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfArgbRenderingSurface`1.Bitmap">
+      <summary>Gets the surface storage.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfArgbStripRenderingSurface`1.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfArgbStripRenderingSurface`1.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBgraByteRenderingSurface.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBgraByteRenderingSurface.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBgraRenderingSurface`1.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBgraRenderingSurface`1.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBgraRenderingSurface`1.Bitmap">
+      <summary>Gets the surface storage.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBgraStripRenderingSurface`1.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBgraStripRenderingSurface`1.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBgrRenderingSurface.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBgrRenderingSurface.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBgrStripRenderingSurface.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBgrStripRenderingSurface.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBlackWhiteRenderingSurface.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBlackWhiteRenderingSurface.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBlackWhiteRenderingSurface.BinarizationFilter">
+      <summary>Gets or sets the binarization filter used to fill the content of the rendering surface.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBlackWhiteStripRenderingSurface.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBlackWhiteStripRenderingSurface.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfBlackWhiteStripRenderingSurface.BinarizationFilter">
+      <summary>Gets or sets the binarization filter used to fill the content of the rendering surface.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfByteRenderingSurface.Bitmap">
+      <summary>Gets the surface storage.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8RenderingSurface.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8RenderingSurface.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8RenderingSurface.Adjust(System.Byte)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8RenderingSurface.ApplyTransferFunction(Xfinium.Pdf.PdfFunctions.PdfFunction)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8RenderingSurface.Expand(Xfinium.Pdf.Rendering.Core.BoundingBox)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8RenderingSurface.Extract(Xfinium.Pdf.Rendering.Core.BoundingBox)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8RenderingSurface.GetIndexForPixel(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8RenderingSurface.GetMaskLine(System.Int32,System.Int32)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8RenderingSurface.Union(Xfinium.Pdf.Rendering.RenderingSurfaces.IMaskRenderingSurface,Xfinium.Pdf.Rendering.RenderingSurfaces.IMaskRenderingSurface)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8RenderingSurface.Merge(Xfinium.Pdf.Rendering.RenderingSurfaces.IMaskRenderingSurface,Xfinium.Pdf.Rendering.Core.BoundingBox)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8RenderingSurface.Merge(Xfinium.Pdf.Rendering.RenderingSurfaces.IMaskRenderingSurface,Xfinium.Pdf.Rendering.RenderingSurfaces.IMaskRenderingSurface,Xfinium.Pdf.Rendering.Core.BoundingBox)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8RenderingSurface.MaskBitmap">
+      <summary>This property supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8StripRenderingSurface.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8StripRenderingSurface.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8StripRenderingSurface.Adjust(System.Byte)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8StripRenderingSurface.ApplyTransferFunction(Xfinium.Pdf.PdfFunctions.PdfFunction)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8StripRenderingSurface.Expand(Xfinium.Pdf.Rendering.Core.BoundingBox)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8StripRenderingSurface.Extract(Xfinium.Pdf.Rendering.Core.BoundingBox)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8StripRenderingSurface.GetIndexForPixel(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8StripRenderingSurface.GetMaskLine(System.Int32,System.Int32)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8StripRenderingSurface.Union(Xfinium.Pdf.Rendering.RenderingSurfaces.IMaskRenderingSurface,Xfinium.Pdf.Rendering.RenderingSurfaces.IMaskRenderingSurface)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8StripRenderingSurface.Merge(Xfinium.Pdf.Rendering.RenderingSurfaces.IMaskRenderingSurface,Xfinium.Pdf.Rendering.Core.BoundingBox)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8StripRenderingSurface.Merge(Xfinium.Pdf.Rendering.RenderingSurfaces.IMaskRenderingSurface,Xfinium.Pdf.Rendering.RenderingSurfaces.IMaskRenderingSurface,Xfinium.Pdf.Rendering.Core.BoundingBox)">
+      <summary>This method supports the internal library infrastructure.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGray8StripRenderingSurface.MaskBitmap">
+      <summary>This property supports the internal library infrastructure.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGrayscaleByteRenderingSurface.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfGrayscaleByteRenderingSurface.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfIntRenderingSurface.Bitmap">
+      <summary>Gets the surface storage.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurface.ConvertFromBgra">
+      <summary>Converts the surface from BGRA to its native format.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurface.Save(System.String)">
+      <summary>Saves the rendering surface to a file.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurface.Height">
+      <summary>Gets or sets the surface height.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurface.Type">
+      <summary>Gets the type of the rendering surface.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRenderingSurface.Width">
+      <summary>Gets the surface width.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbaByteRenderingSurface.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbaByteRenderingSurface.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbaByteRenderingSurface.ConvertFromBgra">
+      <summary>Converts the surface from BGRA to its native format.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbaIntRenderingSurface.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbaIntRenderingSurface.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbaRenderingSurface`1.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbaRenderingSurface`1.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbaRenderingSurface`1.Bitmap">
+      <summary>Gets the surface storage.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbaStripRenderingSurface`1.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbaStripRenderingSurface`1.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbRenderingSurface.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbRenderingSurface.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbStripRenderingSurface.#ctor(System.Int32,System.Int32)">
+      <summary>Initializes a new  object.</summary>
+      <param name="width">Surface width.</param>
+      <param name="height">Surface height.</param>
+    </member>
+    <member name="M:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfRgbStripRenderingSurface.#ctor">
+      <summary>Initializes a new  object with an empty storage.</summary>
+    </member>
+    <member name="P:Xfinium.Pdf.Rendering.RenderingSurfaces.PdfStripRenderingSurface`1.Bitmap">
+      <summary>Gets the surface storage.</summary>
+    </member>
+  </members>
+</doc>
