@@ -13,4 +13,4 @@ var client = MagicOnionClient.Create<IMyFirstService>(channel);
 
 // Call the server-side method using the proxy.
 var result = await client.SumAsync(123, 456);
-Console.WriteLine($"Result: {result}");
+Console.WriteLine($"Result: {result.Result}");
