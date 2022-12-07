@@ -73,3 +73,18 @@ static string GetBars(double fraction, int barCount = 35)
     int barsOff = barCount - barsOn;
     return new string('#', barsOn) + new string('-', barsOff);
 }
+
+public class Microphones
+{
+
+}
+
+public class Microphone
+{
+    private readonly MMDevice _mmDevice;
+
+    public Microphone(MMDevice mmDevice)
+    {
+        _mmDevice = mmDevice;
+    }
+}
