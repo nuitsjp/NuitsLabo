@@ -10,6 +10,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="NAudio" Version="2.1.0" />
+	  <PackageReference Include="Sharprompt" Version="2.4.5" />
 	</ItemGroup>
 
 	<ItemGroup>
