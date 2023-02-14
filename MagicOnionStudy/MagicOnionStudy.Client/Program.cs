@@ -3,7 +3,7 @@ using MagicOnion.Client;
 using MagicOnionStudy;
 
 // Connect to the server using gRPC channel.
-var channel = GrpcChannel.ForAddress("https://localhost:7064");
+var channel = GrpcChannel.ForAddress("https://localhost:5001");
 
 // NOTE: If your project targets non-.NET Standard 2.1, use `Grpc.Core.Channel` class instead.
 // var channel = new Channel("localhost", 5001, new SslCredentials());
