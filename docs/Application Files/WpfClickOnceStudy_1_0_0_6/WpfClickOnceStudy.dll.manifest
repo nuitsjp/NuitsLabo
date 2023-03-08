@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="WpfClickOnceStudy.exe" version="1.0.0.6" publicKeyToken="d796f3ea8b89e721" language="neutral" processorArchitecture="msil" type="win32" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="Launcher" version="7.0.0.0" language="neutral" processorArchitecture="msil" />
+    <commandLine file="Launcher.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          UAC マニフェスト オプション
+          Windows のユーザー アカウント制御のレベルを変更するには、
+          requestedExecutionLevel ノードを以下のいずれかで置換します。
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         下位互換性を保つためにファイルおよびレジストリの仮想化を使用する場合、
+         requestedExecutionLevel ノードを削除します。
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Launcher.exe" size="17392">
+      <assemblyIdentity name="Launcher" version="7.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>dP9yexS4OPb38W0N4ZNUvCeV5l1Jz2A3g1NmdHl6o2E=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="WpfClickOnceStudy.deps.json" size="443">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>FDWX8v+s8sop9nbPYzuUjz19t8YhpmQ3xVmf8REvX3I=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="WpfClickOnceStudy.dll" size="11248">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ngCTTIPyLcfkZSdcSlxAE2JHqK3Jl4c6r+osMrHdWYY=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="WpfClickOnceStudy.exe" size="154608">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>LcQ3LW4lns4remyH9Lej8s/s8fgGlMTrX31oKnDcivs=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="WpfClickOnceStudy.runtimeconfig.json" size="372">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>DSp4MGmJyWjNc/SmtGLu8DcWOcu4eQJIAo4Sy6A1RFo=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=nuits.jp, O=nuits.jp, C=JP" issuerKeyHash="543e7aea5338137479b23143b76bcb5fa9c62173" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>C6vNaIMmsOqVyyCLoVM2P1eLfFE=</DigestValue></Reference></SignedInfo><SignatureValue>kbtovAh51prnGjj2Cg/eEquorsL1vA8M5AYCW/XPzJ1hcD7bgLirSavrYYWJXmt094pDg5d9MU/vOVYUO0591q3siK5+oxsgdThZlR8W9pfouUWSnPD9sDp0/EaIMnko65GglWam38KV2b3W6boYsU5l3omdZrENVCDKfpOd2OTLocz/Dk41msvdarDHDXRQWXyYUDCCRpO0kcK/Q/MSKnqVK0ozaLAukZdDX6sHRLvWr7dub+SVH0Sj0a4Y0xG2gkWHNygktDJ3iKQhNBYke0YR+cQeVkrNsKOkh1+q7f7nMiidw2JdTVfUixbQiAuzMf+6TbNolVz2Ml6S2L8A1g==</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>pABBsDvh5NroZMsqldVVb2aVWv+fkSXLoQuYl/WpeH0jTqOsCM06JpDi4qDOud54bpQ5v9eoHyfYoiR900haRj4cOmsYeooEcNZfPszWQJX3Shg6EPIPZNLqs/Xf/OTEhyaU5cdJlCkt4+JQBMrN7wzkUnZH0sTjGzn7BDP/cylS7xiinhGfc3b/zkB2x5ioieWR5oPq1LjTGo8SQUmsqOvhpepwFgW8dvQiywx3R+hI1rlC8D0WAL25WC24QFqWolB05zw0Ingzf3ymNCh3PldStHQAfIrWcswgxtBme9rOeqN/+aJVdLcyhhacZf3XzYbK3Cl55dS00QVdqX6egQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="517c8b573f3653a18b20cb95eab0268368cdab0b" Description="" Url=""><as:assemblyIdentity name="WpfClickOnceStudy.exe" version="1.0.0.6" publicKeyToken="d796f3ea8b89e721" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=nuits.jp, O=nuits.jp, C=JP</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>IKfvxWrpmGBcb+GiCm6BAhEn0Xc=</DigestValue></Reference></SignedInfo><SignatureValue>hKD2kBsukbXF2UjYaAm7CuRj6CsdE9rscAVgbGU5u6PJgQy1fqJhfWDGS4VrN2UnlF1GNeYrWwRovAxSwYEJkcLaiTTQBYt1oieO6FTukHtPNltNwApJLiV0sLMl6zpEq9fHBflMRJAL3p9p/TcBdPaEtaGmlciW9m5gDlCwUU3Pj2fWg+xJ2MJBNX6nVts85mOYoshYN2Vn33eNqTmU/Ccf32QlwLKYKDzE21sFFqdfCzfb773MiwRodKLUvtf8rwc1rXJpCjDDSqGMIdgJEfukVxQbkkIJ8ZV+NS8mnhe37SJO/n4QSAn5qQwceqYnBPw5NbYCmRHc7wtgMBicfA==</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>pABBsDvh5NroZMsqldVVb2aVWv+fkSXLoQuYl/WpeH0jTqOsCM06JpDi4qDOud54bpQ5v9eoHyfYoiR900haRj4cOmsYeooEcNZfPszWQJX3Shg6EPIPZNLqs/Xf/OTEhyaU5cdJlCkt4+JQBMrN7wzkUnZH0sTjGzn7BDP/cylS7xiinhGfc3b/zkB2x5ioieWR5oPq1LjTGo8SQUmsqOvhpepwFgW8dvQiywx3R+hI1rlC8D0WAL25WC24QFqWolB05zw0Ingzf3ymNCh3PldStHQAfIrWcswgxtBme9rOeqN/+aJVdLcyhhacZf3XzYbK3Cl55dS00QVdqX6egQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIDhjCCAnKgAwIBAgIQuNcyuVytVaJJTdJtia34kzAJBgUrDgMCHQUAMDMxCzAJBgNVBAYTAkpQMREwDwYDVQQKEwhudWl0cy5qcDERMA8GA1UEAxMIbnVpdHMuanAwIBcNMjIwNzE4MjEzNTQ2WhgPMjEwMDA3MTgxNTAwMDBaMDMxCzAJBgNVBAYTAkpQMREwDwYDVQQKEwhudWl0cy5qcDERMA8GA1UEAxMIbnVpdHMuanAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCkAEGwO+Hk2uhkyyqV1VVvZpVa/5+RJcuhC5iX9al4fSNOo6wIzTomkOLioM653nhulDm/16gfJ9iiJH3TSFpGPhw6axh6igRw1l8+zNZAlfdKGDoQ8g9k0uqz9d/85MSHJpTlx0mUKS3j4lAEys3vDORSdkfSxOMbOfsEM/9zKVLvGKKeEZ9zdv/OQHbHmKiJ5ZHmg+rUuNMajxJBSayo6+Gl6nAWBbx29CLLDHdH6EjWuULwPRYAvblYLbhAWpaiUHTnPDQieDN/fKY0KHc+V1K0dAB8itZyzCDG0GZ72s56o3/5olV0tzKGFpxl/dfNhsrcKXnl1LTRBV2pfp6BAgMBAAGjgZswgZgwDwYDVR0TAQH/BAUwAwIBADAfBgNVHSUEGDAWBggrBgEFBQcDAwYKKwYBBAGCNwoDDTBkBgNVHQEEXTBbgBC+67WzSds8msI2VW7tDzTvoTUwMzELMAkGA1UEBhMCSlAxETAPBgNVBAoTCG51aXRzLmpwMREwDwYDVQQDEwhudWl0cy5qcIIQuNcyuVytVaJJTdJtia34kzAJBgUrDgMCHQUAA4IBAQCUjqNeDTAcz5J9QOIVvunt+E2Lg01EpTZLknlSQrLD3a74y8Vb4ozCpIhZpAe28CuXf0T/yjTjuCcd2AitDI/cFCsPvTjNWOMEQQvCjoV2hlXw8bFaINNTPdV3i8BN1CGEpyWStzQGG+vIeR696pq8pzjgVcW5BJxDQdofzvhEK02+lKSK3QJaKYrFrSSya/E1fidpERTokeYN0zxUIqDmckbvB849+AH0IZzR2AuIxE7r6pkkD/MXk29QolQz4WMMtuZO8Ywbf/aM5Ai8oeS8K5EpIgBMcihvg4MsNOVMlWxeaL2B9ybBu8+6QbkgPud2owDgLEs+umx4MozpR6eS</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>
