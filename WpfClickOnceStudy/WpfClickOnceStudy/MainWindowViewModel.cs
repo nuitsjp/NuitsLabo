@@ -10,22 +10,29 @@ public class MainWindowViewModel
     {
         get
         {
-            string query;
-            if (Environment.GetEnvironmentVariable("ClickOnce_IsNetworkDeployed")?.ToLower() == "true")
+            try
             {
-                string value = Environment.GetEnvironmentVariable("ClickOnce_ActivationUri")!;
-                Uri activationUri = new Uri(value);
-                query = activationUri.Query;
+                string query;
+                if (Environment.GetEnvironmentVariable("ClickOnce_IsNetworkDeployed")?.ToLower() == "true")
+                {
+                    string value = Environment.GetEnvironmentVariable("ClickOnce_ActivationUri")!;
+                    Uri activationUri = new Uri(value);
+                    query = activationUri.Query;
 
+                }
+                else
+                {
+                    query = "ApplicationDeployment.IsNetworkDeployed is false";
+                }
+
+
+                File.WriteAllText("Message.txt", $"Hello, Click Once! from File. {DateTime.Now} {query}");
+                return File.ReadAllText("Message.txt");
             }
-            else
+            catch (Exception e)
             {
-                query = "ApplicationDeployment.IsNetworkDeployed is false";
+                return e.StackTrace!;
             }
-
-
-            File.WriteAllText("Message.txt", $"Hello, Click Once! from File. {DateTime.Now} {query}");
-            return File.ReadAllText("Message.txt");
         }
     }
 }
