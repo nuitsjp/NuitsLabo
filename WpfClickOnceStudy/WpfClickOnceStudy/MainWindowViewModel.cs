@@ -15,9 +15,11 @@ public class MainWindowViewModel
                 string query;
                 if (Environment.GetEnvironmentVariable("ClickOnce_IsNetworkDeployed")?.ToLower() == "true")
                 {
-                    string value = Environment.GetEnvironmentVariable("ClickOnce_ActivationUri")!;
-                    Uri activationUri = new Uri(value);
-                    query = activationUri.Query;
+                    string? value = Environment.GetEnvironmentVariable("ClickOnce_ActivationUri");
+                    Uri? activationUri = string.IsNullOrEmpty(value) ? null : new Uri(value);
+                    query = activationUri != null 
+                        ? activationUri.Query 
+                        : Environment.GetEnvironmentVariable("ClickOnce_CurrentVersion")!;
 
                 }
                 else
