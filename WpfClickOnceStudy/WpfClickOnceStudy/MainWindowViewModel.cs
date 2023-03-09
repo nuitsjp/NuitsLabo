@@ -13,12 +13,13 @@ public class MainWindowViewModel
             try
             {
                 string query;
+#if NET
                 if (Environment.GetEnvironmentVariable("ClickOnce_IsNetworkDeployed")?.ToLower() == "true")
                 {
                     string? value = Environment.GetEnvironmentVariable("ClickOnce_ActivationUri");
                     Uri? activationUri = string.IsNullOrEmpty(value) ? null : new Uri(value);
-                    query = activationUri != null 
-                        ? activationUri.Query 
+                    query = activationUri != null
+                        ? activationUri.Query
                         : Environment.GetEnvironmentVariable("ClickOnce_CurrentVersion")!;
 
                 }
@@ -26,6 +27,8 @@ public class MainWindowViewModel
                 {
                     query = "ApplicationDeployment.IsNetworkDeployed is false";
                 }
+#else
+#endif
 
 
                 File.WriteAllText("Message.txt", $"Hello, Click Once! from File. {DateTime.Now} {query}");
