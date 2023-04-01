@@ -1,8 +1,16 @@
+using MagicOnion;
+using MagicOnion.Server;
+using MagicOnionStudy.Server;
+using Microsoft.AspNetCore.SignalR;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddGrpc();
 builder.Services.AddMagicOnion();
-
+builder.Services.AddMagicOnion(options =>
+{
+    options.GlobalFilters.Add<SampleFilterAttribute>();
+});
 var app = builder.Build();
 app.UseRouting(); 
 app.UseEndpoints(endpoints =>
