@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33122.133
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IwtStudy", "IwtStudy\IwtStudy.csproj", "{99518835-5D51-446A-B729-49698534163C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{99518835-5D51-446A-B729-49698534163C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99518835-5D51-446A-B729-49698534163C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99518835-5D51-446A-B729-49698534163C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99518835-5D51-446A-B729-49698534163C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0325089C-81A2-4721-9A58-0547FD063F88}
+	EndGlobalSection
+EndGlobal
