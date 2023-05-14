@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Net.Http;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
 using Serilog.Formatting.Json;
+using Serilog.Sinks.Http.HttpClients;
 
 namespace SerilogStudy
 {
@@ -10,19 +12,22 @@ namespace SerilogStudy
     {
         static void Main(string[] args)
         {
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console(new JsonFormatter())
-                .WriteTo.Console(new CompactJsonFormatter())
-                .WriteTo.Console(
-                    LogEventLevel.Information, 
-                    outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] {ApplicationName} {Message} {LogEvent} {NewLine}{Exception}")
+            Console.WriteLine("Ready to Enter.");
+            Console.ReadLine();
+
+            ILogger log = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .WriteTo.Http(
+                    requestUri: "http://localhost:5000/Logs", 
+                    queueLimitBytes: null,
+                    httpClient: new JsonHttpClient(new HttpClient(new HttpClientHandler { UseDefaultCredentials = true })))
+                .WriteTo.Console()
                 .CreateLogger();
 
-            //Log.Information("Hello, {param}", new EmployeeId { Value = 100 });
-            //Log.Information("Hello, {param}", new Employee(new EmployeeId(100), "Tanaka"));
-            Log.Information("Hello, {param}", new ProcessActionId(new ProcessId(new BusinessId(10), 40), 1));
+            log.Information("Logging {@Heartbeat} from {Computer}", "heartbeat", "computer");
 
-            Log.CloseAndFlush();
+            Console.WriteLine("Completed.");
+            Console.ReadLine();
         }
     }
 
