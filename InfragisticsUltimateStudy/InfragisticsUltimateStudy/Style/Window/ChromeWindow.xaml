@@ -1,0 +1,165 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:InfragisticsUltimateStudy.Interactivity">
+    <!--==============================================================================================================-->
+    <!-- Caption Button                                                                                               -->
+    <!--==============================================================================================================-->
+    <Style x:Key="FocusVisual">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+    <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Primary900}"/>
+    <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+    <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+    <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+    <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+    <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+    <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+    <Style x:Key="CaptionButton" TargetType="{x:Type Button}">
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="FontFamily" Value="Marlett"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Width" Value="45"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Margin" Value="0,-1,-1,0"/>
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                        <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource PrimaryHueLightBrush}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PrimaryHueLightBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource PrimaryHueDarkBrush}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PrimaryHueDarkBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource PrimaryHueMidForegroundBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <!--==============================================================================================================-->
+    <!-- Chrome Window                                                                                                -->
+    <!--==============================================================================================================-->
+    <ControlTemplate x:Key="WindowTemplateKey" TargetType="{x:Type Window}">
+        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+            <Grid>
+                <AdornerDecorator>
+                    <ContentPresenter/>
+                </AdornerDecorator>
+                <ResizeGrip x:Name="WindowResizeGrip" HorizontalAlignment="Right" IsTabStop="false" Visibility="Collapsed" VerticalAlignment="Bottom"/>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="ResizeMode" Value="CanResizeWithGrip"/>
+                    <Condition Property="WindowState" Value="Normal"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Visibility" TargetName="WindowResizeGrip" Value="Visible"/>
+            </MultiTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+
+    <Style TargetType="{x:Type Window}" x:Key="ChromeWindowStyle">
+        <Setter Property="WindowChrome.WindowChrome">
+            <Setter.Value>
+                <WindowChrome CornerRadius="3" 
+                                      GlassFrameThickness="0" 
+                                      UseAeroCaptionButtons="False" 
+                                      CaptionHeight="{x:Static SystemParameters.CaptionHeight}" 
+                                      ResizeBorderThickness="{x:Static SystemParameters.WindowResizeBorderThickness}"/>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Icon" Value="/Idw.Business.View;component/Resource/WindowIcon.png"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource PrimaryHueMidBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="WindowStyle" Value="None"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="WindowState" Value="Normal"/>
+        <Setter Property="Padding" Value="0,0,0,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+                    <Border x:Name="LayoutRoot" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Padding="{TemplateBinding Padding}">
+                        <DockPanel>
+                            <Border DockPanel.Dock="Top" Background="{StaticResource PrimaryHueMidForegroundBrush}">
+                                <Grid Background="White">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="40"/>
+                                        <RowDefinition Height="1"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                            <Image Source="/Idw.Business.View;component/Resource/Icon.png" Stretch="None" Margin="20, 0, 10, 0"/>
+                                            <TextBlock Text="{TemplateBinding Title}" 
+                                                           FontSize="20" 
+                                                           FontFamily="Segoe UI"
+                                                           Foreground="{StaticResource PrimaryHueMidBrush}" 
+                                                           VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal"
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Top">
+                                            <Button Content="0" Style="{DynamicResource CaptionButton}" Command="{x:Static local:ChromeWindowCommands.MinimizeCommand}" CommandParameter="{Binding ElementName=LayoutRoot}"/>
+                                            <Button Content="1" Style="{DynamicResource CaptionButton}" Command="{x:Static local:ChromeWindowCommands.ChangeWindowStateCommand}" CommandParameter="{Binding ElementName=LayoutRoot}"/>
+                                            <Button Content="r" Style="{DynamicResource CaptionButton}" Command="{x:Static local:ChromeWindowCommands.CloseWindowCommand}" CommandParameter="{Binding ElementName=LayoutRoot}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                    <Rectangle Grid.Row="1" Fill="#E5E7E9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                </Grid>
+                            </Border>
+                            <Grid Background="{StaticResource MaterialDesignPaper}">
+                                <AdornerDecorator>
+                                    <ContentPresenter/>
+                                </AdornerDecorator>
+                            </Grid>
+                        </DockPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="ResizeMode" Value="CanResizeWithGrip">
+                <Setter Property="Template" Value="{StaticResource WindowTemplateKey}"/>
+            </Trigger>
+            <Trigger Property="WindowState" Value="Maximized">
+                <Setter Property="Padding" Value="6,6,6,46"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>
