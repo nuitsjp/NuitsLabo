@@ -52,21 +52,15 @@
 
                 <igThemes:PrimitivesRoyalLight/>
                 <igThemes:DataPresenterRoyalLight/>
-                <ResourceDictionary Source="Style/Editors/EditorsRoyalLight.xaml" />
                 <ResourceDictionary Source="Theme/RoyalLight.xamComboEditor.xaml" />
                 <ResourceDictionary Source="Theme/RoyalLight.xamMultiColumnCombo.xaml" />
 
-                <ResourceDictionary Source="Font/Font.xaml" />
                 <ResourceDictionary Source="Style/BusyIndicator/BusyIndicator.xaml" />
                 <ResourceDictionary Source="Style/Button/Buttons.xaml" />
                 <ResourceDictionary Source="Style/Button/MenuButtonStyle.xaml"/>
                 <ResourceDictionary Source="Style/CheckBox/CheckBoxs.xaml" />
                 <ResourceDictionary Source="Style/Grid/Grids.xaml" />
-                <ResourceDictionary Source="Style/TextBlock/TextBlocks.xaml" />
-                <ResourceDictionary Source="Style/TextBox/TextBoxs.xaml" />
                 <ResourceDictionary Source="Style/Window/ChromeWindow.xaml" />
-                <ResourceDictionary Source="Style/XamComboEditor/XamComboEditors.xaml" />
-                <ResourceDictionary Source="Style/XamMultiColumnComboEditor/XamMultiColumnComboEditors.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
