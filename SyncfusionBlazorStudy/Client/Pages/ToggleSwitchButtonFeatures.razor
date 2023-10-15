@@ -1,0 +1,82 @@
+﻿@page "/toggleswitchbutton-features"
+@using Syncfusion.Blazor.Buttons
+<PageTitle>Toggle Switch Button</PageTitle>
+<h2>Toggle Switch Button</h2>
+<br/>
+   <div class="col-lg-12 control-section">
+        <div class="content-wrapper">
+            <div class="container switch-control">
+               <div>
+            <label style="padding: 10px 70px 10px 0;" >USB Tethering</label>
+            <SfSwitch @bind-Checked="@isUSB"></SfSwitch>
+            </div>
+            <div>
+            <label style="padding: 10px 24px 10px 0; ">Portable Wi-Fi hotspot</label>
+            <SfSwitch @bind-Checked="@ishotspot"></SfSwitch>
+            </div>
+            <div>
+            <label style="padding: 10px 40px 10px 0; ">Bluetooth Tethering</label>
+            <SfSwitch Disabled="true" @bind-Checked="@isBluetooth"></SfSwitch>
+            </div>
+            </div>
+        </div>
+    </div>
+<br/>
+<div>
+  <h3>Selected Features:</h3>
+    <ul class="ulstyle">
+      <li class="list"> Default</li>
+      <li class="list"> Theme - Fluent</li>
+    </ul>
+</div>
+<br/>
+<style>
+    .content-wrapper {
+        margin-top: 47px;
+    }
+    .switch-control .heading {
+        text-indent: 15px;
+        padding: 10px 0;
+        margin-left: -20px;
+    }
+    .switch-control div {
+        display: flex;
+        align-items: center;
+    }
+    .switch-control {
+        margin: 0 auto;
+        width: 275px;
+    }
+        .switch-control label {
+            -webkit-tap-highlight-color: transparent;
+            cursor: pointer;
+            user-select: none;
+            font-weight: 400;
+            font-size: 13px;
+        }
+        .switch-control .e-disabled {
+            pointer-events: none;
+        }
+    .list {
+    float: left;
+    line-height: 20px;
+    margin: 10px;
+    min-width: 200px;
+    }
+    .ulstyle {
+        margin: 0px;
+        padding-left: 20px;
+        display: inline-block;
+    }
+    .list {
+        float: left;
+        line-height: 20px;
+        margin: 10px;
+        min-width: 200px;
+    }
+</style>
+@code {
+private bool isUSB = true;
+private bool ishotspot = false;
+private bool isBluetooth = false;
+}

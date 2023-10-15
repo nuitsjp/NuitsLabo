@@ -1,0 +1,62 @@
+﻿@page "/combobox-features"
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Data
+<PageTitle>ComboBox</PageTitle>
+<h2>ComboBox</h2>
+<br/>
+<div id = "ControlRegion">
+<div class="col-lg-12 control-section">
+    <div class="control_wrapper">
+        <SfComboBox TValue="string" TItem="GameFields" PopupHeight="230px" Index=2 Placeholder="Select a game" DataSource="@Games">
+            <ComboBoxFieldSettings Text="Text" Value="ID"></ComboBoxFieldSettings>
+        </SfComboBox>
+    </div>
+</div>
+    </div>
+<br/>
+<div>
+  <h3>Selected Features:</h3>
+    <ul class="ulstyle">
+      <li class="list"> ComboBox Samples - Default</li>
+      <li class="list"> Theme - Fluent</li>
+    </ul>
+</div>
+<br/>
+<style>
+   .control_wrapper {
+        width: 350px;
+        margin: 0 auto;
+        padding: 3%;
+    }
+    .ulstyle {
+        margin: 0px;
+        padding-left: 20px;
+        display: inline-block;
+    }
+    .list {
+    float: left;
+    line-height: 20px;
+    margin: 10px;
+    min-width: 280px;
+    }
+</style>
+@code{
+    public class GameFields
+    {
+        public string ID { get; set; } = string.Empty;
+        public string Text { get; set; } = string.Empty;
+    }
+    private List<GameFields> Games = new List<GameFields>() {
+        new GameFields(){ ID= "Game1", Text= "American Football" },
+        new GameFields(){ ID= "Game2", Text= "Badminton" },
+        new GameFields(){ ID= "Game3", Text= "Basketball" },
+        new GameFields(){ ID= "Game4", Text= "Cricket" },
+        new GameFields(){ ID= "Game5", Text= "Football" },
+        new GameFields(){ ID= "Game6", Text= "Golf" },
+        new GameFields(){ ID= "Game7", Text= "Hockey" },
+        new GameFields(){ ID= "Game8", Text= "Rugby"},
+        new GameFields(){ ID= "Game9", Text= "Snooker" },
+        new GameFields(){ ID= "Game10", Text= "Tennis"},
+     };
+}

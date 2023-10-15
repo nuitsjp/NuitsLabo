@@ -1,0 +1,58 @@
+﻿@page "/datepicker-features"
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Calendars
+@inject HttpClient Http;
+<PageTitle>DatePicker</PageTitle>
+<h2>DatePicker</h2>
+<br/>
+<div id = "ControlRegion">
+	<div class="control-section">
+    <div class="timepicker-section">
+        <div id="wrapper" class="timepicker-control">
+            <div class="tabs-wrap">
+                <div class="wrap">
+                    <SfDatePicker TValue="DateTime?" PlaceHolder="Choose a Date" Min="@min" Max="@max" EnableMask="true" ></SfDatePicker>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<br/>
+<div>
+  <h3>Selected Features:</h3>
+    <ul class="ulstyle">
+      <li class="list"> Range</li>
+      <li class="list"> Mask</li>
+      <li class="list"> Theme - Fluent</li>
+    </ul>
+</div>
+<br/>
+<style>
+    .ulstyle {
+        margin: 0px;
+        padding-left: 20px;
+        display: inline-block;
+    }
+    .list {
+    float: left;
+    line-height: 20px;
+    margin: 10px;
+    min-width: 200px;
+    }
+    #wrapper {
+        max-width: 300px;
+        margin: 0px auto;
+        padding-top: 20px;
+    }
+    .tabs-wrap {
+        padding: 0 0px 10px;
+    }
+    .e-bigger .control-section {
+        margin-top: 60px;
+    }
+</style>
+@code {
+    public DateTime min { get; set; } = new DateTime(2020, 1, 5, 9, 0, 0);
+    public DateTime max { get; set; } = new DateTime(2020, 1, 24, 18, 0, 0);
+}

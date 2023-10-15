@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "FunctionAppNet7": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7042",
+      "launchBrowser": false
+    }
+  }
+}
