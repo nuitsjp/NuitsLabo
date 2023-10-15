@@ -1,0 +1,39 @@
+﻿<Window x:Class="InfragisticsUltimateStudy.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InfragisticsUltimateStudy"
+        xmlns:ig="http://schemas.infragistics.com/xaml"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        x:Name="MyInstance"
+        DataContext="{Binding ElementName=MyInstance}">
+    
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <ig:XamMultiColumnComboEditor 
+                    ItemsSource="{Binding Items}" 
+                    Width="200"
+                    DisplayMemberPath="Name">
+
+            <ig:XamMultiColumnComboEditor.Resources>
+                <Style TargetType="ig:ComboHeaderCellControl">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Style>
+            </ig:XamMultiColumnComboEditor.Resources>
+
+            <ig:XamMultiColumnComboEditor.Columns>
+                <ig:TextComboColumn Key="Name" />
+            </ig:XamMultiColumnComboEditor.Columns>
+
+            <ig:XamMultiColumnComboEditor.ItemFilters>
+                <ig:ComboItemFilter FieldName="Name">
+                    <ig:ComboItemFilter.Conditions>
+                        <ig:ComparisonCondition Operator="Contains"/>
+                    </ig:ComboItemFilter.Conditions>
+                </ig:ComboItemFilter>
+            </ig:XamMultiColumnComboEditor.ItemFilters>
+
+        </ig:XamMultiColumnComboEditor>
+    </Grid>
+</Window>

@@ -1,0 +1,193 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:PresentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+                    xmlns:igEditors="http://infragistics.com/Editors"
+                    xmlns:igPrim="http://schemas.infragistics.com/xaml/primitives"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!--  ********************************** THEME COLORS **********************************  -->
+
+    <!--Base Colors-->
+    <Color x:Key="Color_001">#FF666666</Color><!-- Foreground / ScrollBar Hover -->
+    <Color x:Key="Color_002">#FFFFFFFF</Color><!-- Editors Controls Background -->
+    <Color x:Key="Color_003">#FFDDDDDD</Color><!-- Button Background / Grid Lines -->
+    <Color x:Key="Color_004">#FF777777</Color><!-- Icons Normal  -->
+    <Color x:Key="Color_005">#FF999999</Color><!-- Control Border Hover / RadioButton & Checkbox Hover-->
+    <Color x:Key="Color_006">#FF555555</Color><!-- Icons hover -->
+    <Color x:Key="Color_007">#FFF5F5F5</Color><!-- ColorPicker - Menu - Calendar - Popup Background-->
+    <Color x:Key="Color_008">#FFCCCCCC</Color><!-- ReadOnly Background / Menu Item - listbox hover / grid Hover / Button Border Normal / Button Background Hover-->
+    <Color x:Key="Color_009">#FFBBBBBB</Color><!-- Slider Background /Button Border Hover / Control Border Normal / Scrollbar Background -->
+    <Color x:Key="Color_010">#FFC3C3C3</Color><!-- ReadOnly Border -->
+    <Color x:Key="Color_012">#FFE0E0E0</Color><!-- ColorPicker - Menu - Calendar - Popup Border -->
+    <Color x:Key="Color_014">#FF333333</Color><!-- Foreground Hover -->
+    <Color x:Key="Color_015">#FFEEEEEE</Color><!--  -->
+    <Color x:Key="Color_016">#FF222222</Color><!--  -->
+    <Color x:Key="Color_017">#FF888888</Color><!--   -->
+    <Color x:Key="Color_018">#FF000000</Color><!-- Darker Foregrounds -->
+  
+    <Color x:Key="Color_051">#BF000000</Color>    <!--75% Black-->
+    <Color x:Key="Color_052">#99000000</Color>    <!--60% Black-->
+  
+    <!--  Theme Accent colors  -->  
+    <Color x:Key="Color_011">#FF7446B9</Color> <!--  BG SELECTED/PRESSED/CHECKED  -->    
+    <Color x:Key="Color_013">#FF7446B9</Color>  <!--  BrD FOCUS  -->
+
+    <!--  Transparent and Whites with transparency  -->
+    <Color x:Key="Color_044">#4CFFFFFF</Color><!--30% White-->
+    <Color x:Key="Color_046">#00FFFFFF</Color>
+    
+     <!--Theme Error colors  -->
+    <Color x:Key="Color_019">#FFC62828</Color>
+
+    <!--  *********************************  BRUSHES  *********************************  -->
+    <SolidColorBrush x:Key="CaretBrushForeground" PresentationOptions:Freeze="true" Color="{StaticResource Color_001}" />
+    <SolidColorBrush x:Key="CaretActiveForegroundBrush" PresentationOptions:Freeze="true" Color="{StaticResource Color_002}" />
+    <SolidColorBrush x:Key="DisabledForegroundBrush" PresentationOptions:Freeze="true" Color="{StaticResource Color_007}" />
+    <SolidColorBrush x:Key="TransparentBrush" PresentationOptions:Freeze="true" Color="{StaticResource Color_046}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=PopupBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_007}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=PopupBorderBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_012}" />
+    <SolidColorBrush x:Key="DisabledBorderBrush" PresentationOptions:Freeze="true" Color="{StaticResource Color_006}" />
+    <SolidColorBrush x:Key="DisabledBackgroundBrush" PresentationOptions:Freeze="true" Color="{StaticResource Color_007}" />
+    <SolidColorBrush x:Key="ValidationErrorElement" igPrim:XamlHelper.IsExcludedFromWash="True" PresentationOptions:Freeze="true" Color="{StaticResource Color_019}" />
+   
+    <!--  Glyph Brushes  -->
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=GlyphBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_052}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=GlyphHoverBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_051}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=GlyphPressedBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_051}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=GlyphActiveBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_002}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=PrevNextMonthButtonsCalendarPressedBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_011}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=GlyphDisabledBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_007}" />
+
+    <!--  Scrollbar Brushes  -->
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=HScrollbarThumbBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_009}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=VScrollbarThumbBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_009}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=VScrollbarThumbHoverBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_001}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=HScrollbarThumbHoverBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_001}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=VScrollbarThumbPressedBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_013}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=HScrollbarThumbPressedBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_013}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=ScrollbarPageButtonArrowBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_009}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=ScrollbarPageButtonArrowPressedBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_013}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=ScrollbarPageButtonArrowHoverBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_001}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=ScrollbarPageButtonBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_009}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=ScrollbarPageButtonPressedBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_013}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=ScrollbarPageButtonHoverBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_001}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=ScrollbarPageButtonHoverBorderBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_001}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=ScrollbarBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_046}" />
+
+    <!--  Button Brushes  -->
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamMonthCalendar}, ResourceId=ButtonBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_003}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamMonthCalendar}, ResourceId=ButtonBorderBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_008}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamMonthCalendar}, ResourceId=ButtonHoverBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_008}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamMonthCalendar}, ResourceId=ButtonHoverBorderBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_009}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamMonthCalendar}, ResourceId=ButtonPressedBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_011}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamMonthCalendar}, ResourceId=ButtonPressedBorderBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_011}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamMonthCalendar}, ResourceId=ButtonFocusedBorderBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_013}" />
+
+    <!--  CheckBox Brushes  -->
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:ValueEditorCheckBox}, ResourceId=CheckBoxBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_002}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:ValueEditorCheckBox}, ResourceId=CheckBoxBorderBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_009}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:ValueEditorCheckBox}, ResourceId=CheckBoxCheckedBorderBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_011}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:ValueEditorCheckBox}, ResourceId=CheckBoxCheckedBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_011}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:ValueEditorCheckBox}, ResourceId=CheckBoxHoverBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_002}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:ValueEditorCheckBox}, ResourceId=CheckBoxHoverBorderBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_005}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:ValueEditorCheckBox}, ResourceId=CheckBoxFocusedBorderBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_013}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:ValueEditorCheckBox}, ResourceId=CheckBoxEmbeddedFocusedBorderBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_044}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:ValueEditorCheckBox}, ResourceId=CheckBoxIndeterminateCheckBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_002}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:ValueEditorCheckBox}, ResourceId=CheckBoxCheckBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_002}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:ValueEditorCheckBox}, ResourceId=CheckBoxIndeterminateCheckHoverBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_006}" />
+
+    <!--  ComboBox Brushes  -->
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=ComboBoxItemHoverBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_008}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=ComboBoxItemPressedBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_011}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamComboEditor}, ResourceId=ComboBoxItemFocusedBorderBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_013}" />
+
+    <!--  Editors Brushes  -->
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamTextEditor}, ResourceId=EditorsFocusBorderBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_013}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamTextEditor}, ResourceId=EditorsBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_002}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamTextEditor}, ResourceId=EditorsHoverBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_002}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamTextEditor}, ResourceId=EditorsHoverBorderBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_005}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamTextEditor}, ResourceId=EditorsReadOnlyBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_007}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.EditorsNormalBorderFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_009}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.EditorsHottrackBorderFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_005}" />
+
+    <!--  DropdownButton Brushes  
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.DropdownBtnNormalOuterBorderFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_002}" />   
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.DropdownBtnHottrackOuterBorderFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_010}" />   
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.DropdownBtnHottrackCenterFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_002}" />   
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.DropdownBtnPressedOuterBorderFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_011}" />   
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.DropdownBtnGlyphNormalForegroundFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_004}" />   
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.DropdownBtnGlyphNormalBackgroundFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_046}" />   
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.DropdownBtnGlyphHottrackForegroundFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_001}" />    
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.DropdownBtnGlyphHottrackBackgroundFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_046}" />   
+-->
+    
+    <!--  TextEditors Brushes  -->
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.TextEditorBackgroundKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_002}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.TextEditorBorderBrushKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_009}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.TextEditorForegroundKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_001}" />
+
+    <!--  Calendar Brushes  -->
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamMonthCalendar}, ResourceId=CalendarTodayButtonBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_007}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamMonthCalendar}, ResourceId=CalendarBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_007}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamMonthCalendar}, ResourceId=CalendarBorderBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_012}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamMonthCalendar}, ResourceId=CalendarWeekNumberBaseBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_007}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamMonthCalendar}, ResourceId=CalendarWeekNumberBaseBorderBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_046}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type igEditors:XamMonthCalendar}, ResourceId=SelectedInactiveItemBackgroundBrush}" PresentationOptions:Freeze="true" Color="{StaticResource Color_011}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarItemHoverForegroundKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_001}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarItemHoverFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_008}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarItemHoverOuterBorderFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_046}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarItemSelectedFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_011}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarItemSelectedOuterBorderFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_046}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarItemSelectedForegroundKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_002}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarDayTodayOuterBorderFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_013}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarDayTodayForegroundKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_001}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarDayTodayFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_007}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarItemInnerBorderFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_046}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarOtherDayForegroundKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_001}" Opacity="0.4" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarDayOfWeekFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_007}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarDayOfWeekForegroundKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_014}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarItemGroupTitleForegroundKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_001}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarItemGroupTitleBackgroundKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_007}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarSeparatorStrokeKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_046}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarNavGlyphFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_004}" />
+    <SolidColorBrush x:Key="{x:Static igEditors:EditorsBrushKeys.CalendarNavGlyphHoverFillKey}" PresentationOptions:Freeze="true" Color="{StaticResource Color_006}" />
+
+   
+    <!--  *********************************  COMMON ATTRIBUTES  *********************************  -->
+
+    <!--  Scrollbar Arrow  --> <!--  Width="8" Height="5"  -->
+    <Geometry x:Key="ScrollbarArrow">M 5 5 L 1 0 L -3 5 L 5 5 Z</Geometry>
+
+    <!--  Combo Arrow  --> <!--  Width="7" Height="4"  -->
+    <Geometry x:Key="DownArrow">M 0 0 L 3.5 4 L 7 0 L 0 0 Z</Geometry>
+
+    <!--  Combo UP Arrow  -->
+    <Geometry x:Key="UpArrow">M 0 4 L 3.5 0 L 7 4 L 0 4 Z</Geometry>
+
+    <!--  VShaped Arrow Right  --> <!--  Height="10" Width="6"  -->
+    <Geometry x:Key="VArrowRight">M 0 8.3882 L 1.4175 10 L 6 5 L 1.4175 0 L 0.0675 1.489 L 3.2177 4.9755 L 0 8.3882 Z</Geometry>
+
+    <!--  VShaped Arrow Left  -->
+    <Geometry x:Key="VArrowLeft">M 6 8.3882 L 4.5825 10 L 0 5 L 4.5825 0 L 5.9325 1.489 L 2.7823 4.9755 L 6 8.3882 Z</Geometry>
+    
+     <!--  Plus/Minus Icons  -->
+   <Geometry x:Key="PlusIcon">M3,0 L5,0 L5,3 L8,3 L8,5 L5,5 L5,8 L3,8 L3,5 L0,5 L0,3 L3,3 z</Geometry>
+   <Geometry x:Key="MinusIcon">M0,0 L8,0 L8,2 L0,2 z</Geometry>
+    
+   <CornerRadius x:Key="DropDownCornerRadius">0 1 1 0</CornerRadius>
+
+    <!--  Fonts  -->
+    <FontFamily x:Key="FontFamily">#Segoe UI</FontFamily>
+    <sys:Double x:Key="FontSize">12</sys:Double>
+    <FontWeight x:Key="FontNormal">Normal</FontWeight>
+    <FontWeight x:Key="FontSemiBold">SemiBold</FontWeight>
+    <sys:Double x:Key="DefaultMinHeight">24</sys:Double>
+    <sys:Double x:Key="DefaultSize">24</sys:Double>
+
+    <CornerRadius x:Key="{x:Static igEditors:EditorsBrushKeys.SpinButtonCornerRadiusKey}" BottomLeft="1" BottomRight="1" TopLeft="1" TopRight="1" />
+    <CornerRadius x:Key="{x:Static igEditors:EditorsBrushKeys.TextEditorCornerRadiusKey}" BottomLeft="1" BottomRight="1" TopLeft="1" TopRight="1" />
+    <Thickness x:Key="{x:Static igEditors:EditorsBrushKeys.TextEditorBorderThicknessKey}" Bottom="1" Left="1" Right="1" Top="1" />
+    <Thickness x:Key="{x:Static igEditors:EditorsBrushKeys.TextEditorMarginKey}" Bottom="1" Left="1" Right="1" Top="1" />
+    <Thickness x:Key="{x:Static igEditors:EditorsBrushKeys.TextEditorPaddingKey}" Bottom="2" Left="6" Right="6" Top="2" />
+    
+</ResourceDictionary>

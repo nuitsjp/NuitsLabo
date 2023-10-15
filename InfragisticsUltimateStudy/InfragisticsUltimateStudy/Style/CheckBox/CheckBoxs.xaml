@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ベース -->
+    <Style x:Key="CheckBoxBase" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource MaterialDesignCheckBox}">
+        <Setter Property="Margin" Value="5"/>
+    </Style>
+
+    <!-- デフォルト -->
+    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CheckBoxBase}">
+    </Style>
+
+</ResourceDictionary>
