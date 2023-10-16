@@ -1,0 +1,48 @@
+﻿@page "/textbox-features"
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Inputs
+<PageTitle>TextBox</PageTitle>
+<h2>TextBox</h2>
+<br/>
+<div id = "ControlRegion">
+<div class="col-lg-12 control-section">
+    <div class="control_wrapper">
+            <div class="row" style="width:800px">
+                <div style="width:300px;margin-right:30px">
+                    <SfTextBox Placeholder="First Name"></SfTextBox>
+                </div>
+                <div style="width:300px;;margin-left:30px">
+                    <SfTextBox Placeholder="Last Name"></SfTextBox>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+<div>
+  <h3>Selected Features:</h3>
+    <ul class="ulstyle">
+      <li class="list"> TextBox Samples - Default</li>
+      <li class="list"> Theme - Fluent</li>
+    </ul>
+</div>
+<br/>
+<style>
+    .control_wrapper {
+        width: 350px;
+        margin: 0 auto;
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+    .ulstyle {
+        margin: 0px;
+        padding-left: 20px;
+        display: inline-block;
+    }
+    .list {
+    float: left;
+    line-height: 20px;
+    margin: 10px;
+    min-width: 280px;
+    }
+</style>

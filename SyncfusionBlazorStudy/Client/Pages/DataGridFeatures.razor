@@ -1,0 +1,85 @@
+﻿@page "/datagrid-features"
+@using Syncfusion.Blazor.Grids
+<PageTitle>DataGrid</PageTitle>
+<h2>DataGrid</h2>
+<br/>
+<div id = "ControlRegion">
+<SfGrid  ID="Grid" DataSource="@Orders"  @ref="Grid" AllowPaging="true" AllowFiltering="true" AllowReordering="true" AllowResizing="true" AllowGrouping="true" AllowExcelExport="true" AllowSelection="true"
+              AllowSorting="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update","ExcelExport","Search"})" Height="315" Width="900">        
+        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Normal"></GridEditSettings>
+        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
+    <GridPageSettings PageSizes="true"></GridPageSettings>
+	<GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+        <GridEvents OnToolbarClick="ToolbarClick" TValue="Order"></GridEvents>
+        <GridColumns>
+            <GridColumn Type='ColumnType.CheckBox' Width="50"></GridColumn>
+            <GridColumn Field=@nameof(Order.OrderID) HeaderText="Order ID" IsPrimaryKey="true" ValidationRules="@(new ValidationRules{ Required=true })" TextAlign="TextAlign.Right" Width="120"></GridColumn>
+            <GridColumn Field=@nameof(Order.CustomerID) HeaderText="Customer Name" ValidationRules="@(new ValidationRules{ Required=true })" Width="120"></GridColumn>
+            <GridColumn Field=@nameof(Order.OrderDate) HeaderText=" Order Date" EditType="EditType.DatePickerEdit" Format="d" TextAlign="TextAlign.Right" Width="130" Type="ColumnType.Date"></GridColumn>
+            <GridColumn Field=@nameof(Order.Freight) HeaderText="Freight" Format="C2" TextAlign="TextAlign.Right" EditType="EditType.NumericEdit" Width="120"></GridColumn>
+            <GridColumn Field=@nameof(Order.ShipCountry) HeaderText="Ship Country" EditType="EditType.DropDownEdit" Width="150"></GridColumn>
+        </GridColumns>
+    </SfGrid>
+</div>
+<br/>
+<div>
+  <h3>Selected Features:</h3>
+    <ul class="ulstyle">
+      <li class="list"> Exporting - Excel Export</li>
+      <li class="list"> Grouping</li>
+      <li class="list"> Sorting</li>
+      <li class="list"> Filtering - Filter Bar</li>
+      <li class="list"> Selection</li>
+      <li class="list"> Reordering</li>
+      <li class="list"> Paging</li>
+      <li class="list"> Resizing</li>
+      <li class="list"> Searching</li>
+      <li class="list"> Checkbox Selection</li>
+      <li class="list"> Editing - Normal</li>
+      <li class="list"> Theme - Fluent</li>
+    </ul>
+</div>
+<br/>
+<style>
+    .ulstyle {
+        margin: 0px;
+        padding-left: 20px;
+        display: inline-block;
+    }
+    .list {
+    float: left;
+    line-height: 20px;
+    margin: 10px;
+    min-width: 200px;
+    }
+</style>
+@code{
+        public List<Order>? Orders { get; set; }
+        SfGrid<Order>? Grid;
+    protected override void OnInitialized()
+    {
+        Orders = Enumerable.Range(1, 75).Select(x => new Order()
+        {
+            OrderID = 1000 + x,
+            CustomerID = (new string[] { "ALFKI", "ANANTR", "ANTON", "BLONP", "BOLID" })[new Random().Next(5)],
+            Freight = 2.1 * x,
+            OrderDate = DateTime.Now.AddDays(-x),
+            ShipCountry = (new string[] { "USA", "UK", "CHINA", "RUSSIA", "INDIA" })[new Random().Next(5)]
+        }).ToList();
+    }
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Id == "Grid_excelexport")
+        {
+                this.Grid?.ExportToExcelAsync();
+        }
+    }
+    public class Order
+    {
+        public int? OrderID { get; set; }
+        public string? CustomerID { get; set; }
+        public DateTime? OrderDate { get; set; }
+        public double? Freight { get; set; }
+        public string? ShipCountry { get; set; }
+    }
+}

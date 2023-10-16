@@ -1,0 +1,106 @@
+﻿@page "/dashboardlayout-features"
+@using Syncfusion.Blazor.Layouts
+<PageTitle>Dashboard Layout</PageTitle>
+<h2>Dashboard Layout</h2>
+<br/>
+<div id = "control-region">
+<div class="control-section" id="target">
+    <div style="padding:5px;text-align:right;">
+            <Syncfusion.Blazor.Buttons.SfButton CssClass="e-btn e-info" Content="Add Panel" @onclick="AddClick"></Syncfusion.Blazor.Buttons.SfButton>
+        </div>
+    <SfDashboardLayout @ref="dashboardObject" AllowFloating="true" AllowResizing="true" Columns="5">
+        <DashboardLayoutPanels>
+            <DashboardLayoutPanel Id="one" Column="0" Row="0">
+                <HeaderTemplate>Panel 1</HeaderTemplate>
+            </DashboardLayoutPanel>
+            <DashboardLayoutPanel Id="two" Row="1" Column="0" SizeX=1 SizeY=2>
+                <HeaderTemplate>Panel 2</HeaderTemplate>
+            </DashboardLayoutPanel>
+            <DashboardLayoutPanel Id="three" Row="0" Column="1" SizeX=2 SizeY=2>
+                <HeaderTemplate>Panel 3</HeaderTemplate>
+            </DashboardLayoutPanel>
+            <DashboardLayoutPanel Id="four" Row="2" Column="1" SizeX=1 SizeY=1>
+                <HeaderTemplate>Panel 4</HeaderTemplate>
+            </DashboardLayoutPanel>
+            <DashboardLayoutPanel Id="five" Row="2" Column="2" SizeX=2 SizeY=1>
+                <HeaderTemplate>Panel 5</HeaderTemplate>
+            </DashboardLayoutPanel>
+            <DashboardLayoutPanel Id="six" Row="0" Column="3" SizeX=1 SizeY=1>
+                <HeaderTemplate>Panel 6</HeaderTemplate>
+            </DashboardLayoutPanel>
+            <DashboardLayoutPanel Id="seven" Row="1" Column="3" SizeX=1 SizeY=1>
+                <HeaderTemplate>Panel 7</HeaderTemplate>
+            </DashboardLayoutPanel>
+            <DashboardLayoutPanel Id="eight" Row="0" Column="4" SizeX=1 SizeY=3>
+                <HeaderTemplate>Panel 8</HeaderTemplate>
+            </DashboardLayoutPanel>
+        </DashboardLayoutPanels>
+    </SfDashboardLayout>
+</div>
+</div>
+<br/>
+<div>
+  <h3>Selected Features:</h3>
+    <ul class="ulstyle">
+      <li class="list"> Dashboard Layout Samples - Default</li>
+      <li class="list"> Floating</li>
+      <li class="list"> Resizing</li>
+      <li class="list"> Theme - Fluent</li>
+    </ul>
+</div>
+<br/>
+<style>
+    .e-dashboardlayout {
+        padding: 10px;
+    }
+    .e-dashboardlayout.e-control .e-panel:hover span {
+        display: block;
+    }
+    .e-dashboardlayout .e-panel .e-panel-container .text-align {
+        vertical-align: middle;
+        font-weight: 600;
+        font-size: 20px;
+        text-align: center;
+    }
+    .e-template-icon {
+        padding: 10px;
+        float: right;
+        display: none;
+    }
+    .text-align {
+        line-height: 160px;
+    }
+    .sb-demo-section .container-fluid {
+        background: #E5E5E5;
+    }
+    .ulstyle {
+        margin: 0px;
+        padding-left: 20px;
+        display: inline-block;
+    }
+    .list {
+    float: left;
+    line-height: 20px;
+    margin: 10px;
+    min-width: 350px;
+    }
+</style>
+@code {
+        SfDashboardLayout? dashboardObject;
+    public int Count = 9;
+    public async Task AddClick(EventArgs args)
+    {
+        string ContentValue = this.Count.ToString();
+        PanelModel panel = new PanelModel
+        {
+            Id = this.Count.ToString() + "_layout",
+            SizeX = 1,
+            SizeY = 1,
+            Column = 0,
+            Row = 0,
+            Header = @<div class='text-align'> Panel @ContentValue </div>
+        };
+        await dashboardObject!.AddPanelAsync(panel);
+        this.Count = this.Count + 1;
+    }
+}

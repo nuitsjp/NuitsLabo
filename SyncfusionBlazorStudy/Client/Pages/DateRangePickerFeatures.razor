@@ -1,0 +1,63 @@
+﻿@page "/daterangepicker-features"
+@using Syncfusion.Blazor.Calendars
+@inject HttpClient Http;
+<PageTitle>DateRangePicker</PageTitle>
+<h2>DateRangePicker</h2>
+<br/>
+<div id = "ControlRegion">
+	<div class=" col-lg-12 control-section">
+    <div id="wrapper" class="daterangepicker-section">
+        <div id="daterangepicker-control">
+            <SfDateRangePicker TValue="DateTime?" Placeholder="Choose a Range" Presets="@presets"  >			
+			</SfDateRangePicker>			
+        </div>
+    </div>
+</div>
+</div>
+<br/>
+<div>
+  <h3>Selected Features:</h3>
+    <ul class="ulstyle">
+      <li class="list"> Preset Ranges</li>
+      <li class="list"> Theme - Fluent</li>
+    </ul>
+</div>
+<br/>
+<style>
+    .ulstyle {
+        margin: 0px;
+        padding-left: 20px;
+        display: inline-block;
+    }
+    .list {
+    float: left;
+    line-height: 20px;
+    margin: 10px;
+    min-width: 200px;
+    }
+    #wrapper {
+        max-width: 300px;
+        margin: 0px auto;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+</style>
+@code {
+    public int days = (int)DateTime.Now.DayOfWeek;
+    public DateTime weekStart { get; set; }
+    public DateTime weekEnd { get; set; }
+    public DateTime monthStart { get; set; }
+    public DateTime monthEnd { get; set; }
+    protected override void OnInitialized()
+    {
+        weekStart = DateTime.Now.AddDays(-days);
+        weekEnd = weekStart.AddDays(6);
+        monthStart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+        monthEnd = monthStart.AddMonths(1).AddDays(-1);
+    }
+     public List<Presets> presets { get; set; } = new List<Presets>
+     {
+         new Presets { Start = DateTime.Now.AddDays(-((int)DateTime.Now.DayOfWeek)), End = DateTime.Now.AddDays(-((int)DateTime.Now.DayOfWeek)).AddDays(6) , Label = "This Week"  },
+         new Presets { Start = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1), End = (new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1)).AddMonths(1).AddDays(-1), Label = "This Month"  },
+    };
+	}

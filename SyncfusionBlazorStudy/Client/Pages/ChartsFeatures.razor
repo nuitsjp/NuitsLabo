@@ -1,0 +1,58 @@
+﻿@page "/charts-features"
+@using Syncfusion.Blazor.Charts
+<PageTitle>Charts</PageTitle>
+<h2>Charts</h2>
+<br/>
+<div id = "ControlRegion">
+ <SfChart Theme="Theme.Fluent" Title="Average Sales of Product A" >
+        <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"></ChartPrimaryXAxis>            
+        <ChartPrimaryYAxis LabelFormat="{value}K"></ChartPrimaryYAxis>
+        <ChartSeriesCollection>
+            <ChartSeries DataSource="@Sales" XName="Year" YName="SalesValue" Type="ChartSeriesType.Line">
+            </ChartSeries>
+        </ChartSeriesCollection>
+        <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+        <ChartZoomSettings EnableSelectionZooming="true"></ChartZoomSettings>
+    </SfChart>
+</div>
+<br/>
+<div>
+  <h3>Selected Features:</h3>
+    <ul class="ulstyle">
+      <li class="list"> Chart Types - Line</li>
+      <li class="list"> Zooming</li>
+      <li class="list"> Tooltip</li>
+      <li class="list"> Theme - Fluent</li>
+    </ul>
+</div>
+<br/>
+<style>
+    .ulstyle {
+        margin: 0px;
+        padding-left: 20px;
+        display: inline-block;
+    }
+    .list {
+    float: left;
+    line-height: 20px;
+    margin: 10px;
+    min-width: 200px;
+    }
+</style>
+@code{
+     public class SalesInfo
+    {
+        public double Year { get; set; }
+        public double SalesValue { get; set; }
+    }
+    public List<SalesInfo> Sales = new List<SalesInfo>
+    {
+        new SalesInfo { Year = 2005, SalesValue = 35 },
+        new SalesInfo { Year = 2006, SalesValue = 28 },
+        new SalesInfo { Year = 2007, SalesValue = 34 },
+        new SalesInfo { Year = 2008, SalesValue = 32 },
+        new SalesInfo { Year = 2009, SalesValue = 40 },
+        new SalesInfo { Year = 2010, SalesValue = 32 },
+        new SalesInfo { Year = 2011, SalesValue = 35 }
+    };
+}

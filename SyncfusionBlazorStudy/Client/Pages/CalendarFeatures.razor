@@ -1,0 +1,72 @@
+﻿@page "/calendar-features"
+@using Syncfusion.Blazor.Calendars
+@inject HttpClient Http;
+<PageTitle>Calendar</PageTitle>
+<h2>Calendar</h2>
+<br/>
+<div id = "ControlRegion">
+    <div class="control-section">
+    <div class="calender-section">
+        <div id="calender-control">
+            <SfCalendar TValue="DateTime?" @bind-Value="@DropVal" Min="@min" Max="@max" ></SfCalendar>
+        </div>
+        <div id="display_date">
+            <span id="date_value">Selected values: @(DropVal?.ToString("M/d/yyyy"))</span>
+        </div>
+    </div>
+</div>
+</div>
+<br/>
+<div>
+  <h3>Selected Features:</h3>
+    <ul class="ulstyle">
+      <li class="list"> Range</li>
+      <li class="list"> Theme - Fluent</li>
+    </ul>
+</div>
+<br/>
+<style>
+    .ulstyle {
+        margin: 0px;
+        padding-left: 20px;
+        display: inline-block;
+    }
+    .list {
+    float: left;
+    line-height: 20px;
+    margin: 10px;
+    min-width: 200px;
+    }
+    #wrapper {
+        max-width: 300px;
+        margin: 0px auto;
+        padding-top: 20px;
+    }
+    #date_label {
+        display: block;
+        width: 248px;
+        color: rgba(0, 0, 0, 0.58);
+        margin-left: 5px;
+    }
+    #calender-control {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+    #display_date {
+        max-width: 300px;
+        margin: 0 auto;
+        padding-top: 10px;
+        color: rgba(0, 0, 0, 0.8);
+    }
+    .tabs-wrap {
+        padding: 0 0px 10px;
+    }
+    .e-bigger .control-section {
+        margin-top: 60px;
+    }
+</style>
+@code {
+    public DateTime min { get; set; } = new DateTime(2020, 1, 5, 9, 0, 0);
+    public DateTime max { get; set; } = new DateTime(2020, 1, 24, 18, 0, 0);
+    public DateTime? DropVal { get; set; } = DateTime.Now;
+}
