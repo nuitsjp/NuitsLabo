@@ -2,6 +2,7 @@
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
 namespace WebPBenchmark;
@@ -15,7 +16,7 @@ public static class BitmapExtensions
     /// <param name="dpiX"></param>
     /// <param name="dpiY"></param>
     /// <returns></returns>
-    public static Bitmap ToBitmap(this BitmapImage bitmapImage, int dpiX, int dpiY)
+    public static Bitmap ToBitmap(this BitmapImage bitmapImage, int? dpiX = null, int? dpiY = null)
     {
         // BitmapSourceからピクセルデータを取得
         var width = bitmapImage.PixelWidth;
@@ -24,9 +25,9 @@ public static class BitmapExtensions
         // Bitmapを作成
         var bitmap = new Bitmap(width, height, PixelFormat.Format32bppPArgb);
         // DPIを設定
-        bitmap.SetResolution(dpiX, dpiY);
+        bitmap.SetResolution(dpiX ?? (int)bitmapImage.DpiX, dpiY ?? (int)bitmapImage.DpiY);
         // Bitmapをロック
-        var data = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, bitmap.PixelFormat);
+        var data = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, bitmap.PixelFormat);
         try
         {
             var stride = width * ((bitmapImage.Format.BitsPerPixel + 7) / 8); // 1行あたりのバイト数
@@ -48,7 +49,7 @@ public static class BitmapExtensions
         var handle = bitmap.GetHbitmap();
         try
         {
-            var bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
             bitmapSource.Freeze();
             return bitmapSource;
         }
