@@ -13,28 +13,28 @@ public static class BitmapExtensions
     /// <summary>
     /// BitmapSourceをBitmapに変換
     /// </summary>
-    /// <param name="bitmapImage"></param>
+    /// <param name="bitmapSource"></param>
     /// <param name="dpiX"></param>
     /// <param name="dpiY"></param>
     /// <returns></returns>
-    public static Bitmap ToBitmap(this BitmapImage bitmapImage, int? dpiX = null, int? dpiY = null)
+    public static Bitmap ToBitmap(this BitmapSource bitmapSource, int? dpiX = null, int? dpiY = null)
     {
         // BitmapSourceからピクセルデータを取得
-        var width = bitmapImage.PixelWidth;
-        var height = bitmapImage.PixelHeight;
+        var width = bitmapSource.PixelWidth;
+        var height = bitmapSource.PixelHeight;
 
         // Bitmapを作成
         var bitmap = new Bitmap(width, height, PixelFormat.Format32bppPArgb);
         // DPIを設定
-        bitmap.SetResolution(dpiX ?? (int)bitmapImage.DpiX, dpiY ?? (int)bitmapImage.DpiY);
+        bitmap.SetResolution(dpiX ?? (int)bitmapSource.DpiX, dpiY ?? (int)bitmapSource.DpiY);
         // Bitmapをロック
         var data = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, bitmap.PixelFormat);
         try
         {
-            var stride = width * ((bitmapImage.Format.BitsPerPixel + 7) / 8); // 1行あたりのバイト数
-            var bufferSize = stride * bitmapImage.PixelHeight;
+            var stride = width * ((bitmapSource.Format.BitsPerPixel + 7) / 8); // 1行あたりのバイト数
+            var bufferSize = stride * bitmapSource.PixelHeight;
             // BitmapSourceかBitmapへピクセルデータをコピー
-            bitmapImage.CopyPixels(Int32Rect.Empty, data.Scan0, bufferSize, stride);
+            bitmapSource.CopyPixels(Int32Rect.Empty, data.Scan0, bufferSize, stride);
         }
         finally
         {
