@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -44,16 +45,29 @@ public static class BitmapExtensions
     }
 
 
-    public static BitmapSource ToBitmapSource(this Bitmap bitmap)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="bitmap"></param>
+    /// <param name="format"></param>
+    /// <returns></returns>
+    public static BitmapSource ToBitmapSource(this Bitmap bitmap, ImageFormat? format = null)
     {
-        var handle = bitmap.GetHbitmap();
-        try
-        {
-            var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            bitmapSource.Freeze();
-            return bitmapSource;
-        }
-        finally { DeleteObject(handle); }
+        using var bitmapStream = new MemoryStream();
+        // Bitmapをメモリストリームに保存。デフォルトはJPEG形式。
+        // 処理時間とメモリーのバランスを考えると、JPEG形式が最適なため。
+        // ただし、府が逆性が重要な場合はPNG形式などを利用するが、ほぼ必要なことはないはず。
+        bitmap.Save(bitmapStream, format ?? ImageFormat.Jpeg);
+        bitmapStream.Position = 0;
+
+        var bitmapImage = new BitmapImage();
+        bitmapImage.BeginInit();
+        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+        bitmapImage.StreamSource = bitmapStream;
+        bitmapImage.EndInit();
+        bitmapImage.Freeze();
+
+        return bitmapImage;
     }
 
     [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]

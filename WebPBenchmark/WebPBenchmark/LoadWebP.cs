@@ -6,10 +6,7 @@ using BenchmarkDotNet.Attributes;
 using ImageMagick;
 using SixLabors.ImageSharp;
 using System.Drawing.Imaging;
-using System.Drawing;
-using System.Runtime.InteropServices;
 using Image = SixLabors.ImageSharp.Image;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace WebPBenchmark;
 
@@ -67,22 +64,55 @@ public class LoadWebP
         return renderTarget;
     }
 
-
     [Benchmark]
-    public BitmapSource ImagingAdjustDpiByDrawing()
+    public BitmapSource ImagingAdjustDpiByDrawingByPng()
     {
         using var stream = new MemoryStream(_data);
 
         // MemoryStreamからBitmapImageに変換
-        var bitmapImage = new BitmapImage();
-        bitmapImage.BeginInit();
-        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-        bitmapImage.StreamSource = stream;
-        bitmapImage.EndInit();
-        bitmapImage.Freeze(); // これはUIスレッド外でBitmapSourceを安全に使用するための重要なステップです
+        var source = new BitmapImage();
+        source.BeginInit();
+        source.CacheOption = BitmapCacheOption.OnLoad;
+        source.StreamSource = stream;
+        source.EndInit();
+        source.Freeze(); // これはUIスレッド外でBitmapSourceを安全に使用するための重要なステップです
 
-        using var bitmap = bitmapImage.ToBitmap(300, 300);
+        using var bitmap = source.ToBitmap(300, 300);
+        return bitmap.ToBitmapSource(ImageFormat.Png);
+    }
+
+    [Benchmark]
+    public BitmapSource ImagingAdjustDpiByDrawingByJpg()
+    {
+        using var stream = new MemoryStream(_data);
+
+        // MemoryStreamからBitmapImageに変換
+        var source = new BitmapImage();
+        source.BeginInit();
+        source.CacheOption = BitmapCacheOption.OnLoad;
+        source.StreamSource = stream;
+        source.EndInit();
+        source.Freeze(); // これはUIスレッド外でBitmapSourceを安全に使用するための重要なステップです
+
+        using var bitmap = source.ToBitmap(300, 300);
         return bitmap.ToBitmapSource();
+    }
+
+    [Benchmark]
+    public BitmapSource ImagingAdjustDpiByDrawingByBmp()
+    {
+        using var stream = new MemoryStream(_data);
+
+        // MemoryStreamからBitmapImageに変換
+        var source = new BitmapImage();
+        source.BeginInit();
+        source.CacheOption = BitmapCacheOption.OnLoad;
+        source.StreamSource = stream;
+        source.EndInit();
+        source.Freeze(); // これはUIスレッド外でBitmapSourceを安全に使用するための重要なステップです
+
+        using var bitmap = source.ToBitmap(300, 300);
+        return bitmap.ToBitmapSource(ImageFormat.Bmp);
     }
 
     [Benchmark]
