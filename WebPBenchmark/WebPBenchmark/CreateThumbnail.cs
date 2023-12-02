@@ -10,14 +10,12 @@ namespace WebPBenchmark;
 
 [SimpleJob]
 [MemoryDiagnoser]
-public class CreateThumbnail
+public class CreateThumbnail : BaseBenchmark
 {
-    private readonly byte[] _data = File.ReadAllBytes("Color.jpg");
-
     [Benchmark]
     public async Task<BitmapImage> MagickImage()
     {
-        using var magickImage = new MagickImage(_data);
+        using var magickImage = new MagickImage(Data);
 
         // 画像の縦横比を維持しながら、指定されたサイズにリサイズ
         magickImage.Resize(new MagickGeometry(300, 300) { IgnoreAspectRatio = false });
@@ -41,7 +39,7 @@ public class CreateThumbnail
     [Benchmark]
     public BitmapSource SystemDrawing()
     {
-        using var inputStream = new MemoryStream(_data);
+        using var inputStream = new MemoryStream(Data);
         using var originalImage = new Bitmap(inputStream);
 
         // 画像の縦横比を維持しながら、指定されたサイズにリサイズ
@@ -72,7 +70,7 @@ public class CreateThumbnail
     {
         var size = 300;
 
-        using var stream = new MemoryStream(_data);
+        using var stream = new MemoryStream(Data);
 
         // MemoryStreamからBitmapImageに変換
         var source = new BitmapImage();
@@ -105,7 +103,7 @@ public class CreateThumbnail
     {
         var size = 300;
 
-        using var stream = new MemoryStream(_data);
+        using var stream = new MemoryStream(Data);
 
         // MemoryStreamからBitmapImageに変換
         var source = new BitmapImage();

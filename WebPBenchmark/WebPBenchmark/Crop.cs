@@ -11,16 +11,8 @@ namespace WebPBenchmark;
 
 [ShortRunJob]
 [MemoryDiagnoser]
-public class Crop
+public class Crop : BaseBenchmark
 {
-    private readonly byte[] _webp = File.ReadAllBytes("Color.webp");
-    private readonly byte[] _jpeg = File.ReadAllBytes("Color.jpg");
-
-    [Params("Jpeg", "WebP")] 
-    public string Format { get; set; } = string.Empty;
-
-    private byte[] Data => Format == "WebP" ? _webp : _jpeg;
-
     [Benchmark]
     public byte[] MagickImage()
     {
@@ -42,9 +34,8 @@ public class Crop
     [Benchmark]
     public byte[] SystemDrawingImage()
     {
-        using var inputStream = new MemoryStream(Data);
         using var originalImage = Format == "Jpeg"
-            ? new Bitmap(inputStream)
+            ? new Bitmap(new MemoryStream(Data))
             : LoadWebP();
 
         // 画像の縦横比を維持しながら、指定されたサイズにリサイズ
@@ -108,4 +99,40 @@ public class Crop
         // メモリストリームからバイト配列を取得
         return cropStream.ToArray();
     }
+
+    private BitmapImage _bitmapImage = default!;
+    [GlobalSetup(Target = nameof(SystemWindowsMediaImagingWithoutLoad))]
+    public void GlobalSetupSystemWindowsMediaImagingWithoutLoad()
+    {
+        using var stream = new MemoryStream(Data);
+
+        // MemoryStreamからBitmapImageに変換
+        _bitmapImage = new BitmapImage();
+        _bitmapImage.BeginInit();
+        _bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+        _bitmapImage.StreamSource = stream;
+        _bitmapImage.EndInit();
+        _bitmapImage.Freeze(); // これはUIスレッド外でBitmapSourceを安全に使用するための重要なステップです
+    }
+
+    [Benchmark]
+    public byte[] SystemWindowsMediaImagingWithoutLoad()
+    {
+        // クロップする領域を定義
+        var cropArea = new Int32Rect(100, 200, 300, 400);
+
+        // CroppedBitmapを使用して指定領域をクロップ
+        var croppedBitmap = new CroppedBitmap(_bitmapImage, cropArea);
+
+        // BMPエンコーダのインスタンスを作成
+        var encoder = new BmpBitmapEncoder();
+        encoder.Frames.Add(BitmapFrame.Create(croppedBitmap));
+
+        // メモリストリームを使用してBMPデータを書き出し
+        using var cropStream = new MemoryStream();
+        encoder.Save(cropStream);
+        // メモリストリームからバイト配列を取得
+        return cropStream.ToArray();
+    }
+
 }

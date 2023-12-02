@@ -10,17 +10,14 @@ using Image = SixLabors.ImageSharp.Image;
 
 namespace WebPBenchmark;
 
-[SimpleJob]
+[ShortRunJob]
 [MemoryDiagnoser]
-public class LoadWebP
+public class Load : BaseBenchmark
 {
-    private readonly byte[] _data = File.ReadAllBytes("Color.webp");
-
-
-    [Benchmark]
-    public BitmapImage Imaging()
+    [Benchmark(Baseline = true)]
+    public BitmapImage ImagingWithoutAdjustDpi()
     {
-        using var bitmapMemory = new MemoryStream(_data);
+        using var bitmapMemory = new MemoryStream(Data);
 
         // MemoryStreamからBitmapImageに変換
         var bitmapImage = new BitmapImage();
@@ -37,7 +34,7 @@ public class LoadWebP
     [Benchmark]
     public BitmapSource ImagingAdjustDpiByRenderTargetBitmap()
     {
-        using var bitmapMemory = new MemoryStream(_data);
+        using var bitmapMemory = new MemoryStream(Data);
 
         // MemoryStreamからBitmapImageに変換
         var sourceImage = new BitmapImage();
@@ -46,6 +43,11 @@ public class LoadWebP
         sourceImage.StreamSource = bitmapMemory;
         sourceImage.EndInit();
         sourceImage.Freeze(); // これはUIスレッド外でBitmapSourceを安全に使用するための重要なステップです
+
+        if (IsWebP is false)
+        {
+            return sourceImage;
+        }
 
         // 新しいDPI値でRenderTargetBitmapを作成
         var renderTarget = new RenderTargetBitmap(
@@ -67,7 +69,7 @@ public class LoadWebP
     [Benchmark]
     public BitmapSource ImagingAdjustDpiByDrawingByPng()
     {
-        using var stream = new MemoryStream(_data);
+        using var stream = new MemoryStream(Data);
 
         // MemoryStreamからBitmapImageに変換
         var source = new BitmapImage();
@@ -76,6 +78,11 @@ public class LoadWebP
         source.StreamSource = stream;
         source.EndInit();
         source.Freeze(); // これはUIスレッド外でBitmapSourceを安全に使用するための重要なステップです
+
+        if (IsWebP is false)
+        {
+            return source;
+        }
 
         using var bitmap = source.ToBitmap(300, 300);
         return bitmap.ToBitmapSource(ImageFormat.Png);
@@ -84,7 +91,7 @@ public class LoadWebP
     [Benchmark]
     public BitmapSource ImagingAdjustDpiByDrawingByJpg()
     {
-        using var stream = new MemoryStream(_data);
+        using var stream = new MemoryStream(Data);
 
         // MemoryStreamからBitmapImageに変換
         var source = new BitmapImage();
@@ -93,6 +100,11 @@ public class LoadWebP
         source.StreamSource = stream;
         source.EndInit();
         source.Freeze(); // これはUIスレッド外でBitmapSourceを安全に使用するための重要なステップです
+
+        if (IsWebP is false)
+        {
+            return source;
+        }
 
         using var bitmap = source.ToBitmap(300, 300);
         return bitmap.ToBitmapSource();
@@ -101,7 +113,7 @@ public class LoadWebP
     [Benchmark]
     public BitmapSource ImagingAdjustDpiByDrawingByBmp()
     {
-        using var stream = new MemoryStream(_data);
+        using var stream = new MemoryStream(Data);
 
         // MemoryStreamからBitmapImageに変換
         var source = new BitmapImage();
@@ -111,6 +123,11 @@ public class LoadWebP
         source.EndInit();
         source.Freeze(); // これはUIスレッド外でBitmapSourceを安全に使用するための重要なステップです
 
+        if (IsWebP is false)
+        {
+            return source;
+        }
+
         using var bitmap = source.ToBitmap(300, 300);
         return bitmap.ToBitmapSource(ImageFormat.Bmp);
     }
@@ -118,7 +135,7 @@ public class LoadWebP
     [Benchmark]
     public BitmapImage MagickDotNet()
     {
-        using var magickImage = new MagickImage(_data);
+        using var magickImage = new MagickImage(Data);
         var stream = new MemoryStream();
         magickImage.Write(stream, MagickFormat.Bmp);
         stream.Position = 0;
@@ -137,7 +154,7 @@ public class LoadWebP
     [Benchmark]
     public BitmapImage ImageSharp()
     {
-        using var image = Image.Load(_data);
+        using var image = Image.Load(Data);
         image.Metadata.HorizontalResolution = 300;
         image.Metadata.VerticalResolution = 300;
         var stream = new MemoryStream();
