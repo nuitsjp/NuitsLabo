@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Drawing.Imaging;
 using ImageMagick;
 using System.IO;
 using System.Windows.Media.Imaging;
@@ -39,8 +38,10 @@ public class CreateThumbnail : BaseBenchmark
     [Benchmark]
     public BitmapSource SystemDrawing()
     {
-        using var inputStream = new MemoryStream(Data);
-        using var originalImage = new Bitmap(inputStream);
+        using var originalImage = 
+            IsWebP 
+                ? new Load().ImagingWithoutAdjustDpi().ToBitmap()
+                : new Bitmap(new MemoryStream(Data));
 
         // 画像の縦横比を維持しながら、指定されたサイズにリサイズ
         int destWidth, destHeight;
@@ -62,37 +63,12 @@ public class CreateThumbnail : BaseBenchmark
         }
 
         return resizedImage.ToBitmapSource();
-
     }
 
     [Benchmark]
     public BitmapSource SystemWindowsMediaImaging()
     {
-        var size = 300;
-
-        using var stream = new MemoryStream(Data);
-
-        // MemoryStreamからBitmapImageに変換
-        var source = new BitmapImage();
-        source.BeginInit();
-        source.CacheOption = BitmapCacheOption.OnLoad;
-        source.StreamSource = stream;
-        source.EndInit();
-        source.Freeze(); // これはUIスレッド外でBitmapSourceを安全に使用するための重要なステップです
-
-        double scaleX = size / (double)source.PixelWidth;
-        double scaleY = size / (double)source.PixelHeight;
-        double scale = Math.Min(scaleX, scaleY);
-
-        // スケールが1より大きい場合は、元のサイズを維持
-        scale = (scale > 1) ? 1 : scale;
-
-        // スケーリングトランスフォームを使用してサムネイルを生成
-        var transform = new ScaleTransform(scale, scale);
-        var thumbnail = new TransformedBitmap(source, transform);
-
-        // Freezeメソッドを呼び出して、サムネイルを変更不可能にする（必要に応じて）
-        thumbnail.Freeze();
+        var thumbnail = SystemWindowsMediaImagingWithoutAdjust();
 
         using var bitmap = thumbnail.ToBitmap(300, 300);
         return bitmap.ToBitmapSource();

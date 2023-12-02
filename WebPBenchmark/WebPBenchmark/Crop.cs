@@ -34,9 +34,10 @@ public class Crop : BaseBenchmark
     [Benchmark]
     public byte[] SystemDrawingImage()
     {
-        using var originalImage = Format == "Jpeg"
-            ? new Bitmap(new MemoryStream(Data))
-            : LoadWebP();
+        using var originalImage =
+            IsWebP
+                ? new Load().ImagingWithoutAdjustDpi().ToBitmap()
+                : new Bitmap(new MemoryStream(Data));
 
         // 画像の縦横比を維持しながら、指定されたサイズにリサイズ
         var srcRect = new Rectangle(100, 200, 300, 400);
@@ -53,21 +54,6 @@ public class Crop : BaseBenchmark
         destImage.Save(stream, ImageFormat.Bmp);  // 一時的にBMP形式として出力
         stream.Position = 0;
         return stream.ToArray();
-    }
-
-    private Bitmap LoadWebP()
-    {
-        using var bitmapMemory = new MemoryStream(Data);
-
-        // MemoryStreamからBitmapImageに変換
-        var bitmapImage = new BitmapImage();
-        bitmapImage.BeginInit();
-        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-        bitmapImage.StreamSource = bitmapMemory;
-        bitmapImage.EndInit();
-        bitmapImage.Freeze(); // これはUIスレッド外でBitmapSourceを安全に使用するための重要なステップです
-
-        return bitmapImage.ToBitmap(300, 300);
     }
 
     [Benchmark]

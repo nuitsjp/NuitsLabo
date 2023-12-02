@@ -6,5 +6,5 @@ using BenchmarkDotNet.Running;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using WebPBenchmark;
 
-var summary = BenchmarkRunner.Run<BitmapSourceToBitmap>();
+var summary = BenchmarkRunner.Run<CreateThumbnail>();
 //BenchmarkRunner.Run(typeof(Load).Assembly, DefaultConfig.Instance);
