@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace WebPBenchmark;
 
-[ShortRunJob]
+[SimpleJob]
 [MemoryDiagnoser]
 public class Crop : BaseBenchmark
 {

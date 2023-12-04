@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Media.Imaging;
 using BenchmarkDotNet.Attributes;
 using ImageMagick;
 
@@ -18,74 +19,148 @@ public class Binarize
     /// </summary>
     private static readonly float Threshold = 0.75f;
 
-    [Params(1, 3, 5, 10, 14)]
-    public int N;
-
     [Benchmark]
-    public void ImageMagickFixedThreshold()
+    public BitmapSource MagickNetFixedThreshold()
     {
-        Parallel.ForEach(new int[N], _ =>
-        {
-            using var magickImage = new MagickImage(_data);
+        using var magickImage = new MagickImage(_data);
 
-            magickImage.Threshold(new Percentage(Threshold));
-            magickImage.Depth = 1;
+        magickImage.Threshold(new Percentage(Threshold));
+        magickImage.Depth = 1;
 
-            // MagickImageからMemoryStreamに変換
-            using var bitmapMemory = new MemoryStream();
-            magickImage.Write(bitmapMemory, MagickFormat.Bmp);  // 一時的にBMP形式として出力
-            bitmapMemory.Position = 0;
-            bitmapMemory.ToArray();
-        });
+        // MagickImageからMemoryStreamに変換
+        using var stream = new MemoryStream();
+        magickImage.Write(stream, MagickFormat.Bmp);  // 一時的にBMP形式として出力
+        stream.Position = 0;
+
+        var bitmapImage = new BitmapImage();
+        bitmapImage.BeginInit();
+        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+        bitmapImage.StreamSource = stream;
+        bitmapImage.EndInit();
+        bitmapImage.Freeze();
+
+        return bitmapImage;
     }
 
     [Benchmark]
-    public void ImageMagickOtsu()
+    public BitmapSource MagickNetOtsu()
     {
-        Parallel.ForEach(new int[N], _ =>
-        {
-            using var magickImage = new MagickImage(_data);
+        using var magickImage = new MagickImage(_data);
 
-            // 画像をグレースケールに変換
-            magickImage.ColorSpace = ColorSpace.Gray;
-            // 大津の二値化アルゴリズムを適用して二値化する
-            magickImage.AutoThreshold(AutoThresholdMethod.OTSU);
+        // 画像をグレースケールに変換
+        magickImage.ColorSpace = ColorSpace.Gray;
+        // 大津の二値化アルゴリズムを適用して二値化する
+        magickImage.AutoThreshold(AutoThresholdMethod.OTSU);
 
-            // MagickImageからMemoryStreamに変換
-            using var bitmapMemory = new MemoryStream();
-            magickImage.Write(bitmapMemory, MagickFormat.Bmp);  // 一時的にBMP形式として出力
-            bitmapMemory.Position = 0;
-            bitmapMemory.ToArray();
-        });
+        // MagickImageからMemoryStreamに変換
+        using var stream = new MemoryStream();
+        magickImage.Write(stream, MagickFormat.Bmp);  // 一時的にBMP形式として出力
+        stream.Position = 0;
+
+        var bitmapImage = new BitmapImage();
+        bitmapImage.BeginInit();
+        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+        bitmapImage.StreamSource = stream;
+        bitmapImage.EndInit();
+        bitmapImage.Freeze();
+
+        return bitmapImage;
     }
 
     [Benchmark]
-    public void SystemDrawingFixedThreshold()
+    public BitmapSource SystemDrawingFixedThreshold()
     {
-        Parallel.ForEach(new int[N], _ =>
-        {
-            using var stream = new MemoryStream(_data);
-            using Bitmap src = new(stream);
-            // 変換結果のBitmapを作成する
-            var dest = new Bitmap(src.Width, src.Height, PixelFormat.Format1bppIndexed);
-            dest.SetResolution(src.HorizontalResolution, src.VerticalResolution);
+        using var stream = new MemoryStream(_data);
+        using Bitmap src = new(stream);
+        // 変換結果のBitmapを作成する
+        var dest = new Bitmap(src.Width, src.Height, PixelFormat.Format1bppIndexed);
+        dest.SetResolution(src.HorizontalResolution, src.VerticalResolution);
 
-            // Bitmapをロックし、BitmapDataを取得する
-            var srcBitmapData = src.LockBits(new Rectangle(0, 0, src.Width, src.Height), ImageLockMode.WriteOnly, src.PixelFormat);
-            var destBitmapData = dest.LockBits(new Rectangle(0, 0, dest.Width, dest.Height), ImageLockMode.WriteOnly, dest.PixelFormat);
-            try
+        // Bitmapをロックし、BitmapDataを取得する
+        var srcBitmapData = src.LockBits(new Rectangle(0, 0, src.Width, src.Height), ImageLockMode.WriteOnly, src.PixelFormat);
+        var destBitmapData = dest.LockBits(new Rectangle(0, 0, dest.Width, dest.Height), ImageLockMode.WriteOnly, dest.PixelFormat);
+        try
+        {
+            unsafe
             {
-                unsafe
-                {
-                    var srcPtr = (byte*)srcBitmapData.Scan0;
-                    var destPtr = (byte*)destBitmapData.Scan0;
+                var srcPtr = (byte*)srcBitmapData.Scan0;
+                var destPtr = (byte*)destBitmapData.Scan0;
 
+                for (var y = 0; y < destBitmapData.Height; y++)
+                {
+                    for (var x = 0; x < destBitmapData.Width; x++)
+                    {
+                        // 24bitカラーを256階層のグレースケールに変換し、180以上であれば白と判定する
+                        if (128 <= ConvertToGrayScale(srcPtr, x, y, srcBitmapData.Stride))
+                        {
+                            // 二値画像は1ビットずつ格納されるため、座標は8で割ったアドレスのバイトに格納されている
+                            var pos = (x >> 3) + destBitmapData.Stride * y;
+                            // 該当のビットを立てることで、白にする
+                            destPtr[pos] |= (byte)(0x80 >> (x & 0x7));
+                        }
+                    }
+                }
+            }
+        }
+        finally
+        {
+            // BitmapDataのロックを解除する
+            src.UnlockBits(srcBitmapData);
+            dest.UnlockBits(destBitmapData);
+        }
+
+        return dest.ToBitmapSource();
+    }
+
+    [Benchmark]
+    public BitmapSource SystemDrawingOtsu()
+    {
+
+        using var stream = new MemoryStream(_data);
+        using Bitmap src = new(stream);
+        // 変換結果のBitmapを作成する
+        var dest = new Bitmap(src.Width, src.Height, PixelFormat.Format1bppIndexed);
+        dest.SetResolution(src.HorizontalResolution, src.VerticalResolution);
+
+        // Bitmapをロックし、BitmapDataを取得する
+        var srcBitmapData = src.LockBits(new Rectangle(0, 0, src.Width, src.Height), ImageLockMode.WriteOnly, src.PixelFormat);
+        var destBitmapData = dest.LockBits(new Rectangle(0, 0, dest.Width, dest.Height), ImageLockMode.WriteOnly, dest.PixelFormat);
+        try
+        {
+            unsafe
+            {
+                var srcPtr = (byte*)srcBitmapData.Scan0;
+                var destPtr = (byte*)destBitmapData.Scan0;
+
+                var srcStride = srcBitmapData.Stride;
+
+                // 変換対象のカラー画像の情報をバイト列へ書き出す
+                var srcLength = srcStride * src.Height;
+                var srcIntPtr = Marshal.AllocCoTaskMem(srcLength);
+                try
+                {
+                    // グレイスケールデータの格納先
+                    var grayScale = (byte*)srcIntPtr;
+
+                    // グレイスケール化
+                    for (var y = 0; y < srcBitmapData.Height; y++)
+                    {
+                        for (var x = 0; x < srcBitmapData.Width; x++)
+                        {
+                            grayScale[srcStride * y + x] = (byte)ConvertToGrayScale(srcPtr, x, y, srcStride);
+                        }
+                    }
+
+                    // 大津の二値化アルゴリズムを適用して二値化する
+                    var threshold = CalculateOtsuThreshold(grayScale, srcBitmapData.Width, srcBitmapData.Height, srcStride);
+
+                    // 二値化
                     for (var y = 0; y < destBitmapData.Height; y++)
                     {
                         for (var x = 0; x < destBitmapData.Width; x++)
                         {
-                            // 24bitカラーを256階層のグレースケールに変換し、180以上であれば白と判定する
-                            if (128 <= ConvertToGrayScale(srcPtr, x, y, srcBitmapData.Stride))
+                            // 二値化しきい値を超えている場合は白にする
+                            if (threshold <= grayScale[srcStride * y + x])
                             {
                                 // 二値画像は1ビットずつ格納されるため、座標は8で割ったアドレスのバイトに格納されている
                                 var pos = (x >> 3) + destBitmapData.Stride * y;
@@ -95,100 +170,22 @@ public class Binarize
                         }
                     }
                 }
-            }
-            finally
-            {
-                // BitmapDataのロックを解除する
-                src.UnlockBits(srcBitmapData);
-                dest.UnlockBits(destBitmapData);
-            }
-
-            using MemoryStream binMs = new();
-            // 圧縮指定なし→LZW圧縮になる
-            dest.Save(binMs, ImageFormat.Bmp);
-            binMs.Position = 0;
-            binMs.ToArray();
-        });
-    }
-
-    [Benchmark]
-    public void SystemDrawingOtsu()
-    {
-        Parallel.ForEach(new int[N], _ =>
-        {
-            using var stream = new MemoryStream(_data);
-            using Bitmap src = new(stream);
-            // 変換結果のBitmapを作成する
-            var dest = new Bitmap(src.Width, src.Height, PixelFormat.Format1bppIndexed);
-            dest.SetResolution(src.HorizontalResolution, src.VerticalResolution);
-
-            // Bitmapをロックし、BitmapDataを取得する
-            var srcBitmapData = src.LockBits(new Rectangle(0, 0, src.Width, src.Height), ImageLockMode.WriteOnly, src.PixelFormat);
-            var destBitmapData = dest.LockBits(new Rectangle(0, 0, dest.Width, dest.Height), ImageLockMode.WriteOnly, dest.PixelFormat);
-            try
-            {
-                unsafe
+                finally
                 {
-                    var srcPtr = (byte*)srcBitmapData.Scan0;
-                    var destPtr = (byte*)destBitmapData.Scan0;
-
-                    var srcStride = srcBitmapData.Stride;
-
-                    // 変換対象のカラー画像の情報をバイト列へ書き出す
-                    var srcLength = srcStride * src.Height;
-                    var srcIntPtr = Marshal.AllocCoTaskMem(srcLength);
-                    try
-                    {
-                        // グレイスケールデータの格納先
-                        var grayScale = (byte*)srcIntPtr;
-
-                        // グレイスケール化
-                        for (var y = 0; y < srcBitmapData.Height; y++)
-                        {
-                            for (var x = 0; x < srcBitmapData.Width; x++)
-                            {
-                                grayScale[x * srcStride + y] = (byte)ConvertToGrayScale(srcPtr, x, y, srcStride);
-                            }
-                        }
-
-                        // 大津の二値化アルゴリズムを適用して二値化する
-                        var threshold = CalculateOtsuThreshold(grayScale, srcBitmapData.Width, srcBitmapData.Height, srcStride);
-
-                        // 二値化
-                        for (var y = 0; y < destBitmapData.Height; y++)
-                        {
-                            for (var x = 0; x < destBitmapData.Width; x++)
-                            {
-                                // 二値化しきい値を超えている場合は白にする
-                                if (threshold <= grayScale[x * srcStride + y])
-                                {
-                                    // 二値画像は1ビットずつ格納されるため、座標は8で割ったアドレスのバイトに格納されている
-                                    var pos = (x >> 3) + destBitmapData.Stride * y;
-                                    // 該当のビットを立てることで、白にする
-                                    destPtr[pos] |= (byte)(0x80 >> (x & 0x7));
-                                }
-                            }
-                        }
-                    }
-                    finally
-                    {
-                        Marshal.FreeCoTaskMem(srcIntPtr);
-                    }
+                    Marshal.FreeCoTaskMem(srcIntPtr);
                 }
             }
-            finally
-            {
-                // BitmapDataのロックを解除する
-                src.UnlockBits(srcBitmapData);
-                dest.UnlockBits(destBitmapData);
-            }
+        }
+        finally
+        {
+            // BitmapDataのロックを解除する
+            src.UnlockBits(srcBitmapData);
+            dest.UnlockBits(destBitmapData);
+        }
 
-            using MemoryStream binMs = new();
-            // 圧縮指定なし→LZW圧縮になる
-            dest.Save(binMs, ImageFormat.Bmp);
-            binMs.Position = 0;
-            binMs.ToArray();
-        });
+        dest.Save("Color.tiff", ImageFormat.Tiff);
+
+        return dest.ToBitmapSource();
     }
 
 
@@ -222,7 +219,7 @@ public class Binarize
         {
             for (var x = 0; x < width; x++)
             {
-                int grayScaleValue = srcPixels[x * stride + y];
+                int grayScaleValue = srcPixels[stride * y + x];
                 histogram[grayScaleValue]++;
             }
         }

@@ -6,13 +6,28 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using BenchmarkDotNet.Attributes;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace WebPBenchmark;
 
 [ShortRunJob]
 [MemoryDiagnoser]
-public class BitmapToBitmapSource : BaseBenchmark
+public class BitmapToBitmapSource
 {
+    private static readonly byte[] Jpeg = File.ReadAllBytes("Color.jpg");
+    private static readonly byte[] Tiff = File.ReadAllBytes("Color.tiff");
+
+    [Params("Jpeg", "Tiff")]
+    public string Format { get; set; } = string.Empty;
+
+    private byte[] Data =>
+        Format switch
+        {
+            "Jpeg" => Jpeg,
+            "Tiff" => Tiff,
+            _ => throw new NotSupportedException()
+        };
+
     [Benchmark]
     public BitmapSource BitmapData()
     {
@@ -23,11 +38,16 @@ public class BitmapToBitmapSource : BaseBenchmark
         try
         {
             var bitmapSource = BitmapSource.Create(
-                bitmapData.Width, 
+                bitmapData.Width,
                 bitmapData.Height,
-                bitmap.HorizontalResolution, 
+                bitmap.HorizontalResolution,
                 bitmap.VerticalResolution,
-                PixelFormats.Bgr24, null,
+                bitmap.PixelFormat == PixelFormat.Format1bppIndexed
+                    ? PixelFormats.Indexed1
+                    : PixelFormats.Bgr24,
+                bitmap.PixelFormat == PixelFormat.Format1bppIndexed
+                    ? new BitmapPalette(new List<System.Windows.Media.Color> { Colors.Black, Colors.White })
+                    : null,
                 bitmapData.Scan0, bitmapData.Stride * bitmapData.Height, bitmapData.Stride);
 
             return bitmapSource;

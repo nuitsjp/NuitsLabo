@@ -89,9 +89,9 @@ public class CreateThumbnail : BaseBenchmark
         source.EndInit();
         source.Freeze(); // これはUIスレッド外でBitmapSourceを安全に使用するための重要なステップです
 
-        double scaleX = size / (double)source.PixelWidth;
-        double scaleY = size / (double)source.PixelHeight;
-        double scale = Math.Min(scaleX, scaleY);
+        var scaleX = size / (double)source.PixelWidth;
+        var scaleY = size / (double)source.PixelHeight;
+        var scale = Math.Min(scaleX, scaleY);
 
         // スケールが1より大きい場合は、元のサイズを維持
         scale = (scale > 1) ? 1 : scale;
