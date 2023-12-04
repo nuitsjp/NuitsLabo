@@ -9,25 +9,24 @@ using BenchmarkDotNet.Attributes;
 
 namespace WebPBenchmark;
 
-[SimpleJob]
+[ShortRunJob]
 [MemoryDiagnoser]
-public class BitmapToBitmapSource : IDisposable
+public class BitmapToBitmapSource : BaseBenchmark
 {
-    private readonly Bitmap _bitmap = (Bitmap)Image.FromFile("Color.jpg");
-
     [Benchmark]
     public BitmapSource BitmapData()
     {
-        var bitmapData = _bitmap.LockBits(
-            new Rectangle(0, 0, _bitmap.Width, _bitmap.Height),
-            ImageLockMode.ReadOnly, _bitmap.PixelFormat);
+        using var bitmap = (Bitmap)Image.FromStream(new MemoryStream(Data));
+        var bitmapData = bitmap.LockBits(
+            new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+            ImageLockMode.ReadOnly, bitmap.PixelFormat);
         try
         {
             var bitmapSource = BitmapSource.Create(
                 bitmapData.Width, 
                 bitmapData.Height,
-                _bitmap.HorizontalResolution, 
-                _bitmap.VerticalResolution,
+                bitmap.HorizontalResolution, 
+                bitmap.VerticalResolution,
                 PixelFormats.Bgr24, null,
                 bitmapData.Scan0, bitmapData.Stride * bitmapData.Height, bitmapData.Stride);
 
@@ -35,15 +34,16 @@ public class BitmapToBitmapSource : IDisposable
         }
         finally
         {
-            _bitmap.UnlockBits(bitmapData);
+            bitmap.UnlockBits(bitmapData);
         }
     }
 
     [Benchmark]
     public BitmapSource SaveJpegStream()
     {
+        using var bitmap = (Bitmap)Image.FromStream(new MemoryStream(Data));
         using var bitmapStream = new MemoryStream();
-        _bitmap.Save(bitmapStream, ImageFormat.Jpeg);
+        bitmap.Save(bitmapStream, ImageFormat.Jpeg);
         bitmapStream.Position = 0;
 
         var bitmapImage = new BitmapImage();
@@ -59,11 +59,12 @@ public class BitmapToBitmapSource : IDisposable
     [Benchmark]
     public BitmapSource SaveBmpStream()
     {
+        using var bitmap = (Bitmap)Image.FromStream(new MemoryStream(Data));
         using var bitmapStream = new MemoryStream();
         // Bitmapをメモリストリームに保存。デフォルトはJPEG形式。
         // 処理時間とメモリーのバランスを考えると、JPEG形式が最適なため。
         // ただし、府が逆性が重要な場合はPNG形式などを利用するが、ほぼ必要なことはないはず。
-        _bitmap.Save(bitmapStream, ImageFormat.Bmp);
+        bitmap.Save(bitmapStream, ImageFormat.Bmp);
         bitmapStream.Position = 0;
 
         var bitmapImage = new BitmapImage();
@@ -82,7 +83,8 @@ public class BitmapToBitmapSource : IDisposable
     [Benchmark]
     public BitmapSource CreateBitmapSourceFromHBitmap()
     {
-        var handle = _bitmap.GetHbitmap();
+        using var bitmap = (Bitmap)Image.FromStream(new MemoryStream(Data));
+        var handle = bitmap.GetHbitmap();
         try
         {
             var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
@@ -90,11 +92,5 @@ public class BitmapToBitmapSource : IDisposable
             return bitmapSource;
         }
         finally { DeleteObject(handle); }
-    }
-
-
-    public void Dispose()
-    {
-        _bitmap.Dispose();
     }
 }
