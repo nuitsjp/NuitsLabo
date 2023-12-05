@@ -14,11 +14,6 @@ public class BinarizeByOtsu
 {
     private readonly byte[] _data = File.ReadAllBytes("Color.jpg");
 
-    /// <summary>
-    /// 2値化しきい値
-    /// </summary>
-    private static readonly float Threshold = 0.75f;
-
     [Benchmark]
     public BitmapSource MagickNet()
     {
