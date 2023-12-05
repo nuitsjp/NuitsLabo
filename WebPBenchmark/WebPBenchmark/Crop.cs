@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.Windows;
 using Rectangle = System.Drawing.Rectangle;
+using WebPBenchmark.Extensions;
 
 namespace WebPBenchmark;
 

@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using Rectangle = System.Drawing.Rectangle;
 
-namespace WebPBenchmark;
+namespace WebPBenchmark.Extensions;
 
 public static class BitmapExtensions
 {
@@ -72,5 +72,5 @@ public static class BitmapExtensions
 
     [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
     [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool DeleteObject([In] IntPtr hObject);
+    public static extern bool DeleteObject([In] nint hObject);
 }

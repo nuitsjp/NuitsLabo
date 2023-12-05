@@ -6,6 +6,7 @@ using System.Windows.Media.Imaging;
 using BenchmarkDotNet.Attributes;
 using ImageMagick;
 using SixLabors.ImageSharp;
+using WebPBenchmark.Extensions;
 
 namespace WebPBenchmark;
 

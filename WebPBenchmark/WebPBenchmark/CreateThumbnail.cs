@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using BenchmarkDotNet.Attributes;
 using System.Windows.Media;
+using WebPBenchmark.Extensions;
 
 namespace WebPBenchmark;
 

@@ -6,18 +6,17 @@ using BenchmarkDotNet.Attributes;
 using System.Windows.Media.Imaging;
 using ImageMagick;
 using Rectangle = System.Drawing.Rectangle;
+using WebPBenchmark.Extensions;
 
 namespace WebPBenchmark;
 
 [MemoryDiagnoser]
-public class BinarizeByOtsu
+public class BinarizeByOtsu : BaseBenchmark
 {
-    private readonly byte[] _data = File.ReadAllBytes("Color.jpg");
-
     [Benchmark]
     public BitmapSource MagickNet()
     {
-        using var magickImage = new MagickImage(_data);
+        using var magickImage = new MagickImage(BitmapSource.ToBmpBytes());
 
         // 画像をグレースケールに変換
         magickImage.ColorSpace = ColorSpace.Gray;
@@ -57,7 +56,7 @@ public class BinarizeByOtsu
     [Benchmark]
     public BitmapSource SystemDrawingSplitCalcThreshold()
     {
-        var bitmap = new Bitmap(new MemoryStream(_data));
+        using var bitmap = BitmapSource.ToBitmap();
         var threshold = CalculateOtsuThreshold(bitmap);
         var binBitmap = ToBinary(bitmap, threshold);
         return binBitmap.ToBitmapSource();
@@ -66,7 +65,7 @@ public class BinarizeByOtsu
     [Benchmark]
     public unsafe BitmapSource SystemDrawing()
     {
-        var bitmap = new Bitmap(new MemoryStream(_data));
+        using var bitmap = BitmapSource.ToBitmap();
         // 1bppIndexedの場合はそのまま返す
         if (bitmap.PixelFormat == PixelFormat.Format1bppIndexed)
         {

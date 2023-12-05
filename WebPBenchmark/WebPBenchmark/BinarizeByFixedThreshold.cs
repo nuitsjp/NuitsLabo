@@ -6,11 +6,12 @@ using BenchmarkDotNet.Attributes;
 using System.Windows.Media.Imaging;
 using ImageMagick;
 using Rectangle = System.Drawing.Rectangle;
+using WebPBenchmark.Extensions;
 
 namespace WebPBenchmark;
 
 [MemoryDiagnoser]
-public class BinarizeByFixedThreshold
+public class BinarizeByFixedThreshold : BaseBenchmark
 {
     private readonly byte[] _data = File.ReadAllBytes("Color.jpg");
 
@@ -22,7 +23,7 @@ public class BinarizeByFixedThreshold
     [Benchmark]
     public BitmapSource MagickNetFixedThreshold()
     {
-        using var magickImage = new MagickImage(_data);
+        using var magickImage = new MagickImage(BitmapSource.ToBmpBytes());
 
         magickImage.Threshold(new Percentage(Threshold));
         magickImage.Depth = 1;
@@ -60,7 +61,7 @@ public class BinarizeByFixedThreshold
     [Benchmark]
     public unsafe BitmapSource SystemDrawingFixedThreshold()
     {
-        var bitmap = new Bitmap(new MemoryStream(_data));
+        using var bitmap = BitmapSource.ToBitmap();
         var binBitmap = ToBinary(bitmap, 75f);
         return binBitmap.ToBitmapSource();
     }
