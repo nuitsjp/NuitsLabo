@@ -1,20 +1,18 @@
-﻿using System.IO;
-using System.Windows.Media;
+﻿using System.Drawing.Imaging;
+using System.IO;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using BenchmarkDotNet.Attributes;
 using ImageMagick;
 using SixLabors.ImageSharp;
-using System.Drawing.Imaging;
-using Image = SixLabors.ImageSharp.Image;
 
 namespace WebPBenchmark;
 
-[ShortRunJob]
 [MemoryDiagnoser]
 public class Load : BaseBenchmark
 {
-    [Benchmark(Baseline = true)]
+    [Benchmark]
     public BitmapImage ImagingWithoutAdjustDpi()
     {
         using var bitmapMemory = new MemoryStream(Data);

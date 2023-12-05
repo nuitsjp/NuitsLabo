@@ -6,11 +6,12 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using BenchmarkDotNet.Attributes;
+using Image = System.Drawing.Image;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
+using Rectangle = System.Drawing.Rectangle;
 
 namespace WebPBenchmark;
 
-[ShortRunJob]
 [MemoryDiagnoser]
 public class BitmapToBitmapSource
 {
@@ -49,6 +50,7 @@ public class BitmapToBitmapSource
                     ? new BitmapPalette(new List<System.Windows.Media.Color> { Colors.Black, Colors.White })
                     : null,
                 bitmapData.Scan0, bitmapData.Stride * bitmapData.Height, bitmapData.Stride);
+            bitmapSource.Freeze();
 
             return bitmapSource;
         }

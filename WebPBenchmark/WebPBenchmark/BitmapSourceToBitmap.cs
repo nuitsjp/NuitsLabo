@@ -1,16 +1,14 @@
-﻿
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
-using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using BenchmarkDotNet.Attributes;
 using Point = System.Drawing.Point;
+using Rectangle = System.Drawing.Rectangle;
 
 namespace WebPBenchmark;
 
-[SimpleJob]
 [MemoryDiagnoser]
 public class BitmapSourceToBitmap
 {

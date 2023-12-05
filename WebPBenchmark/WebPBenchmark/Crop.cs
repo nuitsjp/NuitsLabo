@@ -4,8 +4,8 @@ using BenchmarkDotNet.Attributes;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
 using System.Windows;
+using Rectangle = System.Drawing.Rectangle;
 
 namespace WebPBenchmark;
 
