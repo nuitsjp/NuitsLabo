@@ -10,17 +10,15 @@ using Rectangle = System.Drawing.Rectangle;
 namespace WebPBenchmark;
 
 [MemoryDiagnoser]
-public class BitmapSourceToBitmap
+public class BitmapSourceToBitmap : BaseBenchmark
 {
-    private readonly BitmapSource _source = new BitmapImage(new Uri(new FileInfo("Color.jpg").FullName));
-
-
     [Benchmark(Baseline = true)]
     public Bitmap BitmapData()
     {
+        var source = BitmapSource;
         var bitmap = new Bitmap(
-            _source.PixelWidth,
-            _source.PixelHeight,
+            source.PixelWidth,
+            source.PixelHeight,
             PixelFormat.Format32bppPArgb);
         var data = bitmap.LockBits(
             new Rectangle(Point.Empty, bitmap.Size),
@@ -28,7 +26,7 @@ public class BitmapSourceToBitmap
             PixelFormat.Format32bppPArgb);
         try
         {
-            _source.CopyPixels(
+            source.CopyPixels(
                 Int32Rect.Empty,
                 data.Scan0,
                 data.Height * data.Stride,
@@ -46,7 +44,7 @@ public class BitmapSourceToBitmap
     {
         using var outStream = new MemoryStream();
         var enc = new JpegBitmapEncoder();
-        enc.Frames.Add(BitmapFrame.Create(_source));
+        enc.Frames.Add(BitmapFrame.Create(BitmapSource));
         enc.Save(outStream);
         return new Bitmap(outStream);
     }
@@ -56,7 +54,7 @@ public class BitmapSourceToBitmap
     {
         using var outStream = new MemoryStream();
         var enc = new BmpBitmapEncoder();
-        enc.Frames.Add(BitmapFrame.Create(_source));
+        enc.Frames.Add(BitmapFrame.Create(BitmapSource));
         enc.Save(outStream);
         return new Bitmap(outStream);
     }

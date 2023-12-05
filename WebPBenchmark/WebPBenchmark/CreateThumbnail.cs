@@ -8,7 +8,6 @@ using WebPBenchmark.Extensions;
 
 namespace WebPBenchmark;
 
-[SimpleJob]
 [MemoryDiagnoser]
 public class CreateThumbnail : BaseBenchmark
 {
@@ -41,7 +40,7 @@ public class CreateThumbnail : BaseBenchmark
     {
         using var originalImage = 
             IsWebP 
-                ? new Load().ImagingWithoutAdjustDpi().ToBitmap()
+                ? LoadToBitmapImage().ToBitmap()
                 : new Bitmap(new MemoryStream(Data));
 
         // 画像の縦横比を維持しながら、指定されたサイズにリサイズ
@@ -64,6 +63,23 @@ public class CreateThumbnail : BaseBenchmark
         }
 
         return resizedImage.ToBitmapSource();
+    }
+
+    [Benchmark]
+    public BitmapImage LoadToBitmapImage()
+    {
+        using var bitmapMemory = new MemoryStream(Data);
+
+        // MemoryStreamからBitmapImageに変換
+        var bitmapImage = new BitmapImage();
+        bitmapImage.BeginInit();
+        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+        bitmapImage.StreamSource = bitmapMemory;
+        bitmapImage.EndInit();
+        bitmapImage.Freeze(); // これはUIスレッド外でBitmapSourceを安全に使用するための重要なステップです
+
+        return bitmapImage;
+
     }
 
     [Benchmark]
