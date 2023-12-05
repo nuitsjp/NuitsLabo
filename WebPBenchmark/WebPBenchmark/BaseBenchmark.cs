@@ -5,9 +5,9 @@ namespace WebPBenchmark;
 
 public abstract class BaseBenchmark
 {
-    private readonly byte[] _webp = File.ReadAllBytes("Color.webp");
-    private readonly byte[] _jpeg = File.ReadAllBytes("Color.jpg");
-    private readonly byte[] _tiff = File.ReadAllBytes("Color.tiff");
+    private static readonly byte[] WebP = File.ReadAllBytes("Color.webp");
+    private static readonly byte[] Jpeg = File.ReadAllBytes("Color.jpg");
+    private static readonly byte[] Tiff = File.ReadAllBytes("Color.tiff");
 
     [Params("Jpeg", "WebP", "Tiff")]
     public string Format { get; set; } = string.Empty;
@@ -17,9 +17,9 @@ public abstract class BaseBenchmark
     protected byte[] Data =>
         Format switch
         {
-            "Jpeg" => _jpeg,
-            "WebP" => _webp,
-            "Tiff" => _tiff,
+            "Jpeg" => Jpeg,
+            "WebP" => WebP,
+            "Tiff" => Tiff,
             _ => throw new NotSupportedException()
         };
 }
