@@ -10,7 +10,7 @@ using WebPBenchmark.Extensions;
 
 namespace WebPBenchmark;
 
-[SimpleJob]
+[ShortRunJob]
 [MemoryDiagnoser]
 public class Crop : BaseBenchmark
 {
