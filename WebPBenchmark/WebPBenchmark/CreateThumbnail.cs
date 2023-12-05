@@ -65,8 +65,7 @@ public class CreateThumbnail : BaseBenchmark
         return resizedImage.ToBitmapSource();
     }
 
-    [Benchmark]
-    public BitmapImage LoadToBitmapImage()
+    private BitmapImage LoadToBitmapImage()
     {
         using var bitmapMemory = new MemoryStream(Data);
 
