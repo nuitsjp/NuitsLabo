@@ -56,9 +56,9 @@ public class PdfDocument
         using var stream = new InMemoryRandomAccessStream();
 
         // DPIに基づいてレンダリングサイズを計算
-        double scale = dpi / 96.0; // 基本DPIは96
-        uint width = (uint)(page.Size.Width * scale);
-        uint height = (uint)(page.Size.Height * scale);
+        var scale = dpi / 96.0; // 基本DPIは96
+        var width = (uint)(page.Size.Width * scale);
+        var height = (uint)(page.Size.Height * scale);
 
 
         // レンダリングオプションの設定
