@@ -1,15 +1,22 @@
-﻿using System.Drawing;
-using System.Drawing.Imaging;
+﻿using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Running;
+using BenchmarkDotNet.Toolchains.CsProj;
+using BenchmarkDotNet.Toolchains.DotNetCli;
+using PdfStudy.Benchmark;
 
-var pdfBytes = File.ReadAllBytes("FromPowerPoint.pdf");
-using var pdfStream = new MemoryStream(pdfBytes);
-var pageCount = PDFtoImage.Conversion.GetPageCount(pdfBytes);
+//BenchmarkRunner.Run<SaveToJpeg>();
+var job = Job.Default;
 
-for (int i = 0; i < pageCount; i++)
-{
-    using var stream = new MemoryStream();
-    PDFtoImage.Conversion.SaveJpeg(stream, pdfBytes, page: i, dpi: 300);
-    var image = (Bitmap)Image.FromStream(stream);
-    image.SetResolution(300, 300);
-    image.Save($"Page{i}.jpg", ImageFormat.Jpeg);
-}
+var config =
+    ManualConfig.Create(DefaultConfig.Instance)
+        .AddJob(job.WithToolchain(
+            CsProjCoreToolchain.From(
+                new NetCoreAppSettings(
+                    targetFrameworkMoniker: "net8.0-windows",
+                    runtimeFrameworkVersion: null,
+                    name: ".NET 8.0"))))
+        .AddJob(job.WithRuntime(ClrRuntime.Net481));
+
+BenchmarkRunner.Run<SaveToJpeg>(config);
