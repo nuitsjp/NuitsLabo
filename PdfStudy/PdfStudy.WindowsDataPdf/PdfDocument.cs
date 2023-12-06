@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using System.IO;
-using System.Runtime.InteropServices.WindowsRuntime;
+﻿using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Data.Pdf;
 using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
