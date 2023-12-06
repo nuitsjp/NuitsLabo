@@ -9,18 +9,27 @@ namespace PdfStudy.WindowsDataPdf;
 
 public class PdfDocument
 {
-    private readonly Windows.Data.Pdf.PdfDocument _document;
+    private readonly Windows.Data.Pdf.PdfDocument _pdfDocument;
 
-    public PdfDocument(Windows.Data.Pdf.PdfDocument document)
+    public PdfDocument(Windows.Data.Pdf.PdfDocument pdfDocument)
     {
-        _document = document;
+        _pdfDocument = pdfDocument;
     }
-    public uint PageCount => _document.PageCount;
 
-    public async Task<byte[]> ToJpeg(uint pageNo, int dpi)
+    public int PageCount => (int)_pdfDocument.PageCount;
+
+    public static async Task<PdfDocument> LoadAsync(MemoryStream stream)
+    {
+        var randomAccessStream = stream.AsRandomAccessStream();
+        // PdfDocumentをロード
+        var document = await Windows.Data.Pdf.PdfDocument.LoadFromStreamAsync(randomAccessStream);
+        return new PdfDocument(document);
+    }
+
+    public async Task<byte[]> ToJpeg(int pageNo, float dpi)
     {
         // PDFの1ページ目を取得
-        using var page = _document.GetPage(0);
+        using var page = _pdfDocument.GetPage((uint)pageNo);
         // ページをレンダリングするためのストリームを作成
         using var stream = new InMemoryRandomAccessStream();
 
@@ -61,16 +70,5 @@ public class PdfDocument
         return jpegBytes;
     }
 
-    public static async Task<PdfDocument> LoadAsync(string path)
-    {
-        // バイト配列をメモリストリームに変換
-        var pdfData = File.ReadAllBytes(@"Assets\MultiPage.pdf");
-        using var stream = new MemoryStream(pdfData);
-        // メモリストリームをIRandomAccessStreamに変換
-        var randomAccessStream = stream.AsRandomAccessStream();
 
-        // PdfDocumentをロード
-        var pdfDocument = await Windows.Data.Pdf.PdfDocument.LoadFromStreamAsync(randomAccessStream);
-        return new PdfDocument(pdfDocument);
-    }
 }

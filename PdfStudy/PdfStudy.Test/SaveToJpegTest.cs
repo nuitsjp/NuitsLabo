@@ -39,7 +39,8 @@ namespace PdfStudy.Test
         [Fact]
         public async Task WindowsDataPdf()
         {
-            var document = await PdfStudy.WindowsDataPdf.PdfDocument.LoadAsync(@"Assets\MultiPage.pdf");
+            using var stream = new MemoryStream(File.ReadAllBytes(@"Assets\MultiPage.pdf"));
+            var document = await PdfStudy.WindowsDataPdf.PdfDocument.LoadAsync(stream);
             document.PageCount.Should().Be(2);
 
             var page0 = await document.ToJpeg(0, 300);

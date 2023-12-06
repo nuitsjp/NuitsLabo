@@ -5,6 +5,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.IO;
 using System.Windows;
 using Windows.Foundation;
+using System.Runtime.InteropServices.ComTypes;
 // ReSharper disable MethodHasAsyncOverload
 
 
@@ -26,15 +27,25 @@ namespace PdfStudy.Wpf
             var pdfData = File.ReadAllBytes(@"Assets\MultiPage.pdf");
             using var stream = new MemoryStream(pdfData);
             // メモリストリームをIRandomAccessStreamに変換
-            var randomAccessStream = stream.AsRandomAccessStream();
+            //var randomAccessStream = stream.AsRandomAccessStream();
 
-            // PdfDocumentをロード
-            var pdfDocument = await PdfDocument.LoadFromStreamAsync(randomAccessStream);
-            var jpegBytes = await RenderPdfPageToJpegAsync(pdfDocument, 300);
+            //// PdfDocumentをロード
+            //var pdfDocument = await PdfDocument.LoadFromStreamAsync(randomAccessStream);
+            var pdfDocument = await PdfDocument.LoadAsync(stream);
+            var jpegBytes = await pdfDocument.ToJpeg(0, 300);
             File.WriteAllBytes("Pdf.jpg", jpegBytes);
         }
 
-        public async Task<byte[]> RenderPdfPageToJpegAsync(PdfDocument pdfDocument, float dpi)
+        public async Task<Windows.Data.Pdf.PdfDocument> LoadDocumentAsync(MemoryStream stream)
+        {
+            //var pdfData = File.ReadAllBytes(@"Assets\MultiPage.pdf");
+            //using var stream = new MemoryStream(pdfData);
+            var randomAccessStream = stream.AsRandomAccessStream();
+            // PdfDocumentをロード
+            return await Windows.Data.Pdf.PdfDocument.LoadFromStreamAsync(randomAccessStream);
+        }
+
+        public async Task<byte[]> RenderPdfPageToJpegAsync(Windows.Data.Pdf.PdfDocument pdfDocument, float dpi)
         {
             // PDFの1ページ目を取得
             using var page = pdfDocument.GetPage(0);
@@ -79,65 +90,70 @@ namespace PdfStudy.Wpf
         }
 
     }
-}
-
-public class PdfUtil
-{
-    private async Task<PdfDocument> LoadDocumentAsync()
+    public class PdfDocument
     {
-        // バイト配列をメモリストリームに変換
-        var pdfData = File.ReadAllBytes(@"Assets\MultiPage.pdf");
-        using var stream = new MemoryStream(pdfData);
-        // メモリストリームをIRandomAccessStreamに変換
-        var randomAccessStream = stream.AsRandomAccessStream();
+        private readonly Windows.Data.Pdf.PdfDocument _pdfDocument;
 
-        // PdfDocumentをロード
-        return await PdfDocument.LoadFromStreamAsync(randomAccessStream);
-    }
-
-    public async Task<byte[]> RenderPdfPageToJpegAsync(PdfDocument pdfDocument, float dpi)
-    {
-        // PDFの1ページ目を取得
-        using var page = pdfDocument.GetPage(0);
-        // ページをレンダリングするためのストリームを作成
-        using var stream = new InMemoryRandomAccessStream();
-
-        // DPIに基づいてレンダリングサイズを計算
-        double scale = dpi / 96.0; // 基本DPIは96
-        uint width = (uint)(page.Size.Width * scale);
-        uint height = (uint)(page.Size.Height * scale);
-
-
-        // レンダリングオプションの設定
-        var renderOptions = new PdfPageRenderOptions
+        public PdfDocument(Windows.Data.Pdf.PdfDocument pdfDocument)
         {
-            DestinationWidth = width,
-            DestinationHeight = height
-        };
+            _pdfDocument = pdfDocument;
+        }
 
-        // ページをストリームにレンダリング
-        await page.RenderToStreamAsync(stream, renderOptions);
+        public static async Task<PdfDocument> LoadAsync(MemoryStream stream)
+        {
+            //var pdfData = File.ReadAllBytes(@"Assets\MultiPage.pdf");
+            //using var stream = new MemoryStream(pdfData);
+            var randomAccessStream = stream.AsRandomAccessStream();
+            // PdfDocumentをロード
+            var document = await Windows.Data.Pdf.PdfDocument.LoadFromStreamAsync(randomAccessStream);
+            return new PdfDocument(document);
+        }
 
-        // BitmapDecoderを使用してストリームからビットマップを作成
-        var decoder = await BitmapDecoder.CreateAsync(stream);
-        // JPEGにエンコード
-        using var jpegStream = new InMemoryRandomAccessStream();
-        var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, jpegStream);
+        public async Task<byte[]> ToJpeg(int pageNo, float dpi)
+        {
+            // PDFの1ページ目を取得
+            using var page = _pdfDocument.GetPage((uint)pageNo);
+            // ページをレンダリングするためのストリームを作成
+            using var stream = new InMemoryRandomAccessStream();
 
-        // DPI情報を設定したソフトウェアビットマップを用意
-        using var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
-        softwareBitmap.DpiX = dpi;
-        softwareBitmap.DpiY = dpi;
+            // DPIに基づいてレンダリングサイズを計算
+            double scale = dpi / 96.0; // 基本DPIは96
+            uint width = (uint)(page.Size.Width * scale);
+            uint height = (uint)(page.Size.Height * scale);
 
-        // ソフトウェアビットマップをエンコーダに設定
-        encoder.SetSoftwareBitmap(softwareBitmap);
-        await encoder.FlushAsync();
 
-        // JPEGストリームをバイト配列に変換
-        var jpegBytes = new byte[jpegStream.Size];
-        await jpegStream.ReadAsync(jpegBytes.AsBuffer(), (uint)jpegStream.Size, InputStreamOptions.None);
-        return jpegBytes;
+            // レンダリングオプションの設定
+            var renderOptions = new PdfPageRenderOptions
+            {
+                DestinationWidth = width,
+                DestinationHeight = height
+            };
+
+            // ページをストリームにレンダリング
+            await page.RenderToStreamAsync(stream, renderOptions);
+
+            // BitmapDecoderを使用してストリームからビットマップを作成
+            var decoder = await BitmapDecoder.CreateAsync(stream);
+            // JPEGにエンコード
+            using var jpegStream = new InMemoryRandomAccessStream();
+            var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, jpegStream);
+
+            // DPI情報を設定したソフトウェアビットマップを用意
+            using var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
+            softwareBitmap.DpiX = dpi;
+            softwareBitmap.DpiY = dpi;
+
+            // ソフトウェアビットマップをエンコーダに設定
+            encoder.SetSoftwareBitmap(softwareBitmap);
+            await encoder.FlushAsync();
+
+            // JPEGストリームをバイト配列に変換
+            var jpegBytes = new byte[jpegStream.Size];
+            await jpegStream.ReadAsync(jpegBytes.AsBuffer(), (uint)jpegStream.Size, InputStreamOptions.None);
+            return jpegBytes;
+        }
+
+
     }
-
-
 }
+
