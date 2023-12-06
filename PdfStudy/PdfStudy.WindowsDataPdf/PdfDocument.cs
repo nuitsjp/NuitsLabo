@@ -7,17 +7,35 @@ using Windows.Storage.Streams;
 
 namespace PdfStudy.WindowsDataPdf;
 
+/// <summary>
+/// PDFファイルをイメージへレンダリングするクラス。
+/// </summary>
 public class PdfDocument
 {
+    /// <summary>
+    /// Windows.Data.Pdf.PdfDocument
+    /// </summary>
     private readonly Windows.Data.Pdf.PdfDocument _pdfDocument;
 
+    /// <summary>
+    /// コンストラクター
+    /// </summary>
+    /// <param name="pdfDocument"></param>
     public PdfDocument(Windows.Data.Pdf.PdfDocument pdfDocument)
     {
         _pdfDocument = pdfDocument;
     }
 
+    /// <summary>
+    /// ページ数を取得する。
+    /// </summary>
     public int PageCount => (int)_pdfDocument.PageCount;
 
+    /// <summary>
+    /// PdfDocumentをロードする。
+    /// </summary>
+    /// <param name="stream"></param>
+    /// <returns></returns>
     public static async Task<PdfDocument> LoadAsync(MemoryStream stream)
     {
         var randomAccessStream = stream.AsRandomAccessStream();
@@ -26,6 +44,12 @@ public class PdfDocument
         return new PdfDocument(document);
     }
 
+    /// <summary>
+    /// 指定のページをJPEGに変換する。
+    /// </summary>
+    /// <param name="pageNo"></param>
+    /// <param name="dpi"></param>
+    /// <returns></returns>
     public async Task<byte[]> ToJpeg(int pageNo, float dpi)
     {
         // PDFの1ページ目を取得
