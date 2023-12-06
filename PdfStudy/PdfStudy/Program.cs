@@ -7,6 +7,7 @@ using BenchmarkDotNet.Toolchains.CsProj;
 using BenchmarkDotNet.Toolchains.DotNetCli;
 using PdfStudy.Benchmark;
 
+//BenchmarkRunner.Run<SaveToJpeg>();
 var job = Job.ShortRun;
 var config =
     ManualConfig.Create(DefaultConfig.Instance)
@@ -14,7 +15,7 @@ var config =
         .AddJob(job.WithToolchain(
             CsProjCoreToolchain.From(
                 new NetCoreAppSettings(
-                    targetFrameworkMoniker: "net8.0-windows",
+                    targetFrameworkMoniker: "net8.0-windows10.0.19041.0",
                     runtimeFrameworkVersion: null,
                     name: ".NET 8.0")))
             .WithBaseline(true))
