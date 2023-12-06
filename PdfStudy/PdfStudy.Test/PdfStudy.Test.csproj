@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-windows;net481</TargetFrameworks>
+		<TargetFrameworks>net8.0-windows10.0.19041.0;net481-windows10.0.19041.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
@@ -27,6 +27,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\PdfStudy.Aspose\PdfStudy.Aspose.csproj" />
 	  <ProjectReference Include="..\PdfStudy.PDFtoImage\PdfStudy.PDFtoImage.csproj" />
+	  <ProjectReference Include="..\PdfStudy.WindowsDataPdf\PdfStudy.WindowsDataPdf.csproj" />
 	  <ProjectReference Include="..\PdfStudy.Xfinium\PdfStudy.Xfinium.csproj" />
 	</ItemGroup>
 

@@ -1,5 +1,6 @@
 using FluentAssertions;
 using PdfStudy.PDFtoImage;
+// ReSharper disable MethodHasAsyncOverload
 
 namespace PdfStudy.Test
 {
@@ -33,6 +34,21 @@ namespace PdfStudy.Test
             var page1 = document.ToJpeg(1, 300);
             //File.WriteAllBytes(@"Assets\PdfToImage_Page1.jpg", page1);
             page1.Should().BeEquivalentTo(File.ReadAllBytes(@"Assets\PdfToImage_Page1.jpg"));
+        }
+
+        [Fact]
+        public async Task WindowsDataPdf()
+        {
+            var document = await PdfStudy.WindowsDataPdf.PdfDocument.LoadAsync(@"Assets\MultiPage.pdf");
+            document.PageCount.Should().Be(2);
+
+            var page0 = await document.ToJpeg(0, 300);
+            File.WriteAllBytes(@"Assets\WindowsDataPdf_Page0.jpg", page0);
+            page0.Should().BeEquivalentTo(File.ReadAllBytes(@"Assets\WindowsDataPdf_Page0.jpg"));
+
+            var page1 = await document.ToJpeg(1, 300);
+            File.WriteAllBytes(@"Assets\WindowsDataPdf_Page1.jpg", page1);
+            page1.Should().BeEquivalentTo(File.ReadAllBytes(@"Assets\WindowsDataPdf_Page1.jpg"));
         }
 
         [Fact]
