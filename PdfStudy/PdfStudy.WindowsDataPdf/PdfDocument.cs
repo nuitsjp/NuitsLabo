@@ -65,30 +65,16 @@ public class PdfDocument
         var renderOptions = new PdfPageRenderOptions
         {
             DestinationWidth = width,
-            DestinationHeight = height
+            DestinationHeight = height,
+            BitmapEncoderId = BitmapEncoder.JpegEncoderId
         };
 
         // ページをストリームにレンダリング
         await page.RenderToStreamAsync(stream, renderOptions);
 
-        // BitmapDecoderを使用してストリームからビットマップを作成
-        var decoder = await BitmapDecoder.CreateAsync(stream);
-        // JPEGにエンコード
-        using var jpegStream = new InMemoryRandomAccessStream();
-        var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, jpegStream);
-
-        // DPI情報を設定したソフトウェアビットマップを用意
-        using var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
-        softwareBitmap.DpiX = dpi;
-        softwareBitmap.DpiY = dpi;
-
-        // ソフトウェアビットマップをエンコーダに設定
-        encoder.SetSoftwareBitmap(softwareBitmap);
-        await encoder.FlushAsync();
-
         // JPEGストリームをバイト配列に変換
-        var jpegBytes = new byte[jpegStream.Size];
-        await jpegStream.ReadAsync(jpegBytes.AsBuffer(), (uint)jpegStream.Size, InputStreamOptions.None);
+        var jpegBytes = new byte[stream.Size];
+        await stream.ReadAsync(jpegBytes.AsBuffer(), (uint)stream.Size, InputStreamOptions.None);
         return jpegBytes;
     }
 
