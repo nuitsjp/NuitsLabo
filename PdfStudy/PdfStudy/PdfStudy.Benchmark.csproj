@@ -16,10 +16,14 @@
 	  <ProjectReference Include="..\PdfStudy.Aspose\PdfStudy.Aspose.csproj" />
 	  <ProjectReference Include="..\PdfStudy.PDFtoImage\PdfStudy.PDFtoImage.csproj" />
 	  <ProjectReference Include="..\PdfStudy.WindowsDataPdf\PdfStudy.WindowsDataPdf.csproj" />
+	  <ProjectReference Include="..\PdfStudy.Wpf\PdfStudy.Wpf.csproj" />
 	  <ProjectReference Include="..\PdfStudy.Xfinium\PdfStudy.Xfinium.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Update="Assets\Color.webp">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	  <None Update="Assets\MultiPage.pdf">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>

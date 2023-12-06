@@ -21,4 +21,13 @@ var config =
             .WithBaseline(true))
         .AddJob(job.WithRuntime(ClrRuntime.Net481));
 
-BenchmarkRunner.Run<SaveToJpeg>(config);
+//BenchmarkRunner.Run<DecodeWeb>(config);
+
+var switcher = new BenchmarkSwitcher(
+    new[]
+    {
+        typeof(SaveToJpeg),
+        typeof(DecodeWeb)
+    });
+
+switcher.Run(args, config);
