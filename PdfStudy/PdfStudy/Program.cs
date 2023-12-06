@@ -16,7 +16,7 @@ var config =
             CsProjCoreToolchain.From(
                 new NetCoreAppSettings(
                     targetFrameworkMoniker: "net8.0-windows10.0.19041.0",
-                    runtimeFrameworkVersion: null,
+                    runtimeFrameworkVersion: null!,
                     name: ".NET 8.0")))
             .WithBaseline(true))
         .AddJob(job.WithRuntime(ClrRuntime.Net481));
