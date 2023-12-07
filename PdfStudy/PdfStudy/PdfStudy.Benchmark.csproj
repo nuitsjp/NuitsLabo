@@ -14,6 +14,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\PdfStudy.Aspose\PdfStudy.Aspose.csproj" />
+	  <ProjectReference Include="..\PdfStudy.Cube\PdfStudy.Cube.csproj" />
 	  <ProjectReference Include="..\PdfStudy.PDFtoImage\PdfStudy.PDFtoImage.csproj" />
 	  <ProjectReference Include="..\PdfStudy.WindowsDataPdf\PdfStudy.WindowsDataPdf.csproj" />
 	  <ProjectReference Include="..\PdfStudy.Wpf\PdfStudy.Wpf.csproj" />

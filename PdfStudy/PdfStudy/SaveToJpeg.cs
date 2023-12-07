@@ -4,12 +4,20 @@ namespace PdfStudy.Benchmark;
 
 public class SaveToJpeg
 {
-    [Benchmark(Baseline = true)]
+    [Benchmark]
     // ReSharper disable once InconsistentNaming
     public void Aspose()
     {
         var document = new PdfStudy.Aspose.PdfDocument(@"Assets\MultiPage.pdf");
 
+        var page0 = document.ToJpeg(0, 300);
+        var page1 = document.ToJpeg(1, 300);
+    }
+
+    [Benchmark(Baseline = true)]
+    public void CubePdfPdfium()
+    {
+        var document = new Cube.PdfDocument(@"Assets\MultiPage.pdf");
         var page0 = document.ToJpeg(0, 300);
         var page1 = document.ToJpeg(1, 300);
     }

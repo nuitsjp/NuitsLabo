@@ -1,3 +1,4 @@
+using Cube.Pdf.Pdfium;
 using FluentAssertions;
 using PdfStudy.PDFtoImage;
 // ReSharper disable MethodHasAsyncOverload
@@ -19,6 +20,21 @@ namespace PdfStudy.Test
             var page1 = document.ToJpeg(1, 300);
             //File.WriteAllBytes(@"Assets\Aspose_Page1.jpg", page1);
             page1.Should().BeEquivalentTo(File.ReadAllBytes(@"Assets\Aspose_Page1.jpg"));
+        }
+
+        [Fact]
+        public void CubePdfPdfium()
+        {
+            var document = new Cube.PdfDocument(@"Assets\MultiPage.pdf");
+            document.PageCount.Should().Be(2);
+
+            var page0 = document.ToJpeg(0, 300);
+            File.WriteAllBytes(@"Assets\Cube_Page0.jpg", page0);
+            page0.Should().BeEquivalentTo(File.ReadAllBytes(@"Assets\Cube_Page0.jpg"));
+
+            var page1 = document.ToJpeg(1, 300);
+            File.WriteAllBytes(@"Assets\Cube_Page1.jpg", page1);
+            page1.Should().BeEquivalentTo(File.ReadAllBytes(@"Assets\Cube_Page1.jpg"));
         }
 
         [Fact]
