@@ -1,14 +1,11 @@
 using ImageMagick;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Windows.Media.Imaging;
 using FluentAssertions;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp;
 using System.Windows.Media;
 using Color = System.Drawing.Color;
-using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace ImagingTest
 {
@@ -106,7 +103,7 @@ namespace ImagingTest
                 {
                     var pixelDrawing = bitmap.GetPixel(x, y);
                     var index = (y * bitmapSource.PixelWidth + x) * 4;
-                    var pixelWpf = System.Drawing.Color.FromArgb(pixelsWpf[index + 3], pixelsWpf[index + 2], pixelsWpf[index + 1], pixelsWpf[index]);
+                    var pixelWpf = Color.FromArgb(pixelsWpf[index + 3], pixelsWpf[index + 2], pixelsWpf[index + 1], pixelsWpf[index]);
 
                     if (pixelDrawing != pixelWpf)
                         return false;
@@ -116,7 +113,7 @@ namespace ImagingTest
             return true;
         }
 
-        private void Compare(IEnumerable<System.Drawing.Color> colors1, IEnumerable<System.Drawing.Color> colors2)
+        private void Compare(IEnumerable<Color> colors1, IEnumerable<Color> colors2)
         {
             var list1 = colors1.ToList();
             var list2 = colors2.ToList();
@@ -221,7 +218,7 @@ namespace ImagingTest
                 for (var x = 0; x < bitmapSource.PixelWidth; x++)
                 {
                     var index = (y * bitmapSource.PixelWidth + x) * 4;
-                    yield return System.Drawing.Color.FromArgb(
+                    yield return Color.FromArgb(
                         pixels[index + 3],
                         pixels[index + 2],
                         pixels[index + 1],
