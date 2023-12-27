@@ -63,56 +63,6 @@ namespace ImagingTest
                 FromImageSharp(imageBytes));
         }
 
-        private bool CompareBitmaps(BitmapSource bitmapSource, Image<Rgba32> imageSharp)
-        {
-            if (bitmapSource.PixelWidth != imageSharp.Width || bitmapSource.PixelHeight != imageSharp.Height)
-                return false;
-
-            // ピクセルデータのコピー
-            var pixelsWpf = new byte[bitmapSource.PixelHeight * bitmapSource.PixelWidth * 4];
-            bitmapSource.CopyPixels(pixelsWpf, bitmapSource.PixelWidth * 4, 0);
-
-            for (var y = 0; y < bitmapSource.PixelHeight; y++)
-            {
-                for (var x = 0; x < bitmapSource.PixelWidth; x++)
-                {
-                    var index = (y * bitmapSource.PixelWidth + x) * 4;
-                    var pixelWpf = new Rgba32(pixelsWpf[index + 2], pixelsWpf[index + 1], pixelsWpf[index], pixelsWpf[index + 3]); // BGRA to RGBA
-
-                    var pixelImageSharp = imageSharp[x, y];
-
-                    if (!pixelWpf.Equals(pixelImageSharp))
-                        return false;
-                }
-            }
-
-            return true;
-        }
-
-        private bool CompareBitmaps(Bitmap bitmap, BitmapSource bitmapSource)
-        {
-            if (bitmap.Width != bitmapSource.PixelWidth || bitmap.Height != bitmapSource.PixelHeight)
-                return false;
-
-            var pixelsWpf = new byte[bitmapSource.PixelHeight * bitmapSource.PixelWidth * 4];
-            bitmapSource.CopyPixels(pixelsWpf, bitmapSource.PixelWidth * 4, 0);
-
-            for (var y = 0; y < bitmap.Height; y++)
-            {
-                for (var x = 0; x < bitmap.Width; x++)
-                {
-                    var pixelDrawing = bitmap.GetPixel(x, y);
-                    var index = (y * bitmapSource.PixelWidth + x) * 4;
-                    var pixelWpf = Color.FromArgb(pixelsWpf[index + 3], pixelsWpf[index + 2], pixelsWpf[index + 1], pixelsWpf[index]);
-
-                    if (pixelDrawing != pixelWpf)
-                        return false;
-                }
-            }
-
-            return true;
-        }
-
         private void Compare(IEnumerable<Color> colors1, IEnumerable<Color> colors2)
         {
             var list1 = colors1.ToList();
