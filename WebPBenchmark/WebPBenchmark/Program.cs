@@ -38,6 +38,7 @@ var switcher = new BenchmarkSwitcher(
         typeof(Crop),
         typeof(Load),
         typeof(LoadBitmap),
+        typeof(CalculateOtsuThreshold)
     });
 
 switcher.Run(args, config);

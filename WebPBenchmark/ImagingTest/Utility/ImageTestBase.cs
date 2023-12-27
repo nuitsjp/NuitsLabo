@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace ImagingTest;
+namespace ImagingTest.Utility;
 
 public abstract class ImageTestBase
 {

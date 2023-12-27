@@ -3,9 +3,9 @@ using System.Drawing;
 using System.Windows.Media.Imaging;
 using FluentAssertions;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp;
 using System.Windows.Media;
 using Color = System.Drawing.Color;
+using ImagingTest.Utility;
 
 namespace ImagingTest
 {
