@@ -65,59 +65,6 @@ namespace ImagingTest
                 FromMagickDotNet(imageBytes),
                 FromImageSharp(imageBytes));
         }
-        //[Theory]
-        //[InlineData(ImageFormat.Tiff)]
-        //[InlineData(ImageFormat.Jpeg)]
-        //// WebP‚Í–¢‘Î‰ž
-        //// [InlineData(ImageFormat.WebP)]
-        //public void DrawingAndAndMagickDotNet(ImageFormat imageFormat)
-        //{
-        //    var imageBytes = LoadBytes(imageFormat);
-        //    using var fromDrawing = FromDrawing(imageBytes);
-        //    using var fromMagickDotNet = FromMagickDotNet(imageBytes);
-
-        //    CompareBitmaps(fromDrawing, fromMagickDotNet).Should().BeTrue();
-        //}
-
-        //[Theory]
-        //[InlineData(ImageFormat.Tiff)]
-        //[InlineData(ImageFormat.Jpeg)]
-        //// WebP‚Í–¢‘Î‰ž
-        //// [InlineData(ImageFormat.WebP)]
-        //public void DrawingAndImageSharp(ImageFormat imageFormat)
-        //{
-        //    var imageBytes = LoadBytes(imageFormat);
-        //    using var fromDrawing = FromDrawing(imageBytes);
-        //    using var fromImageSharp = FromImageSharp(imageBytes);
-
-        //    CompareBitmaps(fromDrawing, fromImageSharp).Should().BeTrue();
-        //}
-
-        //[Theory]
-        //[InlineData(ImageFormat.Tiff)]
-        //[InlineData(ImageFormat.Jpeg)]
-        //[InlineData(ImageFormat.WebP)]
-        //public void MagickDotNetAndImageSharp(ImageFormat imageFormat)
-        //{
-        //    var imageBytes = LoadBytes(imageFormat);
-        //    using var fromMagickDotNet = FromMagickDotNet(imageBytes);
-        //    using var fromImageSharp = FromImageSharp(imageBytes);
-
-        //    CompareBitmaps(fromMagickDotNet, fromImageSharp).Should().BeTrue();
-        //}
-
-        //[Theory]
-        //[InlineData(ImageFormat.Tiff)]
-        //[InlineData(ImageFormat.Jpeg)]
-        //[InlineData(ImageFormat.WebP)]
-        //public void SystemWindowsAndImageSharp(ImageFormat imageFormat)
-        //{
-        //    var imageBytes = LoadBytes(imageFormat);
-        //    var bitmapSource= FromSystemWindows(imageBytes, imageFormat);
-        //    using var fromImageSharp = FromImageSharp(imageBytes);
-
-        //    CompareBitmaps(bitmapSource, fromImageSharp).Should().BeTrue();
-        //}
 
         private bool CompareBitmaps(BitmapSource bitmapSource, Image<Rgba32> imageSharp)
         {
@@ -214,7 +161,6 @@ namespace ImagingTest
                     yield return Color.FromArgb(pixel.A, pixel.R, pixel.G, pixel.B);
                 }
             }
-
         }
 
         private IEnumerable<Color> FromImageSharp(byte[] imageBytes)
@@ -231,7 +177,6 @@ namespace ImagingTest
                     yield return Color.FromArgb(pixel2.A, pixel2.R, pixel2.G, pixel2.B);
                 }
             }
-
         }
 
         private IEnumerable<Color> FromSystemWindows(byte[] imageBytes, ImageFormat imageFormat)
