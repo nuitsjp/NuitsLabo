@@ -7,36 +7,37 @@ using BenchmarkDotNet.Toolchains.DotNetCli;
 using Sharprompt;
 using WebPBenchmark;
 
-var summary = BenchmarkRunner.Run<Crop>();
+//var summary = BenchmarkRunner.Run<LoadBitmap>();
 
-//var jobs = new[] { Job.ShortRun, Job.Default };
-//var jobName = Prompt.Select("Job", jobs.Select(x => x.ToString()));
+var jobs = new[] { Job.ShortRun, Job.Default };
+var jobName = Prompt.Select("Job", jobs.Select(x => x.ToString()));
 
-//var job = jobs.Single(x => x.ToString() == jobName);
+var job = jobs.Single(x => x.ToString() == jobName);
 
-//var config =
-//    job == Job.ShortRun
-//        ? ManualConfig.Create(DefaultConfig.Instance)
-//            .AddJob(job.WithRuntime(ClrRuntime.Net481))
-//        : ManualConfig.Create(DefaultConfig.Instance)
-//            .AddJob(job.WithToolchain(
-//                CsProjCoreToolchain.From(
-//                    new NetCoreAppSettings(
-//                        targetFrameworkMoniker: "net8.0-windows",
-//                        runtimeFrameworkVersion: null,
-//                        name: ".NET 8.0"))))
-//            .AddJob(job.WithRuntime(ClrRuntime.Net481));
+var config =
+    job == Job.ShortRun
+        ? ManualConfig.Create(DefaultConfig.Instance)
+            .AddJob(job.WithRuntime(ClrRuntime.Net481))
+        : ManualConfig.Create(DefaultConfig.Instance)
+            .AddJob(job.WithToolchain(
+                CsProjCoreToolchain.From(
+                    new NetCoreAppSettings(
+                        targetFrameworkMoniker: "net8.0-windows",
+                        runtimeFrameworkVersion: null,
+                        name: ".NET 8.0"))))
+            .AddJob(job.WithRuntime(ClrRuntime.Net481));
 
-//var switcher = new BenchmarkSwitcher(
-//    new[]
-//    {
-//        typeof(BinarizeByFixedThreshold), 
-//        typeof(BinarizeByOtsu),
-//        typeof(BitmapSourceToBitmap),
-//        typeof(BitmapToBitmapSource),
-//        typeof(CreateThumbnail),
-//        typeof(Crop),
-//        typeof(Load),
-//    });
+var switcher = new BenchmarkSwitcher(
+    new[]
+    {
+        typeof(BinarizeByFixedThreshold),
+        typeof(BinarizeByOtsu),
+        typeof(BitmapSourceToBitmap),
+        typeof(BitmapToBitmapSource),
+        typeof(CreateThumbnail),
+        typeof(Crop),
+        typeof(Load),
+        typeof(LoadBitmap),
+    });
 
-//switcher.Run(args, config);
+switcher.Run(args, config);

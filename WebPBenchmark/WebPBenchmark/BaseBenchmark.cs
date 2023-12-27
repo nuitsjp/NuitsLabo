@@ -15,7 +15,7 @@ public abstract class BaseBenchmark
     private static readonly BitmapSource TiffBitmapSource = CreateBitmapSource(Tiff);
 
     [Params("Jpeg", "WebP", "Tiff")]
-    public string Format { get; set; } = string.Empty;
+    public string Format { get; set; } = "WebP";
 
     protected bool IsWebP => Format == "WebP";
 
