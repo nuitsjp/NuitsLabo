@@ -68,6 +68,12 @@ public class IntTextBox : TextBox
             e.CancelCommand();
         }
     }
+
+    /// <summary>
+    /// ペースト後のテキストを予測します。
+    /// </summary>
+    /// <param name="text"></param>
+    /// <returns></returns>
     private string GetAfterText(string text)
     {
         // ペースト後のテキストを予測（例えば、数値以外の文字が含まれる場合はペーストをキャンセル）
