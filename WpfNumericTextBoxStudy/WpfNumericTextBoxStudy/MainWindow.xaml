@@ -10,7 +10,7 @@
         <local:MainWindowViewModel/>
     </Window.DataContext>
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <local:IntTextBox Text="{Binding Text1, UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="5"/>
+        <local:IntTextBox Text="{Binding Text1, UpdateSourceTrigger=LostFocus}" Width="100" Margin="5"/>
         <TextBox Text="{Binding Text2, UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="5"/>
     </StackPanel>
 </Window>
