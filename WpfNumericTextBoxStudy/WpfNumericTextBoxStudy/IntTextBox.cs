@@ -33,7 +33,7 @@ public class IntTextBox : TextBox
         // 入力されたテキストから、反映後のテキストを予測します。
         var afterText = GetAfterText(e.Text);
 
-        if (!int.TryParse(afterText, out _))
+        if (!IsInt(afterText))
         {
             // 反映後の値がint型の入力値ではない場合、イベントをキャンセルします。
             e.Handled = true;
@@ -56,7 +56,7 @@ public class IntTextBox : TextBox
             // ペーストされたテキストから、反映後のテキストを予測します。
             var afterText = GetAfterText(text);
 
-            if (!int.TryParse(afterText, out _))
+            if (!IsInt(afterText))
             {
                 // 反映後の値がint型の入力値ではない場合、イベントをキャンセルします。
                 e.CancelCommand();
@@ -67,6 +67,23 @@ public class IntTextBox : TextBox
             // ペーストされたデータが文字列として取得できない場合、イベントをキャンセルします。
             e.CancelCommand();
         }
+    }
+
+    /// <summary>
+    /// テキストがint型の値かどうかを判定します。
+    /// </summary>
+    /// <param name="text"></param>
+    /// <returns></returns>
+    private bool IsInt(string text)
+    {
+        // まずint形にパースして確認する。
+        if (int.TryParse(text, out var intValue))
+        {
+            // パースに成功した場合、元の文字列とint型に変換した値が一致するかを確認する。
+            // スペースが含まれている場合（など？）は、一致しないのでfalseを返す。
+            return string.Equals(text, intValue.ToString());
+        }
+        return false;
     }
 
     /// <summary>
