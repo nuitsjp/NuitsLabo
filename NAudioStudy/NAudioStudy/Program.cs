@@ -5,6 +5,7 @@ using var waveIn = new WaveInEvent();
 waveIn.WaveFormat = new WaveFormat(44100, 1);
 var sampleProvider = new WaveInProvider(waveIn).ToSampleProvider();
 var aWeightingFilter = new AWeightingFilter(sampleProvider);
+var fastResponse = new FastResponse();
 
 waveIn.DataAvailable += (s, e) =>
 {
@@ -20,7 +21,10 @@ waveIn.DataAvailable += (s, e) =>
     double rms = Math.Sqrt(sum / samplesRead);
     double db = 20 * Math.Log10(rms);
 
-    Console.WriteLine($"A-weighted Volume: {db} dB");
+    // Fast特性の適用
+    double fastDb = fastResponse.Process(db);
+
+    Console.WriteLine($"A-weighted Fast Response Volume: {fastDb} dB");
 };
 
 waveIn.StartRecording();

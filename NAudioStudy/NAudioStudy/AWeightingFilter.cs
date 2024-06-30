@@ -1,18 +1,17 @@
-﻿namespace NAudioStudy;
-
-using System;
+﻿using NAudio.Dsp;
 using NAudio.Wave;
-using NAudio.Dsp;
+
+namespace NAudioStudy;
 
 class AWeightingFilter(ISampleProvider source) : ISampleProvider
 {
     private readonly BiQuadFilter[] _filters = new BiQuadFilter[]
     {
         // A-weighting filter coefficients based on ITU-R 468-4 standard
-        BiQuadFilter.PeakingEQ(44100, 20.6f, 0.5f, -20.0f),
-        BiQuadFilter.PeakingEQ(44100, 107.7f, 0.5f, 2.0f),
-        BiQuadFilter.PeakingEQ(44100, 737.9f, 0.5f, 0.0f),
-        BiQuadFilter.PeakingEQ(44100, 12200.0f, 0.5f, -12.0f)
+        BiQuadFilter.PeakingEQ(source.WaveFormat.SampleRate, 20.6f, 0.5f, -20.0f),
+        BiQuadFilter.PeakingEQ(source.WaveFormat.SampleRate, 107.7f, 0.5f, 2.0f),
+        BiQuadFilter.PeakingEQ(source.WaveFormat.SampleRate, 737.9f, 0.5f, 0.0f),
+        BiQuadFilter.PeakingEQ(source.WaveFormat.SampleRate, 12200.0f, 0.5f, -12.0f)
     };
 
     // A-weighting filter coefficients based on ITU-R 468-4 standard
