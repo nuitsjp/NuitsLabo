@@ -5,14 +5,127 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:materialDesignThemesStudy="clr-namespace:MaterialDesignThemesStudy"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
         FontFamily="{materialDesign:MaterialDesignFont}"
         Title="MainWindow" Height="450" Width="800">
-    <StackPanel Orientation="Vertical" Margin="50">
-        <TextBox Width="100" Style="{StaticResource MaterialDesignOutlinedTextBox}" Height="36"/>
-        <TextBox Width="100"/>
+    <Window.DataContext>
+        <materialDesignThemesStudy:MainWindowViewModel/>
+    </Window.DataContext>
+    <StackPanel>
+        <FrameworkElement x:Name="DataContextProxy" DataContext="{Binding}" />
+
+        <DataGrid AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                HeadersVisibility="All"
+                ItemsSource="{Binding Items1}"
+                SelectionUnit="{Binding ElementName=selectionUnitComboBox, Path=SelectedValue}">
+            <DataGrid.Columns>
+                <!-- by default a DataGridCheckBoxColumn will have the MaterialDesignDataGridCheckBoxColumnStyle and MaterialDesignDataGridCheckBoxColumnEditingStyle applied. See DataGridAssist.ApplyMaterialDesignColumnStyles attached property -->
+                <DataGridCheckBoxColumn Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridCheckBoxColumn.Header>
+                        <Border Background="Transparent">
+                            <CheckBox IsChecked="{Binding DataContext.IsAllItems1Selected, Source={x:Reference DataContextProxy}}" />
+                        </Border>
+                    </DataGridCheckBoxColumn.Header>
+
+                    <DataGridCheckBoxColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridCheckBoxColumn.HeaderStyle>
+                </DataGridCheckBoxColumn>
+
+                <!-- by default a DataGridTextColumn will have the MaterialDesignDataGridTextColumnStyle and MaterialDesignDataGridTextColumnEditingStyle applied. See DataGridAssist.ApplyMaterialDesignColumnStyles attached property -->
+                <DataGridTextColumn Binding="{Binding Code}" Header="Code" />
+
+                <!-- if you want to use the pop up style (MaterialDesignDataGridTextColumnPopupEditingStyle), you must use MaterialDataGridTextColumn -->
+                <materialDesign:DataGridTextColumn EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                             ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                             Header="Name">
+                    <materialDesign:DataGridTextColumn.Binding>
+                        <Binding Path="Name">
+                            <Binding.ValidationRules>
+                                <materialDesignThemesStudy:NotEmptyValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </materialDesign:DataGridTextColumn.Binding>
+                </materialDesign:DataGridTextColumn>
+
+                <!-- set a max length to get an indicator in the editor -->
+                <DataGridTextColumn Header="Description">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="Description">
+                            <Binding.ValidationRules>
+                                <materialDesignThemesStudy:NotEmptyValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+
+                <materialDesign:DataGridTextColumn Width="120"
+                                             Binding="{Binding Numeric}"
+                                             EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                             Header="Number with long header">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                            <Setter Property="ContentTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}"
+                                 TextAlignment="Right"
+                                 TextWrapping="Wrap" />
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="HorizontalContentAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MaterialDesignDataGridTextColumnStyle}">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </materialDesign:DataGridTextColumn>
+
+                <!-- use custom combo box column to get better combos. Use ItemsSourceBinding as your binding template to be applied to each combo -->
+                <materialDesign:DataGridComboBoxColumn Width="100"
+                                                 Header="Food with long header"
+                                                 IsEditable="True"
+                                                 ItemsSourceBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.Departments}"
+                                                 SelectedValueBinding="{Binding Department}"
+                                                 DisplayMemberPath="Name">
+                    <!--Setting the editing element style allows access to all of the combo box's properties
+                        <materialDesign:MaterialDataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox" BasedOn="{StaticResource {ComponentResourceKey TypeInTargetAssembly={x:Type ComboBox}, ResourceId=MaterialDataGridComboBoxColumnEditingStyle}}" >
+                                <Setter Property="IsEditable" Value="True" />
+                            </Style>
+                        </materialDesign:MaterialDataGridComboBoxColumn.EditingElementStyle>
+            -->
+                </materialDesign:DataGridComboBoxColumn>
+                <materialDesign:DataGridComboBoxColumn Header="ComboBox with long list"
+                                                 ItemsSourceBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.Files}"
+                                                 SelectedValueBinding="{Binding Files}" />
+
+                <DataGridTemplateColumn Header="Template Column">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="{x:Type materialDesignThemesStudy:SelectableViewModel}">
+                            <TextBlock FontSize="14"
+                           FontStyle="Italic"
+                           Text="{Binding Name}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate DataType="{x:Type materialDesignThemesStudy:SelectableViewModel}">
+                            <TextBox Foreground="{DynamicResource SecondaryHueMidBrush}" Text="{Binding Name}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </StackPanel>
 </Window>
