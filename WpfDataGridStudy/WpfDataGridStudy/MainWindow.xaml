@@ -15,11 +15,27 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid 
-                  ItemsSource="{Binding Employees}"
-                  local:DataGrids.SelectedItems="{Binding SelectedEmployees}"
-                  SelectionMode="Extended"
-                  IsReadOnly="True"/>
+        <DataGrid ItemsSource="{Binding Employees}"
+                   local:DataGrids.SelectedItems="{Binding SelectedEmployees}"
+                   SelectionMode="Extended"
+                   AutoGenerateColumns="False">
+            <DataGrid.Resources>
+                <!-- CollectionViewSourceで参照出来るようにしておいて -->
+                <CollectionViewSource
+                    x:Key="DepartmentsSource"
+                    Source="{Binding Departments}" />
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding FirstName}"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding LastName}"/>
+                <DataGridTextColumn Header="Age" Binding="{Binding Age}"/>
+                <DataGridComboBoxColumn Header="Department"
+                                        DisplayMemberPath="Name"
+                                        ItemsSource="{Binding Source={StaticResource DepartmentsSource}}" 
+                                        SelectedValueBinding="{Binding Department}"/>
+            </DataGrid.Columns>
+        </DataGrid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
