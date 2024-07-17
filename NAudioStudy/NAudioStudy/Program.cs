@@ -1,33 +1,62 @@
-﻿using NAudio.Wave;
-using NAudioStudy;
+﻿using NAudio.CoreAudioApi;
+using NAudio.Wave;
+using System;
+using System.Collections.Generic;
 
-using var waveIn = new WaveInEvent();
-waveIn.WaveFormat = new WaveFormat(44100, 1);
-var sampleProvider = new WaveInProvider(waveIn).ToSampleProvider();
-var aWeightingFilter = new AWeightingFilter(sampleProvider);
-var fastResponse = new FastResponse();
-
-waveIn.DataAvailable += (s, e) =>
+class Program
 {
-    float[] buffer = new float[e.BytesRecorded / 2];
-    int samplesRead = aWeightingFilter.Read(buffer, 0, buffer.Length);
-
-    // 音量計算（RMS値）
-    double sum = 0;
-    for (int i = 0; i < samplesRead; i++)
+    static void Main(string[] args)
     {
-        sum += buffer[i] * buffer[i];
+        var deviceEnumerator = new MMDeviceEnumerator();
+        var devices = deviceEnumerator.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active);
+
+        foreach (var device in devices)
+        {
+            Console.WriteLine($"Device: {device.FriendlyName}");
+            var waveFormats = GetSupportedWaveFormats(device);
+
+            foreach (var format in waveFormats)
+            {
+                Console.WriteLine($"  {format.SampleRate}Hz, {format.BitsPerSample}bit, {format.Channels} channels");
+            }
+            Console.WriteLine();
+        }
     }
-    double rms = Math.Sqrt(sum / samplesRead);
-    double db = 20 * Math.Log10(rms);
 
-    // Fast特性の適用
-    double fastDb = fastResponse.Process(db);
+    static List<WaveFormat> GetSupportedWaveFormats(MMDevice device)
+    {
+        var formats = new List<WaveFormat>();
 
-    Console.WriteLine($"A-weighted Fast Response Volume: {fastDb} dB");
-};
+        // 一般的なサンプルレート、ビット深度、チャンネル数の組み合わせを生成
+        var sampleRates = new[] { 8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000 };
+        var bitDepths = new[] { 8, 16, 24, 32 };
+        var channelCounts = new[] { 1, 2 };
 
-waveIn.StartRecording();
-Console.WriteLine("Press any key to stop...");
-Console.ReadKey();
-waveIn.StopRecording();
+        foreach (var rate in sampleRates)
+        {
+            foreach (var depth in bitDepths)
+            {
+                foreach (var channels in channelCounts)
+                {
+                    try
+                    {
+                        var format = new WaveFormat(rate, depth, channels);
+                        using (var audioClient = device.AudioClient)
+                        {
+                            if (audioClient.IsFormatSupported(AudioClientShareMode.Shared, format, out _))
+                            {
+                                formats.Add(format);
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        // 非対応のフォーマットは無視
+                    }
+                }
+            }
+        }
+
+        return formats;
+    }
+}
