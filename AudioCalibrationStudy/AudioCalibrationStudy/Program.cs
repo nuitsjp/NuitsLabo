@@ -10,6 +10,7 @@ var calibrationPoints = new List<(double Decibels, double Amplitude)>
     (85, 1.0)
 };
 
+
 Console.WriteLine($"Linear\t: {DecibelsToAmplitudeByLinear(75, calibrationPoints)}");
 Console.WriteLine($"Spline\t: {DecibelsToAmplitudeBySpline(75, calibrationPoints)}");
 
