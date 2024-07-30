@@ -1,7 +1,7 @@
 ﻿using AudioCalibrationStudy;
 using NAudio.Wave;
 
-var calibrator = new AudioCalibrator();
+var calibrator = new AudioLinearCalibrator();
 
 // 測定したポイントを追加（これらの値は実際の測定に基づいて設定する必要があります）
 calibrator.AddCalibrationPoint(0.1, 50);  // 振幅0.1で50dB
