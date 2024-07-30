@@ -1,6 +1,6 @@
 ﻿namespace AudioCalibrationStudy;
 
-class AudioLinearCalibrator
+internal class AudioLinearCalibrator
 {
     // 測定したサンプルポイントを格納する構造体
     struct CalibrationPoint
@@ -29,7 +29,7 @@ class AudioLinearCalibrator
             throw new ArgumentOutOfRangeException(nameof(amplitude));
         }
 
-        double ratio = (amplitude - lowerPoint.Amplitude) / (upperPoint.Amplitude - lowerPoint.Amplitude);
+        var ratio = (amplitude - lowerPoint.Amplitude) / (upperPoint.Amplitude - lowerPoint.Amplitude);
         return lowerPoint.Decibels + ratio * (upperPoint.Decibels - lowerPoint.Decibels);
     }
 
@@ -45,7 +45,7 @@ class AudioLinearCalibrator
             throw new ArgumentOutOfRangeException(nameof(targetDecibels));
         }
 
-        double ratio = (targetDecibels - lowerPoint.Decibels) / (upperPoint.Decibels - lowerPoint.Decibels);
+        var ratio = (targetDecibels - lowerPoint.Decibels) / (upperPoint.Decibels - lowerPoint.Decibels);
         return lowerPoint.Amplitude + ratio * (upperPoint.Amplitude - lowerPoint.Amplitude);
     }
 }
