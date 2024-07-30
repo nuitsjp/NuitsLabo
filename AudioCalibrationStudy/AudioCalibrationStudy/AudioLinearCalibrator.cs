@@ -18,20 +18,6 @@ internal class AudioLinearCalibrator
     }
 
     // 振幅からデシベルを推定
-    public double EstimateDecibels(double amplitude)
-    {
-        // 簡単な線形補間を使用。より精密な補間方法も考えられます。
-        var lowerPoint = CalibrationPoints.LastOrDefault(p => p.Amplitude <= amplitude);
-        var upperPoint = CalibrationPoints.FirstOrDefault(p => p.Amplitude > amplitude);
-
-        if (lowerPoint.Equals(default(CalibrationPoint)) || upperPoint.Equals(default(CalibrationPoint)))
-        {
-            throw new ArgumentOutOfRangeException(nameof(amplitude));
-        }
-
-        var ratio = (amplitude - lowerPoint.Amplitude) / (upperPoint.Amplitude - lowerPoint.Amplitude);
-        return lowerPoint.Decibels + ratio * (upperPoint.Decibels - lowerPoint.Decibels);
-    }
 
     // デシベルから必要な振幅を推定
     public double EstimateAmplitude(double targetDecibels)
