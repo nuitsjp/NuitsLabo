@@ -1,34 +1,38 @@
 ﻿namespace AudioCalibrationStudy;
 
+/// <summary>
+/// 線形補間を使用してオーディオのキャリブレーションを行うクラス
+/// </summary>
 internal class AudioLinearCalibrator
 {
-    // 測定したサンプルポイントを格納する構造体
-    struct CalibrationPoint
-    {
-        public double Amplitude;
-        public double Decibels;
-    }
-
+    /// <summary>
+    /// キャリブレーションポイントのリスト
+    /// </summary>
     private List<CalibrationPoint> CalibrationPoints { get; } = [];
 
-    // 測定したポイントを追加
-    public void AddCalibrationPoint(double amplitude, double decibels)
+    /// <summary>
+    /// キャリブレーションポイントを追加します
+    /// </summary>
+    public void AddCalibrationPoint(CalibrationPoint calibrationPoint)
     {
-        CalibrationPoints.Add(new CalibrationPoint { Amplitude = amplitude, Decibels = decibels });
+        CalibrationPoints.Add(calibrationPoint);
     }
 
-    // 振幅からデシベルを推定
-
-    // デシベルから必要な振幅を推定
+    /// <summary>
+    /// 指定されたデシベル値に対応する振幅を推定します
+    /// </summary>
+    /// <param name="targetDecibels">目標のデシベル値</param>
+    /// <returns>推定された振幅</returns>
+    /// <exception cref="ArgumentOutOfRangeException">目標のデシベル値が校正範囲外の場合にスローされます</exception>
     public double EstimateAmplitude(double targetDecibels)
     {
-        // 同様に、線形補間を使用
+        // 線形補間を使用
         var lowerPoint = CalibrationPoints.LastOrDefault(p => p.Decibels <= targetDecibels);
         var upperPoint = CalibrationPoints.FirstOrDefault(p => p.Decibels > targetDecibels);
 
-        if (lowerPoint.Equals(default(CalibrationPoint)) || upperPoint.Equals(default(CalibrationPoint)))
+        if (lowerPoint == null || upperPoint == null)
         {
-            throw new ArgumentOutOfRangeException(nameof(targetDecibels));
+            throw new ArgumentOutOfRangeException(nameof(targetDecibels), "目標のデシベル値が校正範囲外です");
         }
 
         var ratio = (targetDecibels - lowerPoint.Decibels) / (upperPoint.Decibels - lowerPoint.Decibels);

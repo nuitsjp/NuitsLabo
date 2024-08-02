@@ -1,5 +1,15 @@
 ﻿namespace AudioCalibrationStudy;
 
+/// <summary>
+/// キャリブレーションポイントを表すレコード
+/// </summary>
+/// <param name="Decibels">デシベル値</param>
+/// <param name="Amplitude">振幅</param>
+public record CalibrationPoint(double Decibels, double Amplitude);
+
+/// <summary>
+/// スプライン補間を使用してオーディオのキャリブレーションを行うクラス
+/// </summary>
 public class AudioSplineCalibrator
 {
     private readonly double[] _decibels;
@@ -10,7 +20,11 @@ public class AudioSplineCalibrator
     private readonly double[] _c; // 2次の項
     private readonly double[] _d; // 3次の項
 
-    public AudioSplineCalibrator(List<(double Decibels, double Amplitude)> calibrationPoints)
+    /// <summary>
+    /// AudioSplineCalibratorのコンストラクタ
+    /// </summary>
+    /// <param name="calibrationPoints">キャリブレーションポイントのリスト</param>
+    public AudioSplineCalibrator(List<CalibrationPoint> calibrationPoints)
     {
         var sortedPoints = calibrationPoints.OrderBy(p => p.Decibels).ToList();
 
@@ -26,6 +40,9 @@ public class AudioSplineCalibrator
         CalculateSplineCoefficients();
     }
 
+    /// <summary>
+    /// スプライン補間の係数を計算するプライベートメソッド
+    /// </summary>
     private void CalculateSplineCoefficients()
     {
         var numberOfPoints = _decibels.Length;
@@ -93,6 +110,11 @@ public class AudioSplineCalibrator
         }
     }
 
+    /// <summary>
+    /// 指定されたデシベル値に対応する振幅を推定します
+    /// </summary>
+    /// <param name="targetDecibels">目標のデシベル値</param>
+    /// <returns>推定された振幅</returns>
     public double EstimateAmplitude(double targetDecibels)
     {
         // 適切なスプライン区間を見つける
