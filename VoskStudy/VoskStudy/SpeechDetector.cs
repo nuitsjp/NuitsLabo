@@ -49,9 +49,11 @@ public class SpeechDetector : IDisposable
 
     private void WaveIn_DataAvailable(object sender, WaveInEventArgs e)
     {
+        var startTime = DateTime.Now;
         if (recognizer.AcceptWaveform(e.Buffer, e.BytesRecorded))
         {
             var result = recognizer.Result();
+            Console.WriteLine($"認識結果: {result} 経過時間:{DateTime.Now - startTime}");
             ProcessResult(result);
         }
     }
@@ -61,7 +63,7 @@ public class SpeechDetector : IDisposable
         // 結果から単語を抽出（簡略化のため、文字列操作を使用）
         if (result.Contains("スタート") || result.Contains("ストップ"))
         {
-            KeywordDetected?.Invoke(this, result.Contains("start") ? "Start" : "Stop");
+            KeywordDetected?.Invoke(this, result.Contains("スタート") ? "スタート" : "ストップ");
         }
     }
 

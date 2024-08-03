@@ -1,4 +1,6 @@
-﻿using var detector = new SpeechDetector(@"..\..\..\vosk-model-small-ja-0.22");
+﻿// 下記のURLからモデルをダウンロードして、vosk-model-small-ja-0.22 フォルダを配置してください。
+// https://alphacephei.com/vosk/models
+using var detector = new SpeechDetector(@"..\..\..\vosk-model-small-ja-0.22");
 detector.KeywordDetected += (sender, keyword) =>
 {
     Console.WriteLine($"検出されたキーワード: {keyword}");
