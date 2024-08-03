@@ -6,6 +6,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+vosk-model-small-ja-0.22/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
