@@ -10,7 +10,7 @@ resource networkInterfaces_arm_template288_name_resource 'Microsoft.Network/netw
     ipConfigurations: [
       {
         name: 'ipconfig1'
-        id: '${networkInterfaces_arm_template288_name_resource.id}/ipConfigurations/ipconfig1'
+        id: resourceId('Microsoft.Network/networkInterfaces/ipConfigurations', networkInterfaces_arm_template288_name, 'ipconfig1')
         type: 'Microsoft.Network/networkInterfaces/ipConfigurations'
         properties: {
           privateIPAddress: '10.1.0.4'
