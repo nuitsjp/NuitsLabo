@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "networkInterfaces_arm_template288_name": {
+            "value": null
+        },
+        "virtualNetworks_ARM_TEMPLATE_vnet_externalid": {
+            "value": null
+        },
+        "networkSecurityGroups_ARMTEMPLATEnsg264_externalid": {
+            "value": null
+        }
+    }
+}
