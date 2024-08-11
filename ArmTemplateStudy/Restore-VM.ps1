@@ -30,7 +30,7 @@ $SnapshotId = Select-Snapshot
 
 # Bicepテンプレートをデプロイ
 Write-Host "Bicepテンプレートを使用してディスク '$DiskName' を作成中..."
-az deployment group create `
+$deployment = az deployment group create `
     --resource-group $ResourceGroup `
     --template-file "$PSScriptRoot\template\vm.bicep" `
     --parameters "$PSScriptRoot\template\vm.json" `
@@ -38,7 +38,7 @@ az deployment group create `
     --parameters resourceGroupName=$ResourceGroup `
     --parameters subscriptionId=$SubscriptionId
 
-if ($LASTEXITCODE -eq 0) {
+if ($deployment) {
     Write-Host "ディスク '$DiskName' をスナップショットから正常に作成しました。"
 } else {
     Write-Error "ディスク '$DiskName' の作成に失敗しました。"
