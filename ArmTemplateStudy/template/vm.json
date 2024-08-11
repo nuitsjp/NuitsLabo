@@ -47,17 +47,11 @@
         "virtualMachineName": {
             "value": "vm-001"
         },
-        "virtualMachineComputerName": {
-            "value": "vm-001"
-        },
-        "virtualMachineRG": {
-            "value": "arm-template-001_group"
+        "virtualMachineSize": {
+            "value": "Standard_D2s_v3"
         },
         "osDiskDeleteOption": {
             "value": "Delete"
-        },
-        "virtualMachineSize": {
-            "value": "Standard_D2s_v3"
         },
         "nicDeleteOption": {
             "value": "Delete"
@@ -91,6 +85,12 @@
         },
         "autoShutdownNotificationEmail": {
             "value": ""
+        },
+        "resourceGroupName": {
+            "value": "rg-arm-template-study-dev-eastjp-001"
+        },
+        "subscriptionId": {
+            "value": "fc7753ed-2e69-4202-bb66-86ff5798b8d5"  // 実際のサブスクリプションIDをここに入力
         }
     }
 }

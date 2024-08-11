@@ -1,3 +1,4 @@
+param resourceGroupName string
 param diskName string
 param location string
 param sku string
@@ -13,10 +14,8 @@ param networkSecurityGroupId string
 param subnetName string
 param virtualNetworkId string
 param virtualMachineName string
-param virtualMachineComputerName string
-param virtualMachineRG string
-param osDiskDeleteOption string
 param virtualMachineSize string
+param osDiskDeleteOption string
 param nicDeleteOption string
 param hibernationEnabled bool
 param securityType string
@@ -28,118 +27,67 @@ param autoShutdownTimeZone string
 param autoShutdownNotificationStatus string
 param autoShutdownNotificationLocale string
 param autoShutdownNotificationEmail string
+param subscriptionId string  // サブスクリプションIDを追加
 
-var nsgId = networkSecurityGroupId
-var vnetId = virtualNetworkId
-var vnetName = last(split(vnetId, '/'))
-var subnetRef = '${vnetId}/subnets/${subnetName}'
-
-resource disk 'Microsoft.Compute/disks@2022-03-02' = {
-  name: diskName
-  location: location
-  properties: {
-    creationData: {
-      createOption: createOption
-      sourceResourceId: sourceResourceId
-    }
-    diskSizeGB: diskSizeGb
-    encryption: {
-      type: diskEncryptionSetType
-    }
+module diskMod 'diskModule.bicep' = {
+  name: 'diskDeployment'
+  scope: resourceGroup(resourceGroupName)
+  params: {
+    diskName: diskName
+    location: location
+    sku: sku
+    diskSizeGb: diskSizeGb
+    sourceResourceId: sourceResourceId
+    createOption: createOption
+    diskEncryptionSetType: diskEncryptionSetType
     dataAccessAuthMode: dataAccessAuthMode
     networkAccessPolicy: networkAccessPolicy
     publicNetworkAccess: publicNetworkAccess
   }
-  sku: {
-    name: sku
-  }
-  tags: {}
 }
 
-resource networkInterface 'Microsoft.Network/networkInterfaces@2022-11-01' = {
-  name: networkInterfaceName
-  location: location
-  properties: {
-    ipConfigurations: [
-      {
-        name: 'ipconfig1'
-        properties: {
-          subnet: {
-            id: subnetRef
-          }
-          privateIPAllocationMethod: 'Dynamic'
-        }
-      }
-    ]
-    networkSecurityGroup: {
-      id: nsgId
-    }
-  }
-  dependsOn: []
-}
-
-resource virtualMachine 'Microsoft.Compute/virtualMachines@2024-03-01' = {
-  name: virtualMachineName
-  location: location
-  properties: {
-    hardwareProfile: {
-      vmSize: virtualMachineSize
-    }
-    storageProfile: {
-      osDisk: {
-        createOption: 'attach'
-        osType: 'Windows'
-        managedDisk: {
-          id: disk.id
-        }
-        deleteOption: osDiskDeleteOption
-      }
-    }
-    networkProfile: {
-      networkInterfaces: [
-        {
-          id: networkInterface.id
-          properties: {
-            deleteOption: nicDeleteOption
-          }
-        }
-      ]
-    }
-    securityProfile: {
-      securityType: securityType
-      uefiSettings: {
-        secureBootEnabled: secureBoot
-        vTpmEnabled: vTPM
-      }
-    }
-    additionalCapabilities: {
-      hibernationEnabled: false
-    }
-    licenseType: 'Windows_Server'
-    diagnosticsProfile: {
-      bootDiagnostics: {
-        enabled: true
-      }
-    }
+module networkInterfaceMod 'networkInterfaceModule.bicep' = {
+  name: 'networkInterfaceDeployment'
+  scope: resourceGroup(resourceGroupName)
+  params: {
+    networkInterfaceName: networkInterfaceName
+    location: location
+    networkSecurityGroupId: networkSecurityGroupId
+    subnetName: subnetName
+    virtualNetworkId: virtualNetworkId
   }
 }
 
-resource shutdown_computevm_virtualMachine 'Microsoft.DevTestLab/schedules@2018-09-15' = {
-  name: 'shutdown-computevm-${virtualMachineName}'
-  location: location
-  properties: {
-    status: autoShutdownStatus
-    taskType: 'ComputeVmShutdownTask'
-    dailyRecurrence: {
-      time: autoShutdownTime
-    }
-    timeZoneId: autoShutdownTimeZone
-    targetResourceId: virtualMachine.id
-    notificationSettings: {
-      status: autoShutdownNotificationStatus
-      notificationLocale: autoShutdownNotificationLocale
-      timeInMinutes: '30'
-      emailRecipient: autoShutdownNotificationEmail
-    }
+module virtualMachineMod 'virtualMachineModule.bicep' = {
+  name: 'virtualMachineDeployment'
+  scope: resourceGroup(resourceGroupName)
+  params: {
+    virtualMachineName: virtualMachineName
+    location: location
+    virtualMachineSize: virtualMachineSize
+    osDiskDeleteOption: osDiskDeleteOption
+    nicDeleteOption: nicDeleteOption
+    hibernationEnabled: hibernationEnabled
+    securityType: securityType
+    secureBoot: secureBoot
+    vTPM: vTPM
+    diskId: diskMod.outputs.diskId
+    networkInterfaceId: networkInterfaceMod.outputs.networkInterfaceId
+  }
+}
+
+module shutdownMod 'shutdownModule.bicep' = {
+  name: 'shutdownDeployment'
+  scope: resourceGroup(resourceGroupName)
+  params: {
+    virtualMachineName: virtualMachineName
+    location: location
+    autoShutdownStatus: autoShutdownStatus
+    autoShutdownTime: autoShutdownTime
+    autoShutdownTimeZone: autoShutdownTimeZone
+    autoShutdownNotificationStatus: autoShutdownNotificationStatus
+    autoShutdownNotificationLocale: autoShutdownNotificationLocale
+    autoShutdownNotificationEmail: autoShutdownNotificationEmail
+    subscriptionId: subscriptionId  // サブスクリプションIDをモジュールに渡す
   }
 }
