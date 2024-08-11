@@ -3,7 +3,6 @@ Set-Variable -Name SubscriptionId -Value "fc7753ed-2e69-4202-bb66-86ff5798b8d5" 
 Set-Variable -Name ResourceGroup -Value "rg-arm-template-study-dev-eastjp-001" -Option ReadOnly -Scope Script
 Set-Variable -Name Location -Value "japaneast" -Option ReadOnly -Scope Script
 Set-Variable -Name DiskName -Value "osdisk-arm-template-study-dev-japaneast-001" -Option ReadOnly -Scope Script
-Set-Variable -Name DiskSku -Value "Standard_LRS" -Option ReadOnly -Scope Script
 
 # 現在のサブスクリプションを確認
 Write-Host "サブスクリプションの確認中..."
