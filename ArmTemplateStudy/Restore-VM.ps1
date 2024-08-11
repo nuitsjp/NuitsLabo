@@ -34,9 +34,7 @@ $deployment = az deployment group create `
     --resource-group $ResourceGroup `
     --template-file "$PSScriptRoot\template\vm.bicep" `
     --parameters "$PSScriptRoot\template\vm.json" `
-    --parameters sourceResourceId=$SnapshotId `
-    --parameters resourceGroupName=$ResourceGroup `
-    --parameters subscriptionId=$SubscriptionId
+    --parameters sourceResourceId=$SnapshotId
 
 if ($deployment) {
     Write-Host "ディスク '$DiskName' をスナップショットから正常に作成しました。"
