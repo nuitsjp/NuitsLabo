@@ -85,12 +85,6 @@
         },
         "autoShutdownNotificationEmail": {
             "value": ""
-        },
-        "resourceGroupName": {
-            "value": "rg-arm-template-study-dev-eastjp-001"
-        },
-        "subscriptionId": {
-            "value": "fc7753ed-2e69-4202-bb66-86ff5798b8d5"  // 実際のサブスクリプションIDをここに入力
         }
     }
 }

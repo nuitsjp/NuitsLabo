@@ -28,35 +28,19 @@ function Select-Snapshot {
 # スナップショットを選択する
 $SnapshotId = Select-Snapshot
 
-# パラメーターファイルを読み込む
-$parameterFilePath = "$PSScriptRoot\template\vm.json"
-$parameters = Get-Content $parameterFilePath | ConvertFrom-Json
+# Bicepテンプレートをデプロイ
+Write-Host "Bicepテンプレートを使用してディスク '$DiskName' を作成中..."
+az deployment group create `
+    --resource-group $ResourceGroup `
+    --template-file "$PSScriptRoot\template\vm.bicep" `
+    --parameters "$PSScriptRoot\template\vm.json" `
+    --parameters sourceResourceId=$SnapshotId `
+    --parameters resourceGroupName=$ResourceGroup `
+    --parameters subscriptionId=$SubscriptionId
 
-# スナップショットのリソースIDを更新
-$parameters.parameters.sourceResourceId.value = $SnapshotId
-
-# 更新したパラメーターを一時ファイルに保存
-$tempParameterFile = [System.IO.Path]::GetTempFileName()
-$parameters | ConvertTo-Json -Depth 10 | Set-Content $tempParameterFile
-try {
-    # Bicepテンプレートをデプロイ
-    Write-Host "Bicepテンプレートを使用してディスク '$DiskName' を作成中..."
-    $deployment = az deployment group create `
-        --resource-group $ResourceGroup `
-        --template-file "$PSScriptRoot\template\vm.bicep" `
-        --parameters "@$tempParameterFile" `
-        --query properties.outputs
-
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "ディスク '$DiskName' をスナップショットから正常に作成しました。"
-    } else {
-        Write-Error "ディスク '$DiskName' の作成に失敗しました。"
-        exit 1
-    }
-
-    return $deployment
-}
-finally {
-    # 一時ファイルを削除
-    Remove-Item $tempParameterFile
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "ディスク '$DiskName' をスナップショットから正常に作成しました。"
+} else {
+    Write-Error "ディスク '$DiskName' の作成に失敗しました。"
+    exit 1
 }
