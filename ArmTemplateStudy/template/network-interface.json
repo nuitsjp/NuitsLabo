@@ -1,15 +1,19 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "networkInterfaces_arm_template288_name": {
-            "value": null
-        },
-        "virtualNetworks_ARM_TEMPLATE_vnet_externalid": {
-            "value": null
-        },
-        "networkSecurityGroups_ARMTEMPLATEnsg264_externalid": {
-            "value": null
-        }
+      "networkInterfaces_arm_template288_name": {
+        "value": null
+      },
+      "virtualNetworks_ARM_TEMPLATE_vnet_name": {
+        "value": null
+      },
+      "virtualNetworks_ARM_TEMPLATE_vnet_rg": {
+        "value": null
+      },
+      "networkSecurityGroups_ARMTEMPLATEnsg264_externalid": {
+        "value": null
+      }
     }
-}
+  }
+  

@@ -1,11 +1,11 @@
 param networkInterfaces_arm_template288_name string = 'arm-template288'
-param virtualNetworks_ARM_TEMPLATE_vnet_externalid string = '/subscriptions/fc7753ed-2e69-4202-bb66-86ff5798b8d5/resourceGroups/rg-arm-template-study-dev-eastjp-001/providers/Microsoft.Network/virtualNetworks/ARM-TEMPLATE-vnet'
+param virtualNetworks_ARM_TEMPLATE_vnet_name string = 'ARM-TEMPLATE-vnet'
+param virtualNetworks_ARM_TEMPLATE_vnet_rg string = 'rg-arm-template-study-dev-eastjp-001'
 param networkSecurityGroups_ARMTEMPLATEnsg264_externalid string = '/subscriptions/fc7753ed-2e69-4202-bb66-86ff5798b8d5/resourceGroups/rg-arm-template-study-dev-eastjp-001/providers/Microsoft.Network/networkSecurityGroups/ARMTEMPLATEnsg264'
 
 resource networkInterfaces_arm_template288_name_resource 'Microsoft.Network/networkInterfaces@2023-11-01' = {
   name: networkInterfaces_arm_template288_name
   location: 'japaneast'
-  kind: 'Regular'
   properties: {
     ipConfigurations: [
       {
@@ -16,7 +16,7 @@ resource networkInterfaces_arm_template288_name_resource 'Microsoft.Network/netw
           privateIPAddress: '10.1.0.4'
           privateIPAllocationMethod: 'Dynamic'
           subnet: {
-            id: '${virtualNetworks_ARM_TEMPLATE_vnet_externalid}/subnets/default'
+            id: resourceId(subscription().subscriptionId, virtualNetworks_ARM_TEMPLATE_vnet_rg, 'Microsoft.Network/virtualNetworks/subnets', virtualNetworks_ARM_TEMPLATE_vnet_name, 'default')
           }
           primary: true
           privateIPAddressVersion: 'IPv4'
