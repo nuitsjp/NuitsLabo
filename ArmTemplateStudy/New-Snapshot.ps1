@@ -1,7 +1,7 @@
 . $PSScriptRoot\Common\Initialize-Script.ps1
 
 # 定数の設定
-Set-Variable -Name SnapshotPrefix -Value "snp-arm-template-study-dev-eastjp" -Option ReadOnly -Scope Script
+Set-Variable -Name SnapshotPrefix -Value "snp-arm-template-study-dev-eastjp-001" -Option ReadOnly -Scope Script
 
 # 現在の日時を取得し、フォーマットを設定
 $timestamp = Get-Date -Format "yyyyMMddHHmmss"

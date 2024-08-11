@@ -2,10 +2,10 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "disks_ARM_TEMPLATE_name": {
+        "disk_name": {
             "value": null
         },
-        "snapshots_snp_arm_template_study_dev_eastjp_20240811073046_externalid": {
+        "snapshot_id": {
             "value": null
         }
     }

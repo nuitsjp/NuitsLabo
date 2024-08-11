@@ -37,11 +37,11 @@ function Restore-Disk {
     }
 
     # パラメーターファイルを読み込む
-    $parameterFilePath = "$PSScriptRoot\template\disk.json"
+    $parameterFilePath = "$PSScriptRoot\..\template\disk.json"
     $parameters = Get-Content $parameterFilePath | ConvertFrom-Json
 
     # スナップショットのリソースIDを更新
-    $parameters.parameters.snapshots_snp_arm_template_study_dev_eastjp_20240811073046_externalid.value = $snapshotResourceId
+    $parameters.parameters.sourceResourceId.value = $snapshotResourceId
 
     # 更新したパラメーターを一時ファイルに保存
     $tempParameterFile = [System.IO.Path]::GetTempFileName()
@@ -51,7 +51,7 @@ function Restore-Disk {
         Write-Host "Bicepテンプレートを使用してディスク '$DiskName' を作成中..."
         $deployment = az deployment group create `
             --resource-group $ResourceGroup `
-            --template-file "$PSScriptRoot\template\disk.bicep" `
+            --template-file "$PSScriptRoot\..\template\disk.bicep" `
             --parameters "@$tempParameterFile" `
             --query properties.outputs
 
