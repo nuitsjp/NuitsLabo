@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "diskName": {
-            "value": "osdisk-arm-template-study-dev-eastjp-001"
+            "value": "osdisk-arm-template-study-dev-japaneast-001"
         },
         "location": {
             "value": "japaneast"

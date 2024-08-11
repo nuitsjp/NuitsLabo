@@ -37,7 +37,7 @@ function Restore-Disk {
     }
 
     # パラメーターファイルを読み込む
-    $parameterFilePath = "$PSScriptRoot\..\template\disk.json"
+    $parameterFilePath = "$PSScriptRoot\..\template\vm.json"
     $parameters = Get-Content $parameterFilePath | ConvertFrom-Json
 
     # スナップショットのリソースIDを更新
@@ -51,7 +51,7 @@ function Restore-Disk {
         Write-Host "Bicepテンプレートを使用してディスク '$DiskName' を作成中..."
         $deployment = az deployment group create `
             --resource-group $ResourceGroup `
-            --template-file "$PSScriptRoot\..\template\disk.bicep" `
+            --template-file "$PSScriptRoot\..\template\vm.bicep" `
             --parameters "@$tempParameterFile" `
             --query properties.outputs
 
@@ -74,7 +74,7 @@ function Restore-Disk {
 Set-Variable -Name Subscription -Value "Visual Studio Enterprise サブスクリプション" -Option ReadOnly -Scope Script
 Set-Variable -Name ResourceGroup -Value "rg-arm-template-study-dev-eastjp-001" -Option ReadOnly -Scope Script
 Set-Variable -Name Location -Value "japaneast" -Option ReadOnly -Scope Script
-Set-Variable -Name DiskName -Value "ARM-TEMPLATE" -Option ReadOnly -Scope Script
+Set-Variable -Name DiskName -Value "osdisk-arm-template-study-dev-japaneast-001" -Option ReadOnly -Scope Script
 Set-Variable -Name DiskSku -Value "Standard_LRS" -Option ReadOnly -Scope Script
 
 # 現在のサブスクリプションを確認

@@ -1,7 +1,7 @@
-param networkInterface_name string = 'nic-arm-template-study-dev-eastjp-001'
+param networkInterface_name string = 'nic-arm-template-study-dev-japaneast-001'
 param vnet_name string = 'ARM-TEMPLATE-vnet'
-param vnet_resourceGroupName string = 'rg-arm-template-study-dev-eastjp-001'
-param networkSecurityGroups_externalid string = '/subscriptions/fc7753ed-2e69-4202-bb66-86ff5798b8d5/resourceGroups/rg-arm-template-study-dev-eastjp-001/providers/Microsoft.Network/networkSecurityGroups/ARMTEMPLATEnsg264'
+param vnet_resourceGroupName string = 'rg-arm-template-study-dev-japaneast-001'
+param networkSecurityGroups_externalid string = '/subscriptions/fc7753ed-2e69-4202-bb66-86ff5798b8d5/resourceGroups/rg-arm-template-study-dev-japaneast-001/providers/Microsoft.Network/networkSecurityGroups/ARMTEMPLATEnsg264'
 
 resource networkInterface_resource 'Microsoft.Network/networkInterfaces@2023-11-01' = {
   name: networkInterface_name
