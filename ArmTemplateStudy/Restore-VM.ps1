@@ -34,7 +34,7 @@ $deployment = az deployment group create `
     --resource-group $ResourceGroup `
     --template-file "$PSScriptRoot\template\vm.bicep" `
     --parameters "$PSScriptRoot\template\vm.json" `
-    --parameters sourceResourceId=$SnapshotId `
+    --parameters snapshotId=$SnapshotId `
     --parameters diskName=$DiskName
 
 if ($deployment) {

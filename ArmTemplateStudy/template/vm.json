@@ -14,7 +14,7 @@
         "diskSizeGb": {
             "value": 128
         },
-        "sourceResourceId": {
+        "snapshotId": {
             "value": null
         },
         "diskEncryptionSetType": {

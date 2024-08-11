@@ -2,7 +2,7 @@ param diskName string
 param location string
 param sku string
 param diskSizeGb int
-param sourceResourceId string
+param snapshotId string
 param createOption string
 param diskEncryptionSetType string
 param dataAccessAuthMode string
@@ -33,7 +33,7 @@ resource disk 'Microsoft.Compute/disks@2022-03-02' = {
   properties: {
     creationData: {
       createOption: createOption
-      sourceResourceId: sourceResourceId
+      sourceResourceId: snapshotId
     }
     diskSizeGB: diskSizeGb
     encryption: {
