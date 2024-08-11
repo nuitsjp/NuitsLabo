@@ -4,7 +4,6 @@ param networkSecurityGroupId string
 param subnetName string
 param virtualNetworkId string
 
-var subnetRef = '${virtualNetworkId}/subnets/${subnetName}'
 
 resource networkInterface 'Microsoft.Network/networkInterfaces@2022-11-01' = {
   name: networkInterfaceName
@@ -15,7 +14,7 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2022-11-01' = {
         name: 'ipconfig1'
         properties: {
           subnet: {
-            id: subnetRef
+            id: '${virtualNetworkId}/subnets/${subnetName}'
           }
           privateIPAllocationMethod: 'Dynamic'
         }
