@@ -71,7 +71,7 @@ function Restore-Disk {
 }
 
 # 読み取り専用変数（定数）を定義
-Set-Variable -Name Subscription -Value "Visual Studio Enterprise サブスクリプション" -Option ReadOnly -Scope Script
+Set-Variable -Name SubscriptionId -Value "Visual Studio Enterprise サブスクリプション" -Option ReadOnly -Scope Script
 Set-Variable -Name ResourceGroup -Value "rg-arm-template-study-dev-eastjp-001" -Option ReadOnly -Scope Script
 Set-Variable -Name Location -Value "japaneast" -Option ReadOnly -Scope Script
 Set-Variable -Name DiskName -Value "osdisk-arm-template-study-dev-japaneast-001" -Option ReadOnly -Scope Script
@@ -81,10 +81,10 @@ Set-Variable -Name DiskSku -Value "Standard_LRS" -Option ReadOnly -Scope Script
 Write-Host "サブスクリプションの確認中..."
 
 # 現在のサブスクリプションが希望のものと異なる場合、切り替える
-$currentSubscription = az account show --query name -o tsv
-if ($currentSubscription -ne $Subscription) {
-    Write-Output "サブスクリプションを '$Subscription' に切り替えています..."
-    az account set --subscription $Subscription
+$currentSubscriptionId = az account show --query id -o tsv
+if ($currentSubscriptionId -ne $SubscriptionId) {
+    Write-Output "サブスクリプションを '$SubscriptionId' に切り替えています..."
+    az account set --subscription $SubscriptionId
     if ($LASTEXITCODE -eq 0) {
         Write-Output "サブスクリプションの切り替えに成功しました。"
     } else {
