@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "diskName": {
-            "value": "osdisk-vm-dev-japaneast-001"
+            "value": null
         },
         "location": {
             "value": "japaneast"
