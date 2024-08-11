@@ -22,14 +22,6 @@ function Select-Snapshot {
     return $snapshots[$selection - 1].Id
 }
 
-function Restore-Disk {
-    param (
-        [Parameter(Mandatory=$true)]
-        [string]$SnapshotId
-    )
-
-}
-
 # 共通スクリプトをロード
 . $PSScriptRoot\Common\Initialize-Script.ps1
 
