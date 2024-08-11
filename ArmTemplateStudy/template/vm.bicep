@@ -29,7 +29,7 @@ param autoShutdownNotificationLocale string
 param autoShutdownNotificationEmail string
 param subscriptionId string  // サブスクリプションIDを追加
 
-module diskMod 'diskModule.bicep' = {
+module diskMod 'module/disk.bicep' = {
   name: 'diskDeployment'
   scope: resourceGroup(resourceGroupName)
   params: {
@@ -46,7 +46,7 @@ module diskMod 'diskModule.bicep' = {
   }
 }
 
-module networkInterfaceMod 'networkInterfaceModule.bicep' = {
+module networkInterfaceMod 'module/networkInterface.bicep' = {
   name: 'networkInterfaceDeployment'
   scope: resourceGroup(resourceGroupName)
   params: {
@@ -58,7 +58,7 @@ module networkInterfaceMod 'networkInterfaceModule.bicep' = {
   }
 }
 
-module virtualMachineMod 'virtualMachineModule.bicep' = {
+module virtualMachineMod 'module/virtualMachine.bicep' = {
   name: 'virtualMachineDeployment'
   scope: resourceGroup(resourceGroupName)
   params: {
@@ -76,7 +76,7 @@ module virtualMachineMod 'virtualMachineModule.bicep' = {
   }
 }
 
-module shutdownMod 'shutdownModule.bicep' = {
+module shutdownMod 'module/shutdown.bicep' = {
   name: 'shutdownDeployment'
   scope: resourceGroup(resourceGroupName)
   params: {
