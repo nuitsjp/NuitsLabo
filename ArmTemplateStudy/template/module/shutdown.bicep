@@ -18,11 +18,11 @@ resource shutdown_computevm_virtualMachine 'Microsoft.DevTestLab/schedules@2018-
       time: autoShutdownTime
     }
     timeZoneId: autoShutdownTimeZone
-    targetResourceId: '/subscriptions/${subscriptionId}/resourceGroups/rg-arm-template-study-dev-eastjp-001/providers/Microsoft.Compute/virtualMachines/${virtualMachineName}'
+    targetResourceId: resourceId(subscriptionId, 'rg-arm-template-study-dev-eastjp-001', 'Microsoft.Compute/virtualMachines', virtualMachineName) 
     notificationSettings: {
       status: autoShutdownNotificationStatus
       notificationLocale: autoShutdownNotificationLocale
-      timeInMinutes: '30'
+      timeInMinutes: 30
       emailRecipient: autoShutdownNotificationEmail
     }
   }

@@ -12,7 +12,7 @@ param publicNetworkAccess string
 param networkInterfaceName string
 param networkSecurityGroupId string
 param subnetName string
-param virtualNetworkId string
+param virtualNetworkName string
 param virtualMachineName string
 param virtualMachineSize string
 param osDiskDeleteOption string
@@ -54,7 +54,7 @@ module networkInterfaceMod 'module/networkInterface.bicep' = {
     location: location
     networkSecurityGroupId: networkSecurityGroupId
     subnetName: subnetName
-    virtualNetworkId: virtualNetworkId
+    virtualNetworkName: virtualNetworkName
   }
 }
 
