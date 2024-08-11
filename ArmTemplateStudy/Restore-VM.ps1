@@ -11,8 +11,5 @@
 $selectedSnapshot = Select-Snapshot
 
 # 選択されたスナップショットを使用してディスクを復元
-$restoredDisk = Restore-Disk -SnapshotName $selectedSnapshot
-
-# 作成されたディスクの詳細を表示
-Write-Host "作成されたディスクの詳細:"
-az disk show --name $DiskName --resource-group $ResourceGroup --query "{Name:name, Location:location, ProvisioningState:provisioningState, DiskState:diskState}" -o table
+$deployment = Restore-Disk -SnapshotName $selectedSnapshot
+Write-Host $deployment

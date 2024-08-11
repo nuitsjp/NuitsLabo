@@ -1,36 +1,32 @@
-param disk_name string = 'osdisk-arm-template-study-dev-eastjp-001'
-param snapshot_id string = '/subscriptions/fc7753ed-2e69-4202-bb66-86ff5798b8d5/resourceGroups/rg-arm-template-study-dev-eastjp-001/providers/Microsoft.Compute/snapshots/snp-arm-template-study-dev-eastjp-20240811073046'
+param diskName string
+param location string
+param sku string
+param diskSizeGb int
+param sourceResourceId string
+param createOption string
+param diskEncryptionSetType string
+param dataAccessAuthMode string
+param networkAccessPolicy string
+param publicNetworkAccess string
 
-resource disk_resource 'Microsoft.Compute/disks@2023-10-02' = {
-  name: disk_name
-  location: 'japaneast'
-  sku: {
-    name: 'Standard_LRS'
-  }
+resource disk 'Microsoft.Compute/disks@2022-03-02' = {
+  name: diskName
+  location: location
   properties: {
-    osType: 'Windows'
-    hyperVGeneration: 'V2'
-    supportsHibernation: true
-    supportedCapabilities: {
-      diskControllerTypes: 'SCSI, NVMe'
-      acceleratedNetwork: true
-      architecture: 'x64'
-    }
     creationData: {
-      createOption: 'Copy'
-      sourceResourceId: snapshot_id
+      createOption: createOption
+      sourceResourceId: sourceResourceId
     }
-    diskSizeGB: 127
-    diskIOPSReadWrite: 500
-    diskMBpsReadWrite: 60
+    diskSizeGB: diskSizeGb
     encryption: {
-      type: 'EncryptionAtRestWithPlatformKey'
+      type: diskEncryptionSetType
     }
-    networkAccessPolicy: 'AllowAll'
-    securityProfile: {
-      securityType: 'TrustedLaunch'
-    }
-    publicNetworkAccess: 'Enabled'
-    dataAccessAuthMode: 'None'
+    dataAccessAuthMode: dataAccessAuthMode
+    networkAccessPolicy: networkAccessPolicy
+    publicNetworkAccess: publicNetworkAccess
   }
+  sku: {
+    name: sku
+  }
+  tags: {}
 }

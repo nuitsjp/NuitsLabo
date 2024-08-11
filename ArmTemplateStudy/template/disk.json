@@ -2,11 +2,35 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "disk_name": {
+        "diskName": {
+            "value": "osdisk-arm-template-study-dev-eastjp-001"
+        },
+        "location": {
+            "value": "japaneast"
+        },
+        "sku": {
+            "value": "StandardSSD_LRS"
+        },
+        "diskSizeGb": {
+            "value": 127
+        },
+        "sourceResourceId": {
             "value": null
         },
-        "snapshot_id": {
-            "value": null
+        "diskEncryptionSetType": {
+            "value": "EncryptionAtRestWithPlatformKey"
+        },
+        "createOption": {
+            "value": "copy"
+        },
+        "dataAccessAuthMode": {
+            "value": "None"
+        },
+        "networkAccessPolicy": {
+            "value": "AllowAll"
+        },
+        "publicNetworkAccess": {
+            "value": "Enabled"
         }
     }
 }
