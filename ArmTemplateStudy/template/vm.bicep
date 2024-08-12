@@ -9,8 +9,8 @@ param dataAccessAuthMode string
 param networkAccessPolicy string
 param publicNetworkAccess string
 param networkInterfaceName string
-param networkSecurityGroupSubscriptionId string
-param networkSecurityGroupResourceGroupName string
+param networkSubscriptionId string
+param networkResourceGroupName string
 param networkSecurityGroupName string
 param subnetName string
 param virtualNetworkName string
@@ -60,14 +60,14 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2022-11-01' = {
         name: 'ipconfig1'
         properties: {
           subnet: {
-            id: resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, subnetName)
+            id: resourceId(networkSubscriptionId, networkResourceGroupName, 'Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, subnetName)
           }
           privateIPAllocationMethod: 'Dynamic'
         }
       }
     ]
     networkSecurityGroup: {
-      id: resourceId(networkSecurityGroupSubscriptionId, networkSecurityGroupResourceGroupName, 'Microsoft.Network/networkSecurityGroups', networkSecurityGroupName)
+      id: resourceId(networkSubscriptionId, networkResourceGroupName, 'Microsoft.Network/networkSecurityGroups', networkSecurityGroupName)
     }
   }
   dependsOn: []

@@ -35,11 +35,11 @@
         "networkInterfaceName": {
             "value": "nic-vm-dev-japaneast-001"
         },
-        "networkSecurityGroupSubscriptionId": {
+        "networkSubscriptionId": {
             "value": "fc7753ed-2e69-4202-bb66-86ff5798b8d5"
         },
-        "networkSecurityGroupResourceGroupName": {
-            "value": "rg-arm-template-study-dev-eastjp-001"
+        "networkResourceGroupName": {
+            "value": "rg-arm-template-study-dev-japaneast-company"
         },
         "networkSecurityGroupName": {
             "value": "ARM-TEMPLATE-nsg"
