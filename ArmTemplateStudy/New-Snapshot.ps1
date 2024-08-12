@@ -32,7 +32,6 @@ $VirtualMachineNames | ForEach-Object -Parallel {
     az snapshot create `
         --resource-group $using:ProductResourceGroup `
         --name $snapshotName `
-        --location $using:Location `
         --source $diskId > $null
 
     if ($LASTEXITCODE -eq 0) {
