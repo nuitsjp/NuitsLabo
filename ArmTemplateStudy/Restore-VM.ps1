@@ -66,8 +66,8 @@ $VirtualMachineNames | ForEach-Object -Parallel {
     $nicName = Get-NicName -VirtualMachineName $virtualMachineName
     az deployment group create `
         --resource-group $using:MyResourceGroup `
-        --template-file "$PSScriptRoot\template\vm.bicep" `
-        --parameters "$PSScriptRoot\template\vm.json" `
+        --template-file "$using:PSScriptRoot\template\vm.bicep" `
+        --parameters "$using:PSScriptRoot\template\vm.json" `
         --parameters snapshotId=$snapshotId `
         --parameters virtualMachineName=$virtualMachineName `
         --parameters diskName=$diskName `
