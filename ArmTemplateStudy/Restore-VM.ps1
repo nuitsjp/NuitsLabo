@@ -48,8 +48,6 @@ function Get-Snapshot {
         exit 1
     }
 
-
-
     # スナップショットのIDを返す
     return $snapshot[0]
 }
@@ -62,16 +60,17 @@ function Get-Snapshot {
 $SnapshotSuffix = Select-Snapshot -Prefix (Get-SnapshotPrefix -VirtualMachineName $VirtualMachineNames[0])
 
 foreach ($virtualMachineName in $VirtualMachineNames) {
+    # スナップショットを取得
+    $snapshot = Get-Snapshot -Prefix (Get-SnapshotPrefix -VirtualMachineName $virtualMachineName) -Suffix $SnapshotSuffix
+    $snapshotId = $snapshot.Id
+
     # ディスクのリソースIDを取得し、スナップショットのリソースIDと比較
     # ディスクのリソースIDがスナップショットのリソースIDと一致しない場合、VMを削除してディスクを作成する
     $diskName = Get-DiskName -VirtualMachineName $virtualMachineName
-    $snapshot = Get-Snapshot -Prefix (Get-SnapshotPrefix -VirtualMachineName $virtualMachineName) -Suffix $SnapshotSuffix
-    $diskSourceResourceId = az disk show --name $diskName --resource-group $MyResourceGroup --query "creationData.sourceResourceId" -o tsv
-    if($diskSourceResourceId) {
-        if ($diskSourceResourceId -ne $snapshot.Id) {
-            Write-Host "VM $virtualMachineName のソースリソースIDがスナップショットと一致しません。VM削除中..."
-            az vm delete --name $virtualMachineName --resource-group $ResourceGroup --yes
-        }
+    $diskExists = az disk list --resource-group $MyResourceGroup --query "[?name=='$diskName' && creationData.sourceResourceId=='$snapshotId'].id | length(@)" -o tsv
+    if ($diskExists -ne 0) {
+        Write-Host "VM $virtualMachineName のソースリソースIDがスナップショットと一致しません。VM削除中..."
+        az vm delete --name $virtualMachineName --resource-group $MyResourceGroup --yes
     }
 
     # Bicepテンプレートをデプロイ
@@ -81,14 +80,13 @@ foreach ($virtualMachineName in $VirtualMachineNames) {
         --resource-group $MyResourceGroup `
         --template-file "$PSScriptRoot\template\vm.bicep" `
         --parameters "$PSScriptRoot\template\vm.json" `
-        --parameters snapshotId=$Snapshot.Id `
+        --parameters snapshotId=$snapshotId `
         --parameters virtualMachineName=$virtualMachineName `
         --parameters diskName=$diskName `
         --parameters networkInterfaceName=$nicName > $null
 
     # 作成に成功したのに、失敗したとエラーがでることがあるため、VMの存在を確認
     $vm = az vm show --name $virtualMachineName --resource-group $MyResourceGroup -o json | ConvertFrom-Json
-
     if ($vm) {
         Write-Host -ForegroundColor Cyan "VM '$virtualMachineName' の作成に成功しました。"
     } else {
