@@ -51,7 +51,7 @@ az deployment group create `
 $vm = az vm show --name $VirtualMachineName --resource-group $ResourceGroup -o json | ConvertFrom-Json
 
 if ($vm) {
-    Write-Host "VM '$VirtualMachineName' を作成しました。"
+    Write-Host -ForegroundColor Cyan "VM '$VirtualMachineName' の作成に成功しました。"
 } else {
     Write-Host -ForegroundColor Red "VM '$VirtualMachineName' の作成に失敗しました。"
     exit 1
