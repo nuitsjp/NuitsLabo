@@ -9,7 +9,9 @@ param dataAccessAuthMode string
 param networkAccessPolicy string
 param publicNetworkAccess string
 param networkInterfaceName string
-param networkSecurityGroupId string
+param networkSecurityGroupSubscriptionId string
+param networkSecurityGroupResourceGroupName string
+param networkSecurityGroupName string
 param subnetName string
 param virtualNetworkName string
 param virtualMachineName string
@@ -65,7 +67,7 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2022-11-01' = {
       }
     ]
     networkSecurityGroup: {
-      id: networkSecurityGroupId
+      id: resourceId(networkSecurityGroupSubscriptionId, networkSecurityGroupResourceGroupName, 'Microsoft.Network/networkSecurityGroups', networkSecurityGroupName)
     }
   }
   dependsOn: []

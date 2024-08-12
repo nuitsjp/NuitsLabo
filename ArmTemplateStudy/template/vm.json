@@ -35,8 +35,14 @@
         "networkInterfaceName": {
             "value": "nic-vm-dev-japaneast-001"
         },
-        "networkSecurityGroupId": {
-            "value": "/subscriptions/fc7753ed-2e69-4202-bb66-86ff5798b8d5/resourceGroups/rg-arm-template-study-dev-eastjp-001/providers/Microsoft.Network/networkSecurityGroups/ARM-TEMPLATE-nsg"
+        "networkSecurityGroupSubscriptionId": {
+            "value": "fc7753ed-2e69-4202-bb66-86ff5798b8d5"
+        },
+        "networkSecurityGroupResourceGroupName": {
+            "value": "rg-arm-template-study-dev-eastjp-001"
+        },
+        "networkSecurityGroupName": {
+            "value": "ARM-TEMPLATE-nsg"
         },
         "subnetName": {
             "value": "default"
