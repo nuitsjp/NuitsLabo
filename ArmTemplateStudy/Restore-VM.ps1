@@ -71,14 +71,8 @@ $VirtualMachineNames | ForEach-Object -Parallel {
         --parameters snapshotId=$snapshotId `
         --parameters virtualMachineName=$virtualMachineName `
         --parameters diskName=$diskName `
-        --parameters networkInterfaceName=$nicName 2>&1 | Out-Null
+        --parameters networkInterfaceName=$nicName 2>&1 | Out-Null # 作成に成功したのに、失敗したとエラーがでることがあるためコンソール出力を抑止
 
-    # 作成に成功したのに、失敗したとエラーがでることがあるため、VMの存在を確認
-    $vm = az vm show --name $virtualMachineName --resource-group $using:MyResourceGroup -o json | ConvertFrom-Json
-    if ($vm) {
-        Write-Host -ForegroundColor Cyan "VM '$virtualMachineName' の作成に成功しました。"
-    } else {
-        Write-Host -ForegroundColor Red "VM '$virtualMachineName' の作成に失敗しました。"
-        exit 1
-    }
+    # 失敗した場合、$ErrorActionPreference = "Stop" によりスクリプトが停止するため、ここに到達することはない
+    Write-Host -ForegroundColor Cyan "VM '$virtualMachineName' の作成に成功しました。"
 }

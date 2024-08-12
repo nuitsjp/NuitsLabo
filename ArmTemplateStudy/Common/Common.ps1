@@ -42,6 +42,8 @@ function Get-NicName {
     return "nic-$VirtualMachineName-dev-japaneast"
 }
 
+$ErrorActionPreference = "Stop"
+
 # 読み取り専用変数（定数）を定義
 Set-Variable -Name SubscriptionId -Value "fc7753ed-2e69-4202-bb66-86ff5798b8d5" -Option ReadOnly -Scope Script
 Set-Variable -Name ProductResourceGroup -Value "rg-arm-template-study-dev-japaneast-product" -Option ReadOnly -Scope Script
