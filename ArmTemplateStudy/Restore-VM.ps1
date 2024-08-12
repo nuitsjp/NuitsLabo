@@ -67,10 +67,13 @@ foreach ($virtualMachineName in $VirtualMachineNames) {
     # ディスクのリソースIDを取得し、スナップショットのリソースIDと比較
     # ディスクのリソースIDがスナップショットのリソースIDと一致しない場合、VMを削除してディスクを作成する
     $diskName = Get-DiskName -VirtualMachineName $virtualMachineName
-    $diskExists = az disk list --resource-group $MyResourceGroup --query "[?name=='$diskName' && creationData.sourceResourceId=='$snapshotId'].id | length(@)" -o tsv
-    if ($diskExists -ne 0) {
-        Write-Host "VM $virtualMachineName のソースリソースIDがスナップショットと一致しません。VM削除中..."
-        az vm delete --name $virtualMachineName --resource-group $MyResourceGroup --yes
+    $disk = az disk list --resource-group $MyResourceGroup --query "[?name=='$diskName'] | [0].{Id:id, SourceResourceId:creationData.sourceResourceId}" -o json | ConvertFrom-Json
+    if ($disk) {
+        # ディスクが存在し、その sourceResourceId がスナップショットと一致しない場合にVMを削除
+        if ($disk.SourceResourceId -ne $snapshotId) {
+            Write-Host "ディスク '$diskName' のソースリソースIDがスナップショットと一致しません。VM '$virtualMachineName' を削除中..."
+            az vm delete --name $virtualMachineName --resource-group $MyResourceGroup --yes
+        }
     }
 
     # Bicepテンプレートをデプロイ
@@ -83,7 +86,7 @@ foreach ($virtualMachineName in $VirtualMachineNames) {
         --parameters snapshotId=$snapshotId `
         --parameters virtualMachineName=$virtualMachineName `
         --parameters diskName=$diskName `
-        --parameters networkInterfaceName=$nicName > $null
+        --parameters networkInterfaceName=$nicName 2>&1 | Out-Null
 
     # 作成に成功したのに、失敗したとエラーがでることがあるため、VMの存在を確認
     $vm = az vm show --name $virtualMachineName --resource-group $MyResourceGroup -o json | ConvertFrom-Json
