@@ -29,113 +29,63 @@ param autoShutdownNotificationStatus string
 param autoShutdownNotificationLocale string
 param autoShutdownNotificationEmail string
 
-resource disk 'Microsoft.Compute/disks@2022-03-02' = {
-  name: diskName
-  location: location
-  properties: {
-    creationData: {
-      createOption: createOption
-      sourceResourceId: snapshotId
-    }
-    diskSizeGB: diskSizeGb
-    encryption: {
-      type: diskEncryptionSetType
-    }
+module diskModule 'module/disk.bicep' = {
+  name: 'diskModule'
+  params: {
+    diskName: diskName
+    location: location
+    sku: sku
+    diskSizeGb: diskSizeGb
+    snapshotId: snapshotId
+    createOption: createOption
+    diskEncryptionSetType: diskEncryptionSetType
     dataAccessAuthMode: dataAccessAuthMode
     networkAccessPolicy: networkAccessPolicy
     publicNetworkAccess: publicNetworkAccess
   }
-  sku: {
-    name: sku
-  }
-  tags: {}
 }
 
-resource networkInterface 'Microsoft.Network/networkInterfaces@2022-11-01' = {
-  name: networkInterfaceName
-  location: location
-  properties: {
-    ipConfigurations: [
-      {
-        name: 'ipconfig1'
-        properties: {
-          subnet: {
-            id: resourceId(networkSubscriptionId, networkResourceGroupName, 'Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, subnetName)
-          }
-          privateIPAllocationMethod: 'Dynamic'
-        }
-      }
-    ]
-    networkSecurityGroup: {
-      id: resourceId(networkSubscriptionId, networkResourceGroupName, 'Microsoft.Network/networkSecurityGroups', networkSecurityGroupName)
-    }
-  }
-  dependsOn: []
-}
-
-resource virtualMachine 'Microsoft.Compute/virtualMachines@2024-03-01' = {
-  name: virtualMachineName
-  location: location
-  properties: {
-    hardwareProfile: {
-      vmSize: virtualMachineSize
-    }
-    storageProfile: {
-      osDisk: {
-        createOption: 'attach'
-        osType: 'Windows'
-        managedDisk: {
-          id: disk.id
-        }
-        deleteOption: osDiskDeleteOption
-      }
-    }
-    networkProfile: {
-      networkInterfaces: [
-        {
-          id: networkInterface.id
-          properties: {
-            deleteOption: nicDeleteOption
-          }
-        }
-      ]
-    }
-    securityProfile: {
-      securityType: securityType
-      uefiSettings: {
-        secureBootEnabled: secureBoot
-        vTpmEnabled: vTPM
-      }
-    }
-    additionalCapabilities: {
-      hibernationEnabled: hibernationEnabled
-    }
-    licenseType: 'Windows_Server'
-    diagnosticsProfile: {
-      bootDiagnostics: {
-        enabled: true
-      }
-    }
+module networkInterfaceModule 'module/networkInterface.bicep' = {
+  name: 'networkInterfaceModule'
+  params: {
+    networkInterfaceName: networkInterfaceName
+    location: location
+    networkSubscriptionId: networkSubscriptionId
+    networkResourceGroupName: networkResourceGroupName
+    networkSecurityGroupName: networkSecurityGroupName
+    subnetName: subnetName
+    virtualNetworkName: virtualNetworkName
   }
 }
 
+module virtualMachineModule 'module/virtualMachine.bicep' = {
+  name: 'virtualMachineModule'
+  params: {
+    virtualMachineName: virtualMachineName
+    location: location
+    virtualMachineSize: virtualMachineSize
+    diskId: diskModule.outputs.diskId
+    osDiskDeleteOption: osDiskDeleteOption
+    nicId: networkInterfaceModule.outputs.nicId
+    nicDeleteOption: nicDeleteOption
+    hibernationEnabled: hibernationEnabled
+    securityType: securityType
+    secureBoot: secureBoot
+    vTPM: vTPM
+  }
+}
 
-resource shutdown_computevm_virtualMachine 'Microsoft.DevTestLab/schedules@2018-09-15' = {
-  name: 'shutdown-computevm-${virtualMachineName}'
-  location: location
-  properties: {
-    status: autoShutdownStatus
-    taskType: 'ComputeVmShutdownTask'
-    dailyRecurrence: {
-      time: autoShutdownTime
-    }
-    timeZoneId: autoShutdownTimeZone
-    targetResourceId: virtualMachine.id
-    notificationSettings: {
-      status: autoShutdownNotificationStatus
-      notificationLocale: autoShutdownNotificationLocale
-      timeInMinutes: 30
-      emailRecipient: autoShutdownNotificationEmail
-    }
+module shutdownModule 'module/shutdown.bicep' = {
+  name: 'shutdownModule'
+  params: {
+    virtualMachineName: virtualMachineName
+    location: location
+    autoShutdownStatus: autoShutdownStatus
+    autoShutdownTime: autoShutdownTime
+    autoShutdownTimeZone: autoShutdownTimeZone
+    autoShutdownNotificationStatus: autoShutdownNotificationStatus
+    autoShutdownNotificationLocale: autoShutdownNotificationLocale
+    autoShutdownNotificationEmail: autoShutdownNotificationEmail
+    virtualMachineId: virtualMachineModule.outputs.vmId
   }
 }
