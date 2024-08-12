@@ -6,6 +6,26 @@ function Get-SnapshotPrefix {
     return "snp-$VirtualMachineName-dev-japaneast"
 }
 
+function Get-Snapshot {
+    param (
+        [string]$Prefix,
+        [string]$Suffix
+    )
+
+    # スナップショットの名前を結合
+    $snapshotName = "${Prefix}-${Suffix}"
+
+    # スナップショットのIDと名称を取得
+    $snapshot = az snapshot show --name $snapshotName --resource-group $ProductResourceGroup --query "{Name:name, Id:id}" -o json | ConvertFrom-Json
+    if ($snapshot.Count -eq 0) {
+        Write-Error "スナップショット '$snapshotName' が見つかりません。スクリプトを終了します。"
+        exit 1
+    }
+
+    # スナップショットのIDを返す
+    return $snapshot[0]
+}
+
 function Get-DiskName {
     param (
         [Parameter(Mandatory = $true)]
