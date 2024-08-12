@@ -28,6 +28,14 @@ function Select-Snapshot {
 # スナップショットを選択する
 $SnapshotId = Select-Snapshot
 
+# ディスクのプロパティを取得し、ソースリソースIDを返す
+$diskSourceResourceId = az disk show --name $DiskName --resource-group $ResourceGroup --query "creationData.sourceResourceId" -o tsv
+if ($diskSourceResourceId -ne $snapshotId) {
+    Write-Host "ディスクのソースリソースIDがスナップショットIDと一致しません。VMを削除してディスクを作成します。"
+    az vm delete --name $VirtualMachineName --resource-group $ResourceGroup --yes
+}
+
+
 # Bicepテンプレートをデプロイ
 Write-Host "Bicepテンプレートを使用してディスク '$DiskName' を作成中..."
 $deployment = az deployment group create `
@@ -35,6 +43,7 @@ $deployment = az deployment group create `
     --template-file "$PSScriptRoot\template\vm.bicep" `
     --parameters "$PSScriptRoot\template\vm.json" `
     --parameters snapshotId=$SnapshotId `
+    --parameters virtualMachineName=$VirtualMachineName `
     --parameters diskName=$DiskName
 
 if ($deployment) {

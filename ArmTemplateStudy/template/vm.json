@@ -51,7 +51,7 @@
             "value": "ARM-TEMPLATE-vnet"
         },
         "virtualMachineName": {
-            "value": "vm-001"
+            "value": null
         },
         "virtualMachineSize": {
             "value": "Standard_D2s_v3"
