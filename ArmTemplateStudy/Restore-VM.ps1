@@ -28,31 +28,39 @@ function Select-Snapshot {
 # スナップショットを選択する
 $SnapshotId = Select-Snapshot
 
-# ディスクのリソースIDを取得し、スナップショットのリソースIDと比較
-# ディスクのリソースIDがスナップショットのリソースIDと一致しない場合、VMを削除してディスクを作成する
-$diskSourceResourceId = az disk show --name $DiskName --resource-group $ResourceGroup --query "creationData.sourceResourceId" -o tsv
-if ($diskSourceResourceId -ne $snapshotId) {
-    Write-Host "ディスクのソースリソースIDがスナップショットIDと一致しません。VMを削除してディスクを作成します。"
-    Write-Host "VM $VirtualMachineName を削除中..."
-    az vm delete --name $VirtualMachineName --resource-group $ResourceGroup --yes
+foreach ($virtualMachineName in $VirtualMachineNames) {
+    # ディスクのリソースIDを取得し、スナップショットのリソースIDと比較
+    # ディスクのリソースIDがスナップショットのリソースIDと一致しない場合、VMを削除してディスクを作成する
+    $diskName = Get-DiskName -VirtualMachineName $virtualMachineName
+    $diskSourceResourceId = az disk show --name $diskName --resource-group $MyResourceGroup --query "creationData.sourceResourceId" -o tsv
+    if($diskSourceResourceId) {
+        if ($diskSourceResourceId -ne $snapshotId) {
+            Write-Host "ディスクのソースリソースIDがスナップショットIDと一致しません。VMを削除してディスクを作成します。"
+            Write-Host "VM $virtualMachineName を削除中..."
+            az vm delete --name $virtualMachineName --resource-group $ResourceGroup --yes
+        }
+    }
+
+    # Bicepテンプレートをデプロイ
+    Write-Host "VM $virtualMachineName を作成中..."
+    $nicName = Get-NicName -VirtualMachineName $virtualMachineName
+    az deployment group create `
+        --resource-group $MyResourceGroup `
+        --template-file "$PSScriptRoot\template\vm.bicep" `
+        --parameters "$PSScriptRoot\template\vm.json" `
+        --parameters snapshotId=$SnapshotId `
+        --parameters virtualMachineName=$virtualMachineName `
+        --parameters diskName=$diskName `
+        --parameters networkInterfaceName=$nicName > $null
+
+    # 作成に成功したのに、失敗したとエラーがでることがあるため、VMの存在を確認
+    $vm = az vm show --name $virtualMachineName --resource-group $MyResourceGroup -o json | ConvertFrom-Json
+
+    if ($vm) {
+        Write-Host -ForegroundColor Cyan "VM '$virtualMachineName' の作成に成功しました。"
+    } else {
+        Write-Host -ForegroundColor Red "VM '$virtualMachineName' の作成に失敗しました。"
+        exit 1
+    }
 }
 
-# Bicepテンプレートをデプロイ
-Write-Host "VM $VirtualMachineName を作成中..."
-az deployment group create `
-    --resource-group $ResourceGroup `
-    --template-file "$PSScriptRoot\template\vm.bicep" `
-    --parameters "$PSScriptRoot\template\vm.json" `
-    --parameters snapshotId=$SnapshotId `
-    --parameters virtualMachineName=$VirtualMachineName `
-    --parameters diskName=$DiskName > $null
-
-# 作成に成功したのに、失敗したとエラーがでることがあるため、VMの存在を確認
-$vm = az vm show --name $VirtualMachineName --resource-group $ResourceGroup -o json | ConvertFrom-Json
-
-if ($vm) {
-    Write-Host -ForegroundColor Cyan "VM '$VirtualMachineName' の作成に成功しました。"
-} else {
-    Write-Host -ForegroundColor Red "VM '$VirtualMachineName' の作成に失敗しました。"
-    exit 1
-}

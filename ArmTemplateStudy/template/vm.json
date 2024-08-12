@@ -33,7 +33,7 @@
             "value": "Enabled"
         },
         "networkInterfaceName": {
-            "value": "nic-vm-dev-japaneast-001"
+            "value": null
         },
         "networkSubscriptionId": {
             "value": "fc7753ed-2e69-4202-bb66-86ff5798b8d5"
