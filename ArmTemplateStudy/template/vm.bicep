@@ -130,7 +130,7 @@ resource shutdown_computevm_virtualMachine 'Microsoft.DevTestLab/schedules@2018-
       time: autoShutdownTime
     }
     timeZoneId: autoShutdownTimeZone
-    targetResourceId: resourceId('Microsoft.Compute/virtualMachines', virtualMachineName) 
+    targetResourceId: virtualMachine.id
     notificationSettings: {
       status: autoShutdownNotificationStatus
       notificationLocale: autoShutdownNotificationLocale

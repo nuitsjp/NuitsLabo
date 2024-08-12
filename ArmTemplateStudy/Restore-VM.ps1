@@ -1,4 +1,4 @@
-function Select-Snapshot {
+function Select-SnapshotInstance {
     param (
         [string]$Prefix
     )
@@ -35,8 +35,8 @@ function Select-Snapshot {
 # 共通スクリプトをロード
 . $PSScriptRoot\Common\Initialize-Script.ps1
 
-# スナップショットを選択する
-$SnapshotSuffix = Select-Snapshot -Prefix (Get-SnapshotPrefix -VirtualMachineName $VirtualMachineNames[0])
+# スナップショットインスタンスを選択する
+$snapshotInstance = Select-SnapshotInstance -Prefix (Get-SnapshotPrefix -VirtualMachineName $VirtualMachineNames[0])
 
 # 並列で処理を実行する
 $VirtualMachineNames | ForEach-Object -Parallel {
@@ -46,7 +46,7 @@ $VirtualMachineNames | ForEach-Object -Parallel {
     $virtualMachineName = $_
 
     # スナップショットを取得
-    $snapshot = Get-Snapshot -Prefix (Get-SnapshotPrefix -VirtualMachineName $virtualMachineName) -Suffix $using:SnapshotSuffix
+    $snapshot = Get-Snapshot -Prefix (Get-SnapshotPrefix -VirtualMachineName $virtualMachineName) -Instance $using:snapshotInstance
     $snapshotId = $snapshot.Id
 
     # ディスクのリソースIDを取得し、スナップショットのリソースIDと比較

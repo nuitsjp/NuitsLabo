@@ -9,11 +9,11 @@ function Get-SnapshotPrefix {
 function Get-Snapshot {
     param (
         [string]$Prefix,
-        [string]$Suffix
+        [string]$Instance
     )
 
     # スナップショットの名前を結合
-    $snapshotName = "${Prefix}-${Suffix}"
+    $snapshotName = "${Prefix}-${Instance}"
 
     # スナップショットのIDと名称を取得
     $snapshot = az snapshot show --name $snapshotName --resource-group $ProductResourceGroup --query "{Name:name, Id:id}" -o json | ConvertFrom-Json

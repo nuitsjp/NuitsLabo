@@ -1,12 +1,12 @@
 param (
-    [string] $Name
+    [string] $Instance
 )
 
 . $PSScriptRoot\Common\Initialize-Script.ps1
 
-# $Nameが指定されていない場合、現在の時刻を取得し、フォーマットを設定
-if (-not $Name) {
-    $Name = Get-Date -Format "yyyy.MM.dd_HH.mm.ss"
+# $Instanceが指定されていない場合、現在の時刻を取得し、フォーマットを設定
+if (-not $Instance) {
+    $Instance = Get-Date -Format "yyyy.MM.dd_HH.mm.ss"
 }
 
 $VirtualMachineNames | ForEach-Object -Parallel {
@@ -17,7 +17,7 @@ $VirtualMachineNames | ForEach-Object -Parallel {
     $SnapshotPrefix = Get-SnapshotPrefix -VirtualMachineName $_
 
     # スナップショット名を作成（ディスク名 + タイムスタンプ）
-    $snapshotName = "${SnapshotPrefix}-${using:Name}"
+    $snapshotName = "${SnapshotPrefix}-${using:Instance}"
 
     # ディスクの存在を確認
     $diskName = Get-DiskName -VirtualMachineName $_
