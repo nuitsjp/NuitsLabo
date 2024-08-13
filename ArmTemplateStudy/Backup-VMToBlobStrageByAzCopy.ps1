@@ -12,49 +12,12 @@ $containerName = "disk-backup"
 # サブスクリプションを設定
 az account set --subscription $subscriptionId
 
-# ストレージアカウントが存在するか確認
-$storageAccount = az storage account show `
-  --name $storageAccountName `
-  --resource-group $resourceGroupName `
-  --query "name" `
-  --output tsv
-
-if (-not $storageAccount) {
-    Write-Output "ストレージアカウント $storageAccountName は存在しません。作成します..."
-    az storage account create `
-      --name $storageAccountName `
-      --resource-group $resourceGroupName `
-      --location $location `
-      --sku Standard_LRS `
-      --kind StorageV2
-} else {
-    Write-Output "ストレージアカウント $storageAccountName は既に存在します。"
-}
-
 # ストレージアカウントキーを取得
 $storageAccountKey = az storage account keys list `
   --resource-group $resourceGroupName `
   --account-name $storageAccountName `
   --query "[0].value" `
   --output tsv
-
-# コンテナが存在するか確認
-$container = az storage container show `
-  --account-name $storageAccountName `
-  --account-key $storageAccountKey `
-  --name $containerName `
-  --query "name" `
-  --output tsv
-
-if (-not $container) {
-    Write-Output "コンテナ $containerName は存在しません。作成します..."
-    az storage container create `
-      --name $containerName `
-      --account-name $storageAccountName `
-      --account-key $storageAccountKey
-} else {
-    Write-Output "コンテナ $containerName は既に存在します。"
-}
 
 # VHDエクスポートとコピーの時間計測開始
 $startTime = Get-Date
@@ -68,6 +31,13 @@ $sourceUrl = az disk grant-access `
   --access-level Read `
   --query "accessSas" `
   --output tsv
+
+$endTime = Get-Date
+$elapsedTime = $endTime - $startTime
+
+Write-Output "エクスポートにかかった時間: $($elapsedTime.TotalSeconds) 秒"
+
+$startTime = Get-Date
 
 # 書き込み用のSAS URLを取得
 Write-Host "書き込み用のSAS URLを取得中..."
@@ -91,5 +61,4 @@ azcopy copy $sourceUrl $destinationUrl
 $endTime = Get-Date
 $elapsedTime = $endTime - $startTime
 
-Write-Output "Managed Disk $diskName の $destinationUrl へのバックアップを完了しました。"
-Write-Output "エクスポートとコピーにかかった時間: $($elapsedTime.TotalSeconds) 秒"
+Write-Output "コピーにかかった時間: $($elapsedTime.TotalSeconds) 秒"
