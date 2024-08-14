@@ -8,50 +8,56 @@ $vhdFileName = "$diskName.vhd"
 $storageAccountName = "armtemplatestudy"
 $containerName = "disk-backup"
 
-# サブスクリプションを設定
-Write-Host "サブスクリプションを設定中..."
-az account set --subscription $subscriptionId
+# 時間計測の共通関数
+# 時間計測の共通関数
+function Measure-ExecutionTime {
+  param (
+      [string]$operationName,
+      [scriptblock]$operation
+  )
 
-# ストレージアカウントキーを取得
-Write-Output "ストレージアカウントキーを取得中..."
-$storageAccountKey = az storage account keys list `
-  --resource-group $resourceGroupName `
-  --account-name $storageAccountName `
-  --query "[0].value" `
-  --output tsv
+  # 処理開始のメッセージを表示
+  Write-Host -NoNewline "$operationName 中..."
 
-# VHDエクスポートとコピーの時間計測開始
-$startTime = Get-Date
+  # 実際の処理を実行
+  $startTime = Get-Date
+  $result = & $operation
+  $endTime = Get-Date
 
-# Managed DiskをVHDファイルにエクスポート
-Write-Host "Managed Disk $diskName をVHDファイルにエクスポート中..."
-$sas = az disk grant-access `
-  --resource-group $resourceGroupName `
-  --name $diskName `
-  --duration-in-seconds 3600 `
-  --access-level Read `
-  --query "accessSas" `
-  --output tsv
-$sas = '"' + $sas + '"'
+  # 経過時間を計算
+  $duration = $endTime - $startTime
 
-$endTime = Get-Date
-$elapsedTime = $endTime - $startTime
+  # 行頭に戻ってメッセージを上書き
+  Write-Host "`r$operationName 完了: 経過時間 $($duration.TotalSeconds) 秒"
 
-Write-Output "エクスポートにかかった時間: $($elapsedTime.TotalSeconds) 秒"
+  return $result
+}
 
-$startTime = Get-Date
+# 現在のサブスクリプションIDを取得
+$currentSubscriptionId = (Get-AzContext).Subscription.Id
 
-# Blob Storageコピー
-Write-Host "VHDファイルをコピー中..."
-az storage blob copy start `
-  --account-key $storageAccountKey `
-  --account-name $storageAccountName `
-  --destination-container $containerName `
-  --destination-blob $vhdFileName `
-  --source-uri $sas
+# サブスクリプションの設定（必要な場合のみ）
+if ($currentSubscriptionId -ne $subscriptionId) {
+    Write-Host "現在のサブスクリプションID '$currentSubscriptionId' と指定されたサブスクリプションID '$subscriptionId' が異なります。サブスクリプションを変更します..."
+    Set-AzContext -SubscriptionId $subscriptionId
+}
 
-# VHDエクスポートとコピーの時間計測終了
-$endTime = Get-Date
-$elapsedTime = $endTime - $startTime
+# ストレージコンテキストの取得
+$storageContext = (Get-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccountName).Context
 
-Write-Output "コピーにかかった時間: $($elapsedTime.TotalSeconds) 秒"
+# マネージドディスクのVHDファイルへのエクスポート
+$sasUri = Measure-ExecutionTime -operationName "マネージドディスク '$diskName' のエクスポート" -operation {
+    Grant-AzDiskAccess -ResourceGroupName $resourceGroupName -DiskName $diskName -Access Read -DurationInSecond 86400
+}
+
+# VHDファイルをBlob Storageにコピー
+Measure-ExecutionTime -operationName "VHDファイル '$vhdFileName' のコピー" -operation {
+    Start-AzStorageBlobCopy -AbsoluteUri $sasUri.AccessSAS -DestContainer $containerName -DestBlob $vhdFileName -DestContext $storageContext -Force > $null
+}
+
+# SAS URI の開放を計測
+Measure-ExecutionTime -operationName "SAS URI の開放" -operation {
+    Revoke-AzDiskAccess -ResourceGroupName $resourceGroupName -DiskName $diskName > $null
+}
+
+Write-Host "マネージドディスク '$diskName' がVHDファイル '$vhdFileName' としてストレージアカウント '$storageAccountName' のコンテナ '$containerName' にコピーされました。"
