@@ -15,7 +15,7 @@ resource disk 'Microsoft.Compute/disks@2022-03-02' = {
   properties: {
     creationData: {
       createOption: createOption
-      sourceResourceId: snapshotId
+      sourceUri: snapshotId
     }
     diskSizeGB: diskSizeGb
     encryption: {

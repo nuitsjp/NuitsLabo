@@ -46,9 +46,9 @@
 #>
 
 param (
-    [string] $Version,
-    [int] $Issue,
-    [string] $BackupName
+  [string] $Version,
+  [int] $Issue,
+  [string] $BackupName
 )
 
 # いずれか1つだけ指定されていることを確認する
@@ -58,10 +58,10 @@ if (($PSBoundParameters.Count -ne 1) -or (-not $PSBoundParameters.ContainsKey('V
 
 # BackupNameを設定
 if ($Version) {
-    $BackupName = "Release/v$Version"
+  $BackupName = "Release/v$Version"
 } elseif ($Issue) {
-    # Issue番号を4桁のゼロ埋めにしてBackupNameを設定
-    $BackupName = "Issue/i{0:D4}" -f $Issue
+  # Issue番号を4桁のゼロ埋めにしてBackupNameを設定
+  $BackupName = "Issue/i{0:D4}" -f $Issue
 }
 
 # 共通の関数や設定を含むスクリプトをインポート
