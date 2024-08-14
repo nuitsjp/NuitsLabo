@@ -5,7 +5,10 @@
 .DESCRIPTION
     このスクリプトは、指定された仮想マシンのディスクをスナップショットとして作成し、そのスナップショットをAzure Blob Storageにバックアップする一連の処理を行います。スクリプトは以下のステップで動作します。
 
-    1. バックアップ名が指定されていない場合、現在の日付と時刻を基にバックアップ名を生成します。
+    1. Version, Issue, BackupNameのいずれか1つを指定することで、バックアップ名を決定します。
+       - Versionは文字列で指定され、その先頭に「V」を付与してBackupNameとします。
+       - Issueは数値で指定され、その先頭に「Issue-」を付与してBackupNameとします（Issue番号は4桁のゼロ埋め）。
+       - BackupNameが指定された場合は、そのままBackupNameとして使用します。
     2. 指定された仮想マシンに対して並列処理を行い、それぞれのディスクに対してスナップショットを作成します。
     3. 作成したスナップショットのSAS URIを取得し、一時的なアクセス権を付与します。
     4. スナップショットを指定されたBlob Storageにコピーします。
@@ -14,34 +17,55 @@
 
     各ステップの実行時間は `Measure-ExecutionTime` を用いて計測され、操作名と共にログに記録されます。並列処理によって複数の仮想マシンに対して効率的にバックアップ処理を実行します。
 
+.PARAMETER Version
+    （オプション）バージョン名を指定します。指定された文字列の先頭に「V」を付与してBackupNameを生成します。
+
+.PARAMETER Issue
+    （オプション）Issue番号を指定します。指定された番号の先頭に「Issue-」を付与してBackupNameを生成します。Issue番号は4桁のゼロ埋めを行います。
+
 .PARAMETER BackupName
-    （オプション）バックアップの名前を指定します。指定しない場合、スクリプトが現在の日時を基に自動生成します。
+    （オプション）バックアップの名前を直接指定します。
 
 .NOTES
-    スクリプトは、共通関数を含む外部スクリプト `Common.ps1` をインポートして使用します。また、スクリプト内で使用されるリソースグループやストレージアカウントの名前は事前に設定されている必要があります。
+    Version, Issue, BackupNameのいずれか1つだけを指定してください。複数指定や未指定の場合はエラーとなります。
+
+.EXAMPLE
+    .\Backup-VM.ps1 -Version "1.0.0"
+
+    "V1.0.0" という名前で仮想マシンのバックアップを作成します。
+
+.EXAMPLE
+    .\Backup-VM.ps1 -Issue 123
+
+    "Issue-0123" という名前で仮想マシンのバックアップを作成します。
 
 .EXAMPLE
     .\Backup-VM.ps1 -BackupName "MyBackup"
 
     "MyBackup" という名前で仮想マシンのバックアップを作成します。
-
-.EXAMPLE
-    .\Backup-VM.ps1
-
-    現在の日時を基にバックアップ名を自動生成し、仮想マシンのバックアップを作成します。
 #>
 
 param (
+    [string] $Version,
+    [int] $Issue,
     [string] $BackupName
 )
 
+# いずれか1つだけ指定されていることを確認する
+if (($PSBoundParameters.Count -ne 1) -or (-not $PSBoundParameters.ContainsKey('Version') -and -not $PSBoundParameters.ContainsKey('Issue') -and -not $PSBoundParameters.ContainsKey('BackupName'))) {
+    throw "Version, Issue, BackupNameのいずれか1つだけを指定してください。複数指定または未指定の場合はエラーとなります。"
+}
+
+# BackupNameを設定
+if ($Version) {
+    $BackupName = "Release/v$Version"
+} elseif ($Issue) {
+    # Issue番号を4桁のゼロ埋めにしてBackupNameを設定
+    $BackupName = "Issue/i{0:D4}" -f $Issue
+}
+
 # 共通の関数や設定を含むスクリプトをインポート
 . $PSScriptRoot\Common\Common.ps1  
-
-# $BackupNameが指定されていない場合、現在の時刻を取得し、フォーマットされた名前を生成
-if (-not $BackupName) {
-  $BackupName = Get-Date -Format "yyyy.MM.dd_HH.mm.ss"
-}
 
 # バックアップ処理の実行時間を計測しながら処理を実行
 Measure-ExecutionTime -operationName "'$BackupName' のバックアップ" -operation {
@@ -54,8 +78,8 @@ Measure-ExecutionTime -operationName "'$BackupName' のバックアップ" -oper
     # 仮想マシンに対応するディスク名を取得
     $diskName = Get-DiskName -VirtualMachineName $virtualMachineName
     # スナップショットとVHDファイルの名前を生成
-    $snapshotName = "$diskName-$using:BackupName"
-    $vhdFileName = "$using:BackupName/$disName.vhd"
+    $snapshotName = "$diskName-backup-working"
+    $vhdFileName = "$using:BackupName/$($diskName).vhd"
     
     # 1/5: スナップショットを作成し、その実行時間を計測
     Measure-ExecutionTime -operationName "'$virtualMachineName' [1/5] スナップショットの作成" -operation {
