@@ -11,6 +11,8 @@ Measure-ExecutionTime -operationName "完全スナップショット '$snapshotN
   New-AzSnapshot -ResourceGroup $MyResourceGroup -SnapshotName $snapshotName -Snapshot $snapshotConfig > $null
 }
 
+Write-Host "スナップショットの作成が完了しました。完了を待たずVMを利用して問題ありません。" -ForegroundColor Cyan
+
 try {
   # スナップショットのSAS URIの取得
   $sasUri = Measure-ExecutionTime -operationName "スナップショット '$snapshotName' のエクスポート" -operation {
