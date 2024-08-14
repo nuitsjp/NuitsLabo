@@ -50,7 +50,7 @@ function Measure-ExecutionTime {
     )
 
     # 処理開始のメッセージを表示
-    Write-Host -NoNewline "$operationName 実施中..."
+    Write-Host "$operationName 実施中..."
 
     # 実際の処理を実行
     $startTime = Get-Date
@@ -61,7 +61,7 @@ function Measure-ExecutionTime {
     $duration = $endTime - $startTime
 
     # 行頭に戻ってメッセージを上書き
-    Write-Host "`r$operationName 完了: 経過時間 $($duration.TotalSeconds) 秒"
+    Write-Host "$operationName 完了: 経過時間 $($duration.TotalSeconds) 秒"
 
     return $result
 }
