@@ -2,51 +2,76 @@ param (
     [string] $BackupName
 )
 
-# 共通スクリプトをロード
+Write-Host "共通スクリプトをロード中..."
 . $PSScriptRoot\Common\Common.ps1
 
-# 並列で処理を実行する
+Write-Host "変数 virtualMachineName を設定中..."
 $virtualMachineName = "vm-001"
 
-# 既存のVMが存在する場合、それを削除
+Write-Host "既存のVM '$virtualMachineName' を確認中..."
 $existingVm = Get-AzVM -ResourceGroupName $MyResourceGroup -Name $virtualMachineName -ErrorAction SilentlyContinue
 if ($existingVm) {
+    Write-Host "既存のVM '$virtualMachineName' が見つかりました。削除を開始します..."
     Measure-ExecutionTime -operationName "既存のVM '$virtualMachineName' を削除" -operation {
+        Write-Host "VM '$virtualMachineName' を削除中..."
         Remove-AzVM -ResourceGroupName $MyResourceGroup -Name $virtualMachineName -Force
     }
 }
 
-$diskName = Get-DiskName -VirtualMachineName $virtualMachineName
-$nicName = Get-NicName -VirtualMachineName $virtualMachineName
-
-# BlobストレージからSASトークンを生成
+Write-Host "ストレージアカウントキーを取得中..."
 $storageAccountKey = (Get-AzStorageAccountKey -ResourceGroupName $ProductResourceGroup -Name $StorageAccountName).Value[0]
+
+Write-Host "ストレージコンテキストを作成中..."
 $context = New-AzStorageContext -StorageAccountName $StorageAccountName -StorageAccountKey $storageAccountKey
 
-# VHDファイルのパス
-#$blobName = "$($BackupName)/$($diskName).vhd"
+Write-Host "Blobの名前を設定中..."
 $blobName = "abcd"
 
-# SASトークン付きの完全なURIを取得
-# $sasToken = New-AzStorageBlobSASToken -Container $containerName -Blob $blobName -Permission r -Context $context -ExpiryTime (Get-Date).AddHours(1)
-# $blobUri = (Get-AzStorageBlob -Container $containerName -Blob $blobName -Context $context).ICloudBlob.Uri.AbsoluteUri
-# $sasUri = "$($blobUri)?$sasToken"
+Write-Host "Blobの絶対URIを取得中..."
+$blobUri = (Get-AzStorageBlob -Container $containerName -Blob $blobName -Context $context).ICloudBlob.Uri.AbsoluteUri
 
-# $sasUri
-$sasUri = 'https://armtemplatestudy.blob.core.windows.net/disk-backup/abcd?sp=r&st=2024-08-15T04:06:34Z&se=2024-08-15T12:06:34Z&spr=https&sv=2022-11-02&sr=b&sig=7RiSHuIcvYlj4mnB40kFRHJodZdqq4aNw%2Bm6j73z6QI%3D'
+# Managed Diskのストレージタイプを指定します。Premium_LRSまたはStandard_LRS。
+$sku = 'Standard_LRS'
 
-# マネージドディスクの作成
-# $diskConfig = New-AzDiskConfig -SkuName "Standard_LRS" -Location $Location -CreateOption Import -SourceUri $sasUri
-# $managedDisk = New-AzDisk -ResourceGroupName $MyResourceGroup -DiskName $diskName -Disk $diskConfig
+# ディスクのサイズをGB単位で指定します。これはVHDファイルのサイズより大きくする必要があります。
+$diskSize = '128'
 
-# Bicepテンプレートをデプロイして新しいVMを作成
-Write-Host "VM $virtualMachineName をBlob $vhdFilePath から復元中..."
-New-AzResourceGroupDeployment -ResourceGroupName $MyResourceGroup `
-    -TemplateFile "$PSScriptRoot\template\vm.bicep" `
-    -TemplateParameterFile "$PSScriptRoot\template\vm.json" `
-    -snapshotId $sasUri `
-    -virtualMachineName $virtualMachineName `
-    -diskName $diskName `
-    -networkInterfaceName $nicName
+Write-Host "ディスク名を取得中..."
+$diskName = Get-DiskName -VirtualMachineName $virtualMachineName
 
-Write-Host -ForegroundColor Cyan "VM '$virtualMachineName' の作成に成功しました。"
+# 既存のディスクをチェック
+$existingDisk = Get-AzDisk -ResourceGroupName $MyResourceGroup -DiskName $diskName -ErrorAction SilentlyContinue
+
+if ($existingDisk) {
+    Write-Host "既存のディスク '$diskName' が見つかりました。既存のディスクを使用します。"
+    $managedDisk = $existingDisk
+} else {
+    # BLOB Storageのコンテキストを取得
+    $storageAccount = Get-AzStorageAccount -ResourceGroupName $ProductResourceGroup -Name $StorageAccountName
+    $storageAccountId = $storageAccount.Id
+
+    # ディスク設定を構成します
+    Write-Host "Creating disk configuration for Managed Disk: $diskName"
+    $diskConfig = New-AzDiskConfig  -OsType Windows -HyperVGeneration V2 -SkuName $sku -Location $location -DiskSizeGB $diskSize -SourceUri $blobUri -CreateOption Import -StorageAccountId $storageAccountId
+    $diskconfig = Set-AzDiskSecurityProfile -Disk $diskconfig -SecurityType "TrustedLaunch"
+
+    # Managed Diskを作成します
+    Write-Host "Creating Managed Disk: $diskName in Resource Group: $MyResourceGroup"
+    $managedDisk = New-AzDisk -DiskName $diskName -Disk $diskConfig -ResourceGroupName $MyResourceGroup
+}
+
+Write-Host "NIC名を取得中..."   
+$nicName = Get-NicName -VirtualMachineName $virtualMachineName
+$diskId = $managedDisk.Id
+
+Write-Host "VM $virtualMachineName をBlob $vhdFilePath (ID: $diskId ) から復元中..."
+Write-Host "Bicepテンプレートをデプロイして新しいVMを作成中..."
+az deployment group create `
+    --resource-group $MyResourceGroup `
+    --template-file "$PSScriptRoot\template\vm.bicep" `
+    --parameters "$PSScriptRoot\template\vm.json" `
+    --parameters diskId=$diskId `
+    --parameters virtualMachineName=$virtualMachineName `
+    --parameters networkInterfaceName=$nicName
+
+# Write-Host -ForegroundColor Cyan "VM '$virtualMachineName' の作成に成功しました。"
