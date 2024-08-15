@@ -76,7 +76,8 @@ Measure-ExecutionTime -operationName "'$BackupName' のバックアップ" -oper
     # 現在の仮想マシン名を設定
     $virtualMachineName = $_
     # 仮想マシンに対応するディスク名を取得
-    $diskName = Get-DiskName -VirtualMachineName $virtualMachineName
+    # $diskName = Get-DiskName -VirtualMachineName $virtualMachineName
+    $diskName = "vm-001_OsDisk_1_e74eda012bb34fda8027ea0fc897b123"
     # スナップショットとVHDファイルの名前を生成
     $snapshotName = "$diskName-backup-working"
     $vhdFileName = "$using:BackupName/$($diskName).vhd"
@@ -88,16 +89,22 @@ Measure-ExecutionTime -operationName "'$BackupName' のバックアップ" -oper
     }
     
     try {
-      # 2/5: スナップショットへのSAS URIのアクセスを許可し、その実行時間を計測
-      $sasUri = Measure-ExecutionTime -operationName "'$virtualMachineName' [2/5] スナップショットのエクスポート" -operation {
-        Grant-AzSnapshotAccess -ResourceGroup $MyResourceGroup -SnapshotName $snapshotName -Access Read -DurationInSecond 300
+      # Provide Shared Access Signature (SAS) expiry duration in seconds e.g. 3600.
+      # Know more about SAS here: https://docs.microsoft.com/azure/storage/storage-dotnet-shared-access-signature-part-1
+      $sasExpiryDuration = 3600
+
+          # 2/5: スナップショットへのSAS URIのアクセスを許可し、その実行時間を計測
+      $sas = Measure-ExecutionTime -operationName "'$virtualMachineName' [2/5] スナップショットのエクスポート" -operation {
+        Grant-AzSnapshotAccess -ResourceGroup $MyResourceGroup -SnapshotName $snapshotName -Access Read -DurationInSecond $sasExpiryDuration
       }
     
       try {
         # 3/5: スナップショットをBlob Storageにコピーし、その実行時間を計測
-        $storageContext = (Get-AzStorageAccount -ResourceGroup $ProductResourceGroup -Name $StorageAccountName).Context
         Measure-ExecutionTime -operationName "'$virtualMachineName' [3/5] スナップショットのコピー" -operation {
-          Start-AzStorageBlobCopy -AbsoluteUri $sasUri.AccessSAS -DestContainer $ContainerName -DestBlob $vhdFileName -DestContext $storageContext -Force > $null
+
+          $destinationContext = (Get-AzStorageAccount -ResourceGroup $ProductResourceGroup -Name $StorageAccountName).Context
+          $containerSASURI = New-AzStorageContainerSASToken -Context $destinationContext -ExpiryTime (Get-Date).AddSeconds($sasExpiryDuration) -FullUri -Name $ContainerName -Permission rw
+          azcopy copy $sas.AccessSAS $containerSASURI > $null
         }
       }
       finally {

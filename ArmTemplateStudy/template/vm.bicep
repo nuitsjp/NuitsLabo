@@ -1,13 +1,5 @@
-param diskName string
+param diskId string
 param location string
-param sku string
-param diskSizeGb int
-param snapshotId string
-param createOption string
-param diskEncryptionSetType string
-param dataAccessAuthMode string
-param networkAccessPolicy string
-param publicNetworkAccess string
 param networkInterfaceName string
 param networkSubscriptionId string
 param networkResourceGroupName string
@@ -29,22 +21,6 @@ param autoShutdownNotificationStatus string
 param autoShutdownNotificationLocale string
 param autoShutdownNotificationEmail string
 
-module diskModule 'module/disk.bicep' = {
-  name: 'diskModule'
-  params: {
-    diskName: diskName
-    location: location
-    sku: sku
-    diskSizeGb: diskSizeGb
-    snapshotId: snapshotId
-    createOption: createOption
-    diskEncryptionSetType: diskEncryptionSetType
-    dataAccessAuthMode: dataAccessAuthMode
-    networkAccessPolicy: networkAccessPolicy
-    publicNetworkAccess: publicNetworkAccess
-  }
-}
-
 module networkInterfaceModule 'module/networkInterface.bicep' = {
   name: 'networkInterfaceModule'
   params: {
@@ -64,7 +40,7 @@ module virtualMachineModule 'module/virtualMachine.bicep' = {
     virtualMachineName: virtualMachineName
     location: location
     virtualMachineSize: virtualMachineSize
-    diskId: diskModule.outputs.diskId
+    diskId: diskId
     osDiskDeleteOption: osDiskDeleteOption
     nicId: networkInterfaceModule.outputs.nicId
     nicDeleteOption: nicDeleteOption
