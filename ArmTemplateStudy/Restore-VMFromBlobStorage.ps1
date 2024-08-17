@@ -25,7 +25,7 @@ Write-Host "ストレージコンテキストを作成中..."
 $context = New-AzStorageContext -StorageAccountName $StorageAccountName -StorageAccountKey $storageAccountKey
 
 Write-Host "Blobの名前を設定中..."
-$blobName = "abcd"
+$blobName = "Issue/i0001/osdisk-vm-001-dev-japaneast.vhd"
 
 Write-Host "Blobの絶対URIを取得中..."
 $blobUri = (Get-AzStorageBlob -Container $containerName -Blob $blobName -Context $context).ICloudBlob.Uri.AbsoluteUri
@@ -66,12 +66,12 @@ $diskId = $managedDisk.Id
 
 Write-Host "VM $virtualMachineName をBlob $vhdFilePath (ID: $diskId ) から復元中..."
 Write-Host "Bicepテンプレートをデプロイして新しいVMを作成中..."
-az deployment group create `
-    --resource-group $MyResourceGroup `
-    --template-file "$PSScriptRoot\template\vm.bicep" `
-    --parameters "$PSScriptRoot\template\vm.json" `
-    --parameters diskId=$diskId `
-    --parameters virtualMachineName=$virtualMachineName `
-    --parameters networkInterfaceName=$nicName
+New-AzResourceGroupDeployment `
+    -ResourceGroupName $MyResourceGroup `
+    -TemplateFile "$PSScriptRoot\template\vm.bicep" `
+    -TemplateParameterFile "$PSScriptRoot\template\vm.json" `
+    -diskId $diskId `
+    -virtualMachineName $virtualMachineName `
+    -networkInterfaceName $nicName  
 
 # Write-Host -ForegroundColor Cyan "VM '$virtualMachineName' の作成に成功しました。"

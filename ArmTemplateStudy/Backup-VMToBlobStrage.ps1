@@ -76,8 +76,7 @@ Measure-ExecutionTime -operationName "'$BackupName' のバックアップ" -oper
     # 現在の仮想マシン名を設定
     $virtualMachineName = $_
     # 仮想マシンに対応するディスク名を取得
-    # $diskName = Get-DiskName -VirtualMachineName $virtualMachineName
-    $diskName = "vm-001_OsDisk_1_e74eda012bb34fda8027ea0fc897b123"
+    $diskName = Get-DiskName -VirtualMachineName $virtualMachineName
     # スナップショットとVHDファイルの名前を生成
     $snapshotName = "$diskName-backup-working"
     $vhdFileName = "$using:BackupName/$($diskName).vhd"
@@ -103,7 +102,13 @@ Measure-ExecutionTime -operationName "'$BackupName' のバックアップ" -oper
         Measure-ExecutionTime -operationName "'$virtualMachineName' [3/5] スナップショットのコピー" -operation {
 
           $destinationContext = (Get-AzStorageAccount -ResourceGroup $ProductResourceGroup -Name $StorageAccountName).Context
-          $containerSASURI = New-AzStorageContainerSASToken -Context $destinationContext -ExpiryTime (Get-Date).AddSeconds($sasExpiryDuration) -FullUri -Name $ContainerName -Permission rw
+          $containerSASURI = New-AzStorageBlobSASToken `
+            -Context $destinationContext `
+            -Container $ContainerName `
+            -Blob $vhdFileName `
+            -Permission racwd `
+            -ExpiryTime (Get-Date).AddSeconds($sasExpiryDuration) `
+            -FullUri
           azcopy copy $sas.AccessSAS $containerSASURI > $null
         }
       }

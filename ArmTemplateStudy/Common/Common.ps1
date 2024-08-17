@@ -75,7 +75,7 @@ Set-Variable -Name ProductResourceGroup -Value "rg-arm-template-study-dev-japane
 Set-Variable -Name MyResourceGroup -Value "rg-arm-template-study-dev-japaneast-001" -Option ReadOnly -Scope Script
 Set-Variable -Name StorageAccountName -Value "armtemplatestudy" -Option ReadOnly -Scope Script
 Set-Variable -Name ContainerName -Value "disk-backup" -Option ReadOnly -Scope Script
-Set-Variable -Name VirtualMachineNames -Value @("vm-001") -Option ReadOnly -Scope Script
+Set-Variable -Name VirtualMachineNames -Value @("vm-001", "vm-002") -Option ReadOnly -Scope Script
 
 # サブスクリプションの設定（必要な場合のみ）
 $currentSubscriptionId = (Get-AzContext).Subscription.Id
