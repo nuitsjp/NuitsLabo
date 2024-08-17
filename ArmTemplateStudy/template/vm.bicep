@@ -4,6 +4,10 @@ param networkInterfaceName string
 param networkSubscriptionId string
 param networkResourceGroupName string
 param networkSecurityGroupName string
+param publicIpAddressName string
+param publicIpAddressType string
+param publicIpAddressSku string
+param pipDeleteOption string
 param subnetName string
 param virtualNetworkName string
 param virtualMachineName string
@@ -21,6 +25,17 @@ param autoShutdownNotificationStatus string
 param autoShutdownNotificationLocale string
 param autoShutdownNotificationEmail string
 
+resource publicIpAddress 'Microsoft.Network/publicIpAddresses@2020-08-01' = {
+  name: publicIpAddressName
+  location: location
+  properties: {
+    publicIPAllocationMethod: publicIpAddressType
+  }
+  sku: {
+    name: publicIpAddressSku
+  }
+}
+
 module networkInterfaceModule 'module/networkInterface.bicep' = {
   name: 'networkInterfaceModule'
   params: {
@@ -31,6 +46,10 @@ module networkInterfaceModule 'module/networkInterface.bicep' = {
     networkSecurityGroupName: networkSecurityGroupName
     subnetName: subnetName
     virtualNetworkName: virtualNetworkName
+    publicIpAddressName: publicIpAddressName
+    publicIpAddressType: publicIpAddressType
+    publicIpAddressSku: publicIpAddressSku
+    pipDeleteOption: pipDeleteOption
   }
 }
 

@@ -6,7 +6,7 @@ Write-Host "共通スクリプトをロード中..."
 . $PSScriptRoot\Common\Common.ps1
 
 Write-Host "変数 virtualMachineName を設定中..."
-$virtualMachineName = "vm-001"
+$virtualMachineName = "vm-002"
 
 Write-Host "既存のVM '$virtualMachineName' を確認中..."
 $existingVm = Get-AzVM -ResourceGroupName $MyResourceGroup -Name $virtualMachineName -ErrorAction SilentlyContinue
@@ -72,6 +72,6 @@ New-AzResourceGroupDeployment `
     -TemplateParameterFile "$PSScriptRoot\template\vm.json" `
     -diskId $diskId `
     -virtualMachineName $virtualMachineName `
-    -networkInterfaceName $nicName  
+    -networkInterfaceName $nicName
 
 # Write-Host -ForegroundColor Cyan "VM '$virtualMachineName' の作成に成功しました。"

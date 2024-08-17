@@ -20,6 +20,18 @@
         "networkSecurityGroupName": {
             "value": "ARM-TEMPLATE-nsg"
         },
+        "publicIpAddressName": {
+            "value": "vm-002-ip"
+        },
+        "publicIpAddressType": {
+            "value": "Static"
+        },
+        "publicIpAddressSku": {
+            "value": "Standard"
+        },
+        "pipDeleteOption": {
+            "value": "Delete"
+        },
         "subnetName": {
             "value": "default"
         },
