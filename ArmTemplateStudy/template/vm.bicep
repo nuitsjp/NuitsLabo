@@ -25,17 +25,6 @@ param autoShutdownNotificationStatus string
 param autoShutdownNotificationLocale string
 param autoShutdownNotificationEmail string
 
-resource publicIpAddress 'Microsoft.Network/publicIpAddresses@2020-08-01' = {
-  name: publicIpAddressName
-  location: location
-  properties: {
-    publicIPAllocationMethod: publicIpAddressType
-  }
-  sku: {
-    name: publicIpAddressSku
-  }
-}
-
 module networkInterfaceModule 'module/networkInterface.bicep' = {
   name: 'networkInterfaceModule'
   params: {

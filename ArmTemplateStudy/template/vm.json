@@ -21,7 +21,7 @@
             "value": "ARM-TEMPLATE-nsg"
         },
         "publicIpAddressName": {
-            "value": "vm-002-ip"
+            "value": null
         },
         "publicIpAddressType": {
             "value": "Static"

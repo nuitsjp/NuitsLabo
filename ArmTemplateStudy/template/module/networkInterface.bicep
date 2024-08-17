@@ -33,7 +33,7 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2022-11-01' = {
           }
           privateIPAllocationMethod: 'Dynamic'
           publicIPAddress: {
-            id: resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', publicIpAddressName)
+            id: publicIpAddress.id
             properties: {
               deleteOption: pipDeleteOption
             }

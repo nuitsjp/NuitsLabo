@@ -83,3 +83,6 @@ if ($currentSubscriptionId -ne $SubscriptionId) {
     Write-Host "現在のサブスクリプションID '$currentSubscriptionId' と指定されたサブスクリプションID '$SubscriptionId' が異なります。サブスクリプションを変更します..."
     Set-AzContext -SubscriptionId $SubscriptionId
 }
+
+# 警告を抑止
+Update-AzConfig -DisplaySecretsWarning $false
