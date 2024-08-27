@@ -1,0 +1,66 @@
+{
+  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
+  "type": "object",
+  "properties": {
+    "AttributeValues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [ "string", "long", "date" ]
+          },
+          "value": {
+            "type": [ "string", "null" ]
+          }
+        },
+        "required": [ "name", "type", "value" ],
+        "allOf": [
+          {
+            "if": {
+              "properties": { "type": { "const": "string" } }
+            },
+            "then": {
+              "properties": {
+                "value": {
+                  "type": [ "string", "null" ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "long" } }
+            },
+            "then": {
+              "properties": {
+                "value": {
+                  "type": [ "string", "null" ],
+                  "pattern": "^-?\\d+$" // 空文字を不許可にし、整数のみを許可する
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "date" } }
+            },
+            "then": {
+              "properties": {
+                "value": {
+                  "type": [ "string", "null" ],
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$" // 空文字を不許可にし、YYYY-MM-DD形式の日付のみを許可する
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "required": [ "AttributeValues" ]
+}

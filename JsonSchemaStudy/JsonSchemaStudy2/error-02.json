@@ -1,0 +1,10 @@
+{
+  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
+  "AttributeValues": [
+    {
+      "name": "ユーザーID",
+      "type": "string",
+      "value": { "key": "value" }
+    }
+  ]
+}
