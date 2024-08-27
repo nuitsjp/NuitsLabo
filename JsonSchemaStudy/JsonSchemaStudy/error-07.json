@@ -1,0 +1,10 @@
+{
+  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
+  "AttributeValues": [
+    {
+      "name": "ログイン時間",
+      // typeが欠落している
+      "stringValue": "10:00"
+    }
+  ]
+}

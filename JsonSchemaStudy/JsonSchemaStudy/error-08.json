@@ -1,0 +1,11 @@
+{
+  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
+  "AttributeValues": [
+    {
+      "name": "コード",
+      "type": "string",
+      "stringValue": "ABC123",
+      "intValue": 456
+    }
+  ]
+}

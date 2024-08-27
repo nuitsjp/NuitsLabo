@@ -1,0 +1,10 @@
+{
+  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
+  "AttributeValues": [
+    {
+      "name": "有効開始日",
+      "type": "date",
+      "dateValue": "0001-01-01"
+    }
+  ]
+}

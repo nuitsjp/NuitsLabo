@@ -1,0 +1,20 @@
+{
+  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
+  "AttributeValues": [
+    {
+      "name": "コード",
+      "type": "string",
+      "stringValue": "A"
+    },
+    {
+      "name": "数量",
+      "type": "int",
+      "intValue": 1
+    },
+    {
+      "name": "開始日",
+      "type": "date",
+      "dateValue": "2021-01-01"
+    }
+  ]
+}
