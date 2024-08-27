@@ -23,7 +23,9 @@
             },
             "then": {
               "properties": {
-                "stringValue": { "type": "string" }
+                "stringValue": {
+                  "type": [ "string", "null" ]
+                }
               },
               "required": [ "stringValue" ],
               "additionalProperties": false
@@ -36,7 +38,7 @@
             "then": {
               "properties": {
                 "longValue": {
-                  "type": "integer",
+                  "type": [ "integer", "null" ],
                   "minimum": -9223372036854775808,
                   "maximum": 9223372036854775807
                 }
@@ -52,7 +54,7 @@
             "then": {
               "properties": {
                 "dateValue": {
-                  "type": "string",
+                  "type": [ "string", "null" ],
                   "pattern": "^\\d{4}/\\d{2}/\\d{2}$"
                 }
               },
