@@ -2,9 +2,9 @@
   "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
     {
-      "name": "部店コード",
-      "type": "int"
-      // intValueが欠落している
+      "name": "ユーザーID",
+      "type": "string",
+      "value": { "key": "value" }
     }
   ]
 }

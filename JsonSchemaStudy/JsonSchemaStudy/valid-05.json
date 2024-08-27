@@ -2,9 +2,9 @@
   "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
     {
-      "name": "最小整数値",
+      "name": "温度",
       "type": "int",
-      "intValue": 0
+      "value": "-10"
     }
   ]
 }

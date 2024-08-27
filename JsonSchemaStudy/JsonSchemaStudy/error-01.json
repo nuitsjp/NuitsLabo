@@ -2,9 +2,9 @@
   "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
     {
-      "name": "口座番号",
-      "type": "string"
-      // stringValueが欠落している
+      "name": "ユーザーID",
+      "type": "string",
+      "value": 12345
     }
   ]
 }

@@ -2,19 +2,9 @@
   "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
     {
-      "name": "口座番号",
-      "type": "string",
-      "stringValue": "987654321098"
-    },
-    {
       "name": "部店コード",
       "type": "int",
-      "intValue": 123
-    },
-    {
-      "name": "更新日",
-      "type": "date",
-      "dateValue": "2022-12-31"
+      "value": "321"
     }
   ]
 }

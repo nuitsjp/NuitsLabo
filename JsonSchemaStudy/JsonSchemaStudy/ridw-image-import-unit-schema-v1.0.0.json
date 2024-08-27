@@ -14,28 +14,25 @@
             "type": "string",
             "enum": [ "string", "int", "date" ]
           },
-          "stringValue": {
-            "type": "string"
-          },
-          "intValue": {
-            "type": "integer"
-          },
-          "dateValue": {
-            "type": "string",
-            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          "value": {
+            "type": [ "string", "null" ],
+            "oneOf": [
+              { "type": "string" },
+              { "type": "null" }
+            ]
           }
         },
-        "required": [ "name", "type" ],
+        "required": [ "name", "type", "value" ],
         "allOf": [
           {
             "if": {
               "properties": { "type": { "const": "string" } }
             },
             "then": {
-              "required": [ "stringValue" ],
               "properties": {
-                "intValue": { "not": {} },
-                "dateValue": { "not": {} }
+                "value": {
+                  "type": [ "string", "null" ]
+                }
               }
             }
           },
@@ -44,10 +41,11 @@
               "properties": { "type": { "const": "int" } }
             },
             "then": {
-              "required": [ "intValue" ],
               "properties": {
-                "stringValue": { "not": {} },
-                "dateValue": { "not": {} }
+                "value": {
+                  "type": [ "string", "null" ],
+                  "pattern": "^-?\\d*$" // 整数もしくは空を許可
+                }
               }
             }
           },
@@ -56,10 +54,11 @@
               "properties": { "type": { "const": "date" } }
             },
             "then": {
-              "required": [ "dateValue" ],
               "properties": {
-                "stringValue": { "not": {} },
-                "intValue": { "not": {} }
+                "value": {
+                  "type": [ "string", "null" ],
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$" // 日付フォーマット（YYYY-MM-DD）
+                }
               }
             }
           }

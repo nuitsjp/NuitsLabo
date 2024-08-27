@@ -2,19 +2,9 @@
   "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
     {
-      "name": "ユーザーID",
-      "type": "string",
-      "stringValue": "user123"
-    },
-    {
-      "name": "注文数",
-      "type": "int",
-      "intValue": 42
-    },
-    {
-      "name": "注文日",
+      "name": "開始日",
       "type": "date",
-      "dateValue": "2023-08-27"
+      "value": "0001-01-01"
     }
   ]
 }

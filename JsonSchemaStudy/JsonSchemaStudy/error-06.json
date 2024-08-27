@@ -2,9 +2,9 @@
   "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
     {
-      "name": "更新日",
+      "name": "作成日",
       "type": "date",
-      "dateValue": "27-08-2023"
+      "value": "08/27/2023"
     }
   ]
 }

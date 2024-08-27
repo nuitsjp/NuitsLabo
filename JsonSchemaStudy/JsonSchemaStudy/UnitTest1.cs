@@ -1,4 +1,6 @@
 using FluentAssertions;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 using NJsonSchema;
 
 namespace JsonSchemaStudy
@@ -18,16 +20,17 @@ namespace JsonSchemaStudy
         public async Task Valid(string jsonFile)
         {
             // スキーマファイルを読み込む
-            var schema = await JsonSchema.FromFileAsync("ridw-image-import-unit-schema-v1.0.0.json");
+            var schemaJson = await File.ReadAllTextAsync("ridw-image-import-unit-schema-v1.0.0.json");
+            var schema = JSchema.Parse(schemaJson);
 
             // JSONファイルの内容を読み込む
             var jsonData = await File.ReadAllTextAsync(jsonFile);
+            var jsonObject = JObject.Parse(jsonData);
 
             // JSONのバリデーション
-            var errors = schema.Validate(jsonData);
-
-            // エラーがないことを確認
-            errors.Should().BeEmpty();
+            jsonObject.IsValid(schema, out IList<ValidationError> errors)
+                .Should()
+                .BeTrue();
         }
 
         [Theory]
@@ -43,16 +46,17 @@ namespace JsonSchemaStudy
         public async Task Error(string jsonFile)
         {
             // スキーマファイルを読み込む
-            var schema = await JsonSchema.FromFileAsync("ridw-image-import-unit-schema-v1.0.0.json");
+            var schemaJson = await File.ReadAllTextAsync("ridw-image-import-unit-schema-v1.0.0.json");
+            var schema = JSchema.Parse(schemaJson);
 
             // JSONファイルの内容を読み込む
             var jsonData = await File.ReadAllTextAsync(jsonFile);
+            var jsonObject = JObject.Parse(jsonData);
 
             // JSONのバリデーション
-            var errors = schema.Validate(jsonData);
-
-            // エラーがないことを確認
-            errors.Should().NotBeEmpty();
+            jsonObject.IsValid(schema, out IList<ValidationError> errors)
+                .Should()
+                .BeFalse();
         }
 
     }

@@ -2,9 +2,9 @@
   "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
     {
-      "name": "作成日",
-      "type": "date"
-      // dateValueが欠落している
+      "name": "部店コード",
+      "type": "int",
+      "value": "123.45"
     }
   ]
 }

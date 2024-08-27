@@ -2,9 +2,9 @@
   "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
     {
-      "name": "注文数",
+      "name": "数量",
       "type": "int",
-      "stringValue": "42"
+      "value": ""
     }
   ]
 }
