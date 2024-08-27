@@ -13,12 +13,9 @@
           "type": {
             "type": "string",
             "enum": [ "string", "long", "date" ]
-          },
-          "value": {
-            "type": [ "string", "null" ]
           }
         },
-        "required": [ "name", "type", "value" ],
+        "required": [ "name", "type" ],
         "allOf": [
           {
             "if": {
@@ -26,10 +23,10 @@
             },
             "then": {
               "properties": {
-                "value": {
-                  "type": [ "string", "null" ]
-                }
-              }
+                "stringValue": { "type": "string" }
+              },
+              "required": [ "stringValue" ],
+              "additionalProperties": false
             }
           },
           {
@@ -38,11 +35,14 @@
             },
             "then": {
               "properties": {
-                "value": {
-                  "type": [ "string", "null" ],
-                  "pattern": "^-?\\d+$" // 空文字を不許可にし、整数のみを許可する
+                "longValue": {
+                  "type": "integer",
+                  "minimum": -9223372036854775808,
+                  "maximum": 9223372036854775807
                 }
-              }
+              },
+              "required": [ "longValue" ],
+              "additionalProperties": false
             }
           },
           {
@@ -51,16 +51,19 @@
             },
             "then": {
               "properties": {
-                "value": {
-                  "type": [ "string", "null" ],
-                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$" // 空文字を不許可にし、YYYY-MM-DD形式の日付のみを許可する
+                "dateValue": {
+                  "type": "string",
+                  "pattern": "^\\d{4}/\\d{2}/\\d{2}$"
                 }
-              }
+              },
+              "required": [ "dateValue" ],
+              "additionalProperties": false
             }
           }
         ]
       }
     }
   },
-  "required": [ "AttributeValues" ]
+  "required": [ "AttributeValues" ],
+  "additionalProperties": false
 }
