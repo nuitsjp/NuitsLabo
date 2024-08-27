@@ -12,7 +12,7 @@
           },
           "type": {
             "type": "string",
-            "enum": [ "string", "long", "date" ]
+            "enum": [ "string", "long", "datetime" ]
           }
         },
         "required": [ "name", "type" ],
@@ -27,8 +27,7 @@
                   "type": [ "string", "null" ]
                 }
               },
-              "required": [ "stringValue" ],
-              "additionalProperties": false
+              "required": [ "stringValue" ]
             }
           },
           {
@@ -43,29 +42,26 @@
                   "maximum": 9223372036854775807
                 }
               },
-              "required": [ "longValue" ],
-              "additionalProperties": false
+              "required": [ "longValue" ]
             }
           },
           {
             "if": {
-              "properties": { "type": { "const": "date" } }
+              "properties": { "type": { "const": "datetime" } }
             },
             "then": {
               "properties": {
-                "dateValue": {
+                "datetimeValue": {
                   "type": [ "string", "null" ],
                   "pattern": "^\\d{4}/\\d{2}/\\d{2}$"
                 }
               },
-              "required": [ "dateValue" ],
-              "additionalProperties": false
+              "required": [ "datetimeValue" ]
             }
           }
         ]
       }
     }
   },
-  "required": [ "AttributeValues" ],
-  "additionalProperties": false
+  "required": [ "AttributeValues" ]
 }

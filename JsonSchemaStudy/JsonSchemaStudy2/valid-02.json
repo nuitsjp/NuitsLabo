@@ -1,10 +1,69 @@
 {
-  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
+    // 文字列属性のテストケース
     {
-      "name": "ユーザーID",
+      "name": "最小文字列属性",
       "type": "string",
-      "value": ""
+      "stringValue": ""
+    },
+    {
+      "name": "最大文字列属性",
+      "type": "string",
+      "stringValue": "abcdefghijklmnopqrstuvwxyzあいうえおかきくけこ1234567890"
+    },
+    {
+      "name": "Null文字列属性",
+      "type": "string",
+      "stringValue": null
+    },
+
+    // 長整数属性のテストケース
+    {
+      "name": "最小長整数属性",
+      "type": "long",
+      "longValue": -9223372036854775808
+    },
+    {
+      "name": "中央値長整数属性",
+      "type": "long",
+      "longValue": 0
+    },
+    {
+      "name": "最大長整数属性",
+      "type": "long",
+      "longValue": 9223372036854775807
+    },
+    {
+      "name": "Null長整数属性",
+      "type": "long",
+      "longValue": null
+    },
+
+    // 日付属性のテストケース
+    {
+      "name": "日付属性",
+      "type": "datetime",
+      "datetimeValue": "2024/08/27"
+    },
+    {
+      "name": "最小の日付属性",
+      "type": "datetime",
+      "datetimeValue": "0000/01/01"
+    },
+    {
+      "name": "うるう年日付属性",
+      "type": "datetime",
+      "datetimeValue": "2024/02/29"
+    },
+    {
+      "name": "月末日付属性",
+      "type": "datetime",
+      "datetimeValue": "2024/01/31"
+    },
+    {
+      "name": "Null日付属性",
+      "type": "datetime",
+      "datetimeValue": null
     }
   ]
 }

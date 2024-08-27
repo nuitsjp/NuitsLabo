@@ -1,10 +1,10 @@
 {
-  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
     {
-      "name": "終了日",
-      "type": "date",
-      "value": "not_a_date"
+      "name": "不正な長整数属性",
+      "type": "long",
+      "longValue": "12345"
+      // "longValue"に文字列型の値が存在
     }
   ]
 }

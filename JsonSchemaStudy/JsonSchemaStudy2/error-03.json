@@ -1,10 +1,9 @@
 {
-  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
     {
-      "name": "部店コード",
-      "type": "long",
-      "value": "123.45"
+      "name": "日付属性",
+      "type": "datetime"
+      // "datetimeValue"が欠如
     }
   ]
 }

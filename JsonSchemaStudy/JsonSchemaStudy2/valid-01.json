@@ -1,10 +1,39 @@
 {
-  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
     {
-      "name": "ユーザーID",
+      "name": "サンプル文字列属性",
       "type": "string",
-      "value": "user123"
+      "stringValue": "サンプルテキスト"
+    },
+    {
+      "name": "Null文字列属性",
+      "type": "string",
+      "stringValue": null
+    },
+    {
+      "name": "最大長整数属性",
+      "type": "long",
+      "longValue": 9223372036854775807
+    },
+    {
+      "name": "Null長整数属性",
+      "type": "long",
+      "longValue": null
+    },
+    {
+      "name": "日付属性",
+      "type": "datetime",
+      "datetimeValue": "2024/08/27"
+    },
+    {
+      "name": "最小の日付属性",
+      "type": "datetime",
+      "datetimeValue": "0000/01/01"
+    },
+    {
+      "name": "Null日付属性",
+      "type": "datetime",
+      "datetimeValue": null
     }
   ]
 }

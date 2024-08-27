@@ -1,10 +1,10 @@
 {
-  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
     {
-      "name": "数量",
-      "type": "long",
-      "value": "not_a_number"
+      "name": "誤った文字列属性",
+      "type": "string",
+      "longValue": 123
+      // "stringValue"が無く、代わりに"longValue"が存在する
     }
   ]
 }

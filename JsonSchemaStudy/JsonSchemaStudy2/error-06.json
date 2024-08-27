@@ -1,10 +1,10 @@
 {
-  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
     {
-      "name": "作成日",
-      "type": "date",
-      "value": "08/27/2023"
+      "name": "誤った日付属性",
+      "type": "datetime",
+      "longValue": 456
+      // "datetimeValue"が無く、代わりに"longValue"が存在する
     }
   ]
 }

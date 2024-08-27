@@ -1,10 +1,25 @@
 {
-  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
+    // 長整数属性のテストケース
     {
-      "name": "ユーザーID",
-      "type": "string",
-      "value": null
+      "name": "最小長整数属性",
+      "type": "long",
+      "longValue": -9223372036854775808
+    },
+    {
+      "name": "中央値長整数属性",
+      "type": "long",
+      "longValue": 0
+    },
+    {
+      "name": "最大長整数属性",
+      "type": "long",
+      "longValue": 9223372036854775807
+    },
+    {
+      "name": "Null長整数属性",
+      "type": "long",
+      "longValue": null
     }
   ]
 }

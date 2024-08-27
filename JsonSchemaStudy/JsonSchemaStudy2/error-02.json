@@ -1,10 +1,9 @@
 {
-  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
     {
-      "name": "ユーザーID",
-      "type": "string",
-      "value": { "key": "value" }
+      "name": "長整数属性",
+      "type": "long"
+      // "longValue"が欠如
     }
   ]
 }

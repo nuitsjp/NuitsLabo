@@ -1,10 +1,10 @@
 {
-  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
     {
-      "name": "設定フラグ",
-      "type": "boolean",
-      "value": "true"
+      "name": "不正な文字列属性",
+      "type": "string",
+      "stringValue": 100
+      // "stringValue"に整数型の値が存在
     }
   ]
 }

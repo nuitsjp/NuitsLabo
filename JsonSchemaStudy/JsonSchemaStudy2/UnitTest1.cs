@@ -11,11 +11,6 @@ namespace JsonSchemaStudy2
         [InlineData("valid-02.json")]
         [InlineData("valid-03.json")]
         [InlineData("valid-04.json")]
-        [InlineData("valid-05.json")]
-        [InlineData("valid-06.json")]
-        [InlineData("valid-07.json")]
-        [InlineData("valid-08.json")]
-        [InlineData("valid-09.json")]
         public async Task Valid(string jsonFile)
         {
             // スキーマファイルを読み込む
@@ -27,9 +22,10 @@ namespace JsonSchemaStudy2
             var jsonObject = JObject.Parse(jsonData);
 
             // JSONのバリデーション
-            jsonObject.IsValid(schema, out IList<ValidationError> errors)
-                .Should()
-                .BeTrue();
+            var isValid = jsonObject.IsValid(schema, out IList<ValidationError> errors);
+
+            isValid.Should().BeTrue();
+            errors.Should().BeEmpty();
         }
 
         [Theory]
@@ -53,9 +49,10 @@ namespace JsonSchemaStudy2
             var jsonObject = JObject.Parse(jsonData);
 
             // JSONのバリデーション
-            jsonObject.IsValid(schema, out IList<ValidationError> errors)
-                .Should()
-                .BeFalse();
+            var isValid = jsonObject.IsValid(schema, out IList<ValidationError> errors);
+
+            isValid.Should().BeFalse();
+            errors.Should().NotBeEmpty();
         }
 
     }

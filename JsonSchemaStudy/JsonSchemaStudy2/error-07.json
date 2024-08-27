@@ -1,10 +1,10 @@
 {
-  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
     {
-      "name": "終了日",
-      "type": "date",
-      "value": "not_a_date"
+      "name": "不正な日付フォーマット属性",
+      "type": "datetime",
+      "datetimeValue": "2024/08/27 12:34:56"
+      // 時刻情報を含む不正なフォーマット
     }
   ]
 }

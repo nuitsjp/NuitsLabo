@@ -1,10 +1,30 @@
 {
-  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
+    // 日付属性のテストケース
     {
-      "name": "部店コード",
-      "type": "long",
-      "value": "321"
+      "name": "日付属性",
+      "type": "datetime",
+      "datetimeValue": "2024/08/27"
+    },
+    {
+      "name": "最小の日付属性",
+      "type": "datetime",
+      "datetimeValue": "0000/01/01"
+    },
+    {
+      "name": "うるう年日付属性",
+      "type": "datetime",
+      "datetimeValue": "2024/02/29"
+    },
+    {
+      "name": "月末日付属性",
+      "type": "datetime",
+      "datetimeValue": "2024/01/31"
+    },
+    {
+      "name": "Null日付属性",
+      "type": "datetime",
+      "datetimeValue": null
     }
   ]
 }
