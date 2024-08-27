@@ -1,4 +1,5 @@
 {
+  "$schema": "https://www.ricoh.co.jp/schemas/ridw/image-importer/unit/1.0.0",
   "AttributeValues": [
     {
       "name": "サンプル文字列属性",
