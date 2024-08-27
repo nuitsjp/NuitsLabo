@@ -12,14 +12,10 @@
           },
           "type": {
             "type": "string",
-            "enum": [ "string", "int", "date" ]
+            "enum": [ "string", "long", "date" ]
           },
           "value": {
-            "type": [ "string", "null" ],
-            "oneOf": [
-              { "type": "string" },
-              { "type": "null" }
-            ]
+            "type": [ "string", "null" ]
           }
         },
         "required": [ "name", "type", "value" ],
@@ -38,13 +34,13 @@
           },
           {
             "if": {
-              "properties": { "type": { "const": "int" } }
+              "properties": { "type": { "const": "long" } }
             },
             "then": {
               "properties": {
                 "value": {
                   "type": [ "string", "null" ],
-                  "pattern": "^-?\\d*$" // 整数もしくは空を許可
+                  "pattern": "^-?\\d+$" // 空文字を不許可にし、整数のみを許可する
                 }
               }
             }
@@ -57,7 +53,7 @@
               "properties": {
                 "value": {
                   "type": [ "string", "null" ],
-                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$" // 日付フォーマット（YYYY-MM-DD）
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$" // 空文字を不許可にし、YYYY-MM-DD形式の日付のみを許可する
                 }
               }
             }

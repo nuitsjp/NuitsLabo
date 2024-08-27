@@ -3,7 +3,7 @@
   "AttributeValues": [
     {
       "name": "数量",
-      "type": "int",
+      "type": "long",
       "value": null
     }
   ]

@@ -3,7 +3,7 @@
   "AttributeValues": [
     {
       "name": "温度",
-      "type": "int",
+      "type": "long",
       "value": "-10"
     }
   ]

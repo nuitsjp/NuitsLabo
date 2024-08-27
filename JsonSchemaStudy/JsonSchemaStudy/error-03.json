@@ -3,7 +3,7 @@
   "AttributeValues": [
     {
       "name": "部店コード",
-      "type": "int",
+      "type": "long",
       "value": "123.45"
     }
   ]
