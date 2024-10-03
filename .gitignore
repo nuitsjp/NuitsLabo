@@ -9,6 +9,8 @@
 vosk-model-small-ja-0.22/
 **/PowerShellModuleStudy/nuget.config
 
+**/launchSettings.json
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
