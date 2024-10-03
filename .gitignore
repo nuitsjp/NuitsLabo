@@ -7,6 +7,7 @@
 *.userosscache
 *.sln.docstates
 vosk-model-small-ja-0.22/
+**/PowerShellModuleStudy/nuget.config
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

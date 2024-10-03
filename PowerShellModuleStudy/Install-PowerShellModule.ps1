@@ -1,0 +1,2 @@
+Register-PSRepository -Name "NuitsGitHub" -SourceLocation "https://nuget.pkg.github.com/nuitsjp/index.json" -PublishLocation "https://nuget.pkg.github.com/nuitsjp/index.json" -InstallationPolicy Trusted
+Install-Module -Name YOUR-USERNAME.HelloWorld -Repository NuitsGitHub
