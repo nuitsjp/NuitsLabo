@@ -2,6 +2,9 @@
 using System;
 using System.IO;
 
+// トークンを第一引数から取得
+string token = args[0];
+
 // リポジトリとファイルの設定
 string repoPath = @"D:\NuitsLabo";
 string fileName = "example.txt";
@@ -9,9 +12,6 @@ string filePath = Path.Combine(repoPath, fileName);
 string fileContent = "Hello, LibGit2Sharp";
 string commitMessage = "Add example.txt";
 string branchName = "main";
-
-// GitHubの個人アクセストークン
-string token = "your_personal_access_token";
 
 // ファイルを作成し、内容を書き込む
 File.WriteAllText(filePath, fileContent);
@@ -27,11 +27,12 @@ var author = new Signature("Your Name", "your.email@example.com", DateTimeOffset
 var committer = author;
 var commit = repo.Commit(commitMessage, author, committer);
 
-// 3. プッシュ（トークン認証を使用）
+// 3. プッシュ（コマンドライン引数から取得したトークンを使用）
 var remote = repo.Network.Remotes["origin"];
 var options = new PushOptions
 {
-    CredentialsProvider = (_url, _user, _cred) => new TokenCredentials(token)
+    CredentialsProvider = (_url, _user, _cred) =>
+        new UsernamePasswordCredentials { Username = token, Password = string.Empty }
 };
 
 repo.Network.Push(remote, $"refs/heads/{branchName}", options);
