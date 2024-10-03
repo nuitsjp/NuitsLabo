@@ -11,7 +11,7 @@ string fileName = "example.txt";
 string filePath = Path.Combine(repoPath, fileName);
 string fileContent = "Hello, LibGit2Sharp";
 string commitMessage = "Add example.txt";
-string branchName = "main";
+string branchName = "master";
 
 // ファイルを作成し、内容を書き込む
 File.WriteAllText(filePath, fileContent);
