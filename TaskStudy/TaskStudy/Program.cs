@@ -1,30 +1,18 @@
-﻿using CancellationTokenSource source = new CancellationTokenSource();
-var token = source.Token;
-source.Cancel();
+﻿Console.WriteLine("Doing...");
+await DoAsync();
+Console.WriteLine("Completed!");
 
-var task = Task.Run(async delegate
+static async Task DoAsync()
 {
-    try
+    await Task.Run(() =>
     {
-        await Task.Delay(TimeSpan.FromMinutes(1), token);
-        return 42;
-    }
-    catch (TaskCanceledException)
-    {
-        Console.WriteLine("タスクがキャンセルされました。");
-        throw;
-    }
-});
-source.Cancel();
-try
-{
-    task.Wait();
+        // 重たい同期処理
+        Thread.Sleep(TimeSpan.FromSeconds(3));
+    });
 }
-catch (AggregateException ae)
+
+static Task HeavyComputationAsync()
 {
-    foreach (var e in ae.InnerExceptions)
-    {
-        Console.WriteLine(e);
-    }
+    return Task.CompletedTask;
 }
-Console.Write("Task t Status: {0}", task.Status);
+

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Workers Example</title>
+</head>
+<body>
+  <h1>Web Workers サンプル</h1>
+  <button id="startButton">計算開始</button>
+  <div id="result"></div>
+  
+  <script>
+    // メインスレッド側のJavaScript
+    document.getElementById('startButton').addEventListener('click', () => {
+      // worker.jsをロード
+      const worker = new Worker('worker.js');
+
+      // メッセージをWorkerに送信
+      worker.postMessage(1000000000);
+
+      // Workerからメッセージを受け取る
+      worker.onmessage = function(event) {
+        document.getElementById('result').innerText = '計算結果: ' + event.data;
+        console.log('結果: ', event.data);
+      };
+
+      // エラーハンドリング
+      worker.onerror = function(error) {
+        console.error('エラーが発生しました:', error.message);
+      };
+    });
+  </script>
+</body>
+</html>
