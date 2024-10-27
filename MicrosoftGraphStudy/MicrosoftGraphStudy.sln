@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34714.143
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicrosoftGraphStudy", "MicrosoftGraphStudy\MicrosoftGraphStudy.csproj", "{727EA3C3-5288-4EDA-9169-EF441F0D6D17}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{727EA3C3-5288-4EDA-9169-EF441F0D6D17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{727EA3C3-5288-4EDA-9169-EF441F0D6D17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{727EA3C3-5288-4EDA-9169-EF441F0D6D17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{727EA3C3-5288-4EDA-9169-EF441F0D6D17}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E8AC713D-1DFF-4C96-8F95-3EA85C26E802}
+	EndGlobalSection
+EndGlobal
