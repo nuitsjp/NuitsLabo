@@ -68,9 +68,13 @@ public class FixedLengthFileReader : IFixedLengthFileReader
     /// <returns>指定されたフィールドの文字列。</returns>
     public string GetField(int index, int bytes)
     {
-        if (index + bytes > _bufferLength)
+        if (_bufferLength <= index)
         {
-            throw new InvalidOperationException("指定されたフィールドの範囲が現在のレコードを超えています。");
+            throw new IndexOutOfRangeException();
+        }
+        if (_bufferLength < index + bytes)
+        {
+            throw new ArgumentOutOfRangeException();
         }
 
         ReadOnlySpan<byte> fieldBytes = new ReadOnlySpan<byte>(_buffer, _bufferPosition + index, bytes);

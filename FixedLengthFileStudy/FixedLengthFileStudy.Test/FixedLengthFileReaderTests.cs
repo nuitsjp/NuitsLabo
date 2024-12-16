@@ -164,7 +164,7 @@ public abstract class FixedLengthFileReaderTestsBase
     }
 
     [Fact]
-    public void GetField_WithInvalidIndex_ShouldThrowArgumentOutOfRangeException()
+    public void GetField_WithInvalidIndex_ShouldThrowException()
     {
         // Arrange
         var content = "ABCDE";
@@ -177,6 +177,23 @@ public abstract class FixedLengthFileReaderTestsBase
         // Assert
         // ReSharper disable once AccessToDisposedClosure
         var action = () => reader.GetField(10, 1);
+        action.Should().Throw<IndexOutOfRangeException>();
+    }
+
+    [Fact]
+    public void GetField_WithInvalidLength_ShouldThrowException()
+    {
+        // Arrange
+        var content = "ABCDE";
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+        using var reader = CreateReader(stream, Encoding.UTF8, Environment.NewLine);
+
+        // Act
+        reader.Read();
+
+        // Assert
+        // ReSharper disable once AccessToDisposedClosure
+        var action = () => reader.GetField(0, 10);
         action.Should().Throw<ArgumentOutOfRangeException>();
     }
 
@@ -193,7 +210,6 @@ public abstract class FixedLengthFileReaderTestsBase
         var action = () => reader.GetField(0, 1);
         action.Should().Throw<InvalidOperationException>();
     }
-
 }
 
 public class ChatGptFixedLengthFileReaderTests : FixedLengthFileReaderTestsBase

@@ -157,7 +157,16 @@ public class FixedLengthFileReader : IFixedLengthFileReader
         if (_currentLine == null)
             throw new InvalidOperationException("No current record.");
 
-        if (index < 0 || bytes <= 0 || index + bytes > _currentLineLength)
+        if (_currentLineLength <= index)
+        {
+            throw new IndexOutOfRangeException();
+        }
+        if (_currentLineLength < index + bytes)
+        {
+            throw new ArgumentOutOfRangeException($"Line length: {_currentLineLength} index:{index} bytes:{bytes} index+bytes:{index + bytes}");
+        }
+
+        if (index < 0 || bytes <= 0)
             throw new ArgumentOutOfRangeException($"Invalid field parameters: index={index}, bytes={bytes}");
 
         // 必要な部分だけをデコード
