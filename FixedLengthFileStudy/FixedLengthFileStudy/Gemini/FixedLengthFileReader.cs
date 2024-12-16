@@ -23,29 +23,30 @@ public class FixedLengthFileReader : IFixedLengthFileReader
     public bool Read()
     {
         _bufferPosition = 0;
+        _bufferLength = _reader.Read(_buffer, 0, _buffer.Length); // 先読みしておく
+
+        if (_bufferLength == 0) return false; // ファイルが空の場合
 
         int newLineIndex = -1;
-        while (true)
+        for (int i = 0; i < _bufferLength; i++)
         {
-            if (_bufferPosition >= _bufferLength)
+            if (CheckNewLine(_buffer, i))
             {
-                _bufferLength = _reader.Read(_buffer, 0, _buffer.Length);
-                _bufferPosition = 0;
-                if (_bufferLength == 0) return false; // EOF
+                newLineIndex = i + _newLineBytes.Length;
+                break;
             }
-
-            for (int i = _bufferPosition; i < _bufferLength; i++)
-            {
-                if (CheckNewLine(_buffer, i))
-                {
-                    newLineIndex = i + _newLineBytes.Length;
-                    break;
-                }
-            }
-            if (newLineIndex > -1) break;
         }
 
-        _bufferPosition = newLineIndex;
+        // 改行が見つからない場合、バッファの最後までを1行とみなす
+        if (newLineIndex == -1)
+        {
+            _bufferPosition = _bufferLength;
+        }
+        else
+        {
+            _bufferPosition = newLineIndex;
+        }
+
         return true;
     }
 

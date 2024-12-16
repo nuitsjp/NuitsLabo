@@ -70,6 +70,7 @@ public class FixedLengthFileReaderTests
 
     [Fact]
     public void GetField_WithShiftJIS_ShouldReadCorrectly()
+
     {
         // Arrange
         var encoding = Encoding.GetEncoding("shift-jis");
@@ -98,7 +99,7 @@ public class FixedLengthFileReaderTests
         reader.Read();
 
         // Assert
-        var action = () => reader.GetField(10, 1);
+            var action = () => reader.GetField(10, 1);
         action.Should().Throw<ArgumentOutOfRangeException>();
     }
 
@@ -126,7 +127,7 @@ public class FixedLengthFileReaderTests
 
         // Act & Assert
         reader.Read().Should().BeTrue();
-        reader.GetField(0, 100).Should().Be(new string('A', 100));
+        reader.GetField(0, 8000).Should().Be(new string('A', 8000));
         reader.GetField(7900, 100).Should().Be(new string('A', 100));
 
         reader.Read().Should().BeTrue();
