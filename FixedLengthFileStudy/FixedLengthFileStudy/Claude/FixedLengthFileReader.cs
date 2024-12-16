@@ -18,16 +18,19 @@ public class FixedLengthFileReader : IFixedLengthFileReader
     private byte[]? _currentLine;
     private int _currentLineLength;
 
-    public FixedLengthFileReader(Stream reader, Encoding encoding, string newLine, int bufferSize = 4096)
+    public FixedLengthFileReader(Stream reader, Encoding encoding, string newLine, Trim trim = Trim.StartAndEnd, int bufferSize = 4096)
     {
         _reader = reader;
         _encoding = encoding;
+        Trim = trim;
         _newLineBytes = encoding.GetBytes(newLine);
         _bufferSize = bufferSize;
         _buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
         _bufferPosition = 0;
         _bytesInBuffer = 0;
     }
+
+    public Trim Trim { get; }
 
     public bool Read()
     {
@@ -158,7 +161,15 @@ public class FixedLengthFileReader : IFixedLengthFileReader
             throw new ArgumentOutOfRangeException($"Invalid field parameters: index={index}, bytes={bytes}");
 
         // 必要な部分だけをデコード
-        return _encoding.GetString(_currentLine, index, bytes).TrimEnd();
+        var field = _encoding.GetString(_currentLine, index, bytes);
+        return Trim switch
+        {
+            Trim.StartAndEnd => field.Trim(),
+            Trim.Start => field.TrimStart(),
+            Trim.End => field.TrimEnd(),
+            Trim.None => field,
+            _ => throw new InvalidOperationException("未知の Trim オプションです。"),
+        };
     }
 
     public void Dispose()

@@ -158,7 +158,6 @@ public class FixedLengthFileReaderTests
 
         // Act
         reader.Read();
-
         // Assert
         reader.GetField(0, 5).Should().Be("ABC");  // 末尾のスペースが除去される
         reader.GetField(5, 5).Should().Be("12");   // 末尾のスペースが除去される

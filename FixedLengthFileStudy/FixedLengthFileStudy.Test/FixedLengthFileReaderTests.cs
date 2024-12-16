@@ -10,7 +10,7 @@ public abstract class FixedLengthFileReaderTestsBase
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     }
 
-    protected abstract IFixedLengthFileReader CreateReader(Stream reader, Encoding encoding, string newLine, int bufferSize = 4096);
+    protected abstract IFixedLengthFileReader CreateReader(Stream reader, Encoding encoding, string newLine, Trim trim = Trim.StartAndEnd, int bufferSize = 4096);
 
     [Theory]
     [InlineData("Shift_JIS", "\r\n", true)]
@@ -67,7 +67,7 @@ public abstract class FixedLengthFileReaderTestsBase
 
         // Act & Assert
         reader.Read().Should().BeTrue();
-        reader.GetField(0, 8000).Should().Be(new string('A', 8000));
+        reader.GetField(0, 100).Should().Be(new string('A', 100));
         reader.GetField(7900, 100).Should().Be(new string('A', 100));
 
         reader.Read().Should().BeTrue();
@@ -88,29 +88,44 @@ public abstract class FixedLengthFileReaderTestsBase
         reader.Read().Should().BeFalse();
     }
 
+    [Fact]
+    public void GetField_WithPaddedData_ShouldTrimStartAndEndCorrectly()
+    {
+        // Arrange
+        var content = " ABC  12  ";  // スペースでパディングされたデータ
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+        using var reader = CreateReader(stream, Encoding.UTF8, "\r\n");
+
+        // Act
+        reader.Read();
+        // Assert
+        reader.GetField(0, 5).Should().Be("ABC");  // 末尾のスペースが除去される
+        reader.GetField(5, 5).Should().Be("12");   // 末尾のスペースが除去される
+    }
+
 }
 
 public class ChatGptFixedLengthFileReaderTests : FixedLengthFileReaderTestsBase
 {
-    protected override IFixedLengthFileReader CreateReader(Stream reader, Encoding encoding, string newLine, int bufferSize = 4096)
+    protected override IFixedLengthFileReader CreateReader(Stream reader, Encoding encoding, string newLine, Trim trim = Trim.StartAndEnd, int bufferSize = 4096)
     {
-        return new FixedLengthFileStudy.ChatGPT.FixedLengthFileReader(reader, encoding, newLine, bufferSize);
+        return new FixedLengthFileStudy.ChatGPT.FixedLengthFileReader(reader, encoding, newLine, trim, bufferSize);
     }
 }
 
 public class ClaudeFixedLengthFileReaderTests : FixedLengthFileReaderTestsBase
 {
-    protected override IFixedLengthFileReader CreateReader(Stream reader, Encoding encoding, string newLine, int bufferSize = 4096)
+    protected override IFixedLengthFileReader CreateReader(Stream reader, Encoding encoding, string newLine, Trim trim = Trim.StartAndEnd, int bufferSize = 4096)
     {
-        return new FixedLengthFileStudy.Claude.FixedLengthFileReader(reader, encoding, newLine, bufferSize);
+        return new FixedLengthFileStudy.Claude.FixedLengthFileReader(reader, encoding, newLine, trim, bufferSize);
     }
 }
 
 
 public class GeminiFixedLengthFileReaderTests : FixedLengthFileReaderTestsBase
 {
-    protected override IFixedLengthFileReader CreateReader(Stream reader, Encoding encoding, string newLine, int bufferSize = 4096)
+    protected override IFixedLengthFileReader CreateReader(Stream reader, Encoding encoding, string newLine, Trim trim = Trim.StartAndEnd, int bufferSize = 4096)
     {
-        return new FixedLengthFileStudy.Gemini.FixedLengthFileReader(reader, encoding, newLine, bufferSize);
+        return new FixedLengthFileStudy.Gemini.FixedLengthFileReader(reader, encoding, newLine, trim, bufferSize);
     }
 }

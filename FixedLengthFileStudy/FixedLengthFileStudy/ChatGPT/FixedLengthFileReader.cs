@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 
 namespace FixedLengthFileStudy.ChatGPT;
 
@@ -23,17 +24,21 @@ public class FixedLengthFileReader : IFixedLengthFileReader
     /// <param name="reader">読み取るストリーム。</param>
     /// <param name="encoding">ファイルのエンコーディング。</param>
     /// <param name="newLine">改行文字列。</param>
+    /// <param name="trim"></param>
     /// <param name="bufferSize">バッファサイズ（デフォルト: 4096バイト）。</param>
-    public FixedLengthFileReader(Stream reader, Encoding encoding, string newLine, int bufferSize = 4096)
+    public FixedLengthFileReader(Stream reader, Encoding encoding, string newLine, Trim trim = Trim.StartAndEnd, int bufferSize = 4096)
     {
         _reader = reader;
         _encoding = encoding;
+        Trim = trim;
         _newlineBytes = encoding.GetBytes(newLine);
         _bufferSize = bufferSize;
         _buffer = new byte[bufferSize];
         _bufferLength = 0;
         _bufferPosition = 0;
     }
+
+    public Trim Trim { get; }
 
     /// <summary>
     /// 次のレコードを読み取ります。
@@ -69,7 +74,15 @@ public class FixedLengthFileReader : IFixedLengthFileReader
         }
 
         ReadOnlySpan<byte> fieldBytes = new ReadOnlySpan<byte>(_buffer, _bufferPosition + index, bytes);
-        return _encoding.GetString(fieldBytes);
+        var field = _encoding.GetString(fieldBytes);
+        return Trim switch
+        {
+            Trim.StartAndEnd => field.Trim(),
+            Trim.Start => field.TrimStart(),
+            Trim.End => field.TrimEnd(),
+            Trim.None => field,
+            _ => throw new InvalidOperationException("未知の Trim オプションです。"),
+        };
     }
 
     /// <summary>

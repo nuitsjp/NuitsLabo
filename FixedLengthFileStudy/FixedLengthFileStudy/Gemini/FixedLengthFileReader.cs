@@ -13,13 +13,16 @@ public class FixedLengthFileReader : IFixedLengthFileReader
     private int _bufferLength;
     private byte[]? _currentLineBuffer;
 
-    public FixedLengthFileReader(Stream reader, Encoding encoding, string newLine, int bufferSize = 4096)
+    public FixedLengthFileReader(Stream reader, Encoding encoding, string newLine, Trim trim = Trim.StartAndEnd, int bufferSize = 4096)
     {
         _reader = reader ?? throw new ArgumentNullException(nameof(reader));
+        Trim = trim;
         _decoder = encoding.GetDecoder();
         _buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
         _newLineBytes = encoding.GetBytes(newLine);
     }
+
+    public Trim Trim { get; }
 
     public bool Read()
     {
@@ -104,9 +107,16 @@ public class FixedLengthFileReader : IFixedLengthFileReader
         int maxCharCount = Encoding.UTF8.GetMaxCharCount(byteSpan.Length);
         char[] chars = ArrayPool<char>.Shared.Rent(maxCharCount);
         int actualCharCount = _decoder.GetChars(byteSpan, chars, true);
-        string result = new string(chars, 0, actualCharCount);
+        string field = new string(chars, 0, actualCharCount);
         ArrayPool<char>.Shared.Return(chars);
-        return result;
+        return Trim switch
+        {
+            Trim.StartAndEnd => field.Trim(),
+            Trim.Start => field.TrimStart(),
+            Trim.End => field.TrimEnd(),
+            Trim.None => field,
+            _ => throw new InvalidOperationException("未知の Trim オプションです。"),
+        };
     }
 
     public void Dispose()
