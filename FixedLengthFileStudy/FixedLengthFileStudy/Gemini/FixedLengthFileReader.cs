@@ -3,7 +3,7 @@ using System.Text;
 
 namespace FixedLengthFileStudy.Gemini;
 
-public class FixedLengthFileReader : IDisposable, IAsyncDisposable
+public class FixedLengthFileReader : IFixedLengthFileReader
 {
     private readonly Stream _reader;
     private readonly Decoder _decoder;
@@ -60,7 +60,7 @@ public class FixedLengthFileReader : IDisposable, IAsyncDisposable
         return true;
     }
 
-    public ReadOnlySpan<byte> GetField(int index, int bytes)
+    public ReadOnlySpan<byte> GetFieldBytes(int index, int bytes)
     {
         if (index + bytes > _bufferPosition)
         {
@@ -69,9 +69,9 @@ public class FixedLengthFileReader : IDisposable, IAsyncDisposable
         return new ReadOnlySpan<byte>(_buffer, index, bytes);
     }
 
-    public string GetFieldString(int index, int bytes)
+    public string GetField(int index, int bytes)
     {
-        var byteSpan = GetField(index, bytes);
+        var byteSpan = GetFieldBytes(index, bytes);
 
         // 最大文字数を取得
         int maxCharCount = Encoding.UTF8.GetMaxCharCount(bytes);

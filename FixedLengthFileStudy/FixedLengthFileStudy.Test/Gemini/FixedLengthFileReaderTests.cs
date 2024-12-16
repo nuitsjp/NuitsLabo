@@ -67,7 +67,7 @@ public class FixedLengthFileReaderTests
         reader.Read(); // Read the line
 
         // Act
-        ReadOnlySpan<byte> field = reader.GetField(5, 5);
+        ReadOnlySpan<byte> field = reader.GetFieldBytes(5, 5);
         string fieldString = Encoding.UTF8.GetString(field);
 
         // Assert
@@ -85,7 +85,7 @@ public class FixedLengthFileReaderTests
         reader.Read();
 
         // Act
-        string field = reader.GetFieldString(3, 9);
+        string field = reader.GetField(3, 9);
 
         // Assert
         field.Should().Be("えおかきく");
@@ -101,7 +101,7 @@ public class FixedLengthFileReaderTests
         reader.Read();
 
         // Act & Assert
-        Assert.Throws<IndexOutOfRangeException>(() => reader.GetField(15, 5));
+        Assert.Throws<IndexOutOfRangeException>(() => reader.GetFieldBytes(15, 5));
     }
 
     [Fact]
@@ -114,10 +114,10 @@ public class FixedLengthFileReaderTests
 
         // Act & Assert
         reader.Read().Should().BeTrue();
-        Encoding.UTF8.GetString(reader.GetField(0, 5)).Should().Be("01234");
+        Encoding.UTF8.GetString(reader.GetFieldBytes(0, 5)).Should().Be("01234");
 
         reader.Read().Should().BeTrue();
-        Encoding.UTF8.GetString(reader.GetField(0, 5)).Should().Be("ABCDE");
+        Encoding.UTF8.GetString(reader.GetFieldBytes(0, 5)).Should().Be("ABCDE");
     }
 
     [Fact]
@@ -130,10 +130,10 @@ public class FixedLengthFileReaderTests
 
         // Act & Assert
         reader.Read().Should().BeTrue();
-        Encoding.UTF8.GetString(reader.GetField(0, 5)).Should().Be("01234");
+        Encoding.UTF8.GetString(reader.GetFieldBytes(0, 5)).Should().Be("01234");
 
         reader.Read().Should().BeTrue();
-        Encoding.UTF8.GetString(reader.GetField(0, 5)).Should().Be("ABCDE");
+        Encoding.UTF8.GetString(reader.GetFieldBytes(0, 5)).Should().Be("ABCDE");
     }
 
     [Theory]
@@ -152,7 +152,7 @@ public class FixedLengthFileReaderTests
         reader.Read();
 
         // Act
-        string field = reader.GetFieldString(index, bytes);
+        string field = reader.GetField(index, bytes);
 
         // Assert
         field.Should().Be(expected);
@@ -168,7 +168,7 @@ public class FixedLengthFileReaderTests
         reader.Read();
 
         //Act
-        string field = reader.GetFieldString(5, 0);
+        string field = reader.GetField(5, 0);
         //Assert
         field.Should().BeEmpty();
 

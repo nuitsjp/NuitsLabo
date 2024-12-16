@@ -2,7 +2,7 @@
 
 namespace FixedLengthFileStudy.ChatGPT;
 
-public class FixedLengthFileReader : IDisposable, IAsyncDisposable
+public class FixedLengthFileReader : IFixedLengthFileReader
 {
     private readonly Stream _reader;
     private readonly Encoding _encoding;

@@ -141,7 +141,7 @@ public class FixedLengthFileReaderTests
     public void Read_WithEmptyFile_ShouldReturnFalse()
     {
         // Arrange
-        using var stream = new MemoryStream(Array.Empty<byte>());
+        using var stream = new MemoryStream([]);
         using var reader = new FixedLengthFileReader(stream, Encoding.UTF8, NewLine);
 
         // Act & Assert
@@ -242,37 +242,25 @@ public class FixedLengthFileReaderTests
     }
 
     [Theory]
-    [InlineData("utf-8")]
-    [InlineData("shift-jis")]
-    public void GetField_WithMixedWidthCharacters_ShouldHandleCorrectly(string encodingName)
+    [InlineData("utf-8", "株式会社ABC Company", "株式会社ABC Company")]
+    [InlineData("shift-jis", "株式会社ABC Company", "株式会社ABC Company")]
+    [InlineData("utf-8", "ABC漢字123かなカナ", "ABC漢字")]
+    [InlineData("shift-jis", "ABC漢字123かなカナ", "ABC漢字")]
+    [InlineData("utf-8", "1234５６７８9012", "1234５６７８9012")]
+    [InlineData("shift-jis", "1234５６７８9012", "1234５６７８9012")]
+    [InlineData("utf-8", "ﾃｽﾄテストTest", "ﾃｽﾄテストTest")]
+    [InlineData("shift-jis", "ﾃｽﾄテストTest", "ﾃｽﾄテストTest")]
+    public void GetField_WithMixedWidthCharacters_ShouldHandleCorrectly(string encodingName, string content, string expected)
     {
         // Arrange
         var encoding = Encoding.GetEncoding(encodingName);
-        var content = "ABC漢字123かなカナ" + NewLine +    // 半角・全角混在
-                     "株式会社ABC Company" + NewLine +    // 日英混在の社名
-                     "1234５６７８9012" + NewLine +       // 半角・全角数字混在
-                     "ﾃｽﾄテストTest" + NewLine;           // 3種類の文字種
 
         using var stream = new MemoryStream(encoding.GetBytes(content));
         using var reader = new FixedLengthFileReader(stream, encoding, NewLine);
 
         // Act & Assert
         reader.Read().Should().BeTrue();
-        var bytesPerChar = encodingName == "utf-8" ? 3 : 2;
-        var firstField = reader.GetField(0, 3 + bytesPerChar * 2);  // ABC漢字
-        firstField.Should().Be("ABC漢字");
-        firstField.Length.Should().Be(5);
-
-        reader.Read().Should().BeTrue();
-        var companyName = reader.GetField(0, bytesPerChar * 4 + 9);  // 株式会社ABC Company
-        companyName.Should().Be("株式会社ABC Company");
-
-        reader.Read().Should().BeTrue();
-        var numbers = reader.GetField(0, 4 + bytesPerChar * 4 + 4);  // 1234５６７８9012
-        numbers.Should().Be("1234５６７８9012");
-
-        reader.Read().Should().BeTrue();
-        var mixed = reader.GetField(0, 4 + bytesPerChar * 3 + 4);  // ﾃｽﾄテストTest
-        mixed.Should().Be("ﾃｽﾄテストTest");
+        var companyName = reader.GetField(0, encoding.GetBytes(expected).Length);
+        companyName.Should().Be(expected);
     }
 }
