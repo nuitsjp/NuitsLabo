@@ -77,6 +77,17 @@ public abstract class FixedLengthFileReaderTestsBase
         reader.Read().Should().BeFalse();
     }
 
+    [Fact]
+    public void Read_WithEmptyFile_ShouldReturnFalse()
+    {
+        // Arrange
+        using var stream = new MemoryStream([]);
+        using var reader = CreateReader(stream, Encoding.UTF8, "\r\n");
+
+        // Act & Assert
+        reader.Read().Should().BeFalse();
+    }
+
 }
 
 public class ChatGptFixedLengthFileReaderTests : FixedLengthFileReaderTestsBase
