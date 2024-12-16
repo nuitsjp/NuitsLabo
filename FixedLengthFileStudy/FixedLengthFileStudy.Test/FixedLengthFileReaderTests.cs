@@ -55,6 +55,38 @@ public abstract class FixedLengthFileReaderTestsBase
     [InlineData("UTF-8", "\r\n", false)]
     [InlineData("Shift_JIS", "\n", false)]
     [InlineData("UTF-8", "\n", false)]
+    public void Read_MultipleLines_ShouldReadAllLines(string encodingName, string newLine, bool endWithNewLine)
+    {
+        // Arrange
+        // ReSharper disable begin StringLiteralTypo
+        var content = "ABCDE12345" + newLine + "FGHIJ67890" + (endWithNewLine ? newLine : string.Empty);
+        // ReSharper disable end StringLiteralTypo
+        using var stream = new MemoryStream(Encoding.GetEncoding(encodingName).GetBytes(content));
+        using var reader = CreateReader(stream, Encoding.UTF8, newLine);
+
+        // Act & Assert
+        reader.Read().Should().BeTrue();
+        // ReSharper disable once StringLiteralTypo
+        reader.GetField(0, 5).Should().Be("ABCDE");
+        reader.GetField(5, 5).Should().Be("12345");
+
+        reader.Read().Should().BeTrue();
+        // ReSharper disable once StringLiteralTypo
+        reader.GetField(0, 5).Should().Be("FGHIJ");
+        reader.GetField(5, 5).Should().Be("67890");
+
+        reader.Read().Should().BeFalse();
+    }
+
+    [Theory]
+    [InlineData("Shift_JIS", "\r\n", true)]
+    [InlineData("UTF-8", "\r\n", true)]
+    [InlineData("Shift_JIS", "\n", true)]
+    [InlineData("UTF-8", "\n", true)]
+    [InlineData("Shift_JIS", "\r\n", false)]
+    [InlineData("UTF-8", "\r\n", false)]
+    [InlineData("Shift_JIS", "\n", false)]
+    [InlineData("UTF-8", "\n", false)]
     public void Read_WithLargeFile_ShouldHandleBufferBoundaries(string encodingName, string newLine, bool endWithNewLine)
     {
         // Arrange
