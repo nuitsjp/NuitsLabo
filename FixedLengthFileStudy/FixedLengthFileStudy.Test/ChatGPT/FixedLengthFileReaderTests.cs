@@ -6,6 +6,11 @@ namespace FixedLengthFileStudy.Test.ChatGPT;
 
 public class FixedLengthFileReaderTests
 {
+    static FixedLengthFileReaderTests()
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+    }
+
     private const string NewLine = "\r\n";
 
     [Fact]

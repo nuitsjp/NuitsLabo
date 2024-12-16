@@ -6,6 +6,11 @@ namespace FixedLengthFileStudy.Test.Claude;
 
 public class FixedLengthFileReaderTests
 {
+    static FixedLengthFileReaderTests()
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+    }
+
     private const string NewLine = "\r\n";
 
     [Fact]
@@ -67,6 +72,7 @@ public class FixedLengthFileReaderTests
     public void GetField_WithShiftJIS_ShouldReadCorrectly()
     {
         // Arrange
+
         var encoding = Encoding.GetEncoding("shift-jis");
         var content = "あいうえお12345" + NewLine;
         using var stream = new MemoryStream(encoding.GetBytes(content));

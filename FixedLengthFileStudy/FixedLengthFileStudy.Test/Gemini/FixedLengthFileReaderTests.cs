@@ -6,6 +6,11 @@ namespace FixedLengthFileStudy.Test.Gemini;
 
 public class FixedLengthFileReaderTests
 {
+    static FixedLengthFileReaderTests()
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+    }
+
     [Fact]
     public void Read_ValidData_ReturnsTrue()
     {
