@@ -135,6 +135,65 @@ public abstract class FixedLengthFileReaderTestsBase
         reader.GetField(5, 5).Should().Be("12");   // 末尾のスペースが除去される
     }
 
+    [Theory]
+    [InlineData("Shift_JIS", "\r\n", true)]
+    [InlineData("UTF-8", "\r\n", true)]
+    [InlineData("Shift_JIS", "\n", true)]
+    [InlineData("UTF-8", "\n", true)]
+    [InlineData("Shift_JIS", "\r\n", false)]
+    [InlineData("UTF-8", "\r\n", false)]
+    [InlineData("Shift_JIS", "\n", false)]
+    [InlineData("UTF-8", "\n", false)]
+    public void GetField_WithJapaneseCharacters_ShouldReadCorrectly(string encodingName, string newLine, bool endWithNewLine)
+    {
+        // Arrange
+
+        var encoding = Encoding.GetEncoding(encodingName);
+        var content = "あいうえお12345" + (endWithNewLine ? newLine : string.Empty);
+        using var stream = new MemoryStream(encoding.GetBytes(content));
+        using var reader = CreateReader(stream, encoding, newLine);
+
+        // Act
+        reader.Read();
+
+        // Assert
+        // Shift-JISでは日本語1文字が2バイトなので、5文字で10バイト
+        var length = encoding.GetBytes("あいうえお").Length;
+        reader.GetField(0, length).Should().Be("あいうえお");
+        reader.GetField(length, 5).Should().Be("12345");
+    }
+
+    [Fact]
+    public void GetField_WithInvalidIndex_ShouldThrowArgumentOutOfRangeException()
+    {
+        // Arrange
+        var content = "ABCDE";
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+        using var reader = CreateReader(stream, Encoding.UTF8, Environment.NewLine);
+
+        // Act
+        reader.Read();
+
+        // Assert
+        // ReSharper disable once AccessToDisposedClosure
+        var action = () => reader.GetField(10, 1);
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [Fact]
+    public void GetField_BeforeRead_ShouldThrowInvalidOperationException()
+    {
+        // Arrange
+        var content = "ABCDE";
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+        using var reader = CreateReader(stream, Encoding.UTF8, Environment.NewLine);
+
+        // Act & Assert
+        // ReSharper disable once AccessToDisposedClosure
+        var action = () => reader.GetField(0, 1);
+        action.Should().Throw<InvalidOperationException>();
+    }
+
 }
 
 public class ChatGptFixedLengthFileReaderTests : FixedLengthFileReaderTestsBase
