@@ -165,8 +165,10 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     {
         CheckAsyncTaskInProgress();
 
+        // If we're at the end of the buffer data, read from the stream.
         if (_bytePos == _byteLen)
         {
+            // If we're already at the end of the stream, return null.
             if (ReadByteBuffer() == 0)
             {
                 return null;
