@@ -50,17 +50,17 @@ internal ref struct ValueByteArrayBuilder(Span<byte> initialBuffer)
 
         // Increase to at least the required size (_pos + additionalCapacityBeyondPos), but try
         // to double the size if possible, bounding the doubling to not go beyond the max array length.
-        int newCapacity = (int)Math.Max(
+        var newCapacity = (int)Math.Max(
             (uint)(_pos + additionalCapacityBeyondPos),
             Math.Min((uint)_bytes.Length * 2, ArrayMaxLength));
 
         // Make sure to let Rent throw an exception if the caller has a bug and the desired capacity is negative.
         // This could also go negative if the actual required length wraps around.
-        byte[] poolArray = ArrayPool<byte>.Shared.Rent(newCapacity);
+        var poolArray = ArrayPool<byte>.Shared.Rent(newCapacity);
 
         _bytes.Slice(0, _pos).CopyTo(poolArray);
 
-        byte[]? toReturn = _arrayToReturnToPool;
+        var toReturn = _arrayToReturnToPool;
         _bytes = _arrayToReturnToPool = poolArray;
         if (toReturn != null)
         {
@@ -71,7 +71,7 @@ internal ref struct ValueByteArrayBuilder(Span<byte> initialBuffer)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Dispose()
     {
-        byte[]? toReturn = _arrayToReturnToPool;
+        var toReturn = _arrayToReturnToPool;
         this = default; // for safety, to avoid using pooled array if this instance is erroneously appended to again
         if (toReturn != null)
         {
