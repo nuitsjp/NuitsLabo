@@ -122,6 +122,26 @@ public abstract class FixedLengthFileReaderTestsBase
     }
 
     [Fact]
+    public async Task DisposeAsync()
+    {
+        // Arrange
+        using var stream = new MemoryStream("1234"u8.ToArray());
+        await using var reader = CreateReader(stream, Encoding.UTF8, "\r\n");
+
+        // Act & Assert
+        reader.Read().Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task DisposeAsync_WhenNotRead()
+    {
+        // Arrange
+        using var stream = new MemoryStream([]);
+        await using var reader = CreateReader(stream, Encoding.UTF8, "\r\n");
+    }
+
+
+    [Fact]
     public void GetField_WithPaddedData_ShouldTrimNoneCorrectly()
     {
         // Arrange
