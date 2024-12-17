@@ -51,11 +51,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     // to send a response, like logging in on a Unix machine.
     private bool _isBlocked;
 
-    // The intent of this field is to leave open the underlying stream when
-    // disposing of this ByteStreamReader.  A name like _leaveOpen is better,
-    // but this type is serializable, and this field's name was _closable.
-    private readonly bool _closable;  // Whether to close the underlying stream.
-
     // We don't guarantee thread safety on ByteStreamReader, but we should at
     // least prevent users from trying to read anything while an Async
     // read from the same thread is in progress.
@@ -83,45 +78,15 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     private ByteStreamReader()
     {
         _stream = Stream.Null;
-        _closable = true;
-    }
-
-    public ByteStreamReader(Stream stream)
-        : this(stream, true)
-    {
-    }
-
-    public ByteStreamReader(Stream stream, bool detectEncodingFromByteOrderMarks)
-        : this(stream, Encoding.UTF8, detectEncodingFromByteOrderMarks, DefaultBufferSize, false)
-    {
     }
 
     public ByteStreamReader(Stream stream, Encoding encoding)
-        : this(stream, encoding, true, DefaultBufferSize, false)
+        : this(stream, encoding, DefaultBufferSize)
     {
     }
 
-    public ByteStreamReader(Stream stream, Encoding encoding, bool detectEncodingFromByteOrderMarks)
-        : this(stream, encoding, detectEncodingFromByteOrderMarks, DefaultBufferSize, false)
-    {
-    }
 
-    // Creates a new ByteStreamReader for the given stream.  The
-    // character encoding is set by encoding and the buffer size,
-    // in number of 16-bit characters, is set by bufferSize.
-    //
-    // Note that detectEncodingFromByteOrderMarks is a very
-    // loose attempt at detecting the encoding by looking at the first
-    // 3 bytes of the stream.  It will recognize UTF-8, little endian
-    // unicode, and big endian unicode text, but that's it.  If neither
-    // of those three match, it will use the Encoding you provided.
-    //
-    public ByteStreamReader(Stream stream, Encoding encoding, bool detectEncodingFromByteOrderMarks, int bufferSize)
-        : this(stream, encoding, detectEncodingFromByteOrderMarks, bufferSize, false)
-    {
-    }
-
-    public ByteStreamReader(Stream stream, Encoding? encoding = null, bool detectEncodingFromByteOrderMarks = true, int bufferSize = -1, bool leaveOpen = false)
+    public ByteStreamReader(Stream stream, Encoding? encoding = null, int bufferSize = -1)
     {
         if (stream == null)
         {
@@ -150,65 +115,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         _byteBuffer = new byte[bufferSize];
         _maxCharsPerBuffer = encoding.GetMaxCharCount(bufferSize);
         _charBuffer = new char[_maxCharsPerBuffer];
-
-        _closable = !leaveOpen;
-    }
-
-    public ByteStreamReader(string path)
-        : this(path, true)
-    {
-    }
-
-    public ByteStreamReader(string path, bool detectEncodingFromByteOrderMarks)
-        : this(path, Encoding.UTF8, detectEncodingFromByteOrderMarks, DefaultBufferSize)
-    {
-    }
-
-    public ByteStreamReader(string path, Encoding encoding)
-        : this(path, encoding, true, DefaultBufferSize)
-    {
-    }
-
-    public ByteStreamReader(string path, Encoding encoding, bool detectEncodingFromByteOrderMarks)
-        : this(path, encoding, detectEncodingFromByteOrderMarks, DefaultBufferSize)
-    {
-    }
-
-    public ByteStreamReader(string path, Encoding encoding, bool detectEncodingFromByteOrderMarks, int bufferSize)
-        : this(ValidateArgsAndOpenPath(path, encoding, bufferSize), encoding, detectEncodingFromByteOrderMarks, bufferSize, leaveOpen: false)
-    {
-    }
-
-    public ByteStreamReader(string path, FileStreamOptions options)
-        : this(path, Encoding.UTF8, true, options)
-    {
-    }
-
-    public ByteStreamReader(string path, Encoding encoding, bool detectEncodingFromByteOrderMarks, FileStreamOptions options)
-        : this(ValidateArgsAndOpenPath(path, encoding, options), encoding, detectEncodingFromByteOrderMarks, DefaultBufferSize)
-    {
-    }
-
-    private static FileStream ValidateArgsAndOpenPath(string path, Encoding encoding, FileStreamOptions options)
-    {
-        ArgumentException.ThrowIfNullOrEmpty(path);
-        ArgumentNullException.ThrowIfNull(encoding);
-        ArgumentNullException.ThrowIfNull(options);
-        if ((options.Access & FileAccess.Read) == 0)
-        {
-            throw new ArgumentException("Stream can not read.");
-        }
-
-        return new FileStream(path, options);
-    }
-
-    private static FileStream ValidateArgsAndOpenPath(string path, Encoding encoding, int bufferSize)
-    {
-        ArgumentException.ThrowIfNullOrEmpty(path);
-        ArgumentNullException.ThrowIfNull(encoding);
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(bufferSize);
-
-        return new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, DefaultFileStreamBufferSize);
     }
 
     public void Close()
@@ -225,23 +131,19 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         }
         _disposed = true;
 
-        // Dispose of our resources if this ByteStreamReader is closable.
-        if (_closable)
+        try
         {
-            try
+            // Note that Stream.Close() can potentially throw here. So we need to
+            // ensure cleaning up internal resources, inside the finally block.
+            if (disposing)
             {
-                // Note that Stream.Close() can potentially throw here. So we need to
-                // ensure cleaning up internal resources, inside the finally block.
-                if (disposing)
-                {
-                    _stream.Close();
-                }
+                _stream.Close();
             }
-            finally
-            {
-                _charPos = 0;
-                _charLen = 0;
-            }
+        }
+        finally
+        {
+            _charPos = 0;
+            _charLen = 0;
         }
     }
 
