@@ -1,34 +1,15 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
-using System;
-using System.Buffers;
-using System.Buffers.Binary;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
+﻿using System.Diagnostics;
 
 namespace FixedLengthFileStudy;
 
-// This class implements a TextReader for reading characters to a Stream.
-// This is designed for character input in a particular Encoding,
-// whereas the Stream class is designed for byte input and output.
 public class ByteStreamReader : IDisposable, IAsyncDisposable
 {
-    // Using a 1K byte buffer and a 4K FileStream buffer works out pretty well
-    // perf-wise.  On even a 40 MB text file, any perf loss by using a 4K
-    // buffer is negated by the win of allocating a smaller byte[], which
-    // saves construction time.  This does break adaptive buffering,
-    // but this is slightly faster.
     public static readonly int DefaultBufferSize = 4096;  // Byte buffer size
     public static readonly int MinBufferSize = 128;
 
     private readonly Stream _stream;
-    private readonly byte[] _byteBuffer = null!; // only null in NullStreamReader where this is never used
-    //private char[] _charBuffer = null!; // only null in NullStreamReader where this is never used
-    // Record the number of valid bytes in the byteBuffer, for a few checks.
+    private readonly byte[] _byteBuffer;
     private int _byteLen;
-    // This is used only for preamble detection
     private int _bytePos;
 
     /// <summary>True if the writer has been disposed; otherwise, false.</summary>
@@ -51,28 +32,20 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
 
     public ByteStreamReader(Stream stream, int? bufferSize = null)
     {
-        int byteBufferSize;
-        if (bufferSize is null)
-        {
-            byteBufferSize = DefaultBufferSize;
-        }
-        else if (bufferSize < MinBufferSize)
-        {
-            throw new ArgumentOutOfRangeException(nameof(bufferSize));
-        }
-        else
-        {
-            byteBufferSize = bufferSize.Value;
-        }
-
         if (!stream.CanRead)
         {
             throw new ArgumentException("Stream can not read.");
         }
 
-        _stream = stream;
+        if (bufferSize < MinBufferSize)
+        {
+            throw new ArgumentOutOfRangeException(nameof(bufferSize));
+        }
 
-        _byteBuffer = new byte[byteBufferSize];
+        _stream = stream;
+        _byteBuffer = bufferSize is null 
+            ? new byte[DefaultBufferSize] 
+            : new byte[bufferSize.Value];
     }
 
     public void Close()
