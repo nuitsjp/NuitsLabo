@@ -29,7 +29,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     private readonly byte[] _byteBuffer = null!; // only null in NullStreamReader where this is never used
     //private char[] _charBuffer = null!; // only null in NullStreamReader where this is never used
     private int _charPos;
-    private int _charLen;
     // Record the number of valid bytes in the byteBuffer, for a few checks.
     private int _byteLen;
     // This is used only for preamble detection
@@ -121,7 +120,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         finally
         {
             _charPos = 0;
-            _charLen = 0;
+            _byteLen = 0;
         }
     }
 
@@ -281,7 +280,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     {
         CheckAsyncTaskInProgress();
 
-        if (_charPos == _charLen)
+        if (_charPos == _byteLen)
         {
             if (ReadByteBuffer() == 0)
             {
@@ -314,16 +313,16 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
                 _charPos += idxOfNewline + 1;
 
                 // If we found '\r', consume any immediately following '\n'.
-                //if (matchedChar == '\r')
-                //{
-                //    if (_charPos < _charLen || ReadByteBuffer() > 0)
-                //    {
-                //        if (_charBuffer[_charPos] == '\n')
-                //        {
-                //            _charPos++;
-                //        }
-                //    }
-                //}
+                if (matchedChar == '\r')
+                {
+                    if (_charPos < _byteLen || ReadByteBuffer() > 0)
+                    {
+                        if (bufferSpan[_charPos] == '\n')
+                        {
+                            _charPos++;
+                        }
+                    }
+                }
 
                 return retVal;
             }
