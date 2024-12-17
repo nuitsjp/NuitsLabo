@@ -216,7 +216,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
             // and loop until we reach a newline or EOF.
 
             vsb.Append(bufferSpan);
-        } while (ReadByteBuffer() > 0);
+        } while (0 < ReadByteBuffer());
 
         return vsb.AsSpan().ToArray();
 
