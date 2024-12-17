@@ -25,55 +25,63 @@ public class ByteStreamReaderBenchmark : IDisposable
         _content = Encoding.UTF8.GetBytes(builder.ToString());
     }
 
-    //[Benchmark]
-    //public void V001()
-    //{
-    //    using var reader = new V001.ByteStreamReader(new MemoryStream(_content));
+    private Stream _stream = Stream.Null;
 
-    //    for (var i = 0; i < _lineCount; i++)
-    //    {
-    //        reader.ReadLine();
-    //    }
-    //}
+    [IterationSetup]
+    public void IterationSetup()
+    {
+        _stream = new MemoryStream(_content);
+    }
 
-    //[Benchmark]
-    //public void V001_10K()
-    //{
-    //    using var reader = new V001.ByteStreamReader(new MemoryStream(_content), 10_000);
+    [Benchmark]
+    public void V001()
+    {
+        using var reader = new V001.ByteStreamReader(_stream);
 
-    //    for (var i = 0; i < _lineCount; i++)
-    //    {
-    //        reader.ReadLine();
-    //    }
-    //}
+        for (var i = 0; i < _lineCount; i++)
+        {
+            reader.ReadLine();
+        }
+    }
+
+    [Benchmark]
+    public void V001_10K()
+    {
+        using var reader = new V001.ByteStreamReader(_stream, 10_000);
+
+        for (var i = 0; i < _lineCount; i++)
+        {
+            reader.ReadLine();
+        }
+    }
 
 
-    //[Benchmark]
-    //public void V002()
-    //{
-    //    using var reader = new V002.ByteStreamReader(new MemoryStream(_content));
+    [Benchmark]
+    public void V002()
+    {
+        using var reader = new V002.ByteStreamReader(_stream);
 
-    //    for (var i = 0; i < _lineCount; i++)
-    //    {
-    //        reader.ReadLine();
-    //    }
-    //}
+        for (var i = 0; i < _lineCount; i++)
+        {
+            reader.ReadLine();
+        }
+    }
 
-    //[Benchmark]
-    //public void V002_10K()
-    //{
-    //    using var reader = new V002.ByteStreamReader(new MemoryStream(_content), 10_000);
+    [Benchmark]
+    public void V002_10K()
+    {
+        using var reader = new V002.ByteStreamReader(_stream, 10_000);
 
-    //    for (var i = 0; i < _lineCount; i++)
-    //    {
-    //        reader.ReadLine();
-    //    }
-    //}
+        for (var i = 0; i < _lineCount; i++)
+        {
+            reader.ReadLine();
+        }
+    }
 
     [Benchmark]
     public void V004()
     {
-        using var reader = new V004.ByteStreamReader(new MemoryStream(_content));
+        using var reader = new V004.ByteStreamReader(_stream);
 
         for (var i = 0; i < _lineCount; i++)
         {
@@ -84,7 +92,7 @@ public class ByteStreamReaderBenchmark : IDisposable
     [Benchmark]
     public void V004_10K()
     {
-        using var reader = new V004.ByteStreamReader(new MemoryStream(_content), 10_000);
+        using var reader = new V004.ByteStreamReader(_stream, 10_000);
 
         for (var i = 0; i < _lineCount; i++)
         {
@@ -95,7 +103,7 @@ public class ByteStreamReaderBenchmark : IDisposable
     [Benchmark]
     public void V005()
     {
-        using var reader = new V005.ByteStreamReader(new MemoryStream(_content));
+        using var reader = new V005.ByteStreamReader(_stream);
 
         for (var i = 0; i < _lineCount; i++)
         {
@@ -106,7 +114,7 @@ public class ByteStreamReaderBenchmark : IDisposable
     [Benchmark]
     public void V005_10K()
     {
-        using var reader = new V005.ByteStreamReader(new MemoryStream(_content), 10_000);
+        using var reader = new V005.ByteStreamReader(_stream, 10_000);
 
         for (var i = 0; i < _lineCount; i++)
         {
@@ -117,7 +125,7 @@ public class ByteStreamReaderBenchmark : IDisposable
     [Benchmark]
     public void V006()
     {
-        using var reader = new V006.ByteStreamReader(new MemoryStream(_content));
+        using var reader = new V006.ByteStreamReader(_stream);
 
         for (var i = 0; i < _lineCount; i++)
         {
@@ -128,7 +136,7 @@ public class ByteStreamReaderBenchmark : IDisposable
     [Benchmark]
     public void V006_10K()
     {
-        using var reader = new V006.ByteStreamReader(new MemoryStream(_content), 10_000);
+        using var reader = new V006.ByteStreamReader(_stream, 10_000);
 
         for (var i = 0; i < _lineCount; i++)
         {
