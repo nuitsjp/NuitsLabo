@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices.JavaScript;
 
 namespace FixedLengthFileStudy;
 
@@ -86,13 +87,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
 
     //    return _charLen;
     //}
-
-    private int ReadByteBuffer()
-    {
-        _bytePos = 0;
-        _byteLen = _stream.Read(_byteBuffer, 0, _byteBuffer.Length);
-        return _byteLen;
-    }
 
     // Reads a line. A line is defined as a sequence of characters followed by
     // a carriage return ('\r'), a line feed ('\n'), or a carriage return
@@ -186,29 +180,29 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
             ReadOnlySpan<byte> bufferSpan = _byteBuffer.AsSpan(_bytePos, _byteLen - _bytePos);
             Debug.Assert(!bufferSpan.IsEmpty, "ReadBuffer returned > 0 but didn't bump _charLen?");
 
-            var idxOfNewline = bufferSpan.IndexOfAny((byte)'\r', (byte)'\n');
-            if (idxOfNewline >= 0)
+            var indexOfNewline = bufferSpan.IndexOfAny((byte)'\r', (byte)'\n');
+            if (indexOfNewline >= 0)
             {
                 byte[] retVal;
                 if (vsb.IsEmpty)
                 {
-                    retVal = bufferSpan.Slice(0, idxOfNewline).ToArray();
+                    retVal = bufferSpan.Slice(0, indexOfNewline).ToArray();
                 }
                 else
                 {
-                    retVal = Concat(vsb.AsSpan(), bufferSpan.Slice(0, idxOfNewline));
+                    retVal = Concat(vsb.AsSpan(), bufferSpan.Slice(0, indexOfNewline));
                     vsb.Dispose();
                 }
 
-                var matchedChar = bufferSpan[idxOfNewline];
-                _bytePos += idxOfNewline + 1;
+                var matchedChar = bufferSpan[indexOfNewline];
+                _bytePos += indexOfNewline + 1;
 
                 // If we found '\r', consume any immediately following '\n'.
                 if (matchedChar == '\r')
                 {
                     if (_bytePos < _byteLen || ReadByteBuffer() > 0)
                     {
-                        if (bufferSpan[idxOfNewline + 1] == '\n')
+                        if (bufferSpan[indexOfNewline + 1] == '\n')
                         {
                             _bytePos++;
                         }
@@ -225,6 +219,13 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         } while (ReadByteBuffer() > 0);
 
         return vsb.AsSpan().ToArray();
+
+        int ReadByteBuffer()
+        {
+            _bytePos = 0; // Reset the position to 0 to read from the beginning of the buffer.
+            _byteLen = _stream.Read(_byteBuffer, 0, _byteBuffer.Length);
+            return _byteLen;
+        }
     }
 
     private static byte[] Concat(ReadOnlySpan<byte> span1, ReadOnlySpan<byte> span2)
