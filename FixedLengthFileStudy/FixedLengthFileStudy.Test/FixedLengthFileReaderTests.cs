@@ -242,6 +242,29 @@ public abstract class FixedLengthFileReaderTestsBase
         reader.GetField(0, "👨👩👧👦"u8.ToArray().Length).Should().Be("👨👩👧👦");
     }
 
+    [Theory]
+    [InlineData("utf-8", "株式会社ABC Company", "株式会社ABC Company")]
+    [InlineData("shift-jis", "株式会社ABC Company", "株式会社ABC Company")]
+    [InlineData("utf-8", "ABC漢字123かなカナ", "ABC漢字")]
+    [InlineData("shift-jis", "ABC漢字123かなカナ", "ABC漢字")]
+    [InlineData("utf-8", "1234５６７８9012", "1234５６７８9012")]
+    [InlineData("shift-jis", "1234５６７８9012", "1234５６７８9012")]
+    [InlineData("utf-8", "ﾃｽﾄテストTest", "ﾃｽﾄテストTest")]
+    [InlineData("shift-jis", "ﾃｽﾄテストTest", "ﾃｽﾄテストTest")]
+    public void GetField_WithMixedWidthCharacters_ShouldHandleCorrectly(string encodingName, string content, string expected)
+    {
+        // Arrange
+        var encoding = Encoding.GetEncoding(encodingName);
+
+        using var stream = new MemoryStream(encoding.GetBytes(content));
+        using var reader = CreateReader(stream, encoding, Environment.NewLine);
+
+        // Act & Assert
+        reader.Read().Should().BeTrue();
+        var companyName = reader.GetField(0, encoding.GetBytes(expected).Length);
+        companyName.Should().Be(expected);
+    }
+
     [Fact]
     public void GetField_WithInvalidIndex_ShouldThrowException()
     {
@@ -288,30 +311,5 @@ public abstract class FixedLengthFileReaderTestsBase
         // ReSharper disable once AccessToDisposedClosure
         var action = () => reader.GetField(0, 1);
         action.Should().Throw<InvalidOperationException>();
-    }
-}
-
-public class ChatGptFixedLengthFileReaderTests : FixedLengthFileReaderTestsBase
-{
-    protected override IFixedLengthFileReader CreateReader(Stream reader, Encoding encoding, string newLine, Trim trim = Trim.StartAndEnd, int bufferSize = 4096)
-    {
-        return new FixedLengthFileStudy.ChatGPT.FixedLengthFileReader(reader, encoding, newLine, trim, bufferSize);
-    }
-}
-
-public class ClaudeFixedLengthFileReaderTests : FixedLengthFileReaderTestsBase
-{
-    protected override IFixedLengthFileReader CreateReader(Stream reader, Encoding encoding, string newLine, Trim trim = Trim.StartAndEnd, int bufferSize = 4096)
-    {
-        return new FixedLengthFileStudy.Claude.FixedLengthFileReader(reader, encoding, newLine, trim, bufferSize);
-    }
-}
-
-
-public class GeminiFixedLengthFileReaderTests : FixedLengthFileReaderTestsBase
-{
-    protected override IFixedLengthFileReader CreateReader(Stream reader, Encoding encoding, string newLine, Trim trim = Trim.StartAndEnd, int bufferSize = 4096)
-    {
-        return new FixedLengthFileStudy.Gemini.FixedLengthFileReader(reader, encoding, newLine, trim, bufferSize);
     }
 }
