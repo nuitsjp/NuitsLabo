@@ -152,39 +152,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         _charPos = 0;
         _byteLen = _stream.Read(_byteBuffer, 0, _byteBuffer.Length);
         return _byteLen;
-        //_byteLen = 0;
-
-        //var eofReached = false;
-
-        //do
-        //{
-        //    Debug.Assert(_bytePos == 0, "bytePos can be non zero only when we are trying to _checkPreamble.  Are two threads using this ByteStreamReader at the same time?");
-        //    _byteLen = _stream.Read(_byteBuffer, 0, _byteBuffer.Length);
-        //    Debug.Assert(_byteLen >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
-
-        //    if (_byteLen == 0)
-        //    {
-        //        eofReached = true;
-        //        break;
-        //    }
-
-        //    Debug.Assert(_charPos == 0 && _charLen == 0, "We shouldn't be trying to decode more data if we made progress in an earlier iteration.");
-        //    _charLen = _decoder.GetChars(_byteBuffer, 0, _byteLen, _charBuffer, 0, flush: false);
-        //} while (_charLen == 0);
-
-        //if (eofReached)
-        //{
-        //    // EOF has been reached - perform final flush.
-        //    // We need to reset _bytePos and _byteLen just in case we hadn't
-        //    // finished processing the preamble before we reached EOF.
-
-        //    Debug.Assert(_charPos == 0 && _charLen == 0, "We shouldn't be looking for EOF unless we have an empty char buffer.");
-        //    _charLen = _decoder.GetChars(_byteBuffer, 0, _byteLen, _charBuffer, 0, flush: true);
-        //    _bytePos = 0;
-        //    _byteLen = 0;
-        //}
-
-        //return _charLen;
     }
 
     // Reads a line. A line is defined as a sequence of characters followed by
@@ -260,7 +227,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     // contain the terminating carriage return and/or line feed. The returned
     // value is null if the end of the input stream has been reached.
     //
-    public byte[]? ReadByteLine()
+    public byte[]? ReadLine()
     {
         CheckAsyncTaskInProgress();
 

@@ -58,11 +58,11 @@ public class ByteStreamReaderTest
         using var reader = new ByteStreamReader(stream, encoding, bufferSize);
 
         // Act
-        reader.ReadByteLine().Should().BeEquivalentTo(encoding.GetBytes(first));
-        reader.ReadByteLine().Should().BeEquivalentTo(encoding.GetBytes(second));
-        reader.ReadByteLine().Should().BeEquivalentTo(encoding.GetBytes(third));
-        reader.ReadByteLine().Should().BeEquivalentTo(encoding.GetBytes(forth));
-        reader.ReadByteLine().Should().BeNull();
+        reader.ReadLine().Should().BeEquivalentTo(encoding.GetBytes(first));
+        reader.ReadLine().Should().BeEquivalentTo(encoding.GetBytes(second));
+        reader.ReadLine().Should().BeEquivalentTo(encoding.GetBytes(third));
+        reader.ReadLine().Should().BeEquivalentTo(encoding.GetBytes(forth));
+        reader.ReadLine().Should().BeNull();
     }
 
     [Fact]
