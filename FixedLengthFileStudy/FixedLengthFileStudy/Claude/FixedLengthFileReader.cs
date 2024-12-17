@@ -8,11 +8,12 @@ public class FixedLengthFileReader : IFixedLengthFileReader
     private readonly Stream _reader;
     private readonly Encoding _encoding;
     private readonly byte[] _newLineBytes;
-    private readonly int _bufferSize;
+    private int _bufferSize;
     private byte[] _buffer;
     private int _bufferPosition;
     private int _bytesInBuffer;
     private bool _isDisposed;
+    private bool _isFirstLine = true;
 
     // 現在の行のデータを保持
     private byte[]? _currentLine;
@@ -49,58 +50,20 @@ public class FixedLengthFileReader : IFixedLengthFileReader
         // バッファーが空の場合は新しいデータを読み込む
         if (_bufferPosition >= _bytesInBuffer)
         {
-            _bytesInBuffer = _reader.Read(_buffer, 0, _bufferSize);
+            _bytesInBuffer = _reader.Read(_buffer, 0, _buffer.Length);
             _bufferPosition = 0;
 
             if (_bytesInBuffer == 0)
                 return false;
         }
 
-        // 行の終わりを探す
         int lineStart = _bufferPosition;
-        int totalLineLength = 0;
         bool foundNewLine = false;
-        List<(byte[] Buffer, int Start, int Length)> lineSegments = new();
+        int newLineMatchCount = 0;
 
         while (!foundNewLine)
         {
-            if (_bufferPosition >= _bytesInBuffer)
-            {
-                // 現在のバッファーの残りを保存
-                int remainingLength = _bytesInBuffer - lineStart;
-                if (remainingLength > 0)
-                {
-                    byte[] segment = ArrayPool<byte>.Shared.Rent(remainingLength);
-                    Buffer.BlockCopy(_buffer, lineStart, segment, 0, remainingLength);
-                    lineSegments.Add((segment, 0, remainingLength));
-                    totalLineLength += remainingLength;
-                }
-
-                // 新しいデータを読み込む
-                _bytesInBuffer = _reader.Read(_buffer, 0, _bufferSize);
-                _bufferPosition = 0;
-                lineStart = 0;
-
-                if (_bytesInBuffer == 0)
-                {
-                    if (totalLineLength > 0)
-                    {
-                        // 最後の行を処理
-                        CombineLineSegments(lineSegments, totalLineLength);
-                        return true;
-                    }
-
-                    // セグメントを解放
-                    foreach (var segment in lineSegments)
-                    {
-                        ArrayPool<byte>.Shared.Return(segment.Buffer);
-                    }
-                    return false;
-                }
-            }
-
-            // 改行文字を探す
-            int newLineMatchCount = 0;
+            // バッファー内を検索
             while (_bufferPosition < _bytesInBuffer)
             {
                 if (_buffer[_bufferPosition] == _newLineBytes[newLineMatchCount])
@@ -122,36 +85,63 @@ public class FixedLengthFileReader : IFixedLengthFileReader
 
             if (foundNewLine)
             {
-                // 現在の行セグメントを追加（改行文字を除く）
-                int currentLength = _bufferPosition - lineStart - _newLineBytes.Length + 1;
-                if (currentLength > 0)
+                break;
+            }
+
+            // バッファーを使い切ったが改行が見つからない場合
+            if (_bufferPosition >= _bytesInBuffer)
+            {
+                // 現在のバッファーの使用済み部分を除いた実効サイズを計算
+                int effectiveSize = _bytesInBuffer - lineStart;
+
+                // 新しいバッファーサイズを計算（現在のサイズ + 基本バッファーサイズ）
+                int newSize = _buffer.Length + _bufferSize;
+                byte[] newBuffer = ArrayPool<byte>.Shared.Rent(newSize);
+
+                // 既存データを新バッファーの先頭にコピー
+                if (effectiveSize > 0)
                 {
-                    byte[] segment = ArrayPool<byte>.Shared.Rent(currentLength);
-                    Buffer.BlockCopy(_buffer, lineStart, segment, 0, currentLength);
-                    lineSegments.Add((segment, 0, currentLength));
-                    totalLineLength += currentLength;
+                    Buffer.BlockCopy(_buffer, lineStart, newBuffer, 0, effectiveSize);
                 }
-                _bufferPosition++; // 改行文字の後ろに移動
+
+                // 古いバッファーを返却
+                ArrayPool<byte>.Shared.Return(_buffer);
+
+                // 新しいバッファーを設定
+                _buffer = newBuffer;
+
+                // 追加データを読み込む
+                int additionalBytes = _reader.Read(_buffer, effectiveSize, _buffer.Length - effectiveSize);
+                if (additionalBytes == 0)
+                {
+                    if (effectiveSize > 0)
+                    {
+                        // 最後の行として処理
+                        _currentLine = ArrayPool<byte>.Shared.Rent(effectiveSize);
+                        Buffer.BlockCopy(_buffer, 0, _currentLine, 0, effectiveSize);
+                        _currentLineLength = effectiveSize;
+                        _bufferPosition = effectiveSize;
+                        _bytesInBuffer = effectiveSize;
+                        return true;
+                    }
+                    return false;
+                }
+
+                // バッファー状態を更新
+                _bytesInBuffer = effectiveSize + additionalBytes;
+                _bufferPosition = effectiveSize;
+                lineStart = 0;
             }
         }
 
-        // 行セグメントを結合
-        CombineLineSegments(lineSegments, totalLineLength);
+        // 行データを保存（改行文字を除く）
+        int lineLength = _bufferPosition - lineStart - _newLineBytes.Length + 1;
+        _currentLine = ArrayPool<byte>.Shared.Rent(lineLength);
+        Buffer.BlockCopy(_buffer, lineStart, _currentLine, 0, lineLength);
+        _currentLineLength = lineLength;
+        _bufferPosition++; // 改行文字の後ろに移動
+
         return true;
-    }
-
-    private void CombineLineSegments(List<(byte[] Buffer, int Start, int Length)> segments, int totalLength)
-    {
-        _currentLine = ArrayPool<byte>.Shared.Rent(totalLength);
-        _currentLineLength = totalLength;
-
-        int offset = 0;
-        foreach (var segment in segments)
-        {
-            Buffer.BlockCopy(segment.Buffer, segment.Start, _currentLine, offset, segment.Length);
-            offset += segment.Length;
-            ArrayPool<byte>.Shared.Return(segment.Buffer);
-        }
     }
 
     public string GetField(int index, int bytes)
