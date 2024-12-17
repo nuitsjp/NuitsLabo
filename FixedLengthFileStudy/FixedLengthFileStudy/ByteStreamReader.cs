@@ -61,13 +61,9 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         // We are simply trying to deter calling any Read APIs while an async Read from the same thread is in progress.
         if (!_asyncReadTask.IsCompleted)
         {
-            ThrowAsyncIOInProgress();
+            throw new InvalidOperationException();
         }
     }
-
-    [DoesNotReturn]
-    private static void ThrowAsyncIOInProgress() =>
-        throw new InvalidOperationException();
 
     // ByteStreamReader by default will ignore illegal UTF8 characters. We don't want to
     // throw here because we want to be able to read ill-formed data without choking.
