@@ -42,14 +42,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     /// <summary>True if the writer has been disposed; otherwise, false.</summary>
     private bool _disposed;
 
-    // Whether the stream is most likely not going to give us back as much
-    // data as we want the next time we call it.  We must do the computation
-    // before we do any byte order mark handling and save the result.  Note
-    // that we need this to allow users to handle streams used for an
-    // interactive protocol, where they block waiting for the remote end
-    // to send a response, like logging in on a Unix machine.
-    private bool _isBlocked;
-
     // We don't guarantee thread safety on ByteStreamReader, but we should at
     // least prevent users from trying to read anything while an Async
     // read from the same thread is in progress.
@@ -162,11 +154,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
                 break;
             }
 
-            // _isBlocked == whether we read fewer bytes than we asked for.
-            // Note we must check it here because CompressBuffer or
-            // DetectEncoding will change byteLen.
-            _isBlocked = (_byteLen < _byteBuffer.Length);
-
             Debug.Assert(_charPos == 0 && _charLen == 0, "We shouldn't be trying to decode more data if we made progress in an earlier iteration.");
             _charLen = _decoder.GetChars(_byteBuffer, 0, _byteLen, _charBuffer, 0, flush: false);
         } while (_charLen == 0);
@@ -186,6 +173,42 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         return _charLen;
     }
 
+    private int ReadByteBuffer()
+    {
+        _byteLen = 0;
+
+        bool eofReached = false;
+
+        do
+        {
+            Debug.Assert(_bytePos == 0, "bytePos can be non zero only when we are trying to _checkPreamble.  Are two threads using this ByteStreamReader at the same time?");
+            _byteLen = _stream.Read(_byteBuffer, 0, _byteBuffer.Length);
+            Debug.Assert(_byteLen >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
+
+            if (_byteLen == 0)
+            {
+                eofReached = true;
+                break;
+            }
+
+            Debug.Assert(_charPos == 0 && _charLen == 0, "We shouldn't be trying to decode more data if we made progress in an earlier iteration.");
+            _charLen = _decoder.GetChars(_byteBuffer, 0, _byteLen, _charBuffer, 0, flush: false);
+        } while (_charLen == 0);
+
+        if (eofReached)
+        {
+            // EOF has been reached - perform final flush.
+            // We need to reset _bytePos and _byteLen just in case we hadn't
+            // finished processing the preamble before we reached EOF.
+
+            Debug.Assert(_charPos == 0 && _charLen == 0, "We shouldn't be looking for EOF unless we have an empty char buffer.");
+            _charLen = _decoder.GetChars(_byteBuffer, 0, _byteLen, _charBuffer, 0, flush: true);
+            _bytePos = 0;
+            _byteLen = 0;
+        }
+
+        return _charLen;
+    }
 
     // Reads a line. A line is defined as a sequence of characters followed by
     // a carriage return ('\r'), a line feed ('\n'), or a carriage return
@@ -251,6 +274,75 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         } while (ReadBuffer() > 0);
 
         return vsb.ToString();
+    }
+
+
+    // Reads a line. A line is defined as a sequence of characters followed by
+    // a carriage return ('\r'), a line feed ('\n'), or a carriage return
+    // immediately followed by a line feed. The resulting string does not
+    // contain the terminating carriage return and/or line feed. The returned
+    // value is null if the end of the input stream has been reached.
+    //
+    public byte[]? ReadByteLine()
+    {
+        CheckAsyncTaskInProgress();
+
+        if (_charPos == _charLen)
+        {
+            if (ReadBuffer() == 0)
+            {
+                return null;
+            }
+        }
+
+        var vsb = new ValueStringBuilder(stackalloc char[256]);
+        do
+        {
+            // Look for '\r' or \'n'.
+            ReadOnlySpan<char> charBufferSpan = _charBuffer.AsSpan(_charPos, _charLen - _charPos);
+            Debug.Assert(!charBufferSpan.IsEmpty, "ReadBuffer returned > 0 but didn't bump _charLen?");
+
+            int idxOfNewline = charBufferSpan.IndexOfAny('\r', '\n');
+            if (idxOfNewline >= 0)
+            {
+                string retVal;
+                if (vsb.Length == 0)
+                {
+                    retVal = new string(charBufferSpan.Slice(0, idxOfNewline));
+                }
+                else
+                {
+                    retVal = string.Concat(vsb.AsSpan(), charBufferSpan.Slice(0, idxOfNewline));
+                    vsb.Dispose();
+                }
+
+                char matchedChar = charBufferSpan[idxOfNewline];
+                _charPos += idxOfNewline + 1;
+
+                // If we found '\r', consume any immediately following '\n'.
+                if (matchedChar == '\r')
+                {
+                    if (_charPos < _charLen || ReadBuffer() > 0)
+                    {
+                        if (_charBuffer[_charPos] == '\n')
+                        {
+                            _charPos++;
+                        }
+                    }
+                }
+
+                //return retVal;
+                return [];
+            }
+
+            // We didn't find '\r' or '\n'. Add it to the StringBuilder
+            // and loop until we reach a newline or EOF.
+
+            vsb.Append(charBufferSpan);
+        } while (ReadBuffer() > 0);
+
+        //return vsb.ToString();
+        return [];
     }
 
     public Task<string?> ReadLineAsync() =>
@@ -376,108 +468,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         return retVal;
     }
 
-    internal async ValueTask<int> ReadAsyncInternal(Memory<char> buffer, CancellationToken cancellationToken)
-    {
-        if (_charPos == _charLen && (await ReadBufferAsync(cancellationToken).ConfigureAwait(false)) == 0)
-        {
-            return 0;
-        }
-
-        int charsRead = 0;
-
-        // As a perf optimization, if we had exactly one buffer's worth of
-        // data read in, let's try writing directly to the user's buffer.
-        bool readToUserBuffer = false;
-
-        byte[] tmpByteBuffer = _byteBuffer;
-        Stream tmpStream = _stream;
-
-        int count = buffer.Length;
-        while (count > 0)
-        {
-            // n is the characters available in _charBuffer
-            int n = _charLen - _charPos;
-
-            // charBuffer is empty, let's read from the stream
-            if (n == 0)
-            {
-                _charLen = 0;
-                _charPos = 0;
-                _byteLen = 0;
-
-                readToUserBuffer = count >= _maxCharsPerBuffer;
-
-                // We loop here so that we read in enough bytes to yield at least 1 char.
-                // We break out of the loop if the stream is blocked (EOF is reached).
-                do
-                {
-                    Debug.Assert(n == 0);
-
-                    Debug.Assert(_bytePos == 0, "_bytePos can be non zero only when we are trying to _checkPreamble.  Are two threads using this ByteStreamReader at the same time?");
-
-                    _byteLen = await tmpStream.ReadAsync(new Memory<byte>(tmpByteBuffer), cancellationToken).ConfigureAwait(false);
-
-                    Debug.Assert(_byteLen >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
-
-                    if (_byteLen == 0)  // EOF
-                    {
-                        _isBlocked = true;
-                        break;
-                    }
-
-                    // _isBlocked == whether we read fewer bytes than we asked for.
-                    // Note we must check it here because CompressBuffer or
-                    // DetectEncoding will change _byteLen.
-                    _isBlocked = (_byteLen < tmpByteBuffer.Length);
-
-                    Debug.Assert(n == 0);
-
-                    _charPos = 0;
-                    if (readToUserBuffer)
-                    {
-                        n = _decoder.GetChars(new ReadOnlySpan<byte>(tmpByteBuffer, 0, _byteLen), buffer.Span.Slice(charsRead), flush: false);
-                        _charLen = 0;  // ByteStreamReader's buffer is empty.
-                    }
-                    else
-                    {
-                        n = _decoder.GetChars(tmpByteBuffer, 0, _byteLen, _charBuffer, 0);
-                        _charLen += n;  // Number of chars in ByteStreamReader's buffer.
-                    }
-                } while (n == 0);
-
-                if (n == 0)
-                {
-                    break;  // We're at EOF
-                }
-            }  // if (n == 0)
-
-            // Got more chars in charBuffer than the user requested
-            if (n > count)
-            {
-                n = count;
-            }
-
-            if (!readToUserBuffer)
-            {
-                new Span<char>(_charBuffer, _charPos, n).CopyTo(buffer.Span.Slice(charsRead));
-                _charPos += n;
-            }
-
-            charsRead += n;
-            count -= n;
-
-            // This function shouldn't block for an indefinite amount of time,
-            // or reading from a network stream won't work right.  If we got
-            // fewer bytes than we requested, then we want to break right here.
-            if (_isBlocked)
-            {
-                break;
-            }
-        }  // while (count > 0)
-
-        return charsRead;
-    }
-
     private async ValueTask<int> ReadBufferAsync(CancellationToken cancellationToken)
     {
         _charLen = 0;
@@ -499,11 +489,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
                 eofReached = true;
                 break;
             }
-
-            // _isBlocked == whether we read fewer bytes than we asked for.
-            // Note we must check it here because CompressBuffer or
-            // DetectEncoding will change _byteLen.
-            _isBlocked = (_byteLen < tmpByteBuffer.Length);
 
             Debug.Assert(_charPos == 0 && _charLen == 0, "We shouldn't be trying to decode more data if we made progress in an earlier iteration.");
             _charLen = _decoder.GetChars(tmpByteBuffer, 0, _byteLen, _charBuffer, 0, flush: false);
