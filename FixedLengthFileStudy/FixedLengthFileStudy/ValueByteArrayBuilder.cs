@@ -25,12 +25,10 @@ internal ref struct ValueByteArrayBuilder(Span<byte> initialBuffer)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Append(byte c)
     {
-        int pos = _pos;
-        Span<byte> chars = _bytes;
-        if (pos < chars.Length)
+        if (_pos < _bytes.Length)
         {
-            chars[pos] = c;
-            _pos = pos + 1;
+            _bytes[_pos] = c;
+            _pos += 1;
         }
         else
         {
