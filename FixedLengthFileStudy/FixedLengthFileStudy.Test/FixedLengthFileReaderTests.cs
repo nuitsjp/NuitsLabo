@@ -122,6 +122,21 @@ public abstract class FixedLengthFileReaderTestsBase
     }
 
     [Fact]
+    public void GetField_WithPaddedData_ShouldTrimNoneCorrectly()
+    {
+        // Arrange
+        var content = " ABC  12  ";  // スペースでパディングされたデータ
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+        using var reader = CreateReader(stream, Encoding.UTF8, "\r\n", trim: Trim.None);
+
+        // Act
+        reader.Read();
+        // Assert
+        reader.GetField(0, 5).Should().Be(" ABC ");  // 末尾のスペースが除去される
+        reader.GetField(5, 5).Should().Be(" 12  ");   // 末尾のスペースが除去される
+    }
+
+    [Fact]
     public void GetField_WithPaddedData_ShouldTrimStartAndEndCorrectly()
     {
         // Arrange
@@ -134,6 +149,36 @@ public abstract class FixedLengthFileReaderTestsBase
         // Assert
         reader.GetField(0, 5).Should().Be("ABC");  // 末尾のスペースが除去される
         reader.GetField(5, 5).Should().Be("12");   // 末尾のスペースが除去される
+    }
+
+    [Fact]
+    public void GetField_WithPaddedData_ShouldTrimStartCorrectly()
+    {
+        // Arrange
+        var content = " ABC  12  ";  // スペースでパディングされたデータ
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+        using var reader = CreateReader(stream, Encoding.UTF8, "\r\n", trim: Trim.Start);
+
+        // Act
+        reader.Read();
+        // Assert
+        reader.GetField(0, 5).Should().Be("ABC ");  // 末尾のスペースが除去される
+        reader.GetField(5, 5).Should().Be("12  ");   // 末尾のスペースが除去される
+    }
+
+    [Fact]
+    public void GetField_WithPaddedData_ShouldTrimEndCorrectly()
+    {
+        // Arrange
+        var content = " ABC  12  ";  // スペースでパディングされたデータ
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+        using var reader = CreateReader(stream, Encoding.UTF8, "\r\n", trim: Trim.End);
+
+        // Act
+        reader.Read();
+        // Assert
+        reader.GetField(0, 5).Should().Be(" ABC");  // 末尾のスペースが除去される
+        reader.GetField(5, 5).Should().Be(" 12");   // 末尾のスペースが除去される
     }
 
     [Theory]
