@@ -185,8 +185,7 @@ public class FixedLengthFileReader : IFixedLengthFileReader
     {
         if (!_isDisposed)
         {
-            if (_buffer != null)
-                ArrayPool<byte>.Shared.Return(_buffer);
+            ArrayPool<byte>.Shared.Return(_buffer);
             if (_currentLine != null)
                 ArrayPool<byte>.Shared.Return(_currentLine);
             _reader.Dispose();
@@ -198,8 +197,7 @@ public class FixedLengthFileReader : IFixedLengthFileReader
     {
         if (!_isDisposed)
         {
-            if (_buffer != null)
-                ArrayPool<byte>.Shared.Return(_buffer);
+            ArrayPool<byte>.Shared.Return(_buffer);
             if (_currentLine != null)
                 ArrayPool<byte>.Shared.Return(_currentLine);
             await _reader.DisposeAsync();
