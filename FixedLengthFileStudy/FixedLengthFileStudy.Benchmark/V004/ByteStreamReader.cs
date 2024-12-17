@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace FixedLengthFileStudy.Benchmark.V001;
+namespace FixedLengthFileStudy.Benchmark.V004;
 
 public class ByteStreamReader : IDisposable, IAsyncDisposable
 {
@@ -8,7 +8,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     public static readonly int MinBufferSize = 128;
 
     private readonly Stream _stream;
-    private readonly byte[] _byteBuffer;
+    private byte[] _byteBuffer;
     private int _byteLen;
     private int _bytePos;
 
@@ -174,7 +174,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
             }
         }
 
-        var vsb = new ValueByteArrayBuilder(stackalloc byte[256]);
+        var vsb = new ValueByteArrayBuilder(stackalloc byte[_byteBuffer.Length]);
         do
         {
             // Look for '\r' or \'n'.
@@ -192,6 +192,11 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
                 else
                 {
                     retVal = Concat(vsb.AsSpan(), bufferSpan.Slice(0, indexOfNewline));
+                    var needByteLength = retVal.Length + 2;
+                    if (_byteBuffer.Length < needByteLength)
+                    {
+                        _byteBuffer = new byte[needByteLength];
+                    }
                     vsb.Dispose();
                 }
 

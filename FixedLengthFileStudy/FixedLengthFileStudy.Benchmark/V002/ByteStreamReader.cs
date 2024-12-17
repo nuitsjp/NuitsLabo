@@ -196,7 +196,8 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
                 }
 
                 var matchedChar = bufferSpan[indexOfNewline];
-                _bytePos += indexOfNewline + 1;
+                var enterIndexOfNewline = indexOfNewline + 1;
+                _bytePos += enterIndexOfNewline;
 
                 // If we found '\r', consume any immediately following '\n'.
                 if (matchedChar == '\r')
@@ -209,7 +210,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
 
                     if (_bytePos < _byteLen)
                     {
-                        if (bufferSpan[indexOfNewline + 1] == '\n')
+                        if (bufferSpan[enterIndexOfNewline] == '\n')
                         {
                             _bytePos++;
                         }
