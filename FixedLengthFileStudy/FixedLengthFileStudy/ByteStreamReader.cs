@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System;
 using System.Buffers;
 using System.Buffers.Binary;
 using System.Diagnostics;
@@ -130,7 +131,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         _charPos = 0;
         _byteLen = 0;
 
-        bool eofReached = false;
+        var eofReached = false;
 
         do
         {
@@ -167,7 +168,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     {
         _byteLen = 0;
 
-        bool eofReached = false;
+        var eofReached = false;
 
         do
         {
@@ -225,7 +226,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
             ReadOnlySpan<char> charBufferSpan = _charBuffer.AsSpan(_charPos, _charLen - _charPos);
             Debug.Assert(!charBufferSpan.IsEmpty, "ReadBuffer returned > 0 but didn't bump _charLen?");
 
-            int idxOfNewline = charBufferSpan.IndexOfAny('\r', '\n');
+            var idxOfNewline = charBufferSpan.IndexOfAny('\r', '\n');
             if (idxOfNewline >= 0)
             {
                 string retVal;
@@ -239,7 +240,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
                     vsb.Dispose();
                 }
 
-                char matchedChar = charBufferSpan[idxOfNewline];
+                var matchedChar = charBufferSpan[idxOfNewline];
                 _charPos += idxOfNewline + 1;
 
                 // If we found '\r', consume any immediately following '\n'.
@@ -285,28 +286,28 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
             }
         }
 
-        var vsb = new ValueStringBuilder(stackalloc char[256]);
+        var vsb = new ValueByteArrayBuilder(stackalloc byte[256]);
         do
         {
             // Look for '\r' or \'n'.
-            ReadOnlySpan<char> charBufferSpan = _charBuffer.AsSpan(_charPos, _charLen - _charPos);
-            Debug.Assert(!charBufferSpan.IsEmpty, "ReadBuffer returned > 0 but didn't bump _charLen?");
+            ReadOnlySpan<byte> bufferSpan = _byteBuffer.AsSpan(_charPos, _charLen - _charPos);
+            Debug.Assert(!bufferSpan.IsEmpty, "ReadBuffer returned > 0 but didn't bump _charLen?");
 
-            int idxOfNewline = charBufferSpan.IndexOfAny('\r', '\n');
+            var idxOfNewline = bufferSpan.IndexOfAny((byte)'\r', (byte)'\n');
             if (idxOfNewline >= 0)
             {
-                string retVal;
+                byte[] retVal;
                 if (vsb.Length == 0)
                 {
-                    retVal = new string(charBufferSpan.Slice(0, idxOfNewline));
+                    retVal = bufferSpan.Slice(0, idxOfNewline).ToArray();
                 }
                 else
                 {
-                    retVal = string.Concat(vsb.AsSpan(), charBufferSpan.Slice(0, idxOfNewline));
+                    retVal = Concat(vsb.AsSpan(), bufferSpan.Slice(0, idxOfNewline));
                     vsb.Dispose();
                 }
 
-                char matchedChar = charBufferSpan[idxOfNewline];
+                var matchedChar = bufferSpan[idxOfNewline];
                 _charPos += idxOfNewline + 1;
 
                 // If we found '\r', consume any immediately following '\n'.
@@ -321,18 +322,16 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
                     }
                 }
 
-                //return retVal;
-                return [];
+                return retVal;
             }
 
             // We didn't find '\r' or '\n'. Add it to the StringBuilder
             // and loop until we reach a newline or EOF.
 
-            vsb.Append(charBufferSpan);
+            vsb.Append(bufferSpan);
         } while (ReadBuffer() > 0);
 
-        //return vsb.ToString();
-        return [];
+        return vsb.AsSpan().ToArray();
     }
 
     public Task<string?> ReadLineAsync() =>
@@ -384,18 +383,18 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
 
         string retVal;
         char[]? arrayPoolBuffer = null;
-        int arrayPoolBufferPos = 0;
+        var arrayPoolBufferPos = 0;
 
         do
         {
-            char[] charBuffer = _charBuffer;
-            int charLen = _charLen;
-            int charPos = _charPos;
+            var charBuffer = _charBuffer;
+            var charLen = _charLen;
+            var charPos = _charPos;
 
             // Look for '\r' or \'n'.
             Debug.Assert(charPos < charLen, "ReadBuffer returned > 0 but didn't bump _charLen?");
 
-            int idxOfNewline = charBuffer.AsSpan(charPos, charLen - charPos).IndexOfAny('\r', '\n');
+            var idxOfNewline = charBuffer.AsSpan(charPos, charLen - charPos).IndexOfAny('\r', '\n');
             if (idxOfNewline >= 0)
             {
                 if (arrayPoolBuffer is null)
@@ -409,7 +408,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
                 }
 
                 charPos += idxOfNewline;
-                char matchedChar = charBuffer[charPos++];
+                var matchedChar = charBuffer[charPos++];
                 _charPos = charPos;
 
                 // If we found '\r', consume any immediately following '\n'.
@@ -435,7 +434,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
             }
             else if ((arrayPoolBuffer.Length - arrayPoolBufferPos) < (charLen - charPos))
             {
-                char[] newBuffer = ArrayPool<char>.Shared.Rent(checked(arrayPoolBufferPos + charLen - charPos));
+                var newBuffer = ArrayPool<char>.Shared.Rent(checked(arrayPoolBufferPos + charLen - charPos));
                 arrayPoolBuffer.AsSpan(0, arrayPoolBufferPos).CopyTo(newBuffer);
                 ArrayPool<char>.Shared.Return(arrayPoolBuffer);
                 arrayPoolBuffer = newBuffer;
@@ -462,11 +461,11 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     {
         _charLen = 0;
         _charPos = 0;
-        byte[] tmpByteBuffer = _byteBuffer;
-        Stream tmpStream = _stream;
+        var tmpByteBuffer = _byteBuffer;
+        var tmpStream = _stream;
         _byteLen = 0;
 
-        bool eofReached = false;
+        var eofReached = false;
 
         do
         {
@@ -507,5 +506,17 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         Dispose(true);
+    }
+
+    private static byte[] Concat(ReadOnlySpan<byte> span1, ReadOnlySpan<byte> span2)
+    {
+        // 新しい配列を作成
+        var combined = new byte[span1.Length + span2.Length];
+
+        // 両方のSpanをコピー
+        span1.CopyTo(combined.AsSpan(0));
+        span2.CopyTo(combined.AsSpan(span1.Length));
+
+        return combined;
     }
 }
