@@ -43,8 +43,8 @@ public class ByteStreamReaderTest
     {
         // Arrange
         var encoding = Encoding.GetEncoding(encodingName);
-        var first = "123";
-        var second = "456";
+        var first = new string('A', 8000);
+        var second = new string('A', 4096);
         var third = "789";
         var content = first + newline + second + newline + third;
         var stream = new MemoryStream(encoding.GetBytes(content));
