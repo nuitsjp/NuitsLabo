@@ -9,7 +9,8 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     public static readonly int MinBufferSize = 128;
 
     private readonly Stream _stream;
-    private readonly byte[] _byteBuffer;
+    private byte[] _byteBuffer;
+    private byte[] _valueByteArrayBuilderBuffer;
     private int _byteLen;
     private int _bytePos;
 
@@ -44,9 +45,10 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         }
 
         _stream = stream;
-        _byteBuffer = bufferSize is null 
-            ? new byte[DefaultBufferSize] 
+        _byteBuffer = bufferSize is null
+            ? new byte[DefaultBufferSize]
             : new byte[bufferSize.Value];
+        _valueByteArrayBuilderBuffer = new byte[_byteBuffer.Length];
     }
 
     //internal virtual int ReadBuffer()
@@ -175,7 +177,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
             }
         }
 
-        var vsb = new ValueByteArrayBuilder(stackalloc byte[256]);
+        var vsb = new ValueByteArrayBuilder(_valueByteArrayBuilderBuffer);
         do
         {
             // Look for '\r' or \'n'.
@@ -193,11 +195,20 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
                 else
                 {
                     retVal = Concat(vsb.AsSpan(), bufferSpan.Slice(0, indexOfNewline));
+                    var needByteLength = retVal.Length + 2;
+                    if (_byteBuffer.Length < needByteLength)
+                    {
+                        var newBuffer = new byte[needByteLength];
+                        _byteBuffer.AsSpan(0, _byteBuffer.Length).CopyTo(newBuffer);
+                        _byteBuffer = newBuffer;
+                        _valueByteArrayBuilderBuffer = new byte[_byteBuffer.Length];
+                    }
                     vsb.Dispose();
                 }
 
                 var matchedChar = bufferSpan[indexOfNewline];
-                _bytePos += indexOfNewline + 1;
+                var enterIndexOfNewline = indexOfNewline + 1;
+                _bytePos += enterIndexOfNewline;
 
                 // If we found '\r', consume any immediately following '\n'.
                 if (matchedChar == '\r')
@@ -210,7 +221,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
 
                     if (_bytePos < _byteLen)
                     {
-                        if (bufferSpan[indexOfNewline + 1] == '\n')
+                        if (bufferSpan[enterIndexOfNewline] == '\n')
                         {
                             _bytePos++;
                         }

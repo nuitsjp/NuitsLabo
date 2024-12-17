@@ -201,7 +201,9 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
                     var needByteLength = retVal.Length + 2;
                     if (_byteBuffer.Length < needByteLength)
                     {
-                        _byteBuffer = new byte[needByteLength];
+                        var newBuffer = new byte[needByteLength];
+                        _byteBuffer.AsSpan(0, _byteBuffer.Length).CopyTo(newBuffer);
+                        _byteBuffer = newBuffer;
                         _valueByteArrayBuilderBuffer = new byte[_byteBuffer.Length];
                     }
                     vsb.Dispose();

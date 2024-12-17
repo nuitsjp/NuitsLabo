@@ -198,7 +198,9 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
                     if (_byteBuffer.Length < needByteLength)
                     {
                         ArrayPool<byte>.Shared.Return(_byteBuffer);
-                        _byteBuffer = ArrayPool<byte>.Shared.Rent(needByteLength);
+                        var newBuffer = ArrayPool<byte>.Shared.Rent(needByteLength);
+                        _byteBuffer.AsSpan(0, _byteBuffer.Length).CopyTo(newBuffer);
+                        _byteBuffer = newBuffer;
                     }
                     vsb.Dispose();
                 }

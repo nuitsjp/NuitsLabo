@@ -16,7 +16,7 @@ internal ref struct ValueByteArrayBuilder(Span<byte> initialBuffer)
     private int _pos = 0;
 
     public bool IsEmpty => _pos == 0;
-
+    public int Length => _pos;
     public void Clear() => _pos = 0;
 
     public ReadOnlySpan<byte> AsSpan() => _bytes.Slice(0, _pos);
