@@ -57,16 +57,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         }
     }
 
-    // ByteStreamReader by default will ignore illegal UTF8 characters. We don't want to
-    // throw here because we want to be able to read ill-formed data without choking.
-    // The high level goal is to be tolerant of encoding errors when we read and very strict
-    // when we write. Hence, default StreamWriter encoding will throw on error.
-
-    private ByteStreamReader()
-    {
-        _stream = Stream.Null;
-    }
-
     public ByteStreamReader(Stream stream, Encoding encoding)
         : this(stream, encoding, DefaultBufferSize)
     {
