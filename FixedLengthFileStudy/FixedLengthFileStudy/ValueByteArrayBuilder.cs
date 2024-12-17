@@ -10,13 +10,15 @@ using System.Runtime.InteropServices;
 
 namespace FixedLengthFileStudy;
 
-internal ref partial struct ValueByteArrayBuilder(Span<byte> initialBuffer)
+internal ref struct ValueByteArrayBuilder(Span<byte> initialBuffer)
 {
     private byte[]? _arrayToReturnToPool = null;
     private Span<byte> _bytes = initialBuffer;
     private int _pos = 0;
 
     public bool IsEmpty => _pos == 0;
+
+    public void Clear() => _pos = 0;
 
     public ReadOnlySpan<byte> AsSpan() => _bytes.Slice(0, _pos);
 
