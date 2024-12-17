@@ -34,15 +34,6 @@ internal ref partial struct ValueStringBuilder
         }
     }
 
-    public ref char this[int index]
-    {
-        get
-        {
-            Debug.Assert(index < _pos);
-            return ref _chars[index];
-        }
-    }
-
     public override string ToString()
     {
         string s = _chars.Slice(0, _pos).ToString();

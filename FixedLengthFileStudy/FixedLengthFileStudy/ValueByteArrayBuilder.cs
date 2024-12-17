@@ -12,11 +12,11 @@ namespace FixedLengthFileStudy;
 
 internal ref partial struct ValueByteArrayBuilder
 {
-    private char[]? _arrayToReturnToPool;
-    private Span<char> _chars;
+    private byte[]? _arrayToReturnToPool;
+    private Span<byte> _chars;
     private int _pos;
 
-    public ValueByteArrayBuilder(Span<char> initialBuffer)
+    public ValueByteArrayBuilder(Span<byte> initialBuffer)
     {
         _arrayToReturnToPool = null;
         _chars = initialBuffer;
@@ -34,29 +34,13 @@ internal ref partial struct ValueByteArrayBuilder
         }
     }
 
-    public ref char this[int index]
-    {
-        get
-        {
-            Debug.Assert(index < _pos);
-            return ref _chars[index];
-        }
-    }
-
-    public override string ToString()
-    {
-        string s = _chars.Slice(0, _pos).ToString();
-        Dispose();
-        return s;
-    }
-
-    public ReadOnlySpan<char> AsSpan() => _chars.Slice(0, _pos);
+    public ReadOnlySpan<byte> AsSpan() => _chars.Slice(0, _pos);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Append(char c)
+    public void Append(byte c)
     {
         int pos = _pos;
-        Span<char> chars = _chars;
+        Span<byte> chars = _chars;
         if ((uint)pos < (uint)chars.Length)
         {
             chars[pos] = c;
@@ -68,7 +52,7 @@ internal ref partial struct ValueByteArrayBuilder
         }
     }
 
-    public void Append(scoped ReadOnlySpan<char> value)
+    public void Append(scoped ReadOnlySpan<byte> value)
     {
         int pos = _pos;
         if (pos > _chars.Length - value.Length)
@@ -81,7 +65,7 @@ internal ref partial struct ValueByteArrayBuilder
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    private void GrowAndAppend(char c)
+    private void GrowAndAppend(byte c)
     {
         Grow(1);
         Append(c);
@@ -111,26 +95,26 @@ internal ref partial struct ValueByteArrayBuilder
 
         // Make sure to let Rent throw an exception if the caller has a bug and the desired capacity is negative.
         // This could also go negative if the actual required length wraps around.
-        char[] poolArray = ArrayPool<char>.Shared.Rent(newCapacity);
+        byte[] poolArray = ArrayPool<byte>.Shared.Rent(newCapacity);
 
         _chars.Slice(0, _pos).CopyTo(poolArray);
 
-        char[]? toReturn = _arrayToReturnToPool;
+        byte[]? toReturn = _arrayToReturnToPool;
         _chars = _arrayToReturnToPool = poolArray;
         if (toReturn != null)
         {
-            ArrayPool<char>.Shared.Return(toReturn);
+            ArrayPool<byte>.Shared.Return(toReturn);
         }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Dispose()
     {
-        char[]? toReturn = _arrayToReturnToPool;
+        byte[]? toReturn = _arrayToReturnToPool;
         this = default; // for safety, to avoid using pooled array if this instance is erroneously appended to again
         if (toReturn != null)
         {
-            ArrayPool<char>.Shared.Return(toReturn);
+            ArrayPool<byte>.Shared.Return(toReturn);
         }
     }
 }
