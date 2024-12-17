@@ -200,7 +200,13 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
                 // If we found '\r', consume any immediately following '\n'.
                 if (matchedChar == '\r')
                 {
-                    if (_bytePos < _byteLen || ReadByteBuffer() > 0)
+                    // If we reached the end of the buffer, read the next buffer.
+                    if (_bytePos == _byteLen)
+                    {
+                        ReadByteBuffer();
+                    }
+
+                    if (_bytePos < _byteLen)
                     {
                         if (bufferSpan[indexOfNewline + 1] == '\n')
                         {
