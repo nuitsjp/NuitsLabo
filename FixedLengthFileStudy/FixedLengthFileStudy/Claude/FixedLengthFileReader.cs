@@ -35,7 +35,9 @@ public class FixedLengthFileReader : IFixedLengthFileReader
     public bool Read()
     {
         if (_isDisposed)
+        {
             throw new ObjectDisposedException(nameof(FixedLengthFileReader));
+        }
 
         // 前回の行データをクリア
         if (_currentLine != null)

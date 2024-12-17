@@ -122,6 +122,19 @@ public abstract class FixedLengthFileReaderTestsBase
     }
 
     [Fact]
+    public void Read_AfterDisposed()
+    {
+        // Arrange
+        using var stream = new MemoryStream([]);
+        var reader = CreateReader(stream, Encoding.UTF8, "\r\n");
+        reader.Dispose();
+
+        // Act & Assert
+        var action = () => reader.Read();
+        action.Should().Throw<ObjectDisposedException>();
+    }
+
+    [Fact]
     public async Task DisposeAsync()
     {
         // Arrange
