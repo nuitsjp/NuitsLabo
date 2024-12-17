@@ -43,11 +43,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     /// <summary>True if the writer has been disposed; otherwise, false.</summary>
     private bool _disposed;
 
-    // We will support looking for byte order marks in the stream and trying
-    // to decide what the encoding might be from the byte order marks, IF they
-    // exist.  But that's all we'll do.
-    private bool _detectEncoding;
-
     // Whether the stream is most likely not going to give us back as much
     // data as we want the next time we call it.  We must do the computation
     // before we do any byte order mark handling and save the result.  Note
@@ -155,7 +150,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         _byteBuffer = new byte[bufferSize];
         _maxCharsPerBuffer = encoding.GetMaxCharCount(bufferSize);
         _charBuffer = new char[_maxCharsPerBuffer];
-        _detectEncoding = detectEncodingFromByteOrderMarks;
 
         _closable = !leaveOpen;
     }
@@ -450,71 +444,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         _byteLen -= n;
     }
 
-    private void DetectEncoding()
-    {
-        Debug.Assert(_byteLen >= 2, "Caller should've validated that at least 2 bytes were available.");
-
-        byte[] byteBuffer = _byteBuffer;
-        _detectEncoding = false;
-        bool changedEncoding = false;
-
-        ushort firstTwoBytes = BinaryPrimitives.ReadUInt16LittleEndian(byteBuffer);
-        if (firstTwoBytes == 0xFFFE)
-        {
-            // Big Endian Unicode
-            _encoding = Encoding.BigEndianUnicode;
-            CompressBuffer(2);
-            changedEncoding = true;
-        }
-        else if (firstTwoBytes == 0xFEFF)
-        {
-            // Little Endian Unicode, or possibly little endian UTF32
-            if (_byteLen < 4 || byteBuffer[2] != 0 || byteBuffer[3] != 0)
-            {
-                _encoding = Encoding.Unicode;
-                CompressBuffer(2);
-                changedEncoding = true;
-            }
-            else
-            {
-                _encoding = Encoding.UTF32;
-                CompressBuffer(4);
-                changedEncoding = true;
-            }
-        }
-        else if (_byteLen >= 3 && firstTwoBytes == 0xBBEF && byteBuffer[2] == 0xBF)
-        {
-            // UTF-8
-            _encoding = Encoding.UTF8;
-            CompressBuffer(3);
-            changedEncoding = true;
-        }
-        else if (_byteLen >= 4 && firstTwoBytes == 0 && byteBuffer[2] == 0xFE && byteBuffer[3] == 0xFF)
-        {
-            // Big Endian UTF32
-            _encoding = new UTF32Encoding(bigEndian: true, byteOrderMark: true);
-            CompressBuffer(4);
-            changedEncoding = true;
-        }
-        else if (_byteLen == 2)
-        {
-            _detectEncoding = true;
-        }
-        // Note: in the future, if we change this algorithm significantly,
-        // we can support checking for the preamble of the given encoding.
-
-        if (changedEncoding)
-        {
-            _decoder = _encoding.GetDecoder();
-            int newMaxCharsPerBuffer = _encoding.GetMaxCharCount(byteBuffer.Length);
-            if (newMaxCharsPerBuffer > _maxCharsPerBuffer)
-            {
-                _charBuffer = new char[newMaxCharsPerBuffer];
-            }
-            _maxCharsPerBuffer = newMaxCharsPerBuffer;
-        }
-    }
-
     internal virtual int ReadBuffer()
     {
         _charLen = 0;
@@ -539,13 +468,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
             // Note we must check it here because CompressBuffer or
             // DetectEncoding will change byteLen.
             _isBlocked = (_byteLen < _byteBuffer.Length);
-
-            // If we're supposed to detect the encoding and haven't done so yet,
-            // do it.  Note this may need to be called more than once.
-            if (_detectEncoding && _byteLen >= 2)
-            {
-                DetectEncoding();
-            }
 
             Debug.Assert(_charPos == 0 && _charLen == 0, "We shouldn't be trying to decode more data if we made progress in an earlier iteration.");
             _charLen = _decoder.GetChars(_byteBuffer, 0, _byteLen, _charBuffer, 0, flush: false);
@@ -614,14 +536,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
             // Note we must check it here because CompressBuffer or
             // DetectEncoding will change byteLen.
             _isBlocked = (_byteLen < _byteBuffer.Length);
-
-            // On the first call to ReadBuffer, if we're supposed to detect the encoding, do it.
-            if (_detectEncoding && _byteLen >= 2)
-            {
-                DetectEncoding();
-                // DetectEncoding changes some buffer state.  Recompute this.
-                readToUserBuffer = userBuffer.Length >= _maxCharsPerBuffer;
-            }
 
             Debug.Assert(charsRead == 0 && _charPos == 0 && _charLen == 0, "We shouldn't be trying to decode more data if we made progress in an earlier iteration.");
             if (readToUserBuffer)
@@ -991,14 +905,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
                     // DetectEncoding will change _byteLen.
                     _isBlocked = (_byteLen < tmpByteBuffer.Length);
 
-                    // On the first call to ReadBuffer, if we're supposed to detect the encoding, do it.
-                    if (_detectEncoding && _byteLen >= 2)
-                    {
-                        DetectEncoding();
-                        // DetectEncoding changes some buffer state.  Recompute this.
-                        readToUserBuffer = count >= _maxCharsPerBuffer;
-                    }
-
                     Debug.Assert(n == 0);
 
                     _charPos = 0;
@@ -1106,13 +1012,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
             // Note we must check it here because CompressBuffer or
             // DetectEncoding will change _byteLen.
             _isBlocked = (_byteLen < tmpByteBuffer.Length);
-
-            // If we're supposed to detect the encoding and haven't done so yet,
-            // do it.  Note this may need to be called more than once.
-            if (_detectEncoding && _byteLen >= 2)
-            {
-                DetectEncoding();
-            }
 
             Debug.Assert(_charPos == 0 && _charLen == 0, "We shouldn't be trying to decode more data if we made progress in an earlier iteration.");
             _charLen = _decoder.GetChars(tmpByteBuffer, 0, _byteLen, _charBuffer, 0, flush: false);
