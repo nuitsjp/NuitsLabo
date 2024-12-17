@@ -190,7 +190,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
             if (idxOfNewline >= 0)
             {
                 byte[] retVal;
-                if (vsb.Length == 0)
+                if (vsb.IsEmpty)
                 {
                     retVal = bufferSpan.Slice(0, idxOfNewline).ToArray();
                 }

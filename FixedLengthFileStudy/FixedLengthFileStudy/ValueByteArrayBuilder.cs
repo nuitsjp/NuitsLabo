@@ -10,37 +10,21 @@ using System.Runtime.InteropServices;
 
 namespace FixedLengthFileStudy;
 
-internal ref partial struct ValueByteArrayBuilder
+internal ref partial struct ValueByteArrayBuilder(Span<byte> initialBuffer)
 {
-    private byte[]? _arrayToReturnToPool;
-    private Span<byte> _chars;
-    private int _pos;
+    private byte[]? _arrayToReturnToPool = null;
+    private Span<byte> _bytes = initialBuffer;
+    private int _pos = 0;
 
-    public ValueByteArrayBuilder(Span<byte> initialBuffer)
-    {
-        _arrayToReturnToPool = null;
-        _chars = initialBuffer;
-        _pos = 0;
-    }
+    public bool IsEmpty => _pos == 0;
 
-    public int Length
-    {
-        get => _pos;
-        set
-        {
-            Debug.Assert(value >= 0);
-            Debug.Assert(value <= _chars.Length);
-            _pos = value;
-        }
-    }
-
-    public ReadOnlySpan<byte> AsSpan() => _chars.Slice(0, _pos);
+    public ReadOnlySpan<byte> AsSpan() => _bytes.Slice(0, _pos);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Append(byte c)
     {
         int pos = _pos;
-        Span<byte> chars = _chars;
+        Span<byte> chars = _bytes;
         if ((uint)pos < (uint)chars.Length)
         {
             chars[pos] = c;
@@ -55,12 +39,12 @@ internal ref partial struct ValueByteArrayBuilder
     public void Append(scoped ReadOnlySpan<byte> value)
     {
         int pos = _pos;
-        if (pos > _chars.Length - value.Length)
+        if (pos > _bytes.Length - value.Length)
         {
             Grow(value.Length);
         }
 
-        value.CopyTo(_chars.Slice(_pos));
+        value.CopyTo(_bytes.Slice(_pos));
         _pos += value.Length;
     }
 
@@ -83,7 +67,7 @@ internal ref partial struct ValueByteArrayBuilder
     private void Grow(int additionalCapacityBeyondPos)
     {
         Debug.Assert(additionalCapacityBeyondPos > 0);
-        Debug.Assert(_pos > _chars.Length - additionalCapacityBeyondPos, "Grow called incorrectly, no resize is needed.");
+        Debug.Assert(_pos > _bytes.Length - additionalCapacityBeyondPos, "Grow called incorrectly, no resize is needed.");
 
         const uint ArrayMaxLength = 0x7FFFFFC7; // same as Array.MaxLength
 
@@ -91,16 +75,16 @@ internal ref partial struct ValueByteArrayBuilder
         // to double the size if possible, bounding the doubling to not go beyond the max array length.
         int newCapacity = (int)Math.Max(
             (uint)(_pos + additionalCapacityBeyondPos),
-            Math.Min((uint)_chars.Length * 2, ArrayMaxLength));
+            Math.Min((uint)_bytes.Length * 2, ArrayMaxLength));
 
         // Make sure to let Rent throw an exception if the caller has a bug and the desired capacity is negative.
         // This could also go negative if the actual required length wraps around.
         byte[] poolArray = ArrayPool<byte>.Shared.Rent(newCapacity);
 
-        _chars.Slice(0, _pos).CopyTo(poolArray);
+        _bytes.Slice(0, _pos).CopyTo(poolArray);
 
         byte[]? toReturn = _arrayToReturnToPool;
-        _chars = _arrayToReturnToPool = poolArray;
+        _bytes = _arrayToReturnToPool = poolArray;
         if (toReturn != null)
         {
             ArrayPool<byte>.Shared.Return(toReturn);
