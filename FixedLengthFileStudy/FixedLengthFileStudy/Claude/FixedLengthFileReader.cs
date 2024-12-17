@@ -157,7 +157,9 @@ public class FixedLengthFileReader : IFixedLengthFileReader
     public string GetField(int index, int bytes)
     {
         if (_currentLine == null)
+        {
             throw new InvalidOperationException("No current record.");
+        }
 
         if (_currentLineLength <= index)
         {
