@@ -71,29 +71,6 @@ public class ByteStreamReaderBenchmark : IDisposable
     }
 
     [Benchmark]
-    public void V003()
-    {
-        using var reader = new V003.ByteStreamReader(new MemoryStream(_content));
-
-        for (var i = 0; i < _lineCount; i++)
-        {
-            reader.ReadLine();
-        }
-    }
-
-    [Benchmark]
-    public void V003_10K()
-    {
-        using var reader = new V003.ByteStreamReader(new MemoryStream(_content), 10_000);
-
-        for (var i = 0; i < _lineCount; i++)
-        {
-            reader.ReadLine();
-        }
-    }
-
-
-    [Benchmark]
     public void V004()
     {
         using var reader = new V004.ByteStreamReader(new MemoryStream(_content));
