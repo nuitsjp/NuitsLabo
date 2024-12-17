@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿// vsbのサイズをリードバッファーと同じサイズに変更
+
+using System.Diagnostics;
 
 namespace FixedLengthFileStudy.Benchmark.V002;
 

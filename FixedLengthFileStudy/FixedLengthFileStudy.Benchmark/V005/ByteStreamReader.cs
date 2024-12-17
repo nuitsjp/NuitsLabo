@@ -1,4 +1,6 @@
-﻿using System.Buffers;
+﻿// バッファーをArrayPoolから取得するように変更
+
+using System.Buffers;
 using System.Diagnostics;
 
 namespace FixedLengthFileStudy.Benchmark.V005;

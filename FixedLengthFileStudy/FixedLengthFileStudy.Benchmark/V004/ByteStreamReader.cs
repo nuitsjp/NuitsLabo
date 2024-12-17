@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿// 行がバッファーより長かった場合に、バッファーを拡張する処理を追加
+
+using System.Diagnostics;
 
 namespace FixedLengthFileStudy.Benchmark.V004;
 
