@@ -31,4 +31,29 @@ public class ByteStreamReaderTest
         reader.ReadLine().Should().Be("789");
         reader.ReadLine().Should().BeNull();
     }
+
+    [Theory]
+    [InlineData("Shift_JIS", "\r")]
+    [InlineData("UTF-8", "\r")]
+    [InlineData("Shift_JIS", "\n")]
+    [InlineData("UTF-8", "\n")]
+    [InlineData("Shift_JIS", "\r\n")]
+    [InlineData("UTF-8", "\r\n")]
+    public void ReadByteArrayTest(string encodingName, string newline)
+    {
+        // Arrange
+        var encoding = Encoding.GetEncoding(encodingName);
+        var first = "123";
+        var second = "456";
+        var third = "789";
+        var content = first + newline + second + newline + third;
+        var stream = new MemoryStream(encoding.GetBytes(content));
+        using var reader = new ByteStreamReader(stream, encoding);
+
+        // Act
+        reader.ReadByteLine().Should().BeEquivalentTo(encoding.GetBytes(first));
+        reader.ReadByteLine().Should().BeEquivalentTo(encoding.GetBytes(second));
+        reader.ReadByteLine().Should().BeEquivalentTo(encoding.GetBytes(third));
+        reader.ReadLine().Should().BeNull();
+    }
 }
