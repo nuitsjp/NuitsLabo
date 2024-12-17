@@ -27,7 +27,7 @@ internal ref struct ValueByteArrayBuilder(Span<byte> initialBuffer)
     {
         int pos = _pos;
         Span<byte> chars = _bytes;
-        if ((uint)pos < (uint)chars.Length)
+        if (pos < chars.Length)
         {
             chars[pos] = c;
             _pos = pos + 1;
@@ -41,7 +41,7 @@ internal ref struct ValueByteArrayBuilder(Span<byte> initialBuffer)
     public void Append(scoped ReadOnlySpan<byte> value)
     {
         int pos = _pos;
-        if (pos > _bytes.Length - value.Length)
+        if (_bytes.Length < pos + value.Length)
         {
             Grow(value.Length);
         }
