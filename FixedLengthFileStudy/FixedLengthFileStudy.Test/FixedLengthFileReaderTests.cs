@@ -91,11 +91,12 @@ public abstract class FixedLengthFileReaderTestsBase
     {
         // Arrange
         var line = new string('A', 8000) + newLine;  // バッファーサイズ（4096）より大きいライン
+        var encoding = Encoding.GetEncoding(encodingName);
         var content =
             new string('A', 8000) + newLine
             + new string('A', 8000) + (endWithNewLine? newLine : string.Empty);  // 2行
-        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
-        using var reader = CreateReader(stream, Encoding.UTF8, newLine);
+        using var stream = new MemoryStream(encoding.GetBytes(content));
+        using var reader = CreateReader(stream, encoding, newLine);
 
         // Act & Assert
         reader.Read().Should().BeTrue();
