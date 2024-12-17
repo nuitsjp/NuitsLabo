@@ -6,7 +6,6 @@
 using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace FixedLengthFileStudy;
 
@@ -22,20 +21,6 @@ internal ref struct ValueByteArrayBuilder(Span<byte> initialBuffer)
 
     public ReadOnlySpan<byte> AsSpan() => _bytes.Slice(0, _pos);
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Append(byte c)
-    {
-        if (_pos < _bytes.Length)
-        {
-            _bytes[_pos] = c;
-            _pos += 1;
-        }
-        else
-        {
-            GrowAndAppend(c);
-        }
-    }
-
     public void Append(scoped ReadOnlySpan<byte> value)
     {
         if (_pos > _bytes.Length - value.Length)
@@ -45,13 +30,6 @@ internal ref struct ValueByteArrayBuilder(Span<byte> initialBuffer)
 
         value.CopyTo(_bytes.Slice(_pos));
         _pos += value.Length;
-    }
-
-    [MethodImpl(MethodImplOptions.NoInlining)]
-    private void GrowAndAppend(byte c)
-    {
-        Grow(1);
-        Append(c);
     }
 
     /// <summary>
