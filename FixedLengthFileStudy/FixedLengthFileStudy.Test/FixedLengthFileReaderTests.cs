@@ -365,6 +365,57 @@ public abstract class FixedLengthFileReaderTestsBase
     }
 
     [Fact]
+    public void GetField_WithMinusIndex_ShouldThrowException()
+    {
+        // Arrange
+        var content = "ABCDE";
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+        using var reader = CreateReader(stream, Encoding.UTF8, Environment.NewLine);
+
+        // Act
+        reader.Read();
+
+        // Assert
+        // ReSharper disable once AccessToDisposedClosure
+        var action = () => reader.GetField(-1, 1);
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [Fact]
+    public void GetField_WithMinusBytes_ShouldThrowException()
+    {
+        // Arrange
+        var content = "ABCDE";
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+        using var reader = CreateReader(stream, Encoding.UTF8, Environment.NewLine);
+
+        // Act
+        reader.Read();
+
+        // Assert
+        // ReSharper disable once AccessToDisposedClosure
+        var action = () => reader.GetField(1, -1);
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [Fact]
+    public void GetField_WithInvalidTrim_ShouldThrowException()
+    {
+        // Arrange
+        var content = "ABCDE";
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+        using var reader = CreateReader(stream, Encoding.UTF8, Environment.NewLine, trim: (Trim)int.MaxValue);
+
+        // Act
+        reader.Read();
+
+        // Assert
+        // ReSharper disable once AccessToDisposedClosure
+        var action = () => reader.GetField(0, 1);
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [Fact]
     public void GetField_BeforeRead_ShouldThrowInvalidOperationException()
     {
         // Arrange
