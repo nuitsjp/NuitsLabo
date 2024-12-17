@@ -181,7 +181,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
             Debug.Assert(!bufferSpan.IsEmpty, "ReadBuffer returned > 0 but didn't bump _charLen?");
 
             var indexOfNewline = bufferSpan.IndexOfAny((byte)'\r', (byte)'\n');
-            if (indexOfNewline >= 0)
+            if (0 <= indexOfNewline)
             {
                 byte[] retVal;
                 if (vsb.IsEmpty)
