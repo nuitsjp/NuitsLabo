@@ -48,10 +48,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     // exist.  But that's all we'll do.
     private bool _detectEncoding;
 
-    // Whether we must still check for the encoding's given preamble at the
-    // beginning of this file.
-    private bool _checkPreamble;
-
     // Whether the stream is most likely not going to give us back as much
     // data as we want the next time we call it.  We must do the computation
     // before we do any byte order mark handling and save the result.  Note
@@ -160,13 +156,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         _maxCharsPerBuffer = encoding.GetMaxCharCount(bufferSize);
         _charBuffer = new char[_maxCharsPerBuffer];
         _detectEncoding = detectEncodingFromByteOrderMarks;
-
-        // If the preamble length is larger than the byte buffer length,
-        // we'll never match it and will enter an infinite loop. This
-        // should never happen in practice, but just in case, we'll skip
-        // the preamble check for absurdly long preambles.
-        int preambleLength = encoding.Preamble.Length;
-        _checkPreamble = preambleLength > 0 && preambleLength <= bufferSize;
 
         _closable = !leaveOpen;
     }
@@ -526,106 +515,30 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         }
     }
 
-    // Trims the preamble bytes from the byteBuffer. This routine can be called multiple times
-    // and we will buffer the bytes read until the preamble is matched or we determine that
-    // there is no match. If there is no match, every byte read previously will be available
-    // for further consumption. If there is a match, we will compress the buffer for the
-    // leading preamble bytes
-    private bool IsPreamble()
-    {
-        if (!_checkPreamble)
-        {
-            return false;
-        }
-
-        return IsPreambleWorker(); // move this call out of the hot path
-        bool IsPreambleWorker()
-        {
-            Debug.Assert(_checkPreamble);
-            ReadOnlySpan<byte> preamble = _encoding.Preamble;
-
-            Debug.Assert(_bytePos < preamble.Length, "_compressPreamble was called with the current bytePos greater than the preamble buffer length.  Are two threads using this ByteStreamReader at the same time?");
-            int len = Math.Min(_byteLen, preamble.Length);
-
-            for (int i = _bytePos; i < len; i++)
-            {
-                if (_byteBuffer[i] != preamble[i])
-                {
-                    _bytePos = 0; // preamble match failed; back up to beginning of buffer
-                    _checkPreamble = false;
-                    return false;
-                }
-            }
-            _bytePos = len; // we've matched all bytes up to this point
-
-            Debug.Assert(_bytePos <= preamble.Length, "possible bug in _compressPreamble.  Are two threads using this ByteStreamReader at the same time?");
-
-            if (_bytePos == preamble.Length)
-            {
-                // We have a match
-                CompressBuffer(preamble.Length);
-                _bytePos = 0;
-                _checkPreamble = false;
-                _detectEncoding = false;
-            }
-
-            return _checkPreamble;
-        }
-    }
-
     internal virtual int ReadBuffer()
     {
         _charLen = 0;
         _charPos = 0;
-
-        if (!_checkPreamble)
-        {
-            _byteLen = 0;
-        }
+        _byteLen = 0;
 
         bool eofReached = false;
 
         do
         {
-            if (_checkPreamble)
+            Debug.Assert(_bytePos == 0, "bytePos can be non zero only when we are trying to _checkPreamble.  Are two threads using this ByteStreamReader at the same time?");
+            _byteLen = _stream.Read(_byteBuffer, 0, _byteBuffer.Length);
+            Debug.Assert(_byteLen >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
+
+            if (_byteLen == 0)
             {
-                Debug.Assert(_bytePos <= _encoding.Preamble.Length, "possible bug in _compressPreamble.  Are two threads using this ByteStreamReader at the same time?");
-                int len = _stream.Read(_byteBuffer, _bytePos, _byteBuffer.Length - _bytePos);
-                Debug.Assert(len >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
-
-                if (len == 0)
-                {
-                    eofReached = true;
-                    break;
-                }
-
-                _byteLen += len;
-            }
-            else
-            {
-                Debug.Assert(_bytePos == 0, "bytePos can be non zero only when we are trying to _checkPreamble.  Are two threads using this ByteStreamReader at the same time?");
-                _byteLen = _stream.Read(_byteBuffer, 0, _byteBuffer.Length);
-                Debug.Assert(_byteLen >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
-
-                if (_byteLen == 0)
-                {
-                    eofReached = true;
-                    break;
-                }
+                eofReached = true;
+                break;
             }
 
             // _isBlocked == whether we read fewer bytes than we asked for.
             // Note we must check it here because CompressBuffer or
             // DetectEncoding will change byteLen.
             _isBlocked = (_byteLen < _byteBuffer.Length);
-
-            // Check for preamble before detect encoding. This is not to the
-            // user supplied Encoding for the one we implicitly detect. The user could
-            // customize the encoding which we will loose, such as ThrowOnError on UTF8
-            if (IsPreamble())
-            {
-                continue;
-            }
 
             // If we're supposed to detect the encoding and haven't done so yet,
             // do it.  Note this may need to be called more than once.
@@ -665,11 +578,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     {
         _charLen = 0;
         _charPos = 0;
-
-        if (!_checkPreamble)
-        {
-            _byteLen = 0;
-        }
+        _byteLen = 0;
 
         bool eofReached = false;
         int charsRead = 0;
@@ -691,47 +600,20 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         {
             Debug.Assert(charsRead == 0);
 
-            if (_checkPreamble)
+            Debug.Assert(_bytePos == 0, "bytePos can be non zero only when we are trying to _checkPreamble.  Are two threads using this ByteStreamReader at the same time?");
+            _byteLen = _stream.Read(_byteBuffer, 0, _byteBuffer.Length);
+            Debug.Assert(_byteLen >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
+
+            if (_byteLen == 0)
             {
-                Debug.Assert(_bytePos <= _encoding.Preamble.Length, "possible bug in _compressPreamble.  Are two threads using this ByteStreamReader at the same time?");
-                int len = _stream.Read(_byteBuffer, _bytePos, _byteBuffer.Length - _bytePos);
-                Debug.Assert(len >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
-
-                if (len == 0)
-                {
-                    eofReached = true;
-                    break;
-                }
-
-                _byteLen += len;
-            }
-            else
-            {
-                Debug.Assert(_bytePos == 0, "bytePos can be non zero only when we are trying to _checkPreamble.  Are two threads using this ByteStreamReader at the same time?");
-                _byteLen = _stream.Read(_byteBuffer, 0, _byteBuffer.Length);
-                Debug.Assert(_byteLen >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
-
-                if (_byteLen == 0)
-                {
-                    eofReached = true;
-                    break;
-                }
+                eofReached = true;
+                break;
             }
 
             // _isBlocked == whether we read fewer bytes than we asked for.
             // Note we must check it here because CompressBuffer or
             // DetectEncoding will change byteLen.
             _isBlocked = (_byteLen < _byteBuffer.Length);
-
-            // Check for preamble before detect encoding. This is not to the
-            // user supplied Encoding for the one we implicitly detect. The user could
-            // customize the encoding which we will loose, such as ThrowOnError on UTF8
-            // Note: we don't need to recompute readToUserBuffer optimization as IsPreamble
-            // doesn't change the encoding or affect _maxCharsPerBuffer
-            if (IsPreamble())
-            {
-                continue;
-            }
 
             // On the first call to ReadBuffer, if we're supposed to detect the encoding, do it.
             if (_detectEncoding && _byteLen >= 2)
@@ -1082,11 +964,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
             {
                 _charLen = 0;
                 _charPos = 0;
-
-                if (!_checkPreamble)
-                {
-                    _byteLen = 0;
-                }
+                _byteLen = 0;
 
                 readToUserBuffer = count >= _maxCharsPerBuffer;
 
@@ -1096,71 +974,22 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
                 {
                     Debug.Assert(n == 0);
 
-                    if (_checkPreamble)
+                    Debug.Assert(_bytePos == 0, "_bytePos can be non zero only when we are trying to _checkPreamble.  Are two threads using this ByteStreamReader at the same time?");
+
+                    _byteLen = await tmpStream.ReadAsync(new Memory<byte>(tmpByteBuffer), cancellationToken).ConfigureAwait(false);
+
+                    Debug.Assert(_byteLen >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
+
+                    if (_byteLen == 0)  // EOF
                     {
-                        Debug.Assert(_bytePos <= _encoding.Preamble.Length, "possible bug in _compressPreamble.  Are two threads using this ByteStreamReader at the same time?");
-                        int tmpBytePos = _bytePos;
-                        int len = await tmpStream.ReadAsync(new Memory<byte>(tmpByteBuffer, tmpBytePos, tmpByteBuffer.Length - tmpBytePos), cancellationToken).ConfigureAwait(false);
-                        Debug.Assert(len >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
-
-                        if (len == 0)
-                        {
-                            // EOF but we might have buffered bytes from previous
-                            // attempts to detect preamble that needs to be decoded now
-                            if (_byteLen > 0)
-                            {
-                                if (readToUserBuffer)
-                                {
-                                    n = _decoder.GetChars(new ReadOnlySpan<byte>(tmpByteBuffer, 0, _byteLen), buffer.Span.Slice(charsRead), flush: false);
-                                    _charLen = 0;  // ByteStreamReader's buffer is empty.
-                                }
-                                else
-                                {
-                                    n = _decoder.GetChars(tmpByteBuffer, 0, _byteLen, _charBuffer, 0);
-                                    _charLen += n;  // Number of chars in ByteStreamReader's buffer.
-                                }
-                            }
-
-                            // How can part of the preamble yield any chars?
-                            Debug.Assert(n == 0);
-
-                            _isBlocked = true;
-                            break;
-                        }
-                        else
-                        {
-                            _byteLen += len;
-                        }
-                    }
-                    else
-                    {
-                        Debug.Assert(_bytePos == 0, "_bytePos can be non zero only when we are trying to _checkPreamble.  Are two threads using this ByteStreamReader at the same time?");
-
-                        _byteLen = await tmpStream.ReadAsync(new Memory<byte>(tmpByteBuffer), cancellationToken).ConfigureAwait(false);
-
-                        Debug.Assert(_byteLen >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
-
-                        if (_byteLen == 0)  // EOF
-                        {
-                            _isBlocked = true;
-                            break;
-                        }
+                        _isBlocked = true;
+                        break;
                     }
 
                     // _isBlocked == whether we read fewer bytes than we asked for.
                     // Note we must check it here because CompressBuffer or
                     // DetectEncoding will change _byteLen.
                     _isBlocked = (_byteLen < tmpByteBuffer.Length);
-
-                    // Check for preamble before detect encoding. This is not to the
-                    // user supplied Encoding for the one we implicitly detect. The user could
-                    // customize the encoding which we will loose, such as ThrowOnError on UTF8
-                    // Note: we don't need to recompute readToUserBuffer optimization as IsPreamble
-                    // doesn't change the encoding or affect _maxCharsPerBuffer
-                    if (IsPreamble())
-                    {
-                        continue;
-                    }
 
                     // On the first call to ReadBuffer, if we're supposed to detect the encoding, do it.
                     if (_detectEncoding && _byteLen >= 2)
@@ -1257,56 +1086,26 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         _charPos = 0;
         byte[] tmpByteBuffer = _byteBuffer;
         Stream tmpStream = _stream;
-
-        if (!_checkPreamble)
-        {
-            _byteLen = 0;
-        }
+        _byteLen = 0;
 
         bool eofReached = false;
 
         do
         {
-            if (_checkPreamble)
+            Debug.Assert(_bytePos == 0, "_bytePos can be non zero only when we are trying to _checkPreamble. Are two threads using this ByteStreamReader at the same time?");
+            _byteLen = await tmpStream.ReadAsync(new Memory<byte>(tmpByteBuffer), cancellationToken).ConfigureAwait(false);
+            Debug.Assert(_byteLen >= 0, "Stream.Read returned a negative number!  Bug in stream class.");
+
+            if (_byteLen == 0)
             {
-                Debug.Assert(_bytePos <= _encoding.Preamble.Length, "possible bug in _compressPreamble. Are two threads using this ByteStreamReader at the same time?");
-                int tmpBytePos = _bytePos;
-                int len = await tmpStream.ReadAsync(tmpByteBuffer.AsMemory(tmpBytePos), cancellationToken).ConfigureAwait(false);
-                Debug.Assert(len >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
-
-                if (len == 0)
-                {
-                    eofReached = true;
-                    break;
-                }
-
-                _byteLen += len;
-            }
-            else
-            {
-                Debug.Assert(_bytePos == 0, "_bytePos can be non zero only when we are trying to _checkPreamble. Are two threads using this ByteStreamReader at the same time?");
-                _byteLen = await tmpStream.ReadAsync(new Memory<byte>(tmpByteBuffer), cancellationToken).ConfigureAwait(false);
-                Debug.Assert(_byteLen >= 0, "Stream.Read returned a negative number!  Bug in stream class.");
-
-                if (_byteLen == 0)
-                {
-                    eofReached = true;
-                    break;
-                }
+                eofReached = true;
+                break;
             }
 
             // _isBlocked == whether we read fewer bytes than we asked for.
             // Note we must check it here because CompressBuffer or
             // DetectEncoding will change _byteLen.
             _isBlocked = (_byteLen < tmpByteBuffer.Length);
-
-            // Check for preamble before detect encoding. This is not to the
-            // user supplied Encoding for the one we implicitly detect. The user could
-            // customize the encoding which we will loose, such as ThrowOnError on UTF8
-            if (IsPreamble())
-            {
-                continue;
-            }
 
             // If we're supposed to detect the encoding and haven't done so yet,
             // do it.  Note this may need to be called more than once.
