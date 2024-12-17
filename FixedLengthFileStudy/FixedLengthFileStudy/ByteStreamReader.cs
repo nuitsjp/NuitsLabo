@@ -26,7 +26,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     private readonly Stream _stream;
     private readonly byte[] _byteBuffer = null!; // only null in NullStreamReader where this is never used
     //private char[] _charBuffer = null!; // only null in NullStreamReader where this is never used
-    private int _charPos;
     // Record the number of valid bytes in the byteBuffer, for a few checks.
     private int _byteLen;
     // This is used only for preamble detection
@@ -101,7 +100,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         }
         finally
         {
-            _charPos = 0;
+            _bytePos = 0;
             _byteLen = 0;
         }
     }
@@ -147,7 +146,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
 
     private int ReadByteBuffer()
     {
-        _charPos = 0;
+        _bytePos = 0;
         _byteLen = _stream.Read(_byteBuffer, 0, _byteBuffer.Length);
         return _byteLen;
     }
@@ -229,7 +228,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     {
         CheckAsyncTaskInProgress();
 
-        if (_charPos == _byteLen)
+        if (_bytePos == _byteLen)
         {
             if (ReadByteBuffer() == 0)
             {
@@ -241,7 +240,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         do
         {
             // Look for '\r' or \'n'.
-            ReadOnlySpan<byte> bufferSpan = _byteBuffer.AsSpan(_charPos, _byteLen - _charPos);
+            ReadOnlySpan<byte> bufferSpan = _byteBuffer.AsSpan(_bytePos, _byteLen - _bytePos);
             Debug.Assert(!bufferSpan.IsEmpty, "ReadBuffer returned > 0 but didn't bump _charLen?");
 
             var idxOfNewline = bufferSpan.IndexOfAny((byte)'\r', (byte)'\n');
@@ -259,16 +258,16 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
                 }
 
                 var matchedChar = bufferSpan[idxOfNewline];
-                _charPos += idxOfNewline + 1;
+                _bytePos += idxOfNewline + 1;
 
                 // If we found '\r', consume any immediately following '\n'.
                 if (matchedChar == '\r')
                 {
-                    if (_charPos < _byteLen || ReadByteBuffer() > 0)
+                    if (_bytePos < _byteLen || ReadByteBuffer() > 0)
                     {
                         if (bufferSpan[idxOfNewline + 1] == '\n')
                         {
-                            _charPos++;
+                            _bytePos++;
                         }
                     }
                 }
