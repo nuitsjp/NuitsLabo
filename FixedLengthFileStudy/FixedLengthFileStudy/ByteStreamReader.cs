@@ -317,7 +317,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
                 {
                     if (_charPos < _byteLen || ReadByteBuffer() > 0)
                     {
-                        if (bufferSpan[_charPos] == '\n')
+                        if (bufferSpan[idxOfNewline + 1] == '\n')
                         {
                             _charPos++;
                         }

@@ -46,7 +46,8 @@ public class ByteStreamReaderTest
         var first = new string('あ', 8000);
         var second = new string('A', 4096);
         var third = "789";
-        var content = first + newline + second + newline + third;
+        var forth = new string('B', 100);
+        var content = first + newline + second + newline + third + newline + forth;
         var stream = new MemoryStream(encoding.GetBytes(content));
         using var reader = new ByteStreamReader(stream, encoding);
 
@@ -54,6 +55,7 @@ public class ByteStreamReaderTest
         reader.ReadByteLine().Should().BeEquivalentTo(encoding.GetBytes(first));
         reader.ReadByteLine().Should().BeEquivalentTo(encoding.GetBytes(second));
         reader.ReadByteLine().Should().BeEquivalentTo(encoding.GetBytes(third));
+        reader.ReadByteLine().Should().BeEquivalentTo(encoding.GetBytes(forth));
         reader.ReadByteLine().Should().BeNull();
     }
 }
