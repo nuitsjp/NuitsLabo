@@ -40,8 +40,7 @@ internal ref struct ValueByteArrayBuilder(Span<byte> initialBuffer)
 
     public void Append(scoped ReadOnlySpan<byte> value)
     {
-        int pos = _pos;
-        if (_bytes.Length < pos + value.Length)
+        if (_pos > _bytes.Length - value.Length)
         {
             Grow(value.Length);
         }
