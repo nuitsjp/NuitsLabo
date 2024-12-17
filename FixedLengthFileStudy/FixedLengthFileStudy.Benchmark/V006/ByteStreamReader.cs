@@ -1,4 +1,5 @@
 ﻿// 004ベース
+// ValueByteArrayBuilderのバッファーをメンバー変数に確保
 
 using System.Buffers;
 using System.Diagnostics;
@@ -12,6 +13,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
 
     private readonly Stream _stream;
     private byte[] _byteBuffer;
+    private byte[] _valueByteArrayBuilderBuffer;
     private int _byteLen;
     private int _bytePos;
 
@@ -49,6 +51,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         _byteBuffer = bufferSize is null
             ? new byte[DefaultBufferSize]
             : new byte[bufferSize.Value];
+        _valueByteArrayBuilderBuffer = new byte[_byteBuffer.Length];
     }
 
     //internal virtual int ReadBuffer()
@@ -177,7 +180,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
             }
         }
 
-        var vsb = new ValueByteArrayBuilder(stackalloc byte[_byteBuffer.Length]);
+        var vsb = new ValueByteArrayBuilder(_valueByteArrayBuilderBuffer);
         do
         {
             // Look for '\r' or \'n'.
@@ -199,6 +202,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
                     if (_byteBuffer.Length < needByteLength)
                     {
                         _byteBuffer = new byte[needByteLength];
+                        _valueByteArrayBuilderBuffer = new byte[_byteBuffer.Length];
                     }
                     vsb.Dispose();
                 }
