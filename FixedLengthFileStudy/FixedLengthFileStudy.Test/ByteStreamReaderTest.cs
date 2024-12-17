@@ -55,7 +55,7 @@ public class ByteStreamReaderTest
         var forth = new string('B', 100);
         var content = first + newline + second + newline + third + newline + forth;
         var stream = new MemoryStream(encoding.GetBytes(content));
-        using var reader = new ByteStreamReader(stream, encoding, bufferSize);
+        using var reader = new ByteStreamReader(stream, bufferSize);
 
         // Act
         reader.ReadLine().Should().BeEquivalentTo(encoding.GetBytes(first));
@@ -69,7 +69,7 @@ public class ByteStreamReaderTest
     public void CloseAndDispose()
     {
         var stream = new MemoryStream(Encoding.UTF8.GetBytes(string.Empty));
-        var reader = new ByteStreamReader(stream, Encoding.UTF8);
+        var reader = new ByteStreamReader(stream);
 
         reader.Close();
         reader.Dispose();
@@ -82,7 +82,7 @@ public class ByteStreamReaderTest
     public async Task DisposeAsync()
     {
         var stream = new MemoryStream(Encoding.UTF8.GetBytes(string.Empty));
-        var reader = new ByteStreamReader(stream, Encoding.UTF8);
+        var reader = new ByteStreamReader(stream);
 
         await reader.DisposeAsync();
 
@@ -95,7 +95,7 @@ public class ByteStreamReaderTest
         var stream = new MemoryStream();
         stream.Close();
         stream.CanRead.Should().BeFalse();
-        Action action = () => new ByteStreamReader(stream, Encoding.UTF8);
+        Action action = () => new ByteStreamReader(stream);
         action.Should().Throw<ArgumentException>();
     }
 
@@ -106,7 +106,7 @@ public class ByteStreamReaderTest
     {
         using var stream = new MemoryStream();
         // ReSharper disable once AccessToDisposedClosure
-        Action action = () => new ByteStreamReader(stream, Encoding.UTF8, bufferSize);
+        Action action = () => new ByteStreamReader(stream, bufferSize);
         action.Should().Throw<ArgumentException>();
     }
 

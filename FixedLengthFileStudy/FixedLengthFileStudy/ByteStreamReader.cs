@@ -24,7 +24,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     public static readonly int MinBufferSize = 128;
 
     private readonly Stream _stream;
-    private Encoding _encoding = null!; // only null in NullStreamReader where this is never used
     private readonly byte[] _byteBuffer = null!; // only null in NullStreamReader where this is never used
     //private char[] _charBuffer = null!; // only null in NullStreamReader where this is never used
     private int _charPos;
@@ -51,7 +50,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         }
     }
 
-    public ByteStreamReader(Stream stream, Encoding encoding, int? bufferSize = null)
+    public ByteStreamReader(Stream stream, int? bufferSize = null)
     {
         int byteBufferSize;
         if (bufferSize is null)
@@ -73,7 +72,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         }
 
         _stream = stream;
-        _encoding = encoding;
 
         _byteBuffer = new byte[byteBufferSize];
     }
