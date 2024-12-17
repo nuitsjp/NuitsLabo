@@ -92,6 +92,29 @@ public class ByteStreamReaderBenchmark : IDisposable
         }
     }
 
+
+    [Benchmark]
+    public void V005()
+    {
+        using var reader = new V005.ByteStreamReader(new MemoryStream(_content));
+
+        for (var i = 0; i < _lineCount; i++)
+        {
+            reader.ReadLine();
+        }
+    }
+
+    [Benchmark]
+    public void V005_10K()
+    {
+        using var reader = new V005.ByteStreamReader(new MemoryStream(_content), 10_000);
+
+        for (var i = 0; i < _lineCount; i++)
+        {
+            reader.ReadLine();
+        }
+    }
+
     public void Dispose()
     {
         // TODO release managed resources here
