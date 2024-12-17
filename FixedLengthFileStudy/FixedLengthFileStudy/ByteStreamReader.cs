@@ -48,36 +48,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
             : new byte[bufferSize.Value];
     }
 
-    public void Close()
-    {
-        Dispose(true);
-    }
-
-
-    protected void Dispose(bool disposing)
-    {
-        if (_disposed)
-        {
-            return;
-        }
-        _disposed = true;
-
-        try
-        {
-            // Note that Stream.Close() can potentially throw here. So we need to
-            // ensure cleaning up internal resources, inside the finally block.
-            if (disposing)
-            {
-                _stream.Close();
-            }
-        }
-        finally
-        {
-            _bytePos = 0;
-            _byteLen = 0;
-        }
-    }
-
     //internal virtual int ReadBuffer()
     //{
     //    _charLen = 0;
@@ -421,14 +391,41 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     //    return _charLen;
     //}
 
+    public void Close()
+    {
+        Dispose();
+    }
+
     public void Dispose()
     {
-        Dispose(true);
+        if (_disposed) return;
+
+        _disposed = true;
+
+        try
+        {
+            _stream.Close();
+        }
+        catch
+        {
+            // Ignore any exceptions that might result from closing the stream.
+        }
     }
 
     public async ValueTask DisposeAsync()
     {
-        Dispose(true);
+        if (_disposed) return;
+
+        _disposed = true;
+
+        try
+        {
+            await _stream.DisposeAsync();
+        }
+        catch
+        {
+            // Ignore any exceptions that might result from closing the stream.
+        }
     }
 
     private static byte[] Concat(ReadOnlySpan<byte> span1, ReadOnlySpan<byte> span2)
