@@ -20,12 +20,11 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     // buffer is negated by the win of allocating a smaller byte[], which
     // saves construction time.  This does break adaptive buffering,
     // but this is slightly faster.
-    private const int DefaultBufferSize = 4096;  // Byte buffer size
-    private const int MinBufferSize = 128;
+    public static readonly int DefaultBufferSize = 4096;  // Byte buffer size
+    public static readonly int MinBufferSize = 128;
 
     private readonly Stream _stream;
     private Encoding _encoding = null!; // only null in NullStreamReader where this is never used
-    private Decoder _decoder = null!; // only null in NullStreamReader where this is never used
     private readonly byte[] _byteBuffer = null!; // only null in NullStreamReader where this is never used
     //private char[] _charBuffer = null!; // only null in NullStreamReader where this is never used
     private int _charPos;
@@ -33,11 +32,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     private int _byteLen;
     // This is used only for preamble detection
     private int _bytePos;
-
-    // This is the maximum number of chars we can get from one call to
-    // ReadBuffer.  Used so ReadBuffer can tell when to copy data into
-    // a user's char[] directly, instead of our internal char[].
-    private int _maxCharsPerBuffer;
 
     /// <summary>True if the writer has been disposed; otherwise, false.</summary>
     private bool _disposed;
@@ -57,26 +51,31 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         }
     }
 
-    public ByteStreamReader(Stream stream, Encoding encoding, int bufferSize = DefaultBufferSize)
+    public ByteStreamReader(Stream stream, Encoding encoding, int? bufferSize = null)
     {
+        int byteBufferSize;
+        if (bufferSize is null)
+        {
+            byteBufferSize = DefaultBufferSize;
+        }
+        else if (bufferSize < MinBufferSize)
+        {
+            throw new ArgumentOutOfRangeException(nameof(bufferSize));
+        }
+        else
+        {
+            byteBufferSize = bufferSize.Value;
+        }
+
         if (!stream.CanRead)
         {
             throw new ArgumentException("Stream can not read.");
         }
 
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(bufferSize);
-
         _stream = stream;
-        _encoding = encoding ??= Encoding.UTF8;
-        _decoder = encoding.GetDecoder();
-        if (bufferSize < MinBufferSize)
-        {
-            bufferSize = MinBufferSize;
-        }
+        _encoding = encoding;
 
-        _byteBuffer = new byte[bufferSize];
-        _maxCharsPerBuffer = encoding.GetMaxCharCount(bufferSize);
-        //_charBuffer = new char[_maxCharsPerBuffer];
+        _byteBuffer = new byte[byteBufferSize];
     }
 
     public void Close()

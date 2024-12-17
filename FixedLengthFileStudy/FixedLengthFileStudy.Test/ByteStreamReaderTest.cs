@@ -33,13 +33,19 @@ public class ByteStreamReaderTest
     //}
 
     [Theory]
-    [InlineData("Shift_JIS", "\r")]
-    [InlineData("UTF-8", "\r")]
-    [InlineData("Shift_JIS", "\n")]
-    [InlineData("UTF-8", "\n")]
-    [InlineData("Shift_JIS", "\r\n")]
-    [InlineData("UTF-8", "\r\n")]
-    public void ReadByteArrayTest(string encodingName, string newline)
+    [InlineData("Shift_JIS", "\r", null)]
+    [InlineData("UTF-8", "\r", null)]
+    [InlineData("Shift_JIS", "\n", null)]
+    [InlineData("UTF-8", "\n", null)]
+    [InlineData("Shift_JIS", "\r\n", null)]
+    [InlineData("UTF-8", "\r\n", null)]
+    [InlineData("Shift_JIS", "\r", 8000)]
+    [InlineData("UTF-8", "\r", 8000)]
+    [InlineData("Shift_JIS", "\n", 8000)]
+    [InlineData("UTF-8", "\n", 8000)]
+    [InlineData("Shift_JIS", "\r\n", 8000)]
+    [InlineData("UTF-8", "\r\n", 8000)]
+    public void ReadByteArrayTest(string encodingName, string newline, int? bufferSize)
     {
         // Arrange
         var encoding = Encoding.GetEncoding(encodingName);
@@ -49,7 +55,7 @@ public class ByteStreamReaderTest
         var forth = new string('B', 100);
         var content = first + newline + second + newline + third + newline + forth;
         var stream = new MemoryStream(encoding.GetBytes(content));
-        using var reader = new ByteStreamReader(stream, encoding);
+        using var reader = new ByteStreamReader(stream, encoding, bufferSize);
 
         // Act
         reader.ReadByteLine().Should().BeEquivalentTo(encoding.GetBytes(first));
@@ -60,13 +66,27 @@ public class ByteStreamReaderTest
     }
 
     [Fact]
-    public void Dispose_SecondTime()
+    public void CloseAndDispose()
     {
         var stream = new MemoryStream(Encoding.UTF8.GetBytes(string.Empty));
         var reader = new ByteStreamReader(stream, Encoding.UTF8);
 
+        reader.Close();
         reader.Dispose();
-        reader.Dispose();
+
+        stream.CanRead.Should().BeFalse();
+    }
+
+
+    [Fact]
+    public async Task DisposeAsync()
+    {
+        var stream = new MemoryStream(Encoding.UTF8.GetBytes(string.Empty));
+        var reader = new ByteStreamReader(stream, Encoding.UTF8);
+
+        await reader.DisposeAsync();
+
+        stream.CanRead.Should().BeFalse();
     }
 
     [Fact]
