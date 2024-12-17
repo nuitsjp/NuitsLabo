@@ -12,11 +12,8 @@ namespace FixedLengthFileStudy;
 // This class implements a TextReader for reading characters to a Stream.
 // This is designed for character input in a particular Encoding,
 // whereas the Stream class is designed for byte input and output.
-public class StreamReader : TextReader
+public class ByteStreamReader : IDisposable, IAsyncDisposable
 {
-    // StreamReader.Null is threadsafe.
-    public static new readonly StreamReader Null = new NullStreamReader();
-
     // Using a 1K byte buffer and a 4K FileStream buffer works out pretty well
     // perf-wise.  On even a 40 MB text file, any perf loss by using a 4K
     // buffer is negated by the win of allocating a smaller byte[], which
@@ -64,11 +61,11 @@ public class StreamReader : TextReader
     private bool _isBlocked;
 
     // The intent of this field is to leave open the underlying stream when
-    // disposing of this StreamReader.  A name like _leaveOpen is better,
+    // disposing of this ByteStreamReader.  A name like _leaveOpen is better,
     // but this type is serializable, and this field's name was _closable.
     private readonly bool _closable;  // Whether to close the underlying stream.
 
-    // We don't guarantee thread safety on StreamReader, but we should at
+    // We don't guarantee thread safety on ByteStreamReader, but we should at
     // least prevent users from trying to read anything while an Async
     // read from the same thread is in progress.
     private Task _asyncReadTask = Task.CompletedTask;
@@ -87,39 +84,38 @@ public class StreamReader : TextReader
     private static void ThrowAsyncIOInProgress() =>
         throw new InvalidOperationException();
 
-    // StreamReader by default will ignore illegal UTF8 characters. We don't want to
+    // ByteStreamReader by default will ignore illegal UTF8 characters. We don't want to
     // throw here because we want to be able to read ill-formed data without choking.
     // The high level goal is to be tolerant of encoding errors when we read and very strict
     // when we write. Hence, default StreamWriter encoding will throw on error.
 
-    private StreamReader()
+    private ByteStreamReader()
     {
-        Debug.Assert(this is NullStreamReader);
         _stream = Stream.Null;
         _closable = true;
     }
 
-    public StreamReader(Stream stream)
+    public ByteStreamReader(Stream stream)
         : this(stream, true)
     {
     }
 
-    public StreamReader(Stream stream, bool detectEncodingFromByteOrderMarks)
+    public ByteStreamReader(Stream stream, bool detectEncodingFromByteOrderMarks)
         : this(stream, Encoding.UTF8, detectEncodingFromByteOrderMarks, DefaultBufferSize, false)
     {
     }
 
-    public StreamReader(Stream stream, Encoding encoding)
+    public ByteStreamReader(Stream stream, Encoding encoding)
         : this(stream, encoding, true, DefaultBufferSize, false)
     {
     }
 
-    public StreamReader(Stream stream, Encoding encoding, bool detectEncodingFromByteOrderMarks)
+    public ByteStreamReader(Stream stream, Encoding encoding, bool detectEncodingFromByteOrderMarks)
         : this(stream, encoding, detectEncodingFromByteOrderMarks, DefaultBufferSize, false)
     {
     }
 
-    // Creates a new StreamReader for the given stream.  The
+    // Creates a new ByteStreamReader for the given stream.  The
     // character encoding is set by encoding and the buffer size,
     // in number of 16-bit characters, is set by bufferSize.
     //
@@ -129,12 +125,12 @@ public class StreamReader : TextReader
     // unicode, and big endian unicode text, but that's it.  If neither
     // of those three match, it will use the Encoding you provided.
     //
-    public StreamReader(Stream stream, Encoding encoding, bool detectEncodingFromByteOrderMarks, int bufferSize)
+    public ByteStreamReader(Stream stream, Encoding encoding, bool detectEncodingFromByteOrderMarks, int bufferSize)
         : this(stream, encoding, detectEncodingFromByteOrderMarks, bufferSize, false)
     {
     }
 
-    public StreamReader(Stream stream, Encoding? encoding = null, bool detectEncodingFromByteOrderMarks = true, int bufferSize = -1, bool leaveOpen = false)
+    public ByteStreamReader(Stream stream, Encoding? encoding = null, bool detectEncodingFromByteOrderMarks = true, int bufferSize = -1, bool leaveOpen = false)
     {
         if (stream == null)
         {
@@ -175,37 +171,37 @@ public class StreamReader : TextReader
         _closable = !leaveOpen;
     }
 
-    public StreamReader(string path)
+    public ByteStreamReader(string path)
         : this(path, true)
     {
     }
 
-    public StreamReader(string path, bool detectEncodingFromByteOrderMarks)
+    public ByteStreamReader(string path, bool detectEncodingFromByteOrderMarks)
         : this(path, Encoding.UTF8, detectEncodingFromByteOrderMarks, DefaultBufferSize)
     {
     }
 
-    public StreamReader(string path, Encoding encoding)
+    public ByteStreamReader(string path, Encoding encoding)
         : this(path, encoding, true, DefaultBufferSize)
     {
     }
 
-    public StreamReader(string path, Encoding encoding, bool detectEncodingFromByteOrderMarks)
+    public ByteStreamReader(string path, Encoding encoding, bool detectEncodingFromByteOrderMarks)
         : this(path, encoding, detectEncodingFromByteOrderMarks, DefaultBufferSize)
     {
     }
 
-    public StreamReader(string path, Encoding encoding, bool detectEncodingFromByteOrderMarks, int bufferSize)
+    public ByteStreamReader(string path, Encoding encoding, bool detectEncodingFromByteOrderMarks, int bufferSize)
         : this(ValidateArgsAndOpenPath(path, encoding, bufferSize), encoding, detectEncodingFromByteOrderMarks, bufferSize, leaveOpen: false)
     {
     }
 
-    public StreamReader(string path, FileStreamOptions options)
+    public ByteStreamReader(string path, FileStreamOptions options)
         : this(path, Encoding.UTF8, true, options)
     {
     }
 
-    public StreamReader(string path, Encoding encoding, bool detectEncodingFromByteOrderMarks, FileStreamOptions options)
+    public ByteStreamReader(string path, Encoding encoding, bool detectEncodingFromByteOrderMarks, FileStreamOptions options)
         : this(ValidateArgsAndOpenPath(path, encoding, options), encoding, detectEncodingFromByteOrderMarks, DefaultBufferSize)
     {
     }
@@ -232,12 +228,13 @@ public class StreamReader : TextReader
         return new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, DefaultFileStreamBufferSize);
     }
 
-    public override void Close()
+    public void Close()
     {
         Dispose(true);
     }
 
-    protected override void Dispose(bool disposing)
+
+    protected void Dispose(bool disposing)
     {
         if (_disposed)
         {
@@ -245,7 +242,7 @@ public class StreamReader : TextReader
         }
         _disposed = true;
 
-        // Dispose of our resources if this StreamReader is closable.
+        // Dispose of our resources if this ByteStreamReader is closable.
         if (_closable)
         {
             try
@@ -261,7 +258,6 @@ public class StreamReader : TextReader
             {
                 _charPos = 0;
                 _charLen = 0;
-                base.Dispose(disposing);
             }
         }
     }
@@ -270,13 +266,13 @@ public class StreamReader : TextReader
 
     public virtual Stream BaseStream => _stream;
 
-    // DiscardBufferedData tells StreamReader to throw away its internal
+    // DiscardBufferedData tells ByteStreamReader to throw away its internal
     // buffer contents.  This is useful if the user needs to seek on the
-    // underlying stream to a known location then wants the StreamReader
+    // underlying stream to a known location then wants the ByteStreamReader
     // to start reading from this new point.  This method should be called
     // very sparingly, if ever, since it can lead to very poor performance.
     // However, it may be the only way of handling some scenarios where
-    // users need to re-read the contents of a StreamReader a second time.
+    // users need to re-read the contents of a ByteStreamReader a second time.
     public void DiscardBufferedData()
     {
         CheckAsyncTaskInProgress();
@@ -311,7 +307,7 @@ public class StreamReader : TextReader
         }
     }
 
-    public override int Peek()
+    public int Peek()
     {
         ThrowIfDisposed();
         CheckAsyncTaskInProgress();
@@ -326,7 +322,7 @@ public class StreamReader : TextReader
         return _charBuffer[_charPos];
     }
 
-    public override int Read()
+    public int Read()
     {
         ThrowIfDisposed();
         CheckAsyncTaskInProgress();
@@ -343,7 +339,7 @@ public class StreamReader : TextReader
         return result;
     }
 
-    public override int Read(char[] buffer, int index, int count)
+    public int Read(char[] buffer, int index, int count)
     {
         ArgumentNullException.ThrowIfNull(buffer);
 
@@ -357,9 +353,9 @@ public class StreamReader : TextReader
         return ReadSpan(new Span<char>(buffer, index, count));
     }
 
-    public override int Read(Span<char> buffer) =>
-        GetType() == typeof(StreamReader) ? ReadSpan(buffer) :
-            base.Read(buffer); // Defer to Read(char[], ...) if a derived type may have previously overridden it
+    //public int Read(Span<char> buffer) =>
+    //    GetType() == typeof(ByteStreamReader) ? ReadSpan(buffer) :
+    //        base.Read(buffer); // Defer to Read(char[], ...) if a derived type may have previously overridden it
 
     private int ReadSpan(Span<char> buffer)
     {
@@ -406,7 +402,7 @@ public class StreamReader : TextReader
         return charsRead;
     }
 
-    public override string ReadToEnd()
+    public string ReadToEnd()
     {
         ThrowIfDisposed();
         CheckAsyncTaskInProgress();
@@ -422,43 +418,43 @@ public class StreamReader : TextReader
         return sb.ToString();
     }
 
-    public override int ReadBlock(char[] buffer, int index, int count)
-    {
-        ArgumentNullException.ThrowIfNull(buffer);
+    //public int ReadBlock(char[] buffer, int index, int count)
+    //{
+    //    ArgumentNullException.ThrowIfNull(buffer);
 
-        ArgumentOutOfRangeException.ThrowIfNegative(index);
-        ArgumentOutOfRangeException.ThrowIfNegative(count);
-        if (buffer.Length - index < count)
-        {
-            throw new ArgumentException("buffer.Length - index < count");
-        }
-        ThrowIfDisposed();
-        CheckAsyncTaskInProgress();
+    //    ArgumentOutOfRangeException.ThrowIfNegative(index);
+    //    ArgumentOutOfRangeException.ThrowIfNegative(count);
+    //    if (buffer.Length - index < count)
+    //    {
+    //        throw new ArgumentException("buffer.Length - index < count");
+    //    }
+    //    ThrowIfDisposed();
+    //    CheckAsyncTaskInProgress();
 
-        return base.ReadBlock(buffer, index, count);
-    }
+    //    return base.ReadBlock(buffer, index, count);
+    //}
 
-    public override int ReadBlock(Span<char> buffer)
-    {
-        if (GetType() != typeof(StreamReader))
-        {
-            // Defer to Read(char[], ...) if a derived type may have previously overridden it.
-            return base.ReadBlock(buffer);
-        }
+    //public int ReadBlock(Span<char> buffer)
+    //{
+    //    if (GetType() != typeof(ByteStreamReader))
+    //    {
+    //        // Defer to Read(char[], ...) if a derived type may have previously overridden it.
+    //        return base.ReadBlock(buffer);
+    //    }
 
-        int i, n = 0;
-        do
-        {
-            i = ReadSpan(buffer.Slice(n));
-            n += i;
-        } while (i > 0 && n < buffer.Length);
-        return n;
-    }
+    //    int i, n = 0;
+    //    do
+    //    {
+    //        i = ReadSpan(buffer.Slice(n));
+    //        n += i;
+    //    } while (i > 0 && n < buffer.Length);
+    //    return n;
+    //}
 
     // Trims n bytes from the front of the buffer.
     private void CompressBuffer(int n)
     {
-        Debug.Assert(_byteLen >= n, "CompressBuffer was called with a number of bytes greater than the current buffer length.  Are two threads using this StreamReader at the same time?");
+        Debug.Assert(_byteLen >= n, "CompressBuffer was called with a number of bytes greater than the current buffer length.  Are two threads using this ByteStreamReader at the same time?");
         byte[] byteBuffer = _byteBuffer;
         _ = byteBuffer.Length; // allow JIT to prove object is not null
         new ReadOnlySpan<byte>(byteBuffer, n, _byteLen - n).CopyTo(byteBuffer);
@@ -548,7 +544,7 @@ public class StreamReader : TextReader
             Debug.Assert(_checkPreamble);
             ReadOnlySpan<byte> preamble = _encoding.Preamble;
 
-            Debug.Assert(_bytePos < preamble.Length, "_compressPreamble was called with the current bytePos greater than the preamble buffer length.  Are two threads using this StreamReader at the same time?");
+            Debug.Assert(_bytePos < preamble.Length, "_compressPreamble was called with the current bytePos greater than the preamble buffer length.  Are two threads using this ByteStreamReader at the same time?");
             int len = Math.Min(_byteLen, preamble.Length);
 
             for (int i = _bytePos; i < len; i++)
@@ -562,7 +558,7 @@ public class StreamReader : TextReader
             }
             _bytePos = len; // we've matched all bytes up to this point
 
-            Debug.Assert(_bytePos <= preamble.Length, "possible bug in _compressPreamble.  Are two threads using this StreamReader at the same time?");
+            Debug.Assert(_bytePos <= preamble.Length, "possible bug in _compressPreamble.  Are two threads using this ByteStreamReader at the same time?");
 
             if (_bytePos == preamble.Length)
             {
@@ -593,7 +589,7 @@ public class StreamReader : TextReader
         {
             if (_checkPreamble)
             {
-                Debug.Assert(_bytePos <= _encoding.Preamble.Length, "possible bug in _compressPreamble.  Are two threads using this StreamReader at the same time?");
+                Debug.Assert(_bytePos <= _encoding.Preamble.Length, "possible bug in _compressPreamble.  Are two threads using this ByteStreamReader at the same time?");
                 int len = _stream.Read(_byteBuffer, _bytePos, _byteBuffer.Length - _bytePos);
                 Debug.Assert(len >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
 
@@ -607,7 +603,7 @@ public class StreamReader : TextReader
             }
             else
             {
-                Debug.Assert(_bytePos == 0, "bytePos can be non zero only when we are trying to _checkPreamble.  Are two threads using this StreamReader at the same time?");
+                Debug.Assert(_bytePos == 0, "bytePos can be non zero only when we are trying to _checkPreamble.  Are two threads using this ByteStreamReader at the same time?");
                 _byteLen = _stream.Read(_byteBuffer, 0, _byteBuffer.Length);
                 Debug.Assert(_byteLen >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
 
@@ -623,7 +619,7 @@ public class StreamReader : TextReader
             // DetectEncoding will change byteLen.
             _isBlocked = (_byteLen < _byteBuffer.Length);
 
-            // Check for preamble before detect encoding. This is not to override the
+            // Check for preamble before detect encoding. This is not to the
             // user supplied Encoding for the one we implicitly detect. The user could
             // customize the encoding which we will loose, such as ThrowOnError on UTF8
             if (IsPreamble())
@@ -659,7 +655,7 @@ public class StreamReader : TextReader
 
 
     // This version has a perf optimization to decode data DIRECTLY into the
-    // user's buffer, bypassing StreamReader's own buffer.
+    // user's buffer, bypassing ByteStreamReader's own buffer.
     // This gives a > 20% perf improvement for our encodings across the board,
     // but only when asking for at least the number of characters that one
     // buffer's worth of bytes could produce.
@@ -697,7 +693,7 @@ public class StreamReader : TextReader
 
             if (_checkPreamble)
             {
-                Debug.Assert(_bytePos <= _encoding.Preamble.Length, "possible bug in _compressPreamble.  Are two threads using this StreamReader at the same time?");
+                Debug.Assert(_bytePos <= _encoding.Preamble.Length, "possible bug in _compressPreamble.  Are two threads using this ByteStreamReader at the same time?");
                 int len = _stream.Read(_byteBuffer, _bytePos, _byteBuffer.Length - _bytePos);
                 Debug.Assert(len >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
 
@@ -711,7 +707,7 @@ public class StreamReader : TextReader
             }
             else
             {
-                Debug.Assert(_bytePos == 0, "bytePos can be non zero only when we are trying to _checkPreamble.  Are two threads using this StreamReader at the same time?");
+                Debug.Assert(_bytePos == 0, "bytePos can be non zero only when we are trying to _checkPreamble.  Are two threads using this ByteStreamReader at the same time?");
                 _byteLen = _stream.Read(_byteBuffer, 0, _byteBuffer.Length);
                 Debug.Assert(_byteLen >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
 
@@ -727,7 +723,7 @@ public class StreamReader : TextReader
             // DetectEncoding will change byteLen.
             _isBlocked = (_byteLen < _byteBuffer.Length);
 
-            // Check for preamble before detect encoding. This is not to override the
+            // Check for preamble before detect encoding. This is not to the
             // user supplied Encoding for the one we implicitly detect. The user could
             // customize the encoding which we will loose, such as ThrowOnError on UTF8
             // Note: we don't need to recompute readToUserBuffer optimization as IsPreamble
@@ -753,7 +749,7 @@ public class StreamReader : TextReader
             else
             {
                 charsRead = _decoder.GetChars(_byteBuffer, 0, _byteLen, _charBuffer, 0, flush: false);
-                _charLen = charsRead;  // Number of chars in StreamReader's buffer.
+                _charLen = charsRead;  // Number of chars in ByteStreamReader's buffer.
             }
         } while (charsRead == 0);
 
@@ -772,7 +768,7 @@ public class StreamReader : TextReader
             else
             {
                 charsRead = _decoder.GetChars(_byteBuffer, 0, _byteLen, _charBuffer, 0, flush: true);
-                _charLen = charsRead;  // Number of chars in StreamReader's buffer.
+                _charLen = charsRead;  // Number of chars in ByteStreamReader's buffer.
             }
             _bytePos = 0;
             _byteLen = 0;
@@ -790,7 +786,7 @@ public class StreamReader : TextReader
     // contain the terminating carriage return and/or line feed. The returned
     // value is null if the end of the input stream has been reached.
     //
-    public override string? ReadLine()
+    public string? ReadLine()
     {
         ThrowIfDisposed();
         CheckAsyncTaskInProgress();
@@ -851,7 +847,7 @@ public class StreamReader : TextReader
         return vsb.ToString();
     }
 
-    public override Task<string?> ReadLineAsync() =>
+    public Task<string?> ReadLineAsync() =>
         ReadLineAsync(default).AsTask();
 
     /// <summary>
@@ -867,7 +863,7 @@ public class StreamReader : TextReader
     /// The following example shows how to read and print all lines from the file until the end of the file is reached or the operation timed out.
     /// <code lang="C#">
     /// using CancellationTokenSource tokenSource = new (TimeSpan.FromSeconds(1));
-    /// using StreamReader reader = File.OpenText("existingfile.txt");
+    /// using ByteStreamReader reader = File.OpenText("existingfile.txt");
     ///
     /// string line;
     /// while ((line = await reader.ReadLineAsync(tokenSource.Token)) is not null)
@@ -879,19 +875,10 @@ public class StreamReader : TextReader
     /// <remarks>
     /// If this method is canceled via <paramref name="cancellationToken"/>, some data
     /// that has been read from the current <see cref="Stream"/> but not stored (by the
-    /// <see cref="StreamReader"/>) or returned (to the caller) may be lost.
+    /// <see cref="ByteStreamReader"/>) or returned (to the caller) may be lost.
     /// </remarks>
-    public override ValueTask<string?> ReadLineAsync(CancellationToken cancellationToken)
+    public ValueTask<string?> ReadLineAsync(CancellationToken cancellationToken)
     {
-        // If we have been inherited into a subclass, the following implementation could be incorrect
-        // since it does not call through to Read() which a subclass might have overridden.
-        // To be safe we will only use this implementation in cases where we know it is safe to do so,
-        // and delegate to our base class (which will call into Read) when we are not sure.
-        if (GetType() != typeof(StreamReader))
-        {
-            return base.ReadLineAsync(cancellationToken);
-        }
-
         ThrowIfDisposed();
         CheckAsyncTaskInProgress();
 
@@ -984,7 +971,7 @@ public class StreamReader : TextReader
         return retVal;
     }
 
-    public override Task<string> ReadToEndAsync() => ReadToEndAsync(default);
+    public Task<string> ReadToEndAsync() => ReadToEndAsync(default);
 
     /// <summary>
     /// Reads all characters from the current position to the end of the stream asynchronously and returns them as one string.
@@ -999,7 +986,7 @@ public class StreamReader : TextReader
     /// The following example shows how to read the contents of a file by using the <see cref="ReadToEndAsync(CancellationToken)"/> method.
     /// <code lang="C#">
     /// using CancellationTokenSource tokenSource = new (TimeSpan.FromSeconds(1));
-    /// using StreamReader reader = File.OpenText("existingfile.txt");
+    /// using ByteStreamReader reader = File.OpenText("existingfile.txt");
     ///
     /// Console.WriteLine(await reader.ReadToEndAsync(tokenSource.Token));
     /// </code>
@@ -1007,19 +994,10 @@ public class StreamReader : TextReader
     /// <remarks>
     /// If this method is canceled via <paramref name="cancellationToken"/>, some data
     /// that has been read from the current <see cref="Stream"/> but not stored (by the
-    /// <see cref="StreamReader"/>) or returned (to the caller) may be lost.
+    /// <see cref="ByteStreamReader"/>) or returned (to the caller) may be lost.
     /// </remarks>
-    public override Task<string> ReadToEndAsync(CancellationToken cancellationToken)
+    public Task<string> ReadToEndAsync(CancellationToken cancellationToken)
     {
-        // If we have been inherited into a subclass, the following implementation could be incorrect
-        // since it does not call through to Read() which a subclass might have overridden.
-        // To be safe we will only use this implementation in cases where we know it is safe to do so,
-        // and delegate to our base class (which will call into Read) when we are not sure.
-        if (GetType() != typeof(StreamReader))
-        {
-            return base.ReadToEndAsync(cancellationToken);
-        }
-
         ThrowIfDisposed();
         CheckAsyncTaskInProgress();
 
@@ -1044,7 +1022,7 @@ public class StreamReader : TextReader
         return sb.ToString();
     }
 
-    public override Task<int> ReadAsync(char[] buffer, int index, int count)
+    public Task<int> ReadAsync(char[] buffer, int index, int count)
     {
         ArgumentNullException.ThrowIfNull(buffer);
 
@@ -1053,15 +1031,6 @@ public class StreamReader : TextReader
         if (buffer.Length - index < count)
         {
             throw new ArgumentException("buffer.Length - index < count");
-        }
-
-        // If we have been inherited into a subclass, the following implementation could be incorrect
-        // since it does not call through to Read() which a subclass might have overridden.
-        // To be safe we will only use this implementation in cases where we know it is safe to do so,
-        // and delegate to our base class (which will call into Read) when we are not sure.
-        if (GetType() != typeof(StreamReader))
-        {
-            return base.ReadAsync(buffer, index, count);
         }
 
         ThrowIfDisposed();
@@ -1073,14 +1042,8 @@ public class StreamReader : TextReader
         return task;
     }
 
-    public override ValueTask<int> ReadAsync(Memory<char> buffer, CancellationToken cancellationToken = default)
+    public ValueTask<int> ReadAsync(Memory<char> buffer, CancellationToken cancellationToken = default)
     {
-        if (GetType() != typeof(StreamReader))
-        {
-            // Ensure we use existing overrides if a class already overrode existing overloads.
-            return base.ReadAsync(buffer, cancellationToken);
-        }
-
         ThrowIfDisposed();
         CheckAsyncTaskInProgress();
 
@@ -1135,7 +1098,7 @@ public class StreamReader : TextReader
 
                     if (_checkPreamble)
                     {
-                        Debug.Assert(_bytePos <= _encoding.Preamble.Length, "possible bug in _compressPreamble.  Are two threads using this StreamReader at the same time?");
+                        Debug.Assert(_bytePos <= _encoding.Preamble.Length, "possible bug in _compressPreamble.  Are two threads using this ByteStreamReader at the same time?");
                         int tmpBytePos = _bytePos;
                         int len = await tmpStream.ReadAsync(new Memory<byte>(tmpByteBuffer, tmpBytePos, tmpByteBuffer.Length - tmpBytePos), cancellationToken).ConfigureAwait(false);
                         Debug.Assert(len >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
@@ -1149,12 +1112,12 @@ public class StreamReader : TextReader
                                 if (readToUserBuffer)
                                 {
                                     n = _decoder.GetChars(new ReadOnlySpan<byte>(tmpByteBuffer, 0, _byteLen), buffer.Span.Slice(charsRead), flush: false);
-                                    _charLen = 0;  // StreamReader's buffer is empty.
+                                    _charLen = 0;  // ByteStreamReader's buffer is empty.
                                 }
                                 else
                                 {
                                     n = _decoder.GetChars(tmpByteBuffer, 0, _byteLen, _charBuffer, 0);
-                                    _charLen += n;  // Number of chars in StreamReader's buffer.
+                                    _charLen += n;  // Number of chars in ByteStreamReader's buffer.
                                 }
                             }
 
@@ -1171,7 +1134,7 @@ public class StreamReader : TextReader
                     }
                     else
                     {
-                        Debug.Assert(_bytePos == 0, "_bytePos can be non zero only when we are trying to _checkPreamble.  Are two threads using this StreamReader at the same time?");
+                        Debug.Assert(_bytePos == 0, "_bytePos can be non zero only when we are trying to _checkPreamble.  Are two threads using this ByteStreamReader at the same time?");
 
                         _byteLen = await tmpStream.ReadAsync(new Memory<byte>(tmpByteBuffer), cancellationToken).ConfigureAwait(false);
 
@@ -1189,7 +1152,7 @@ public class StreamReader : TextReader
                     // DetectEncoding will change _byteLen.
                     _isBlocked = (_byteLen < tmpByteBuffer.Length);
 
-                    // Check for preamble before detect encoding. This is not to override the
+                    // Check for preamble before detect encoding. This is not to the
                     // user supplied Encoding for the one we implicitly detect. The user could
                     // customize the encoding which we will loose, such as ThrowOnError on UTF8
                     // Note: we don't need to recompute readToUserBuffer optimization as IsPreamble
@@ -1213,12 +1176,12 @@ public class StreamReader : TextReader
                     if (readToUserBuffer)
                     {
                         n = _decoder.GetChars(new ReadOnlySpan<byte>(tmpByteBuffer, 0, _byteLen), buffer.Span.Slice(charsRead), flush: false);
-                        _charLen = 0;  // StreamReader's buffer is empty.
+                        _charLen = 0;  // ByteStreamReader's buffer is empty.
                     }
                     else
                     {
                         n = _decoder.GetChars(tmpByteBuffer, 0, _byteLen, _charBuffer, 0);
-                        _charLen += n;  // Number of chars in StreamReader's buffer.
+                        _charLen += n;  // Number of chars in ByteStreamReader's buffer.
                     }
                 } while (n == 0);
 
@@ -1255,44 +1218,8 @@ public class StreamReader : TextReader
         return charsRead;
     }
 
-    public override Task<int> ReadBlockAsync(char[] buffer, int index, int count)
+    public ValueTask<int> ReadBlockAsync(Memory<char> buffer, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(buffer);
-
-        ArgumentOutOfRangeException.ThrowIfNegative(index);
-        ArgumentOutOfRangeException.ThrowIfNegative(count);
-        if (buffer.Length - index < count)
-        {
-            throw new ArgumentException("buffer.Length - index < count");
-        }
-
-        // If we have been inherited into a subclass, the following implementation could be incorrect
-        // since it does not call through to Read() which a subclass might have overridden.
-        // To be safe we will only use this implementation in cases where we know it is safe to do so,
-        // and delegate to our base class (which will call into Read) when we are not sure.
-        if (GetType() != typeof(StreamReader))
-        {
-            return base.ReadBlockAsync(buffer, index, count);
-        }
-
-        ThrowIfDisposed();
-        CheckAsyncTaskInProgress();
-
-        Task<int> task = base.ReadBlockAsync(buffer, index, count);
-        _asyncReadTask = task;
-
-        return task;
-    }
-
-    public override ValueTask<int> ReadBlockAsync(Memory<char> buffer, CancellationToken cancellationToken = default)
-    {
-        if (GetType() != typeof(StreamReader))
-        {
-            // If a derived type may have overridden ReadBlockAsync(char[], ...) before this overload
-            // was introduced, defer to it.
-            return base.ReadBlockAsync(buffer, cancellationToken);
-        }
-
         ThrowIfDisposed();
         CheckAsyncTaskInProgress();
 
@@ -1342,7 +1269,7 @@ public class StreamReader : TextReader
         {
             if (_checkPreamble)
             {
-                Debug.Assert(_bytePos <= _encoding.Preamble.Length, "possible bug in _compressPreamble. Are two threads using this StreamReader at the same time?");
+                Debug.Assert(_bytePos <= _encoding.Preamble.Length, "possible bug in _compressPreamble. Are two threads using this ByteStreamReader at the same time?");
                 int tmpBytePos = _bytePos;
                 int len = await tmpStream.ReadAsync(tmpByteBuffer.AsMemory(tmpBytePos), cancellationToken).ConfigureAwait(false);
                 Debug.Assert(len >= 0, "Stream.Read returned a negative number!  This is a bug in your stream class.");
@@ -1357,7 +1284,7 @@ public class StreamReader : TextReader
             }
             else
             {
-                Debug.Assert(_bytePos == 0, "_bytePos can be non zero only when we are trying to _checkPreamble. Are two threads using this StreamReader at the same time?");
+                Debug.Assert(_bytePos == 0, "_bytePos can be non zero only when we are trying to _checkPreamble. Are two threads using this ByteStreamReader at the same time?");
                 _byteLen = await tmpStream.ReadAsync(new Memory<byte>(tmpByteBuffer), cancellationToken).ConfigureAwait(false);
                 Debug.Assert(_byteLen >= 0, "Stream.Read returned a negative number!  Bug in stream class.");
 
@@ -1373,7 +1300,7 @@ public class StreamReader : TextReader
             // DetectEncoding will change _byteLen.
             _isBlocked = (_byteLen < tmpByteBuffer.Length);
 
-            // Check for preamble before detect encoding. This is not to override the
+            // Check for preamble before detect encoding. This is not to the
             // user supplied Encoding for the one we implicitly detect. The user could
             // customize the encoding which we will loose, such as ThrowOnError on UTF8
             if (IsPreamble())
@@ -1417,56 +1344,13 @@ public class StreamReader : TextReader
         void ThrowObjectDisposedException() => throw new ObjectDisposedException(GetType().Name);
     }
 
-    // No data, class doesn't need to be serializable.
-    // Note this class is threadsafe.
-    internal sealed class NullStreamReader : StreamReader
+    public void Dispose()
     {
-        public override Encoding CurrentEncoding => Encoding.Unicode;
+        Dispose(true);
+    }
 
-        protected override void Dispose(bool disposing)
-        {
-            // Do nothing - this is essentially unclosable.
-        }
-
-        public override int Peek() => -1;
-
-        public override int Read() => -1;
-
-        public override int Read(char[] buffer, int index, int count) => 0;
-
-        public override int Read(Span<char> buffer) => 0;
-
-        public override Task<int> ReadAsync(char[] buffer, int index, int count) => Task.FromResult(0);
-
-        public override ValueTask<int> ReadAsync(Memory<char> buffer, CancellationToken cancellationToken) =>
-            cancellationToken.IsCancellationRequested ? ValueTask.FromCanceled<int>(cancellationToken) : default;
-
-        public override int ReadBlock(char[] buffer, int index, int count) => 0;
-
-        public override int ReadBlock(Span<char> buffer) => 0;
-
-        public override Task<int> ReadBlockAsync(char[] buffer, int index, int count) => Task.FromResult(0);
-
-        public override ValueTask<int> ReadBlockAsync(Memory<char> buffer, CancellationToken cancellationToken) =>
-            cancellationToken.IsCancellationRequested ? ValueTask.FromCanceled<int>(cancellationToken) : default;
-
-        public override string? ReadLine() => null;
-
-        public override Task<string?> ReadLineAsync() => Task.FromResult<string?>(null);
-
-        public override ValueTask<string?> ReadLineAsync(CancellationToken cancellationToken) =>
-            cancellationToken.IsCancellationRequested ? ValueTask.FromCanceled<string?>(cancellationToken) : default;
-
-        public override string ReadToEnd() => "";
-
-        public override Task<string> ReadToEndAsync() => Task.FromResult("");
-
-        public override Task<string> ReadToEndAsync(CancellationToken cancellationToken) =>
-            cancellationToken.IsCancellationRequested ? Task.FromCanceled<string>(cancellationToken) : Task.FromResult("");
-
-        internal ValueTask<int> ReadAsyncInternal(Memory<char> buffer, CancellationToken cancellationToken) =>
-            cancellationToken.IsCancellationRequested ? ValueTask.FromCanceled<int>(cancellationToken) : default;
-
-        internal override int ReadBuffer() => 0;
+    public async ValueTask DisposeAsync()
+    {
+        Dispose(true);
     }
 }
