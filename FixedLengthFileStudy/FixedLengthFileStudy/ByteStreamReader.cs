@@ -57,28 +57,13 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         }
     }
 
-    public ByteStreamReader(Stream stream, Encoding encoding)
-        : this(stream, encoding, DefaultBufferSize)
+    public ByteStreamReader(Stream stream, Encoding encoding, int bufferSize = DefaultBufferSize)
     {
-    }
-
-
-    public ByteStreamReader(Stream stream, Encoding? encoding = null, int bufferSize = -1)
-    {
-        if (stream == null)
-        {
-            throw new ArgumentNullException(nameof(stream));
-        }
-
         if (!stream.CanRead)
         {
             throw new ArgumentException("Stream can not read.");
         }
 
-        if (bufferSize == -1)
-        {
-            bufferSize = DefaultBufferSize;
-        }
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(bufferSize);
 
         _stream = stream;
