@@ -17,12 +17,12 @@ public class ByteStreamReaderTest
     [InlineData("UTF-8", "\n", null)]
     [InlineData("Shift_JIS", "\r\n", null)]
     [InlineData("UTF-8", "\r\n", null)]
-    [InlineData("Shift_JIS", "\r", 8000)]
-    [InlineData("UTF-8", "\r", 8000)]
-    [InlineData("Shift_JIS", "\n", 8000)]
-    [InlineData("UTF-8", "\n", 8000)]
-    [InlineData("Shift_JIS", "\r\n", 8000)]
-    [InlineData("UTF-8", "\r\n", 8000)]
+    [InlineData("Shift_JIS", "\r", 80000)]
+    [InlineData("UTF-8", "\r", 80000)]
+    [InlineData("Shift_JIS", "\n", 80000)]
+    [InlineData("UTF-8", "\n", 80000)]
+    [InlineData("Shift_JIS", "\r\n", 80000)]
+    [InlineData("UTF-8", "\r\n", 80000)]
     public void ReadLine(string encodingName, string newline, int? bufferSize)
     {
         // Arrange
