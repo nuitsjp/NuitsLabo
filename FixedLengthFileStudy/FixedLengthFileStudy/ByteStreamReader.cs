@@ -19,8 +19,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     // buffer is negated by the win of allocating a smaller byte[], which
     // saves construction time.  This does break adaptive buffering,
     // but this is slightly faster.
-    private const int DefaultBufferSize = 1024;  // Byte buffer size
-    private const int DefaultFileStreamBufferSize = 4096;
+    private const int DefaultBufferSize = 4096;  // Byte buffer size
     private const int MinBufferSize = 128;
 
     private readonly Stream _stream;
@@ -200,7 +199,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     //
     public string? ReadLine()
     {
-        ThrowIfDisposed();
         CheckAsyncTaskInProgress();
 
         if (_charPos == _charLen)
@@ -291,7 +289,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     /// </remarks>
     public ValueTask<string?> ReadLineAsync(CancellationToken cancellationToken)
     {
-        ThrowIfDisposed();
         CheckAsyncTaskInProgress();
 
         Task<string?> task = ReadLineAsyncInternal(cancellationToken);
@@ -529,16 +526,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         }
 
         return _charLen;
-    }
-
-    private void ThrowIfDisposed()
-    {
-        if (_disposed)
-        {
-            ThrowObjectDisposedException();
-        }
-
-        void ThrowObjectDisposedException() => throw new ObjectDisposedException(GetType().Name);
     }
 
     public void Dispose()
