@@ -160,7 +160,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
 
 
     private byte[]? _arrayToReturnToPool;
-    private int _pos;
 
     // Reads a line. A line is defined as a sequence of characters followed by
     // a carriage return ('\r'), a line feed ('\n'), or a carriage return
@@ -183,7 +182,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         }
 
         Span<byte> _bytes = _valueByteArrayBuilderBuffer;
-        _pos = 0;
+        var _pos = 0;
         do
         {
             // Look for '\r' or \'n'.
@@ -238,7 +237,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
             // We didn't find '\r' or '\n'. Add it to the StringBuilder
             // and loop until we reach a newline or EOF.
 
-            Append(ref _bytes, bufferSpan);
+            _pos = Append(ref _bytes, bufferSpan, _pos);
         } while (0 < ReadByteBuffer());
 
         return _bytes.Slice(0, _pos).ToArray();
@@ -251,19 +250,19 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         }
     }
 
-    public void Append(ref Span<byte> bytes, scoped ReadOnlySpan<byte> value)
+    public int Append(ref Span<byte> bytes, scoped ReadOnlySpan<byte> value, int _pos)
     {
         if (_pos > bytes.Length - value.Length)
         {
-            bytes = Grow(bytes, value.Length);
+            bytes = Grow(bytes, value.Length, _pos);
         }
 
         value.CopyTo(bytes.Slice(_pos));
-        _pos += value.Length;
+        return _pos + value.Length;
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    private Span<byte> Grow(scoped Span<byte> _bytes, int additionalCapacityBeyondPos)
+    private Span<byte> Grow(scoped Span<byte> _bytes, int additionalCapacityBeyondPos, int _pos)
     {
         Debug.Assert(additionalCapacityBeyondPos > 0);
         Debug.Assert(_pos > _bytes.Length - additionalCapacityBeyondPos, "Grow called incorrectly, no resize is needed.");
