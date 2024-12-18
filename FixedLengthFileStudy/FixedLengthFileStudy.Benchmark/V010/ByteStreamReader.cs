@@ -255,18 +255,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         }
     }
 
-    private static byte[] Concat(ReadOnlySpan<byte> span1, ReadOnlySpan<byte> span2)
-    {
-        // 新しい配列を作成
-        var combined = new byte[span1.Length + span2.Length];
-
-        // 両方のSpanをコピー
-        span1.CopyTo(combined.AsSpan(0));
-        span2.CopyTo(combined.AsSpan(span1.Length));
-
-        return combined;
-    }
-
     //public Task<string?> ReadLineAsync() =>
     //    ReadLineAsync(default).AsTask();
 
