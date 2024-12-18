@@ -1,10 +1,11 @@
-﻿using System;
+﻿// 004ベース
+// ValueByteArrayBuilderのバッファーをメンバー変数に確保
+
 using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.JavaScript;
 
-namespace FixedLengthFileStudy;
+namespace FixedLengthFileStudy.Benchmark.V010;
 
 public class ByteStreamReader : IDisposable, IAsyncDisposable
 {
