@@ -1,9 +1,11 @@
-﻿using System.Buffers;
+﻿// 004ベース
+// ValueByteArrayBuilderのバッファーをメンバー変数に確保
+
+using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.JavaScript;
 
-namespace FixedLengthFileStudy;
+namespace FixedLengthFileStudy.Benchmark.V009;
 
 public class ByteStreamReader : IDisposable, IAsyncDisposable
 {
@@ -251,7 +253,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
 
     public int Append(scoped ReadOnlySpan<byte> value, int _pos)
     {
-        var span = _valueByteArrayBuilderBuffer.AsSpan(); 
+        var span = _valueByteArrayBuilderBuffer.AsSpan();
         if (_pos > span.Length - value.Length)
         {
             const uint arrayMaxLength = 0x7FFFFFC7; // same as Array.MaxLength

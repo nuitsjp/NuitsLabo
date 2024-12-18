@@ -187,6 +187,28 @@ public class ByteStreamReaderBenchmark : IDisposable
         }
     }
 
+    [Benchmark]
+    public void V009()
+    {
+        using var reader = new V009.ByteStreamReader(_stream);
+
+        for (var i = 0; i < LineCount; i++)
+        {
+            reader.ReadLine();
+        }
+    }
+
+    [Benchmark]
+    public void V009_10K()
+    {
+        using var reader = new V009.ByteStreamReader(_stream, 10_000);
+
+        for (var i = 0; i < LineCount; i++)
+        {
+            reader.ReadLine();
+        }
+    }
+
     //[Benchmark]
     //public void FixedLengthFileReader()
     //{
