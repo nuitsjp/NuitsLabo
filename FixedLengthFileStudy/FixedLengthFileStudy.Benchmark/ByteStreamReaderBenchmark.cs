@@ -143,10 +143,32 @@ public class ByteStreamReaderBenchmark : IDisposable
         }
     }
 
+    //[Benchmark]
+    //public void V007()
+    //{
+    //    using var reader = new V007.ByteStreamReader(_stream);
+
+    //    for (var i = 0; i < LineCount; i++)
+    //    {
+    //        reader.ReadLine();
+    //    }
+    //}
+
+    //[Benchmark]
+    //public void V007_10K()
+    //{
+    //    using var reader = new V007.ByteStreamReader(_stream, 10_000);
+
+    //    for (var i = 0; i < LineCount; i++)
+    //    {
+    //        reader.ReadLine();
+    //    }
+    //}
+
     [Benchmark]
-    public void V007()
+    public void V008()
     {
-        using var reader = new V007.ByteStreamReader(_stream);
+        using var reader = new V008.ByteStreamReader(_stream);
 
         for (var i = 0; i < LineCount; i++)
         {
@@ -155,9 +177,9 @@ public class ByteStreamReaderBenchmark : IDisposable
     }
 
     [Benchmark]
-    public void V007_10K()
+    public void V008_10K()
     {
-        using var reader = new V007.ByteStreamReader(_stream, 10_000);
+        using var reader = new V008.ByteStreamReader(_stream, 10_000);
 
         for (var i = 0; i < LineCount; i++)
         {

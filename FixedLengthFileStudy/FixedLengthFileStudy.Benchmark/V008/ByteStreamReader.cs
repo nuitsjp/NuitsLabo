@@ -1,9 +1,11 @@
-﻿using System.Buffers;
+﻿// 004ベース
+// ValueByteArrayBuilderのバッファーをメンバー変数に確保
+
+using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.JavaScript;
 
-namespace FixedLengthFileStudy;
+namespace FixedLengthFileStudy.Benchmark.V008;
 
 public class ByteStreamReader : IDisposable, IAsyncDisposable
 {
@@ -238,7 +240,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
             // We didn't find '\r' or '\n'. Add it to the StringBuilder
             // and loop until we reach a newline or EOF.
 
-            Append(ref _bytes, bufferSpan);
+            _bytes = Append(_bytes, bufferSpan);
         } while (0 < ReadByteBuffer());
 
         return _bytes.Slice(0, _pos).ToArray();
@@ -251,15 +253,22 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         }
     }
 
-    public void Append(ref Span<byte> bytes, scoped ReadOnlySpan<byte> value)
+    public Span<byte> Append(Span<byte> _bytes, scoped ReadOnlySpan<byte> value)
     {
-        if (_pos > bytes.Length - value.Length)
+        Span<byte> bytes;
+        if (_pos > _bytes.Length - value.Length)
         {
-            bytes = Grow(bytes, value.Length);
+            bytes = Grow(_bytes, value.Length);
+        }
+        else
+        {
+            bytes = _bytes;
         }
 
         value.CopyTo(bytes.Slice(_pos));
         _pos += value.Length;
+
+        return bytes;
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
@@ -326,7 +335,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     /// <remarks>
     /// If this method is canceled via <paramref name="cancellationToken"/>, some data
     /// that has been read from the current <see cref="Stream"/> but not stored (by the
-    /// <see cref="ByteStreamReader"/>) or returned (to the caller) may be lost.
+    /// <see cref="FixedLengthFileStudy.ByteStreamReader"/>) or returned (to the caller) may be lost.
     /// </remarks>
     //public ValueTask<string?> ReadLineAsync(CancellationToken cancellationToken)
     //{
