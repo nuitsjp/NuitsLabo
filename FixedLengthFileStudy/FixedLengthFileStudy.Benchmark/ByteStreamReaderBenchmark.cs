@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using System.Text;
+using FixedLengthFileStudy.Claude;
 
 namespace FixedLengthFileStudy.Benchmark;
 
@@ -9,18 +10,18 @@ namespace FixedLengthFileStudy.Benchmark;
 [GcConcurrent]
 public class ByteStreamReaderBenchmark : IDisposable
 {
-    private static readonly int _lineCount = 10_000;
-    private static readonly byte[] _content;
+    private static readonly int LineCount = 10_000;
+    private static readonly byte[] Content;
 
     static ByteStreamReaderBenchmark()
     {
         StringBuilder builder = new();
-        for (var i = 0; i < _lineCount; i++)
+        for (var i = 0; i < LineCount; i++)
         {
             builder.Append(new string('あ', 10_000));
             builder.Append("\r\n");
         }
-        _content = Encoding.UTF8.GetBytes(builder.ToString());
+        Content = Encoding.UTF8.GetBytes(builder.ToString());
     }
 
     private Stream _stream = Stream.Null;
@@ -28,7 +29,7 @@ public class ByteStreamReaderBenchmark : IDisposable
     [IterationSetup]
     public void IterationSetup()
     {
-        _stream = new MemoryStream(_content);
+        _stream = new MemoryStream(Content);
     }
 
     [Benchmark]
@@ -36,7 +37,7 @@ public class ByteStreamReaderBenchmark : IDisposable
     {
         using var reader = new V001.ByteStreamReader(_stream);
 
-        for (var i = 0; i < _lineCount; i++)
+        for (var i = 0; i < LineCount; i++)
         {
             reader.ReadLine();
         }
@@ -47,7 +48,7 @@ public class ByteStreamReaderBenchmark : IDisposable
     {
         using var reader = new V001.ByteStreamReader(_stream, 10_000);
 
-        for (var i = 0; i < _lineCount; i++)
+        for (var i = 0; i < LineCount; i++)
         {
             reader.ReadLine();
         }
@@ -59,7 +60,7 @@ public class ByteStreamReaderBenchmark : IDisposable
     {
         using var reader = new V002.ByteStreamReader(_stream);
 
-        for (var i = 0; i < _lineCount; i++)
+        for (var i = 0; i < LineCount; i++)
         {
             reader.ReadLine();
         }
@@ -70,7 +71,7 @@ public class ByteStreamReaderBenchmark : IDisposable
     {
         using var reader = new V002.ByteStreamReader(_stream, 10_000);
 
-        for (var i = 0; i < _lineCount; i++)
+        for (var i = 0; i < LineCount; i++)
         {
             reader.ReadLine();
         }
@@ -81,7 +82,7 @@ public class ByteStreamReaderBenchmark : IDisposable
     {
         using var reader = new V004.ByteStreamReader(_stream);
 
-        for (var i = 0; i < _lineCount; i++)
+        for (var i = 0; i < LineCount; i++)
         {
             reader.ReadLine();
         }
@@ -92,7 +93,7 @@ public class ByteStreamReaderBenchmark : IDisposable
     {
         using var reader = new V004.ByteStreamReader(_stream, 10_000);
 
-        for (var i = 0; i < _lineCount; i++)
+        for (var i = 0; i < LineCount; i++)
         {
             reader.ReadLine();
         }
@@ -103,7 +104,7 @@ public class ByteStreamReaderBenchmark : IDisposable
     {
         using var reader = new V005.ByteStreamReader(_stream);
 
-        for (var i = 0; i < _lineCount; i++)
+        for (var i = 0; i < LineCount; i++)
         {
             reader.ReadLine();
         }
@@ -114,7 +115,7 @@ public class ByteStreamReaderBenchmark : IDisposable
     {
         using var reader = new V005.ByteStreamReader(_stream, 10_000);
 
-        for (var i = 0; i < _lineCount; i++)
+        for (var i = 0; i < LineCount; i++)
         {
             reader.ReadLine();
         }
@@ -125,7 +126,7 @@ public class ByteStreamReaderBenchmark : IDisposable
     {
         using var reader = new V006.ByteStreamReader(_stream);
 
-        for (var i = 0; i < _lineCount; i++)
+        for (var i = 0; i < LineCount; i++)
         {
             reader.ReadLine();
         }
@@ -136,9 +137,33 @@ public class ByteStreamReaderBenchmark : IDisposable
     {
         using var reader = new V006.ByteStreamReader(_stream, 10_000);
 
-        for (var i = 0; i < _lineCount; i++)
+        for (var i = 0; i < LineCount; i++)
         {
             reader.ReadLine();
+        }
+    }
+
+    [Benchmark]
+    public void FixedLengthFileReader()
+    {
+        using var reader = new FixedLengthFileReader(_stream, Encoding.UTF8, "\r\n");
+
+        for (var i = 0; i < LineCount; i++)
+        {
+            reader.Read();
+            var line = reader.CurrentLine;
+        }
+    }
+
+    [Benchmark]
+    public void FixedLengthFileReader_10K()
+    {
+        using var reader = new FixedLengthFileReader(_stream, Encoding.UTF8, "\r\n", bufferSize: 10_000);
+
+        for (var i = 0; i < LineCount; i++)
+        {
+            reader.Read();
+            var line = reader.CurrentLine;
         }
     }
 

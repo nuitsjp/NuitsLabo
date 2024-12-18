@@ -33,6 +33,8 @@ public class FixedLengthFileReader : IFixedLengthFileReader
 
     public Trim Trim { get; }
 
+    public byte[] CurrentLine => _currentLine.AsSpan(0, _currentLineLength).ToArray();
+
     public bool Read()
     {
         if (_isDisposed)
