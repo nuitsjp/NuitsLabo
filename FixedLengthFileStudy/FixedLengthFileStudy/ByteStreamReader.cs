@@ -159,8 +159,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     //}
 
 
-    private byte[]? _arrayToReturnToPool;
-
     // Reads a line. A line is defined as a sequence of characters followed by
     // a carriage return ('\r'), a line feed ('\n'), or a carriage return
     // immediately followed by a line feed. The resulting string does not
