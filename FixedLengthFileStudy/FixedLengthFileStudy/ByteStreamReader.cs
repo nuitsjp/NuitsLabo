@@ -182,7 +182,6 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
         {
             // Look for '\r' or \'n'.
             ReadOnlySpan<byte> bufferSpan = _byteBuffer.AsSpan(_bytePos, _byteLen - _bytePos);
-            Debug.Assert(!bufferSpan.IsEmpty, "ReadBuffer returned > 0 but didn't bump _charLen?");
 
             var indexOfNewline = bufferSpan.IndexOfAny((byte)'\r', (byte)'\n');
             if (0 <= indexOfNewline)
