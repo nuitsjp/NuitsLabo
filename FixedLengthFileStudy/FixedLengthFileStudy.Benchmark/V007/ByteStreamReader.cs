@@ -1,9 +1,11 @@
-﻿using System.Buffers;
+﻿// 004ベース
+// ValueByteArrayBuilderのバッファーをメンバー変数に確保
+
+using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.JavaScript;
 
-namespace FixedLengthFileStudy;
+namespace FixedLengthFileStudy.Benchmark.V007;
 
 public class ByteStreamReader : IDisposable, IAsyncDisposable
 {
@@ -333,7 +335,7 @@ public class ByteStreamReader : IDisposable, IAsyncDisposable
     /// <remarks>
     /// If this method is canceled via <paramref name="cancellationToken"/>, some data
     /// that has been read from the current <see cref="Stream"/> but not stored (by the
-    /// <see cref="ByteStreamReader"/>) or returned (to the caller) may be lost.
+    /// <see cref="FixedLengthFileStudy.ByteStreamReader"/>) or returned (to the caller) may be lost.
     /// </remarks>
     //public ValueTask<string?> ReadLineAsync(CancellationToken cancellationToken)
     //{
