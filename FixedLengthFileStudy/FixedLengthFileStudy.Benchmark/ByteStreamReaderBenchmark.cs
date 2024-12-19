@@ -121,27 +121,27 @@ public class ByteStreamReaderBenchmark : IDisposable
     //    }
     //}
 
-    [Benchmark]
-    public void V006()
-    {
-        using var reader = new V006.ByteStreamReader(_stream);
+    //[Benchmark]
+    //public void V006()
+    //{
+    //    using var reader = new V006.ByteStreamReader(_stream);
 
-        for (var i = 0; i < LineCount; i++)
-        {
-            reader.ReadLine();
-        }
-    }
+    //    for (var i = 0; i < LineCount; i++)
+    //    {
+    //        reader.ReadLine();
+    //    }
+    //}
 
-    [Benchmark]
-    public void V006_10K()
-    {
-        using var reader = new V006.ByteStreamReader(_stream, 10_000);
+    //[Benchmark]
+    //public void V006_10K()
+    //{
+    //    using var reader = new V006.ByteStreamReader(_stream, 10_000);
 
-        for (var i = 0; i < LineCount; i++)
-        {
-            reader.ReadLine();
-        }
-    }
+    //    for (var i = 0; i < LineCount; i++)
+    //    {
+    //        reader.ReadLine();
+    //    }
+    //}
 
     //[Benchmark]
     //public void V007()
@@ -165,49 +165,49 @@ public class ByteStreamReaderBenchmark : IDisposable
     //    }
     //}
 
-    [Benchmark]
-    public void V008()
-    {
-        using var reader = new V008.ByteStreamReader(_stream);
+    //[Benchmark]
+    //public void V008()
+    //{
+    //    using var reader = new V008.ByteStreamReader(_stream);
 
-        for (var i = 0; i < LineCount; i++)
-        {
-            reader.ReadLine();
-        }
-    }
+    //    for (var i = 0; i < LineCount; i++)
+    //    {
+    //        reader.ReadLine();
+    //    }
+    //}
 
-    [Benchmark]
-    public void V008_10K()
-    {
-        using var reader = new V008.ByteStreamReader(_stream, 10_000);
+    //[Benchmark]
+    //public void V008_10K()
+    //{
+    //    using var reader = new V008.ByteStreamReader(_stream, 10_000);
 
-        for (var i = 0; i < LineCount; i++)
-        {
-            reader.ReadLine();
-        }
-    }
+    //    for (var i = 0; i < LineCount; i++)
+    //    {
+    //        reader.ReadLine();
+    //    }
+    //}
 
-    [Benchmark]
-    public void V009()
-    {
-        using var reader = new V009.ByteStreamReader(_stream);
+    //[Benchmark]
+    //public void V009()
+    //{
+    //    using var reader = new V009.ByteStreamReader(_stream);
 
-        for (var i = 0; i < LineCount; i++)
-        {
-            reader.ReadLine();
-        }
-    }
+    //    for (var i = 0; i < LineCount; i++)
+    //    {
+    //        reader.ReadLine();
+    //    }
+    //}
 
-    [Benchmark]
-    public void V009_10K()
-    {
-        using var reader = new V009.ByteStreamReader(_stream, 10_000);
+    //[Benchmark]
+    //public void V009_10K()
+    //{
+    //    using var reader = new V009.ByteStreamReader(_stream, 10_000);
 
-        for (var i = 0; i < LineCount; i++)
-        {
-            reader.ReadLine();
-        }
-    }
+    //    for (var i = 0; i < LineCount; i++)
+    //    {
+    //        reader.ReadLine();
+    //    }
+    //}
 
     [Benchmark]
     public void V010()
@@ -231,29 +231,29 @@ public class ByteStreamReaderBenchmark : IDisposable
         }
     }
 
-    //[Benchmark]
-    //public void FixedLengthFileReader()
-    //{
-    //    using var reader = new FixedLengthFileReader(_stream, Encoding.UTF8, "\r\n");
+    [Benchmark]
+    public void FixedLengthFileReader()
+    {
+        using var reader = new FixedLengthFileReader(_stream, Encoding.UTF8, "\r\n");
 
-    //    for (var i = 0; i < LineCount; i++)
-    //    {
-    //        reader.Read();
-    //        var line = reader.CurrentLine;
-    //    }
-    //}
+        for (var i = 0; i < LineCount; i++)
+        {
+            reader.Read();
+            var line = reader.CurrentLine;
+        }
+    }
 
-    //[Benchmark]
-    //public void FixedLengthFileReader_10K()
-    //{
-    //    using var reader = new FixedLengthFileReader(_stream, Encoding.UTF8, "\r\n", bufferSize: 10_000);
+    [Benchmark]
+    public void FixedLengthFileReader_10K()
+    {
+        using var reader = new FixedLengthFileReader(_stream, Encoding.UTF8, "\r\n", bufferSize: 10_000);
 
-    //    for (var i = 0; i < LineCount; i++)
-    //    {
-    //        reader.Read();
-    //        var line = reader.CurrentLine;
-    //    }
-    //}
+        for (var i = 0; i < LineCount; i++)
+        {
+            reader.Read();
+            var line = reader.CurrentLine;
+        }
+    }
 
     public void Dispose()
     {
