@@ -8,11 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\FixedLengthFileStudy\FixedLengthFileStudy.csproj" />
+    <PackageReference Include="FileHelpers" Version="3.5.2" />
   </ItemGroup>
 
 </Project>
