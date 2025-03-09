@@ -1,0 +1,4533 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>TwainScanning</name>
+  </assembly>
+  <members>
+    <member name="T:TwainScanning.Bridgex86.Bridgex86">
+      <summary>
+            Interoperability for scanning with 32-bit device drivers in projects which are not 32-bit.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.IsDeviceCached(System.String)">
+      <summary>
+            Checks if the specified device is cached.
+            </summary>
+      <param name="deviceName">Device to check if it is cached, if omitted or blank default device will be used (with slight performance impact).</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.ClearCache">
+      <summary>
+            Clears the cache for all devices.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.ClearCache(System.String)">
+      <summary>
+            Clears the cache for the specified device only.
+            </summary>
+      <param name="deviceName">Device to clear cache for, if omitted or blank default device will be used (with slight performance impact).</param>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.Acquire(System.String)">
+      <summary>
+            Acquire with Bridgex86.
+            </summary>
+      <param name="outputFileName">
+            Absolute path for file to acquire to.
+            <para />
+            Supported file formats: TIFF (default if extension not specified), PDF, JPEG, BMP, PNG.
+            </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.Acquire(System.String,TwainScanning.Bridgex86.ScanSettings)">
+      <summary>
+            Acquire with Bridgex86.
+            </summary>
+      <param name="outputFileName">
+            Absolute path for file to acquire to. Ignored if <see cref="P:TwainScanning.Bridgex86.ScanSettings.OutputFileNamesList" /> is set.
+            <para />
+            Supported file formats: TIFF (default if extension not specified), PDF, JPEG, BMP, PNG.
+            </param>
+      <param name="scanSettings">Scan settings to use.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetAllDevices">
+      <summary>
+            Gets all devices installed on the system.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetDefaultDevice">
+      <summary>
+            Gets the default device.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetCurrentDeviceSettings(System.String)">
+      <summary>
+            Gets the current settings for the specified device. Only the supported settings are retrieved, the rest are null/empty.
+            </summary>
+      <param name="deviceName">The device to use, if omitted default device will be used.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetSupportedPageSizes(System.String)">
+      <summary>
+            Gets the supported page sizes for the specified device.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as DataSource.Settings.Page.Sizes or 
+            the alias <see cref="F:TwainScanning.DataSource.PageSize" />.
+            </summary>
+      <param name="deviceName">The device to use, if omitted default device will be used.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetSupportedTransferMechanisms(System.String)">
+      <summary>
+            Gets the supported transfer mechanisms for the specified device.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as DataSource.Settings.Transfer.Mechanism or 
+            the alias <see cref="F:TwainScanning.DataSource.TransferMechanism" />.
+            </summary>
+      <param name="deviceName">The device to use, if omitted default device will be used.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetSupportedDuplexEnabled(System.String)">
+      <summary>
+            Gets the supported duplex enabled settings for the specified device.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as DataSource.Settings.Duplex.Enabled or 
+            the alias <see cref="F:TwainScanning.DataSource.UseDuplex" />.
+            </summary>
+      <param name="deviceName">The device to use, if omitted default device will be used.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetSupportedResolutions(System.String)">
+      <summary>
+            Gets the supported resolutions for the specified device.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as DataSource.Settings.Resolution.X and 
+            DataSource.Settings.Resolution.Y or 
+            the alias <see cref="F:TwainScanning.DataSource.Resolution" />.
+            </summary>
+      <param name="deviceName">The device to use, if omitted default device will be used.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetSupportedAutoFeeds(System.String)">
+      <summary>
+            Gets the supported auto feed settings for the specified device.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as DataSource.Settings.Feeder.Autofeed.
+            </summary>
+      <param name="deviceName">The device to use, if omitted default device will be used.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetSupportedColorModes(System.String)">
+      <summary>
+            Gets the supported color modes for the specified device.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as DataSource.Settings.ImageType.PixelType or 
+            the alias <see cref="F:TwainScanning.DataSource.ColorMode" />.
+            </summary>
+      <param name="deviceName">The device to use, if omitted default device will be used.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetSupportedRotations(System.String)">
+      <summary>
+            Gets the supported rotations for the specified device.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as DataSource.Settings.ImageAcquire.Rotation.
+            </summary>
+      <param name="deviceName">The device to use, if omitted default device will be used.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetSupportedAutomaticBorderDetections(System.String)">
+      <summary>
+            Gets the supported automatic border detection settings for the specified device.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as DataSource.Settings.AutomaticAdjustments.AutomaticBorderDetection.
+            </summary>
+      <param name="deviceName">The device to use, if omitted default device will be used.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetSupportedThresholds(System.String)">
+      <summary>
+            Gets the supported thresholds for the specified device.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as DataSource.Settings.ImageType.Threshold.
+            </summary>
+      <param name="deviceName">The device to use, if omitted default device will be used.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetSupportedContrasts(System.String)">
+      <summary>
+            Gets the supported contrasts for the specified device.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as DataSource.Settings.ImageAcquire.Contrast.
+            </summary>
+      <param name="deviceName">The device to use, if omitted default device will be used.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetSupportedBrightnesses(System.String)">
+      <summary>
+            Gets the supported brightnesses for the specified device.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as DataSource.Settings.ImageAcquire.Brightness.
+            </summary>
+      <param name="deviceName">The device to use, if omitted default device will be used.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetSupportedImageCount(System.String)">
+      <summary>
+            Gets the supported image count settings for the specified device.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as count parameter in Acquire() and AcquireAsync() methods or 
+            DataSource.Settings.Transfer.ImageCount.
+            </summary>
+      <param name="deviceName">The device to use, if omitted default device will be used.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetSupportedIgnoreBlankPages(System.String)">
+      <summary>
+            Gets the supported ignore blank pages settings for the specified device.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as DataSource.Settings.AutomaticAdjustments.AutoDiscardBlankPages.
+            </summary>
+      <param name="deviceName">The device to use, if omitted default device will be used.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetAllSupportedCapabilities(System.String)">
+      <summary>
+            Gets all supported capabilities for the specified device.
+            </summary>
+      <param name="deviceName">The device to use, if omitted default device will be used.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.Bridgex86.GetIsSupportedCapability(System.String,System.String)">
+      <summary>
+            Gets an indicator if the specified capability is supported for the specified device.
+            </summary>
+      <param name="capabilityName">The capability to check (can also be an alias).</param>
+      <param name="deviceName">The device to use, if omitted default device will be used.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="T:TwainScanning.Bridgex86.ScanResolution">
+      <summary>
+            Scan resolution used for scanning with <see cref="T:TwainScanning.Bridgex86.Bridgex86" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanResolution.X">
+      <summary>
+            The X resolution.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanResolution.Y">
+      <summary>
+            The Y resolution.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.ScanResolution.#ctor(System.Single)">
+      <summary>
+            Creates a new scan resolution with the same value for <see cref="P:TwainScanning.Bridgex86.ScanResolution.X" /> and <see cref="P:TwainScanning.Bridgex86.ScanResolution.Y" />.
+            </summary>
+      <param name="uniformResolution">The same uniform resolution to be applied to <see cref="P:TwainScanning.Bridgex86.ScanResolution.X" /> and <see cref="P:TwainScanning.Bridgex86.ScanResolution.Y" />.</param>
+    </member>
+    <member name="M:TwainScanning.Bridgex86.ScanResolution.#ctor(System.Single,System.Single)">
+      <summary>
+            Creates a new scan resolution with separate values for <see cref="P:TwainScanning.Bridgex86.ScanResolution.X" /> and <see cref="P:TwainScanning.Bridgex86.ScanResolution.Y" />.
+            </summary>
+      <param name="x">The x resolution.</param>
+      <param name="y">The y resolution.</param>
+    </member>
+    <member name="T:TwainScanning.Bridgex86.ScanSettings">
+      <summary>
+            Class used to simplify passing all scan settings when scanning. Most settings are optional, 
+            leave individual settings null/empty if they should not be changed or if the current device value should be used.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.Device">
+      <summary>
+            Device to use to perform the scan operation.
+            <para />
+            If not set, the default device will be used.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.TransferMechanism">
+      <summary>
+            Transfer mechanism used to perform the scan operation.
+            <para />
+            If not set, <see cref="F:TwainScanning.NativeStructs.TwSX.Native" /> will be used.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as using <see cref="!:DataSource.Settings.Transfer.Mechanism" /> or 
+            the alias <see cref="F:TwainScanning.DataSource.TransferMechanism" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.ShowUI">
+      <summary>
+            Show scan window provided by the device or scan without showing it.
+            <para />
+            If not set, <see langword="true" /> will be used.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.CloseUIAfterAcquire">
+      <summary>
+            Close scan window provided by the device or leave it shown.
+            <para />
+            If not set, <see langword="true" /> will be used.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.DuplexEnabled">
+      <summary>
+            Should duplex scanning be used.
+            <para />
+            If not set, the device default value will be used.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as using <see cref="!:DataSource.Settings.Duplex.Enabled" /> or 
+            the alias <see cref="F:TwainScanning.DataSource.UseDuplex" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.Resolution">
+      <summary>
+            Resolution at which to scan.
+            <para />
+            If not set, the device default value will be used.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as using <see cref="!:Settings.Resolution.X" /> and 
+            <see cref="!:Settings.Resolution.Y" /> or 
+            the alias <see cref="F:TwainScanning.DataSource.Resolution" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.PageSize">
+      <summary>
+            Page size to scan.
+            <para />
+            If not set, the device default value will be used.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as using <see cref="!:DataSource.Settings.Page.Sizes" /> or 
+            the alias <see cref="F:TwainScanning.DataSource.PageSize" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.AutoFeed">
+      <summary>
+            Should auto feed be used.
+            <para />
+            If not set, the device default value will be used.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as using <see cref="!:DataSource.Settings.Feeder.Autofeed" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.ColorMode">
+      <summary>
+            Which color mode should be used for scanning.
+            <para />
+            If not set, the device default value will be used.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as using <see cref="!:DataSource.Settings.ImageType.PixelType" /> or 
+            the alias <see cref="F:TwainScanning.DataSource.ColorMode" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.ImageQuality">
+      <summary>
+            Which quality to use for scanned images, value clamped between 10-100.
+            <para />
+            Only applied when using the following file formats: PDF, JPEG, PNG. And requires <see cref="P:TwainScanning.Bridgex86.ScanSettings.TransferMechanism" /> to be 
+            set to <see cref="F:TwainScanning.NativeStructs.TwSX.Native" /> or <see cref="F:TwainScanning.NativeStructs.TwSX.Memory" />.
+            <para />
+            If not set, the TwainScanning default value will be used.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.TiffImageQuality">
+      <summary>
+            Which quality to use for scanned images.
+            <para />
+            Only applied when using TIFF file format. And requires <see cref="P:TwainScanning.Bridgex86.ScanSettings.TransferMechanism" /> to be 
+            set to <see cref="F:TwainScanning.NativeStructs.TwSX.Native" /> or <see cref="F:TwainScanning.NativeStructs.TwSX.Memory" />.
+            <para />
+            If not set, the TwainScanning default value will be used.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.Rotation">
+      <summary>
+            How to rotate the image after scanning.
+            <para />
+            If not set, the device default value will be used.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as using <see cref="!:DataSource.Settings.ImageAcquire.Rotation" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.AutomaticBorderDetection">
+      <summary>
+            Should automatic border detection be used.
+            <para />
+            If not set, the device default value will be used.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as using <see cref="!:DataSource.Settings.AutomaticAdjustments.AutomaticBorderDetection" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.Threshold">
+      <summary>
+            The threshold between detecting black and white shades (requires <see cref="P:TwainScanning.Bridgex86.ScanSettings.ColorMode" /> to be set to <see cref="F:TwainScanning.NativeStructs.TwPixelType.BW" />).
+            <para />
+            If not set, the device default value will be used.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as using <see cref="!:DataSource.Settings.ImageType.Threshold" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.Contrast">
+      <summary>
+            The contrast to use when scanning.
+            <para />
+            If not set, the device default value will be used.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as using <see cref="!:DataSource.Settings.ImageAcquire.Contrast" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.Brightness">
+      <summary>
+            The brightness to use when scanning.
+            <para />
+            If not set, the device default value will be used.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as using <see cref="!:DataSource.Settings.ImageAcquire.Brightness" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.ImageCount">
+      <summary>
+            Maximum number of images to acquire (-1 acquires all available images, 0 is treated as -1).
+            <para />
+            If not set, the device default value will be used.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as using count parameter in Acquire() and AcquireAsync() methods or 
+            <see cref="!:DataSource.Settings.Transfer.ImageCount" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.MultiPageScan">
+      <summary>
+            If scanning to TIFF or PDF, should scanned images be placed into a multi-page file.
+            <para />
+            If not set, the TwainScanning default value will be used.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.IgnoreBlankPages">
+      <summary>
+            Should blank pages be ignored during scanning.
+            <para />
+            If not set, the device default value will be used.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as using <see cref="!:DataSource.Settings.AutomaticAdjustments.AutoDiscardBlankPages" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.PdfProtection">
+      <summary>
+            If scanning to PDF, which protection settings to set.
+            <para />
+            Only applied when using PDF file format. And requires <see cref="P:TwainScanning.Bridgex86.ScanSettings.TransferMechanism" /> to be 
+            set to <see cref="F:TwainScanning.NativeStructs.TwSX.Native" /> or <see cref="F:TwainScanning.NativeStructs.TwSX.Memory" />.
+            <para />
+            If not set, the scanned PDF document will not be protected.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ScanSettings.OutputFileNamesList">
+      <summary>
+            Absolute paths for files to acquire to. 
+            Use when specific custom names are required for scan result files. 
+            Always provide at least as many as there are items to scan, having more is acceptable, but less is not.
+            <para />
+            Supported file formats: TIFF (default if extension not specified), PDF, JPEG, BMP, PNG. 
+            Use same file format for all files, mixing formats is not supported.
+            <para />
+            If set, the file name parameter specified in <see cref="M:TwainScanning.Bridgex86.Bridgex86.Acquire(System.String,TwainScanning.Bridgex86.ScanSettings)" /> will be ignored (mutually exclusive).
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as using IEnumerable string parameter in any SaveAllTo*() method of an <see cref="T:TwainScanning.Collectors.ImageCollector" />.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Bridgex86.CurrentDeviceSettings">
+      <summary>
+            Represents current scan settings for specified device. Settings which are not supported are null/empty.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.CurrentDeviceSettings.Device">
+      <summary>
+            Device for which the current settings were retrieved.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.CurrentDeviceSettings.TransferMechanism">
+      <summary>
+            Transfer mechanism currently used to perform scan operations.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as <see cref="!:DataSource.Settings.Transfer.Mechanism" /> or 
+            the alias <see cref="F:TwainScanning.DataSource.TransferMechanism" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.CurrentDeviceSettings.DuplexEnabled">
+      <summary>
+            Is duplex scanning being used.
+            <para />
+            If not set, then the device doesn't support it.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as <see cref="!:DataSource.Settings.Duplex.Enabled" /> or 
+            the alias <see cref="F:TwainScanning.DataSource.UseDuplex" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.CurrentDeviceSettings.Resolution">
+      <summary>
+            Resolution at which scanning is performed.
+            <para />
+            If not set, then the device doesn't support it.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as <see cref="!:Settings.Resolution.X" /> and 
+            <see cref="!:Settings.Resolution.Y" /> or 
+            the alias <see cref="F:TwainScanning.DataSource.Resolution" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.CurrentDeviceSettings.PageSize">
+      <summary>
+            Page size being scanned to.
+            <para />
+            If not set, then the device doesn't support it.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as <see cref="!:DataSource.Settings.Page.Sizes" /> or 
+            the alias <see cref="F:TwainScanning.DataSource.PageSize" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.CurrentDeviceSettings.AutoFeed">
+      <summary>
+            Is auto feed being used.
+            <para />
+            If not set, then the device doesn't support it.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as <see cref="!:DataSource.Settings.Feeder.Autofeed" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.CurrentDeviceSettings.ColorMode">
+      <summary>
+            Which color mode is being used for scanning.
+            <para />
+            If not set, then the device doesn't support it.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as <see cref="!:DataSource.Settings.ImageType.PixelType" /> or 
+            the alias <see cref="F:TwainScanning.DataSource.ColorMode" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.CurrentDeviceSettings.Rotation">
+      <summary>
+            How the image is rotated after scanning (if at all).
+            <para />
+            If not set, then the device doesn't support it.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as <see cref="!:DataSource.Settings.ImageAcquire.Rotation" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.CurrentDeviceSettings.AutomaticBorderDetection">
+      <summary>
+            Is automatic border detection being used.
+            <para />
+            If not set, then the device doesn't support it.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as <see cref="!:DataSource.Settings.AutomaticAdjustments.AutomaticBorderDetection" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.CurrentDeviceSettings.Threshold">
+      <summary>
+            The threshold being used for detecting between black and white shades (used when <see cref="P:TwainScanning.Bridgex86.CurrentDeviceSettings.ColorMode" /> is set to <see cref="F:TwainScanning.NativeStructs.TwPixelType.BW" />).
+            <para />
+            If not set, then the device doesn't support it.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as <see cref="!:DataSource.Settings.ImageType.Threshold" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.CurrentDeviceSettings.Contrast">
+      <summary>
+            The contrast being used when scanning.
+            <para />
+            If not set, then the device doesn't support it.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as <see cref="!:DataSource.Settings.ImageAcquire.Contrast" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.CurrentDeviceSettings.Brightness">
+      <summary>
+            The brightness being used when scanning.
+            <para />
+            If not set, then the device doesn't support it.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as <see cref="!:DataSource.Settings.ImageAcquire.Brightness" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.CurrentDeviceSettings.ImageCount">
+      <summary>
+            Maximum number of images being acquired (if -1, all available images are acquired).
+            <para />
+            If not set, then the device doesn't support it.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as count parameter in Acquire() and AcquireAsync() methods or 
+            <see cref="!:DataSource.Settings.Transfer.ImageCount" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.CurrentDeviceSettings.IgnoreBlankPages">
+      <summary>
+            Are blank pages being ignored during scanning.
+            <para />
+            If not set, then the device doesn't support it.
+            <para />
+            Note: When not using <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, same as <see cref="!:DataSource.Settings.AutomaticAdjustments.AutoDiscardBlankPages" />.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Bridgex86.ResultCurrentDeviceSettings">
+      <summary>
+            Result class for <see cref="T:TwainScanning.Bridgex86.CurrentDeviceSettings" /> results returned from <see cref="T:TwainScanning.Bridgex86.Bridgex86" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ResultCurrentDeviceSettings.Value">
+      <summary>
+            Result value from Bridgex86.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Bridgex86.StatusType">
+      <summary>
+            Used to indicate result status of Bridgex86 operation.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Bridgex86.StatusType.Unknown">
+      <summary>
+            Status not determined or nothing was sent.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Bridgex86.StatusType.OK">
+      <summary>
+            Everything OK.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Bridgex86.StatusType.Warning">
+      <summary>
+            Warnings occurred.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Bridgex86.StatusType.Error">
+      <summary>
+            Errors occurred.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Bridgex86.ResultBase">
+      <summary>
+            Base class for all results returned from <see cref="T:TwainScanning.Bridgex86.Bridgex86" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ResultBase.Status">
+      <summary>
+            Result status of Bridgex86 operation.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ResultBase.WarningMessages">
+      <summary>
+            Warning messages from Bridgex86.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ResultBase.ErrorMessages">
+      <summary>
+            Error messages from Bridgex86.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Bridgex86.ResultBool">
+      <summary>
+            Result class for <c>bool</c> results returned from <see cref="T:TwainScanning.Bridgex86.Bridgex86" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ResultBool.Value">
+      <summary>
+            Result value from Bridgex86.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Bridgex86.ResultNoValue">
+      <summary>
+            Result class for results returned from <see cref="T:TwainScanning.Bridgex86.Bridgex86" />, but without a value property.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Bridgex86.ResultString">
+      <summary>
+            Result class for <c>string</c> results returned from <see cref="T:TwainScanning.Bridgex86.Bridgex86" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ResultString.Value">
+      <summary>
+            Result value from Bridgex86.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Bridgex86.ResultStringArray">
+      <summary>
+            Result class for <c>string[]</c> results returned from <see cref="T:TwainScanning.Bridgex86.Bridgex86" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Bridgex86.ResultStringArray.Value">
+      <summary>
+            Result values from Bridgex86.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilityProxy`1">
+      <summary>
+            Class that allow user to easily get supported capability values as array.
+            </summary>
+      <typeparam name="CapValueType">
+      </typeparam>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilityProxy`1.Value">
+      <summary>
+            Get or set capability value. 
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilityProxy`1.AvailableValues">
+      <summary>
+            Get array of supported capability values.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.Capability.CapabilityProxy`1.IsSupportedOnThisDevice">
+      <summary>
+            Is capability suppported by Twain device.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Capability.CapabilityProxy`1.Reset">
+      <summary>
+            Reset current instance.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.DeviceSettings">
+      <summary>
+              Data source settings. Abstraction around capabilities of the device represented by the <see cref="T:TwainScanning.DataSource" />.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.AsyncDeviceEvents">
+      <summary>
+            Represent event of Twain source.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.AudibleAlarms">
+      <summary>
+            Represent audible alarms of twain source.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.AutomaticAdjustments">
+      <summary>
+            Represent collection of automatic adjustments of twain source.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.AutomaticCapture">
+      <summary>
+             Represent automatic capture supported by device. 
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.AutomaticScanning">
+      <summary>
+            Represent automatic scanning.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.BarCodeDetection">
+      <summary>
+            Represent BarCodeDetection  supported by device.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.Caps">
+      <summary>
+             Represent a collection of capability.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.Color">
+      <summary>
+             Represent color filter capability.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.Compression">
+      <summary>
+            Represent Compression capability.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.Device">
+      <summary>
+            Represent manipulation of twain device's.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.DoublefeedDetection">
+      <summary>
+            DFD functionality.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.ImprinterEndorser">
+      <summary>
+             Allows the application to specify the starting endorser / imprinter number.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.ImageInformation">
+      <summary>
+            Represent information about image.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.ImageAcquire">
+      <summary>
+            Represent image acquire from twain device.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.ImageType">
+      <summary>
+            Represent collection of image type capabilities.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.Language">
+      <summary>
+            Language information.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.MICR">
+      <summary>
+            MICR
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.Page">
+      <summary>
+            Represent manipulation of document pages.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.Duplex">
+      <summary>
+            Represent duplex.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.Feeder">
+      <summary>
+            Represent Feeder.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.PatchCodeDetection">
+      <summary>
+            Represent PatchCodeDetection.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.PowerMonitoring">
+      <summary>
+            Represent device power manipulation.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.Resolution">
+      <summary>
+            Represente resolutions supported by device.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.Transfer">
+      <summary>
+            Allows to manipulate with image transfer of Twain device.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.Capability.DeviceSettings.UserInterface">
+      <summary>
+            Allows to manipulate with UserInterface of Twain device.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.Capability.DeviceSettings.GetSupportedCapabilities">
+      <summary>
+            Get list of supported caps.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.AsyncDeviceEvents">
+      <summary>
+             Class that represent event of Twain source.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AsyncDeviceEvents.DeviceEvent">
+      <summary>
+            Selects which events the application wants the source to report.
+            CAP_DEVICEEVENT
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.AudibleAlarms">
+      <summary>
+             Class that control's audio of twain device.
+             Turning on and off audiable alarms is done through Alarms capability and to control device’s audible alarm Volume should be called. 
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AudibleAlarms.Alarms">
+      <summary>
+            Turns specific audible alarms on and off.
+            CAP_ALARMS
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AudibleAlarms.Volume">
+      <summary>
+            Controls the volume of a device’s audible alarm.
+            CAP_ALARMVOLUME
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.AutomaticAdjustments">
+      <summary>
+             Class that represents a collection  of automatic adjustments capability.
+             Settings are to change page behavior.
+             To force the output image dimensions to match either the current value of ICAP_SUPPORTEDSIZES AutoSize should be called
+             or to discards blank pages AutoDiscardBlankPages;
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticAdjustments.AutomaticSenseMedium">
+      <summary>
+            Configures a Source to check for paper in the Automatic Document Feeder.
+            CAP_AUTOMATICSENSEMEDIUM
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticAdjustments.AutoDiscardBlankPages">
+      <summary>
+            Discards blank pages.
+            ICAP_AUTODISCARDBLANKPAGES
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticAdjustments.AutomaticBorderDetection">
+      <summary>
+            Turns automatic border detection on and off.
+            ICAP_AUTOMATICBORDERDETECTION
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticAdjustments.AutomaticColorEnabled">
+      <summary>
+            Detects the pixel type of the image and returns either a color image or a non-color image specified by <see cref="P:TwainScanning.Capability.CapabilitySets.AutomaticAdjustments.AutomaticColorNonColorPixelType" />.
+            ICAP_AUTOMATICCOLORENABLED
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticAdjustments.AutomaticColorNonColorPixelType">
+      <summary>
+            Specifies the non-color pixel type to use when automatic color is enabled.
+            ICAP_AUTOMATICCOLORNONCOLORPIXELTYPE.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticAdjustments.AutomaticCropUsesFrame">
+      <summary>
+            Reduces the amount of data captured from the device, potentially improving the performance of the driver.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticAdjustments.AutomaticDeskew">
+      <summary>
+             Turns automatic skew correction on and off.
+             ICAP_AUTOMATICDESKEW
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticAdjustments.AutomaticLengthDetection">
+      <summary>
+            Controls the automatic detection of the length of a document, this is intended for use with an
+            Automatic Document Feeder.
+            ICAP_AUTOMATICLENGTHDETECTION
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticAdjustments.AutomaticRotate">
+      <summary>
+            When <c>true</c>, depends on source to automatically rotate the image. 
+            ICAP_AUTOMATICROTATE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticAdjustments.AutoSize">
+      <summary>
+            Gets auto size capability.
+            Force the output image dimensions to match either the current value of ICAP_SUPPORTEDSIZES
+            or any of its current allowed values.
+            ICAP_AUTOSIZE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticAdjustments.FlipRotation">
+      <summary>
+            Orients images that flip orientation every other image.
+            ICAP_FLIPROTATION
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticAdjustments.ImageMerge">
+      <summary>
+            Merges the front and rear image of a document in one of four orientations: front on the top, front
+            on the bottom, front on the left or front on the right.
+            ICAP_IMAGEMERGE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticAdjustments.ImageMergeHeightThreshold">
+      <summary>
+            Specifies a Y-Offset in ICAP_UNITS units. Front and rear images less than or equal to this value
+            are merged according to the settings of ICAP_IMAGEMERGE. If either the front or the rear image is
+            greater than this value, they are not merged.
+            ICAP_IMAGEMERGEHEIGHTTHRESHOLD
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.AutomaticCapture">
+      <summary>
+            Class that represents automaticCapture capabilities supported by device.
+            The number of images to automatically capture. 
+            This does not refer to the number of images to be sent to the Application, use CAP_XFERCOUNT for that.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticCapture.NumberOfImages">
+      <summary>
+            The number of images to automatically capture. This does not refer to the number of images to be
+            sent to the Application, use CAP_XFERCOUNT for that.
+            CAP_AUTOMATICCAPTURE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticCapture.TimeBeforeFirstCapture">
+      <summary>
+            For automatic capture, this value selects the number of milliseconds before the first picture is to be
+            taken, or the first image is to be scanned.
+            CAP_TIMEBEFOREFIRSTCAPTURE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticCapture.TimeBetweenCaptures">
+      <summary>
+            For automatic capture, this value selects the milliseconds to wait between pictures taken, or images scanned.
+            CAP_TIMEBETWEENCAPTURES
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.AutomaticScanning">
+      <summary>
+            These settings are intended to boost the performance of a Source. The fundamental assumption
+            behind AutomaticScanning is that the device is able to capture the number of images indicated by the value
+            of CAP_XFERCOUNT without waiting for the Application to request the image transfers.This is
+            only possible if the device has internal buffers capable of caching the images it captures. 
+            </summary>
+      <seealso cref="T:TwainScanning.Capability.CapSetBase" />
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticScanning.AutoScan">
+      <summary>
+            Enables the source’s automatic document scanning process.
+            CAP_AUTOSCAN
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticScanning.CameraEnabled">
+      <summary>
+            When set to <c>true</c> the device will deliver images from the current camera. 
+            CAP_CAMERAENABLED
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticScanning.CameraOrder">
+      <summary>
+            This capability selects the order of output for Single Document Multiple Image (SDMI) mode
+            based on an array of pixel types; it does not constrain the allowed pixel types.
+            CAP_CAMERAORDER
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticScanning.CameraSide">
+      <summary>
+            TWAIN models a duplex scanner as conceptually having two 'cameras' - a 'top' camera that
+            captures the front of each page, and a 'bottom' camera that captures the back.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticScanning.ClearBuffers">
+      <summary>
+            Getting Value reports the presence of data in the scanner’s buffers. Setting with a value of
+            TwCB.Clear immediately clears the buffers.
+            CAP_CAMERASIDE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.AutomaticScanning.MaxBatchBuffers">
+      <summary>.
+            Describes the number of pages that the scanner can buffer.
+            CAP_MAXBATCHBUFFERS
+            </summary>
+      <value>
+            The maximum batch buffers.
+            </value>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.BarCodeDetection">
+      <summary>
+             Class that represents BarCodeDetection capabilities supported by device.
+             MaxRetries restricts the number of times a search will be retried if none are found on each page.
+             Refine this capability to limit the number of times the bar code search algorithm is retried on a page that contains no bar codes.
+             BarCodeSearchPriorities restricts bar code searching to certain orientations, or prioritizes one orientation over the other. 
+             Negotiate this capability if the orientation of bar codes is already known to the application. Refinement of this capability can 
+             speed the bar code search.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.BarCodeDetection.Enabled">
+      <summary>
+            Support this capability if the scanner supports any Bar code recognition. If the device allows this           
+            feature to be turned off, then default to off.
+            ICAP_BARCODEDETECTIONENABLED
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.BarCodeDetection.SupportedTypes">
+      <summary>
+            Provides a list of bar code types that can be detected by the current Data Source.
+            This is a read only capability.
+            ICAP_SUPPORTEDBARCODETYPES
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.BarCodeDetection.MaxRetries">
+      <summary>
+            Restricts the number of times a search will be retried if none are found on each page.
+            ICAP_BARCODEMAXRETRIES
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.BarCodeDetection.MaxSearchPriorities">
+      <summary>
+            Specifies the maximum number of supported search priorities.
+            ICAP_BARCODEMAXSEARCHPRIORITIES
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.BarCodeDetection.SearchMode">
+      <summary>
+            Restricts bar code searching to certain orientations, or prioritizes one orientation over the other.
+            ICAP_BARCODESEARCHMODE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.BarCodeDetection.SearchPriorities">
+      <summary>
+            A prioritized list of bar code types dictating the order in which bar codes will be sought.
+            ICAP_BARCODESEARCHPRIORITIES
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.BarCodeDetection.Timeout">
+      <summary>
+            Gets the bar code timeout.
+            Restricts the total time spent on searching for a bar code on each page.
+            ICAP_BARCODETIMEOUT
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.Caps">
+      <summary>
+             Class that represents a collection of capability.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Caps.ExtendedCaps">
+      <summary>
+            Returns a list of the capabilities already negotiated.
+            CAP_EXTENDEDCAPS
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Caps.SupportedCaps">
+      <summary>
+            Returns a list of all the capabilities for which the Source will answer inquiries. Does not indicate
+            which capabilities the Source will allow to be set by the application.Some capabilities can only be
+            set if certain setup work has been done so the Source cannot globally answer which capabilities
+            are “set-able.”
+            CAP_SUPPORTEDCAPS
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Caps.SupportedDats">
+      <summary>
+            Inquire Source’s DAT messages that are valid.
+            CAP_SUPPORTEDDATS
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.Color">
+      <summary>
+             Class that represent color capabilities. Filter describes the color characteristic of the subtractive filter 
+             applied to the image data. Multiple filters may be applied to a single acquisition.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Color.ColorManagementEnabled">
+      <summary>
+            Disables the Source’s color and gamma tables for color and grayscale images, resulting in output
+            that that could be termed “raw”.
+            ICAP_COLORMANAGEMENTENABLED
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Color.Filter">
+      <summary>
+            Describes the color characteristic of the subtractive filter applied to the image data. Multiple
+            filters may be applied to a single acquisition.
+            ICAP_FILTER
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Color.Gamma">
+      <summary>
+            Gamma correction value for the image data.
+            ICAP_GAMMA
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Color.IccProfile">
+      <summary>
+            Informs the application if the source has an ICC profile and can embed or link it in the current
+            ICAP_IMAGEFILEFORMAT.Tells the source if the application would like an ICC profile
+            embedded or linked into the image file the source will write.
+            ICAP_ICCPROFILE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Color.PlanarChunky">
+      <summary>
+            Allows the application and Source to identify which color data formats are available. There are
+            two options, “planar” and “chunky.”
+            ICAP_PLANARCHUNKY
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.Compression">
+      <summary>
+            Class that represents a collection of capabilities  (compression) supported by device.
+            Use JpegQuality capability as a shortcut to select JPEG quantization tables that tradeoff quality versus 
+            compressed image size. 
+            Used in concert with DAT_JPEGCOMPRESSION it is possible for an Application to obtain the tables that are 
+            appropriate for varying percentages of quality within a given Source. TWJQ_UNKNOWN is a read-only value 
+            (get or getCurrent), the Application cannot set the Source to this value. This value is reported if the 
+            Application uses DAT_JPEGCOMPRESSION to select the quantization tables, and the Source is unable to resolve 
+            those tables to a percentage value. The next three TWJQ_ values are intended as markers into the quality 
+            range, and are only applicable with set method. get, getCurrent and getDefault only return values in the 
+            range 0 - 100. If an Application wishes to map a TWJQ_ value to a corresponding value in the range 0 - 100, 
+            then it must issue a get after a set with one of the three TWJQ_ values. No assumption is made about the 
+            meaning of the range 0 - 99, it may be derived from the JPEG standard or it may be optimized for the Source's 
+            device. 100, though, implies a lossless form of compression. Applications are not encouraged to use this 
+            value since it results in poor compression, as well as a format that is not currently widely supported in 
+            the industry.
+            TWJQ_UNKNOWN - read-only; must be the setting for this capability if the user sets the JPEG compression tables 
+            using DAT_JPEGCOMPRESSION, and the Source is not able to map the selected tables to a specific percentage of quality.
+            TWJQ_LOW - write-only; implies low quality; the images are at the maximum compression recommended by the Source.
+            TWJQ_MEDIUM - write-only; implies medium quality; the images are at the balance point between good compression 
+            and good images. This is an arbitrary setting on the part of the Source writer that is expected to best represent 
+            their device. This is the value that Applications are most encouraged to use.
+            TWJQ_HIGH - write-only; implies high quality; the images display the maximum quality that produces any kind of 
+            meaningful compression. Note that images at this setting are still considered to be lossy.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Compression.BitOrderCodes">
+      <summary>
+            Used for CCITT data compression only. Indicates the bit order representation of the stored
+            compressed codes.
+            ICAP_BITORDERCODES
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Compression.CcittKFactor">
+      <summary>
+             Used for CCITT Group 3 2-dimensional compression.The ‘K’ factor indicates how often the new
+             compression baseline should be re-established.A value of 2 or 4 is common in facsimile
+             communication.A value of zero in this field will indicate an infinite K factor—the baseline is only
+             calculated at the beginning of the transfer.
+             ICAP_CCITTKFACTOR
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Compression.Method">
+      <summary>
+            Compression method for Buffered Memory Transfers and File transfers.
+            ICAP_COMPRESSION
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Compression.JpegPixelType">
+      <summary>
+            Allows the application and Source to agree upon a common set of color descriptors that are made
+            available by the Source.This ICAP is only useful for JPEG-compressed buffered memory image
+            transfers.
+            ICAP_JPEGPIXELTYPE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Compression.JpegQuality">
+      <summary>
+            Use this capability as a shortcut to select JPEG quantization tables that tradeoff quality versus
+            compressed image size. Used in concert with DAT_JPEGCOMPRSSION it is possible for an
+            Application to obtain the tables that are appropriate for varying percentages of quality within a
+            given Source.
+            ICAP_JPEGQUALITY
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Compression.JpegSubSampling">
+      <summary>
+            Use this capability and JpegQuality as a shortcut to select JPEG quantization. 
+            ICAP_JPEGSUBSAMPLING
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Compression.PixelFlavorCodes">
+      <summary>
+            Sense of the pixel whose numeric value is zero (minimum data value).
+            ICAP_PIXELFLAVORCODES
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Compression.TimeFill">
+      <summary>
+            Used only with CCITT data compression. Specifies the minimum number of words of
+            compressed codes(compressed data) to be transmitted per line.
+            ICAP_TIMEFILL
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.Device">
+      <summary>
+            Class that allows to manipulate TWAIN device.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Device.Online">
+      <summary>
+            If <c>true</c>, the physical hardware (e.g., scanner, digital camera, image database, etc.) that represents
+            the image source is attached, powered on, and communicating.
+            CAP_DEVICEONLINE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Device.TimeDate">
+      <summary>
+            The date and time of the device’s clock.
+            Managed in the form “YYYY/MM/DD HH:mm:SS:sss”
+            CAP_DEVICETIMEDATE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Device.SerialNumber">
+      <summary>
+            A string containing the serial number of the currently selected device in the Source. Multiple
+            devices may all report the same serial number.
+            CAP_SERIALNUMBER
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Device.MinimumHeight">
+      <summary>
+            Allows the source to define the minimum height (Y-axis) that the source can acquire (measured in units of
+            <see cref="P:TwainScanning.Capability.CapabilitySets.Device.Unit" />).
+            This is a read only capability.
+            ICAP_MINIMUMHEIGHT
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Device.MinimumWidth">
+      <summary>
+            Allows the source to define the minimum width (X-axis) that the source can acquire  (measured in units of
+            <see cref="P:TwainScanning.Capability.CapabilitySets.Device.Unit" />). 
+            This is a read only capability.
+            ICAP_MINIMUMWIDTH
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Device.ExposureTime">
+      <summary>
+            Specifies the exposure time used to capture the image, in seconds.
+            ICAP_EXPOSURETIME
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Device.FlashUsed2">
+      <summary>
+            For devices that support flash. MSG_SET selects the flash to be used (if any). MSG_GET reports the
+            current setting.This capability replaces ICAP_FLASHUSED, which is only able to negotiate the
+            flash being on or off.
+            ICAP_FLASHUSED2
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Device.ImageFilter">
+      <summary>
+            For devices that support image enhancement filtering. This capability selects the algorithm used
+            to improve the quality of the image.
+            ICAP_IMAGEFILTER
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Device.LampState">
+      <summary>
+            TRUE means the lamp is currently, or should be set to ON.Sources may not support MSG_SET
+            operations.
+            ICAP_LAMPSTATE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Device.LightPath">
+      <summary>
+             Describes whether the image was captured transmissively or reflectively.
+            ICAP_LIGHTPATH
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Device.LightSource">
+      <summary>
+            Describes the general color characteristic of the light source used to acquire the image.
+            ICAP_LIGHTSOURCE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Device.NoiseFilter">
+      <summary>
+            For devices that support noise filtering, selects the algorithm to be used.
+            ICAP_NOISEFILTER
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Device.OverScan">
+      <summary>
+            Overscan is used to scan outside of the boundaries described by ICAP_FRAMES, and is used to
+            help acquire image data that may be lost because of skewing.
+            ICAP_OVERSCAN
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Device.PhysicalHeight">
+      <summary>
+            The maximum physical height (Y-axis) the Source can acquire (measured in units of
+            <see cref="P:TwainScanning.Capability.CapabilitySets.Device.Unit" />).
+            ICAP_PHYSICALHEIGHT
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Device.PhysicalWidth">
+      <summary>
+            The maximum physical width (X-axis) the Source can acquire (measured in units of
+            <see cref="P:TwainScanning.Capability.CapabilitySets.Device.Unit" />).
+            ICAP_PHYSICALWIDTH.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Device.Unit">
+      <summary>
+            Unless a quantity is dimensionless or uses a specified unit of measure, This setting determines
+            the unit of measure for all quantities.
+            ICAP_UNITS
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Device.ZoomFactor">
+      <summary>
+            Camera lens zooming.
+            ICAP_ZOOMFACTOR
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.DoublefeedDetection">
+      <summary>
+            Control DFD functionality.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.DoublefeedDetection.Mode">
+      <summary>
+            Type of the double feed detection method. To disable set empty array.
+            CAP_DOUBLEFEEDDETECTION
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.DoublefeedDetection.DoubleFeedDetectionLength">
+      <summary>
+            When <see cref="P:TwainScanning.Capability.CapabilitySets.DoublefeedDetection.Mode" />  includes <see cref="F:TwainScanning.NativeStructs.TwDF.ByLength" /> , it allows an Application to set
+            the minimum length for detecting double feed documents.A value of zero always means “off”.
+            CAP_DOUBLEFEEDDETECTIONLENGTH
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.DoublefeedDetection.DoubleFeedDetectionSensitivity">
+      <summary>
+            When <see cref="P:TwainScanning.Capability.CapabilitySets.DoublefeedDetection.Mode" /> includes <see cref="F:TwainScanning.NativeStructs.TwDF.Ultrasonic" />, allows an Application to set
+            how sensitive the double feed detection is.
+            CAP_DOUBLEFEEDDETECTIONSENSITIVITY
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.DoublefeedDetection.DoubleFeedDetectionResponse">
+      <summary>
+            It allows an Application to set how the source will respond to detecting a double feed.
+            CAP_DOUBLEFEEDDETECTIONRESPONSE
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.ImprinterEndorser">
+      <summary>
+             Allows the application to specify the starting endorser / imprinter number. 
+             All other endorser/ imprinter properties should be handled through the data source's user interface.
+             The user can set the starting number for the endorser.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImprinterEndorser.Endorser">
+      <summary>
+            Allows the application to specify the scanner’s starting endorser / imprinter number.
+            CAP_ENDORSER
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImprinterEndorser.Imprinter">
+      <summary>
+            It gets the current list of available printer devices, along with the one currently being
+            used for negotiation. Setting value selects the current device for negotiation, and optionally
+            constrains the list. Reseting restores all the available devices(useful after setting a value has been
+            used to constrain the list).
+            CAP_PRINTER
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImprinterEndorser.ImprinterEnabled">
+      <summary>
+            Turns the current imprinter device on or off.
+            CAP_PRINTERENABLED
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImprinterEndorser.ImprinterIndex">
+      <summary>
+            Gets the index of the current imprinter.
+            CAP_PRINTERINDEX
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImprinterEndorser.ImprinterMode">
+      <summary>
+            Specifies the appropriate current imprinter device mode.
+            CAP_PRINTERMODE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImprinterEndorser.PrinterString">
+      <summary>
+            Specifies the string(s) that are to be used in the string component when the current imprinter
+             device is enabled.
+            CAP_PRINTERSTRING
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImprinterEndorser.PrinterSuffix">
+      <summary>
+            Specifies the string that shall be used as the current imprinter device’s suffix.
+            CAP_PRINTERSUFFIX
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImprinterEndorser.PrinterVerticalOffset">
+      <summary>
+            Gets the printer vertical offset.
+            Specifies a Y-Offset in <see cref="P:TwainScanning.Capability.CapabilitySets.Device.Unit" /> for the current imprinter device.
+            CAP_PRINTERVERTICALOFFSET
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImprinterEndorser.PrinterCharRotation">
+      <summary>
+            Orientation of each character in the font.
+            CAP_PRINTERCHARROTATION
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImprinterEndorser.PrinterFontStyle">
+      <summary>
+            Style (ex: bold, italic…).
+            CAP_PRINTERFONTSTYLE 
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImprinterEndorser.PrinterIndexLeadChar">
+      <summary>
+            Lead character for padding.
+            CAP_PRINTERINDEXLEADCHAR
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImprinterEndorser.PrinterIndexMaxValue">
+      <summary>
+            Maximum allowed printer index value.
+            CAP_PRINTERINDEXMAXVALUE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImprinterEndorser.PrinterIndexNumDigits">
+      <summary>
+            Maximum allowed digits in printer index value.
+            CAP_PRINTERINDEXNUMDIGITS
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImprinterEndorser.PrinterIndexStep">
+      <summary>
+            Increment between printer index values.
+            CAP_PRINTERINDEXSTEP
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImprinterEndorser.PrinterIndexTrigger">
+      <summary>
+            Triggers for incrementing the printer index value.
+            CAP_PRINTERINDEXTRIGGER
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImprinterEndorser.PrinterStringPreview">
+      <summary>
+            Preview of what a printer string will look like.
+            CAP_PRINTERSTRINGPREVIEW
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.ImageInformation">
+      <summary>
+            Class that contains information about image.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageInformation.Author">
+      <summary>
+            Author of acquired image (may include a copyright string). 
+            Gets the author. 
+            CAP_AUTHOR
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageInformation.Caption">
+      <summary>
+            General note about acquired image.
+            CAP_CAPTION 
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageInformation.TimeDate">
+      <summary>
+            Date and Time the image was acquired.
+            CAP_TIMEDATE 
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageInformation.ExtImageInfo">
+      <summary>
+            Allows the application to query the data source to see if it
+            supports the new operation triplet DG_IMAGE/DAT_EXTIMAGEINFO/ MSG_GET.
+            ICAP_EXTIMAGEINFO
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageInformation.SupportedExtImageInfo">
+      <summary>
+            Gets the supported ext image information.
+            Lists all of the information that the Source is capable of
+            returning from a call to DAT_EXTIMAGEINFO.
+            ICAP_SUPPORTEDEXTIMAGEINFO
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.ImageAcquire">
+      <summary>
+            Class that allows to manipulate image capability supported by device.
+             Allows an application to request the delivery of thumbnail representations for the set of images that are to be 
+             delivered. Setting CAP_THUMBNAILSENABLED to TRUE turns on thumbnail mode. 
+             Images transferred thereafter will be sent at thumbnail size (exact thumbnail size is determined by the Data Source). 
+             Setting this capability to FALSE turns thumbnail mode off and returns full size images. 
+             A successful set of this capability to TRUE will cause the Source to deliver image thumbnails during normal data 
+             transfer operations. This mode remains in effect until this capability is set back to FALSE.
+             Application can use this capability to inquire, set, or restrict the values for BRIGHTNESS used in the Source.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageAcquire.ThumbnailsEnabled">
+      <summary>
+            Allows an application to request the delivery of thumbnail representations for the set of images
+            that are to be delivered.
+            CAP_THUMBNAILSENABLED
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageAcquire.AutoBright">
+      <summary>
+            The source Auto-brightness function (if any).
+            ICAP_AUTOBRIGHT
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageAcquire.Brightness">
+      <summary>
+            The brightness values available within the Source.
+            ICAP_BRIGHTNESS
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageAcquire.Contrast">
+      <summary>
+            The contrast values available within the Source.
+            ICAP_CONTRAST
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageAcquire.Highlight">
+      <summary>
+            Specifies which value in an image should be interpreted as the lightest “highlight.” All values 
+            “lighter” than this value will be clipped to this value.
+            ICAP_HIGHLIGHT
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageAcquire.ImageDataSet">
+      <summary>
+            Gets or sets the image indices that will be delivered during the standard image transfer.
+            ICAP_IMAGEDATASET
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageAcquire.Mirror">
+      <summary>
+            How the Source can/should mirror the scanned image data prior to transfer. 
+            ICAP_MIRROR
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageAcquire.Orientation">
+      <summary>
+            Defines which edge of the “paper” the image’s “top” is aligned with.
+            ICAP_ORIENTATION
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageAcquire.Rotation">
+      <summary>
+            How the Source can/should rotate the scanned image data prior to transfer. 
+            ICAP_ROTATION
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageAcquire.Shadow">
+      <summary>
+            Darkest shadow, values darker than this value will be clipped to this value.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageAcquire.XScaling">
+      <summary>
+            All the X-axis scaling values available. A value of ‘1.0’ is equivalent to 100% scaling. Do not use
+            values less than or equal to zero.
+            ICAP_XSCALING 
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageAcquire.YScaling">
+      <summary>
+            All the Y-axis scaling values available. A value of ‘1.0’ is equivalent to 100% scaling. Do not use
+             values less than or equal to zero.
+            ICAP_YSCALING
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.ImageType">
+      <summary>
+            Class that represents a collection of ImageType capabilities supported by device.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageType.BitDepth">
+      <summary>
+            Specifies the pixel bit depths for the Current value of <see cref="P:TwainScanning.Capability.CapabilitySets.ImageType.PixelType" />. 
+            ICAP_BITDEPTH
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageType.BitDepthReduction">
+      <summary>
+            Specifies the Reduction Method the Source should use to reduce the bit depth of the data. Most
+            commonly used with <see cref="P:TwainScanning.Capability.CapabilitySets.ImageType.PixelType" /> = <see cref="F:TwainScanning.NativeStructs.TwPixelType.BW" /> to reduce gray data to black and white.
+            ICAP_BITDEPTHREDUCTION
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageType.BitOrder">
+      <summary>
+            Specifies how the bytes in an image are filled by the Source. <see cref="F:TwainScanning.NativeStructs.TwBO.MsbFirst" /> indicates that the
+            leftmost bit in the byte (usually bit 7) is the byte’s Most Significant Bit.
+            ICAP_BITORDER
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageType.CustHalftone">
+      <summary>
+            Specifies the square-cell halftone (dithering) matrix the Source should use to halftone the image.
+            ICAP_CUSTHALFTONE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageType.Halftones">
+      <summary>
+            A list of names of the halftone patterns available within the Source.
+            ICAP_HALFTONES
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageType.PixelFlawor">
+      <summary>
+            Sense of the pixel whose numeric value is zero.
+            ICAP_PIXELFLAVOR
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageType.PixelType">
+      <summary>
+            The type of pixel data (B/W, gray, color, etc.).
+            ICAP_PIXELTYPE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.ImageType.Threshold">
+      <summary>
+            Specifies the dividing line between black and white. This is the value the Source will use to
+             threshold, if needed, when <see cref="P:TwainScanning.Capability.CapabilitySets.ImageType.PixelType" /> = <see cref="F:TwainScanning.NativeStructs.TwPixelType.BW" />.
+             ICAP_THRESHOLD
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.Language">
+      <summary>
+             Class that contains information about Language.
+             Allows application and source to identify which languages they have in common for the exchange of string data, 
+             and to select the language of the internal UI.
+             Note: Since the TWLG_xxxx codes include language and country data,
+             there is no separate capability for selecting the country. In multi-lingual environments, 
+             it is the responsibility of the Application to recall the last selected language for a given User.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Language.TheLanguage">
+      <summary>
+            Allows application and source to identify which languages they have in common.
+            CAP_LANGUAGE
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.MICR">
+      <summary>
+            Class that contains information about MICR.
+            If set to true check scanning is enabled.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.MICR.Enabled">
+      <summary>
+            Gets the micr enabled capability.
+            Get this capability to determine if the Source supports check scanning. If set to <c>true</c> check
+            scanning is enabled, if set to <c>false</c> check scanning is disabled.
+            CAP_MICRENABLED
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.Page">
+      <summary>
+            Class that allows to manipulate Pages segments as frames,MaxFrames,sizes.
+            Capability sizes for devices that support fixed frame sizes. Defined sizes match typical page sizes. 
+            This specifies the size(s) the Source can/should use to acquire image data.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Page.Segmented">
+      <summary>
+            Describes the segmentation setting for captured images. Image segmentation occurs when either
+            the device, the Source or the Application breaks up an image into a stream of image components
+            (text, pictures, graphics) that must be assembled by the application to reconstruct the original
+            document.
+            CAP_SEGMENTED
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Page.Frames">
+      <summary>
+            The list of frames the Source will acquire on each page.
+            ICAP_FRAMES
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Page.MaxFrames">
+      <summary>
+            The maximum number of frames the Source can provide or the application can accept per page.
+            This is a bounding capability only.It does not establish current or future behavior.
+            ICAP_MAXFRAMES
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Page.Sizes">
+      <summary>
+            Gets the supported sizes capability.
+            For devices that support fixed frame sizes. Defined sizes match typical page sizes. This specifies
+            the size(s) the Source can/should use to acquire image data.
+            ICAP_SUPPORTEDSIZES
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.Duplex">
+      <summary>
+            Class that allows to manipulate duplex.
+            To check if duplex is supported or is duplex one-path , two-path  use Mode (TwCap.Duplex),to check if
+            duplex is enable use Enable (TwCap.DuplexEnabled).
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Duplex.Mode">
+      <summary>
+            This indicates whether the scanner supports duplex. If so, it further indicates whether one-path or
+            two-path duplex is supported.
+            CAP_DUPLEX
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Duplex.Enabled">
+      <summary>
+            Is duplex enabled.
+            CAP_DUPLEXENABLED
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.Feeder">
+      <summary>
+            Class that allows to manipulate the automatic document feeder of TWAIN device.
+            Cap AutoFeed if TRUE, the Source will automatically feed the next page from the document feeder after the 
+            frame negotiated for capture from each page are acquired. 
+            CAP_FEEDERENABLED must be TRUE to use this capability. 
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Feeder.Autofeed">
+      <summary>
+            If TRUE, the Source will automatically feed the next page from the document feeder after the
+            number of frames negotiated for capture from each page are acquired. CAP_FEEDERENABLED
+            must be TRUE to use this capability.
+            CAP_AUTOFEED
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Feeder.ClearPage">
+      <summary>
+            Source will eject the current page being acquired from and will leave the feeder
+            acquire area empty.
+            CAP_CLEARPAGE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Feeder.Alignment">
+      <summary>
+            Indicates the alignment of the document feeder.
+            CAP_FEEDERALIGNMENT
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Feeder.Enabled">
+      <summary>
+            If <c>true</c>, Source’s feeder is enabled.
+            CAP_FEEDERENABLED
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Feeder.Loaded">
+      <summary>
+            Reflect whether there are documents loaded in the Source’s feeder.
+            This is a read only capability.
+            CAP_FEEDERLOADED
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Feeder.Order">
+      <summary>
+            Indicates the alignment of the document feeder.
+            CAP_FEEDERORDER
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Feeder.Pocket">
+      <summary>
+            Indicates the alignment of the document feeder.
+            CAP_FEEDERPOCKET
+            </summary>
+    </member>
+    <member name="M:TwainScanning.Capability.CapabilitySets.Feeder.Prepare">
+      <summary>
+            Indicates the alignment of the document feeder.
+            CAP_FEEDERPREP
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Feeder.PaperDetectable">
+      <summary>
+            Determines whether source can detect documents on the ADF or flatbed.
+            CAP_PAPERDETECTABLE
+            </summary>
+      <value>
+            The loaded.
+            </value>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Feeder.PaperHandling">
+      <summary>
+            Control paper handling.
+            CAP_PAPERHANDLING
+            </summary>
+      <value>
+            The paper handling.
+            </value>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Feeder.ReacquireAllowed">
+      <summary>
+            Capable of acquiring multiple images of the same page without changing the physical registration of that page.
+            CAP_REACQUIREALLOWED
+            </summary>
+      <value>
+            The reacquire allowed.
+            </value>
+    </member>
+    <member name="M:TwainScanning.Capability.CapabilitySets.Feeder.RewindPage">
+      <summary>
+            The Source will return the current page to the input side of the document feeder and feed
+             the last page from the output side of the feeder back into the acquisition area.
+            CAP_REWINDPAGE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Feeder.Type">
+      <summary>
+            Allows application to set scan parameters depending on the type of feeder being used.
+            ICAP_FEEDERTYPE
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.PatchCodeDetection">
+      <summary>
+            Support for patch PatchCodeDetection.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.PatchCodeDetection.Enabled">
+      <summary>
+            Gets patch code detection enabled capability.
+            Turns patch code detection on and off.
+            ICAP_PATCHCODEDETECTIONENABLED
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.PatchCodeDetection.SupportedTypes">
+      <summary>
+            A list of patch code types that may be detected by the current Data Source.
+            This is a read only capability.
+            ICAP_SUPPORTEDPATCHCODETYPES
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.PatchCodeDetection.MaxSearchPriorities">
+      <summary>
+            The maximum number of supported search priorities.
+            ICAP_PATCHCODEMAXSEARCHPRIORITIES
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.PatchCodeDetection.SearchPriorities">
+      <summary>
+            A prioritized list of patch code types dictating the order in which patch codes will be sought.
+            ICAP_PATCHCODESEARCHPRIORITIES
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.PatchCodeDetection.SearchMode">
+      <summary>
+            Restricts patch code searching to certain orientations, or prioritizes one orientation over the other
+            ICAP_PATCHCODESEARCHMODE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.PatchCodeDetection.MaxRetries">
+      <summary>
+            Restricts the number of times a search will be retried if none are found on each page.
+            ICAP_PATCHCODEMAXRETRIES
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.PatchCodeDetection.Timeout">
+      <summary>
+            Restricts the total time spent on searching for a patch code on each page.
+            ICAP_PATCHCODETIMEOUT
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.PowerMonitoring">
+      <summary>
+            Class to manipulate capability power of device.
+            Use batteryPercentage with get method to indicate to the user about the battery power status, 
+            if -1 is returned, it indicates that the battery is not present. It 
+            is recomended to use PowerSupply to indentify the power source first.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.PowerMonitoring.BatteryMinutes">
+      <summary>
+            The minutes of battery power remaining to the device.
+            CAP_BATTERYMINUTES
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.PowerMonitoring.BatteryPercentage">
+      <summary>
+            When used with MSG_GET, return the percentage of battery power level on camera. If -1 is
+            returned, it indicates that the battery is not present.
+            CAP_BATTERYPERCENTAGE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.PowerMonitoring.PowerSaveTime">
+      <summary>
+            When used with MSG_SET, set the camera power down timer in seconds. When used with
+            MSG_GET, return the current setting of the power down time.
+            CAP_POWERSAVETIME
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.PowerMonitoring.PowerSupply">
+      <summary>
+            MSG_GET reports the kinds of power available to the device. MSG_GETCURRENT reports the
+             current power supply in use.
+            This is a read only capability.
+            CAP_POWERSUPPLY
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.Resolution">
+      <summary>
+            Class that allows to manipulate resolutions supported by device.
+            All the X-axis resolutions the Source can provide. Measured in units of pixels per unit as 
+            defined by ICAP_UNITS (pixels per TWUN_PIXELS yields dimensionless data). 
+            That is, when the units are TWUN_PIXELS, both ICAP_XRESOLUTION and ICAP_YRESOLUTION shall 
+            report 1 pixel/pixel. 
+            Some data sources like to report the actual number of pixels that the device reports, but 
+            that response is more appropriate in ICAP_PHYSICALHEIGHT and ICAP_PHYSICALWIDTH. 
+            Setting this value will restrict the various resolutions that will be available to the user during acquisition. 
+            Applications will want to ensure that the values set for this ICAP match those set for ICAP_YRESOLUTION.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Resolution.X">
+      <summary>
+            Measured in units of pixels per unit as defined by <see cref="P:TwainScanning.Capability.CapabilitySets.Device.Unit" />.
+            ICAP_XRESOLUTION 
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Resolution.Y">
+      <summary>
+            Measured in units of pixels per unit as defined by <see cref="P:TwainScanning.Capability.CapabilitySets.Device.Unit" />.
+            ICAP_YRESOLUTION 
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Resolution.XNativeRes">
+      <summary>
+            Current/Available optical resolutions for x-axis.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Resolution.YNativeRes">
+      <summary>
+            Current/Available optical resolutions for x-axis.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.Transfer">
+      <summary>
+             Class that allows to manipulate with image transfer of Twain device.
+             To get supported transfers capability MECHANISMS should be called.
+             XferCount set this capability to the number of images you are willing to 
+             transfer per session. 
+             Common values are: 1 Application wishes to transfer only one image this 
+             session -1 Application is willing to transfer multiple images.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Transfer.JobControl">
+      <summary>
+            Allows multiple jobs in batch mode. The application can decide how the job can be processed,
+            according to the flags listed below.
+            CAP_JOBCONTROL
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Transfer.ImageCount">
+      <summary>
+            Number of images the application is willing to accept this session.
+            CAP_XFERCOUNT
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Transfer.Compression">
+      <summary>
+            Buffered Memory transfer compression schemes.
+            ICAP_COMPRESSION
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Transfer.ImageFileFormat">
+      <summary>
+            File formats for file transfers.
+            ICAP_IMAGEFILEFORMAT
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Transfer.Tiles">
+      <summary>
+            This is used with buffered memory transfers. If TRUE, Source can provide application with tiled
+             image data.
+            ICAP_TILES
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Transfer.UndefinedImageSize">
+      <summary>
+            If TRUE the Source will issue a MSG_XFERREADY before starting the scan. 
+            ICAP_UNDEFINEDIMAGESIZE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.Transfer.Mechanism">
+      <summary>
+            Gets the transfer mechanism.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySets.UserInterface">
+      <summary>
+             Class that allows to manipulate with UserInterface of Twain device.
+             To allow an application to query a source to see if it implements the new user interface 
+             settings dialog capability EnableDSUIOnly should be call.
+             To check if source supports preview UI CameraPreviewUI should return TRUE. However, 
+             the application can choose to use the Source's UI or not even if the Source supports it.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.UserInterface.CameraPreviewUI">
+      <summary>
+            This capability queries the Source for UI support for preview mode. If <c>true</c>, the Source supports
+            preview UI.
+            CAP_CAMERAPREVIEWUI
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.UserInterface.CustomDSData">
+      <summary>
+            Allows the application to query the data source to see if it supports the new operation triplets.
+            CAP_CUSTOMDSDATA
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.UserInterface.CustomInterfaceGuid">
+      <summary>
+            Uniquely identifies an interface for a Data Source, so that an Application can properly interpret its custom content.
+            This is a read only capability.
+            CAP_CUSTOMINTERFACEGUID
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.UserInterface.EnableDSUIOnly">
+      <summary>
+            Allows an application to query a source to see if it implements the new user interface settings
+            dialog.
+            CAP_ENABLEDSUIONLY
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.UserInterface.Indicators">
+      <summary>
+            If <c>true</c>, the Source displays a progress indicator during acquisition and transfer, regardless of
+            whether the Source's user interface is active. If FALSE, the progress indicator is suppressed if the
+            Source's user interface is inactive.
+            The Source displays device-specific instructions and error messages if either the user interface or
+            progress indicator is turned on.In this case it returns TWCC_OPERATIONERROR to alert the
+            application that it handled the error, and communicated the problem to the user.
+            If both the user interface and progress indicator are turned off, then the Source never displays any
+            message to the user, even if TWCC_OPERATIONERROR is returned.Messages to the user are under
+            the sole control of the Application.
+            CAP_INDICATORS
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.UserInterface.IndicatorsMode">
+      <summary>
+            Specify what messages can be displayed if <see cref="P:TwainScanning.Capability.CapabilitySets.UserInterface.Indicators" /> is TRUE.
+            CAP_INDICATORSMODE
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySets.UserInterface.UIControllable">
+      <summary>
+            If <c>true</c>, indicates that this Source supports acquisition with/without the UI.
+            CAP_UICONTROLLABLE
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapSetBase">
+      <summary>
+              Base class for capability sets.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.Capability.CapSetBase.MakeCapReadOnlyArray``1(TwainScanning.NativeStructs.TwCap,``0)">
+      <summary>
+      </summary>
+      <typeparam name="T">
+      </typeparam>
+      <param name="cap">
+      </param>
+      <param name="defaultVal">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="T:TwainScanning.Capability.ICapabilityObjBase">
+      <summary>
+            Capability value object interface. All capability objects implements this interface.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.Capability.ICapabilityObjBase.GetSupportedValuesObj">
+      <summary>
+            Get supported object values in form of objects.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Capability.ICapabilityObjBase.GetCurrentValuesObj">
+      <summary>
+            Get current object values in form of objects.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Capability.ICapabilityObjBase.SetCurrentValuesObj(System.Collections.Generic.IEnumerable{System.Object})">
+      <summary>
+            Set the current values of the capability.
+            </summary>
+      <param name="vals">
+      </param>
+    </member>
+    <member name="M:TwainScanning.Capability.ICapabilityObjBase.SetCurrentValuesStr(System.Collections.Generic.IEnumerable{System.String})">
+      <summary>
+            Sets the current values of the capability as collection of string.
+            </summary>
+      <param name="vals">The vals.</param>
+    </member>
+    <member name="P:TwainScanning.Capability.ICapabilityObjBase.Cap">
+      <summary>
+            Gets the capability type.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.ICapabilityObjBase.IsMultiVal">
+      <summary>
+            Can this capability have more than one current value. Example of such capability is Caps.SupportedCaps whose value is a collection of types.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.ICapabilityObjBase.IsReadOnly">
+      <summary>
+            Is capability read only. If it is read only tahe value can't be changed.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.Capability.ICapabilityObjBase.IsSupportedOnThisDevice">
+      <summary>
+            Is capability supported on this Twain device.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="P:TwainScanning.Capability.ICapabilityObjBase.UnderlyingType">
+      <summary>
+            Gets the type of the capability value.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilityBase`1">
+      <summary>
+            Base class for capabilities.
+            </summary>
+      <typeparam name="T">
+      </typeparam>
+    </member>
+    <member name="M:TwainScanning.Capability.CapabilityBase`1.IsSupportedOnThisDevice">
+      <summary>
+            Is capability supported by twain device.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Capability.CapabilityBase`1.Reset">
+      <summary>
+            Resets this instance.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilityBase`1.SupportedValues">
+      <summary>
+            Get array of supported values.
+            </summary>
+      <value>
+            SupportedValues.
+            </value>
+    </member>
+    <member name="M:TwainScanning.Capability.CapabilityBase`1.GetSupportedValuesObj">
+      <summary>
+            Get supported values for capability.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Capability.CapabilityBase`1.GetCurrentValuesObj">
+      <summary>
+            Get current value of capability.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Capability.CapabilityBase`1.SetCurrentValuesObj(System.Collections.Generic.IEnumerable{System.Object})">
+      <summary>
+            Set current value for capability.
+            </summary>
+      <param name="vals">
+      </param>
+    </member>
+    <member name="M:TwainScanning.Capability.CapabilityBase`1.SetCurrentValuesStr(System.Collections.Generic.IEnumerable{System.String})">
+      <summary>
+            Set current value string.
+            </summary>
+      <param name="vals">
+      </param>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilityBase`1.Cap">
+      <summary>
+            Supported caps.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySingleValue`1">
+      <summary>
+            Single value capability.
+            </summary>
+      <typeparam name="T">
+      </typeparam>
+      <seealso cref="T:TwainScanning.Capability.CapabilityBase`1" />
+    </member>
+    <member name="M:TwainScanning.Capability.CapabilitySingleValue`1.#ctor(TwainScanning.NativeStructs.TwIdentity,TwainScanning.NativeStructs.TwIdentity,TwainScanning.NativeStructs.TwCap,`0)">
+      <summary>
+            Initializes a new instance of the <see cref="T:TwainScanning.Capability.CapabilitySingleValue`1" /> class.
+            </summary>
+      <param name="appId">The application identifier.</param>
+      <param name="srcId">The source identifier.</param>
+      <param name="cap">The cap.</param>
+      <param name="defaultVal">The default value.</param>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySingleValue`1.DefaultValue">
+      <summary>
+            Gets the default value.
+            </summary>
+      <value>
+            The default.
+            </value>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySingleValue`1.Value">
+      <summary>
+            Gets or sets the value.
+            </summary>
+      <value>
+            The value.
+            </value>
+    </member>
+    <member name="M:TwainScanning.Capability.CapabilitySingleValue`1.Set(`0)">
+      <summary>
+            Sets the specified cap.
+            </summary>
+      <param name="cap">The cap.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySingleValue`1.IsMultiVal">
+      <summary>
+            Is capability multivalue.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySingleValue`1.IsReadOnly">
+      <summary>
+             Is capability readonly.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilitySingleValueReadonly`1">
+      <summary>
+            Single value readOnly capability.
+            </summary>
+      <typeparam name="T">
+      </typeparam>
+      <seealso cref="T:TwainScanning.Capability.CapabilityBase`1" />
+    </member>
+    <member name="M:TwainScanning.Capability.CapabilitySingleValueReadonly`1.#ctor(TwainScanning.NativeStructs.TwIdentity,TwainScanning.NativeStructs.TwIdentity,TwainScanning.NativeStructs.TwCap,`0)">
+      <summary>
+            Initializes a new instance of the <see cref="T:TwainScanning.Capability.CapabilitySingleValueReadonly`1" /> class.
+            </summary>
+      <param name="appId">The application identifier.</param>
+      <param name="srcId">The source identifier.</param>
+      <param name="cap">The cap.</param>
+      <param name="defaultVal">The default value.</param>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySingleValueReadonly`1.DefaultValue">
+      <summary>
+            Gets the default.
+            </summary>
+      <value>
+            The default.
+            </value>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySingleValueReadonly`1.Value">
+      <summary>
+            Gets the value.
+            </summary>
+      <value>
+            The value.
+            </value>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySingleValueReadonly`1.IsMultiVal">
+      <summary>
+            Is capability multivalue.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilitySingleValueReadonly`1.IsReadOnly">
+      <summary>
+            Is capability readOnly.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilityArray`1">
+      <summary>
+            Capability value is array.
+            </summary>
+      <typeparam name="T">Capability value type.</typeparam>
+      <seealso cref="T:TwainScanning.Capability.CapabilityBase`1" />
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilityArray`1.DefaultValue">
+      <summary>
+            Gets the default.
+            </summary>
+      <value>
+            The default.
+            </value>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilityArray`1.Value">
+      <summary>
+            Gets or sets value (Array).
+            </summary>
+      <value>
+            The value.
+            </value>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilityArray`1.IsMultiVal">
+      <summary>
+            Is capability multivalue.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilityArray`1.IsReadOnly">
+      <summary>
+            Is capability read-only.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Capability.CapabilityArrayReadonly`1">
+      <summary>
+            Capability value is readOnly array.
+            </summary>
+      <typeparam name="T">
+      </typeparam>
+      <seealso cref="T:TwainScanning.Capability.CapabilityBase`1" />
+    </member>
+    <member name="M:TwainScanning.Capability.CapabilityArrayReadonly`1.#ctor(TwainScanning.NativeStructs.TwIdentity,TwainScanning.NativeStructs.TwIdentity,TwainScanning.NativeStructs.TwCap,`0)">
+      <summary>
+            Initializes a new instance of the <see cref="T:TwainScanning.Capability.CapabilityArrayReadonly`1" /> class.
+            </summary>
+      <param name="appId">The application identifier.</param>
+      <param name="srcId">The source identifier.</param>
+      <param name="cap">The cap.</param>
+      <param name="defaultVal">The default value.</param>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilityArrayReadonly`1.DefaultValue">
+      <summary>
+            Gets default cap array.
+            </summary>
+      <value>
+            The default.
+            </value>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilityArrayReadonly`1.Value">
+      <summary>
+            Gets caps array value.
+            </summary>
+      <value>
+            The value.
+            </value>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilityArrayReadonly`1.IsMultiVal">
+      <summary>
+            Is capability multivalue.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Capability.CapabilityArrayReadonly`1.IsReadOnly">
+      <summary>
+            is capability readOnly.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.DataSource">
+      <summary>
+            Class that represent twain device.
+            </summary>
+      <seealso cref="T:System.IDisposable" />
+    </member>
+    <member name="F:TwainScanning.DataSource.ClearPage">
+      <summary>
+            Stop scanning all pages from feeder. <para />
+            Alias for <see cref="!:Settings.Feeder.ClearPage" />.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.PageSize">
+      <summary>
+            Represent available PageSize. <para />
+            Alias for <see cref="!:Settings.Page.Sizes" />.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.ColorMode">
+      <summary>
+            Represent color mode. <para />
+            Alias for <see cref="!:Settings.ImageType.PixelType" />.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.PixelDepth">
+      <summary>
+             Represent pixel depth for current value. <para />
+            Alias for <see cref="!:Settings.ImageType.BitDepth" />.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.Resolution">
+      <summary>
+            Represent supported resolutions. <para />
+            Alias for <see cref="!:Settings.Resolution.X" /> and <see cref="!:Settings.Resolution.Y" />.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.UseFeeder">
+      <summary>
+            Represent if feeder is enable. <para />
+            Alias for <see cref="!:Settings.Feeder.Enabled" />.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.UseDuplex">
+      <summary>
+            If duplex is enable. <para />
+            Alias for <see cref="!:Settings.Duplex.Enabled" />.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.TransferMechanism">
+      <summary>
+            Represent supported transfer mechanism. <para />
+            Alias for <see cref="!:Settings.Transfer.Mechanism" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.DataSource.HasFeeder">
+      <summary>
+            Is feeder suported on Twain Device.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.DataSource.Layout">
+      <summary>
+            Property layout.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.Settings">
+      <summary>
+             Data source settings. Abstraction around capabilities of the device represented by the <see cref="T:TwainScanning.DataSource" />.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.DataSource.ErrorInfo">
+      <summary>
+            Class that represents error information.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.DataSource.ErrorInfo.Message">
+      <summary>
+            Get error message.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.DataSource.ErrorInfo.ReturnCode">
+      <summary>
+            Get return code.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.DataSource.ErrorInfo.ConditionCode">
+      <summary>
+            Get condition code.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.DataSource.Identity">
+      <summary>
+            Get identity of current scanner.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.DataSource.AcquiringEventArgs">
+      <summary>
+            Class representing image acquiring events.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.DataSource.AcquiringEventArgs.EventTypeEnum">
+      <summary>
+            Specifies type of events.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.AcquiringEventArgs.EventTypeEnum.Progress">
+      <summary>
+            Image scanning progression.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.AcquiringEventArgs.EventTypeEnum.ImageAcquired">
+      <summary>
+            Image aquired by twain device.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.AcquiringEventArgs.EventTypeEnum.AllImagesAquired">
+      <summary>
+            All images acquired by Twain device.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.AcquiringEventArgs.EventTypeEnum.ScanningFinished">
+      <summary>
+            Scanning is finish.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.AcquiringEventArgs.EventTypeEnum.ScanningFinishedSimple">
+      <summary>
+            Simple scanning finish.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.DataSource.AcquiringEventArgs.EventType">
+      <summary>
+            The event handler acquring.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.DataSource.AcquiringEventArgs.ProgresStatus">
+      <summary>
+            Get scanning progress status.Return value is integer.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.DataSource.AcquiringEventArgs.AcquiredImage">
+      <summary>
+            Returns scanned image.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.DataSource.AcquiringEventArgs.NumberOfImagesAcquired">
+      <summary>
+            Returns number of images acquired by device.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.DataSource.AcquiringEventArgs.Collector">
+      <summary>
+            Get collector.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.DataSource.BatchFinishedEventArgs">
+      <summary>
+             Event occurs when batch scan is finished.
+            </summary>
+      <seealso cref="T:System.EventArgs" />
+    </member>
+    <member name="M:TwainScanning.DataSource.BatchFinishedEventArgs.#ctor(System.Int32)">
+      <summary>
+            Initializes a new instance of the <see cref="T:TwainScanning.DataSource.BatchFinishedEventArgs" /> class.
+            </summary>
+      <param name="numberOfImages">The number of images.</param>
+    </member>
+    <member name="F:TwainScanning.DataSource.BatchFinishedEventArgs.NumberOfImages">
+      <summary>
+            Get number of scanned images.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.DataSource.ProgressEventArgs">
+      <summary>
+            Returns the progress, in percent, of current action.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.ProgressEventArgs.Percentage">
+      <summary>
+            Gets the progress, in percents, of current action.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.DataSource.ScanningFinishedEventArgs">
+      <summary>
+             Represents scan finish event.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.ScanningFinishedEventArgs.Collector">
+      <summary>
+            Gets image collector of current action.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.DataSource.MemoryTransferProgressUpdateEventArgs">
+      <summary>
+            Class represent image memory transfer progress.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.MemoryTransferProgressUpdateEventArgs.Progress">
+      <summary>
+             Gets the progress of current action. Memory transfer only.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.DataSource.SingleImageAcquiredEventArgs">
+      <summary>
+            Provides data for the Device.ImageAcquired event.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.DataSource.SingleImageAcquiredEventArgs.#ctor(System.Drawing.Bitmap,System.Boolean)">
+      <summary>
+            Single image acquire event
+            Initializes a new instance of the <see cref="T:TwainScanning.DataSource.SingleImageAcquiredEventArgs" /> class.
+            </summary>
+      <param name="image">The image.</param>
+      <param name="cancelScanning">Should further scanning be cancelled.</param>
+    </member>
+    <member name="F:TwainScanning.DataSource.SingleImageAcquiredEventArgs.Image">
+      <summary>
+            Contains single image acquired by SingleImageAcquiredEventArgs.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.SingleImageAcquiredEventArgs.CancelScanning">
+      <summary>
+            Should further scanning be cancelled or should it continue. <para />
+            Note: Supported only when transfer mechanism <see cref="F:TwainScanning.NativeStructs.TwSX.Native" />
+            or <see cref="F:TwainScanning.NativeStructs.TwSX.Memory" /> is used.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.DataSource.ErrorEventArgs">
+      <summary>
+            Class that represents error information event which occur's in Twain device.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.DataSource.ErrorEventArgs.Info">
+      <summary>
+            Twain device error info.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.DataSource.DeviceEventArgs">
+      <summary>
+            Class represent image memory transfer progress.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.DeviceEventArgs.Type">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:TwainScanning.DataSource.DeviceEventArgs.DeviceName">
+      <summary>
+      </summary>
+    </member>
+    <member name="T:TwainScanning.DataSource.DeviceEventArgs.BateryCheck">
+      <summary>
+      </summary>
+    </member>
+    <member name="E:TwainScanning.DataSource.AcquiringEvent">
+      <summary>
+            Representing image acquiring events.
+            </summary>
+    </member>
+    <member name="E:TwainScanning.DataSource.OnErrorEvent">
+      <summary>
+            Represents errors which occur in Twain device.
+            </summary>
+    </member>
+    <member name="E:TwainScanning.DataSource.OnSingleImageAcquired">
+      <summary>
+            Provides data for the Device.ImageAcquired event.
+            </summary>
+    </member>
+    <member name="E:TwainScanning.DataSource.OnBatchFinished">
+      <summary>
+            Occurse when batch scanning is finish.
+            </summary>
+    </member>
+    <member name="E:TwainScanning.DataSource.OnScanningFinished">
+      <summary>
+            Occurse when scanning is finish.
+            </summary>
+    </member>
+    <member name="E:TwainScanning.DataSource.OnMemoryTransferProgressUpdate">
+      <summary>
+            Occurs when image chunk is transfered from scanner to this library.
+            Occurs only when using <see cref="F:TwainScanning.NativeStructs.TwSX.Memory" /> or <see cref="F:TwainScanning.NativeStructs.TwSX.MemFile" /> as transfer method.
+            </summary>
+    </member>
+    <member name="E:TwainScanning.DataSource.OnDeviceEvents">
+      <summary>
+      </summary>
+    </member>
+    <member name="M:TwainScanning.DataSource.AcquireAsync(TwainScanning.Collectors.IImageCollector,System.Boolean,System.Boolean,System.Nullable{TwainScanning.NativeStructs.TwSX},System.Nullable{System.Int32})">
+      <summary>
+            Allows to acquire images from the scanner asynchronously. This function will return immediately.
+            </summary>
+      <param name="collector">The collector.</param>
+      <param name="showUI">if set to <c>true</c> [show UI].</param>
+      <param name="closeUIAfterAcquire">if set to <c>true</c> [close UI after acquire].</param>
+      <param name="transferMechanism">The transfe mode.</param>
+      <param name="count">The count. Use -1 to acquire all images.</param>
+      <exception cref="T:TwainScanning.TwainException">Collector can NOT be used if transfer mechanism is TwSX.File or TwSX.MemFile!</exception>
+    </member>
+    <member name="M:TwainScanning.DataSource.AcquireAsync(TwainScanning.Collectors.ImageCollector.OnFinishedDelegate,System.Boolean,System.Boolean,System.Nullable{TwainScanning.NativeStructs.TwSX},System.Nullable{System.Int32})">
+      <summary>
+             Allows to acquire images from the scanner asynchronously.
+            </summary>
+      <param name="onFinished">The on finished.</param>
+      <param name="showUI">if set to <c>true</c> show scanners UI.</param>
+      <param name="closeUIAfterAcquire">if set to <c>true</c> [close UI after acquire].</param>
+      <param name="transferMechanism">The transfer mechanism.</param>
+      <param name="count">The count.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.DataSource.Acquire(TwainScanning.Collectors.IImageCollector,System.Boolean,System.Boolean,System.Nullable{TwainScanning.NativeStructs.TwSX},System.Nullable{System.Int32})">
+      <summary>
+             Allows to acquire images from the scanner synchronously. This function will not return until scanning is finished.
+            </summary>
+      <param name="collector">The collector.</param>
+      <param name="showUI">if set to <c>true</c> [show UI].</param>
+      <param name="closeUIAfterAcquire">if set to <c>true</c> [close UI after acquire].</param>
+      <param name="transferMechanism">The transfe mechanism.</param>
+      <param name="count">The count. Use -1 to acquire all images.</param>
+    </member>
+    <member name="M:TwainScanning.DataSource.Acquire(System.Boolean,System.Boolean,TwainScanning.DataSource.ErrorInfo,System.Nullable{TwainScanning.NativeStructs.TwSX},System.Int32)">
+      <summary>
+            Acquires images. Most simple way to scan. Preferred way for scanning in the console applications.
+            Function will not return until scanning is finished.
+            </summary>
+      <param name="showUI">if set to <c>true</c> scanner's UI will be shown.</param>
+      <param name="closeUIAfterAcquire">if set to <c>true</c> scanner's UI wll be closed after all images are scanned.</param>
+      <param name="transferMechanism">The transfer mechanism <see cref="T:TwainScanning.NativeStructs.TwSX" />. If set to null curent transfer mechanism will be used.</param>
+      <param name="count">Count of images to be scanned. If set to null scanner's current image count will be used. If set to -1 all images will be scanned.</param>
+      <returns>Object that is used for accessing all scanned images.</returns>
+    </member>
+    <member name="M:TwainScanning.DataSource.CancelCurrentScanning">
+      <summary>
+            Cancels the current scanning.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.DataSource.Dispose">
+      <summary>
+            Closes source and performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.AppInfo">
+      <summary>
+            Class that represent application infomation.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.AppInfo.name">
+      <summary>
+            Name of application.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.AppInfo.manufacturer">
+      <summary>
+            Name of manufacturer.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.AppInfo.majorVersionNum">
+      <summary>
+            Application major version.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.AppInfo.minorVersMinorNum">
+      <summary>
+            Application minor version.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.AppInfo.appFamily">
+      <summary>
+            Software name.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.AppInfo.language">
+      <summary>
+            Indicate application language.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.AppInfo.country">
+      <summary>
+            Indicate application origin.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.AppInfo.#ctor">
+      <summary>
+            Get's name of executing assembly.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.AppInfo.#ctor(System.String,System.String,System.Int32,System.Int32)">
+      <summary>
+            AppInfo contructor.
+            </summary>
+      <param name="name_">
+      </param>
+      <param name="manufacturer_">
+      </param>
+      <param name="majorVersionNum_">
+      </param>
+      <param name="minorVersMinorNum_">
+      </param>
+    </member>
+    <member name="T:TwainScanning.DataSourceManager">
+      <summary>
+            DataSourceManager (DSM) represent entry point.
+            </summary>
+      <seealso cref="T:System.IDisposable" />
+    </member>
+    <member name="M:TwainScanning.DataSourceManager.#ctor(System.Windows.Forms.Form,TwainScanning.AppInfo)">
+      <summary>
+            Initializes a new instance of the <see cref="T:TwainScanning.DataSourceManager" /> class. 
+            It opens DSM (Data Source Manager) in this constructor. If it fails to open it throws. 
+            </summary>
+      <param name="frm">The aplication's form. For console applications use <c>null</c>.</param>
+      <param name="info">The information about application. If <c>null</c> defaults will be used.</param>
+      <exception cref="T:TwainScanning.BadRcTwainException">
+      </exception>
+      <remarks>
+            Multiple device can be opened by calling OpenSource on dataSourceManager
+            several times with different device name.
+            </remarks>
+    </member>
+    <member name="M:TwainScanning.DataSourceManager.#ctor(System.IntPtr,TwainScanning.AppInfo)">
+      <summary>
+            Initializes a new instance of the <see cref="T:TwainScanning.DataSourceManager" /> class. 
+            It opens DSM (Data Source Manager) in this constructor. If it fails to open it throws. 
+            </summary>
+      <param name="handle">Handle to the application's window. For console applications use <see cref="F:System.IntPtr.Zero" />.</param>
+      <param name="info">The information about application. If <c>null</c> defaults will be used.</param>
+      <exception cref="T:TwainScanning.BadRcTwainException">
+      </exception>
+      <remarks>
+            Multiple device can be opened by calling OpenSource on dataSourceManager
+            several times with different device name.
+            </remarks>
+    </member>
+    <member name="M:TwainScanning.DataSourceManager.AvailableSources">
+      <summary>
+            Returns a collection of TWAIN devices available in the system. <see cref="T:TwainScanning.NativeStructs.TwIdentity" /></summary>
+      <returns>List of the <see cref="T:TwainScanning.NativeStructs.TwIdentity" /></returns>
+    </member>
+    <member name="M:TwainScanning.DataSourceManager.SelectDefaultSourceDlg">
+      <summary>
+            Shows standard TWAIN dialog for selecting default source. Selected source is set as default source.
+            </summary>
+      <returns>
+        <see cref="T:TwainScanning.NativeStructs.TwIdentity" /> of the new default source.</returns>
+    </member>
+    <member name="M:TwainScanning.DataSourceManager.DefaultSource">
+      <summary>
+            Returns <see cref="T:TwainScanning.NativeStructs.TwIdentity" /> of default source (Device).
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.DataSourceManager.OpenSource">
+      <summary>
+            Opens default device.
+            </summary>
+      <remarks>
+            Creates <see cref="T:TwainScanning.DataSource" /> object of selected device.
+            If it fails to open it will throw. Reasons to fail may be that specified source is unaccessible or it is already opened.
+            </remarks>
+      <returns>Newly created <see cref="T:TwainScanning.DataSource" /> that reperesents openend source.</returns>
+      <exception cref="T:TwainScanning.BadRcTwainException">
+      </exception>
+    </member>
+    <member name="M:TwainScanning.DataSourceManager.OpenSource(System.String)">
+      <summary>
+            Opens device by name.
+            </summary>
+      <remarks>
+            Creates <see cref="T:TwainScanning.DataSource" /> object of selected device.
+            If it fails to open it will throw. Reasons to fail may be that specified source is unaccessible or it is already opened.
+            </remarks>
+      <param name="deviceName">The name.</param>
+      <returns>Newly created <see cref="T:TwainScanning.DataSource" /> that reperesents openend source.</returns>
+      <exception cref="T:TwainScanning.BadRcTwainException">
+      </exception>
+    </member>
+    <member name="M:TwainScanning.DataSourceManager.OpenSource(TwainScanning.NativeStructs.TwIdentity)">
+      <summary>
+            Opens source that is represented with <see cref="T:TwainScanning.NativeStructs.TwIdentity" />.
+            </summary>
+      <remarks>
+            Creates <see cref="T:TwainScanning.DataSource" /> object of selected device.
+            If it fails to open it will throw. Reasons to fail may be that specified source is unaccessible or it is already opened.
+            </remarks>
+      <param name="device">The device.</param>
+      <returns>Newly created <see cref="T:TwainScanning.DataSource" /> that reperesents openend source.</returns>
+      <exception cref="T:TwainScanning.BadRcTwainException">
+      </exception>
+    </member>
+    <member name="M:TwainScanning.DataSourceManager.Dispose">
+      <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources...
+            </summary>
+    </member>
+    <member name="T:TwainScanning.BadRcTwainException">
+      <summary>
+            Should be raised to catch twain exception message.
+            </summary>
+      <seealso cref="T:TwainScanning.TwainException" />
+    </member>
+    <member name="P:TwainScanning.BadRcTwainException.ReturnCode">
+      <summary>
+            Twain Return code.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.BadRcTwainException.ConditionCode">
+      <summary>
+            Twain condition codes.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.GlobalConfig">
+      <summary>
+            Class for setting global configuration, like license details and forcing 64-bit drivers.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.GlobalConfig.SetLicenseKey(System.String,System.String)">
+      <summary>
+            The SetLicenseKey method is used to set Licensing Information provided  by Terminalworks Ltd.
+            </summary>
+      <param name="companyName">
+      </param>
+      <param name="companyKey">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="P:TwainScanning.GlobalConfig.Is64BitProcess">
+      <summary>
+            Indicates if current process is a 64-bit process.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.GlobalConfig.Force64BitDriver">
+      <summary>
+            In 64-bit applications when scanning with device which has a 64-bit driver this needs to be set to <see langword="true" />,
+            otherwise leave it as <see langword="false" />.
+            <para />
+            Note: Whenever changed, the <see cref="T:TwainScanning.DataSourceManager" /> must be reinstantiated for the change to take effect.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.GlobalConfig.MaxBMPResolution">
+      <summary>
+            Scanning as BMP is very memory consuming, and it is recommended to lower DPI resolution as much as possible.
+            Default is 1200, but recommended is 200 or 300 DPI.
+            This property doesn't have effect on other image formats, it is only for BMP format.
+            </summary>s
+        </member>
+    <member name="P:TwainScanning.GlobalConfig.UseMemoryOptimization">
+      <summary>
+            If true, it will use less memory but it will be slower.
+            Default is false. Recommened to set to true when working with high DPI.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Collectors.IImageCollector">
+      <summary>
+            Image collector interface. All image collector objects implement this interface.
+            </summary>
+      <seealso cref="T:System.IDisposable" />
+    </member>
+    <member name="M:TwainScanning.Collectors.IImageCollector.AddImg(System.Drawing.Bitmap)">
+      <summary>
+            Add image.
+            </summary>
+      <param name="img">The img.</param>
+    </member>
+    <member name="P:TwainScanning.Collectors.IImageCollector.Count">
+      <summary>
+            Get count.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Collectors.ImageCollectorBase">
+      <summary>
+            Base class for collectors.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollectorBase.AddImg(System.Drawing.Bitmap)">
+      <summary>
+            Add image.
+            </summary>
+      <param name="img">The img.</param>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollectorBase.SaveImgTo``1(``0,System.Drawing.Bitmap,System.Drawing.Imaging.ImageFormat,System.Drawing.Imaging.EncoderParameter[])">
+      <summary>
+            Helper method which saves Bitmap image to the file.
+            </summary>
+      <typeparam name="T">type</typeparam>
+      <param name="file">File as file name or stream</param>
+      <param name="b">Bitmap</param>
+      <param name="fmt">image format</param>
+      <param name="ep">Encoding parameter</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollectorBase.IsBitmapResolutionTooBig(System.Drawing.Bitmap,System.Int32)">
+      <summary>
+            Checks if originalBmp has vertical or horizontal resolution greater than allowed maxResolution
+            </summary>
+      <param name="originalBmp">Original bitmap</param>
+      <param name="maxResolution">Max allowed resolution</param>
+      <returns>True if vertical or horizontal resolution is greater than maxResolution, otherwise false.</returns>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollectorBase.ResizeBitmapWithNewResolution(System.Drawing.Bitmap,System.Int32)">
+      <summary>
+            Helper method which will return Bitmap with reduced resolution and size.
+            This method is useful if we want to reduce memory consumption of very big bitmap.
+            </summary>
+      <param name="originalBmp">Original bitmap</param>
+      <param name="resolution">New bitmap resolution</param>
+      <returns>new Bitmap with new resolution</returns>
+    </member>
+    <member name="T:TwainScanning.Collectors.ImageMultiCollector">
+      <summary>
+             MultiCollector class should be called when more then one collector is needed.
+            </summary>
+      <seealso cref="T:TwainScanning.Collectors.ImageCollectorBase" />
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageMultiCollector.#ctor(TwainScanning.Collectors.ImageCollectorBase[])">
+      <summary>
+            Add collector to multiCollector array.
+            </summary>
+      <param name="collectors">The collectors.</param>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageMultiCollector.#ctor(System.Collections.Generic.IEnumerable{TwainScanning.Collectors.IImageCollector})">
+      <summary>
+            Add collector to multiCollector list.
+            </summary>
+      <param name="collectors">The collectors.</param>
+    </member>
+    <member name="P:TwainScanning.Collectors.ImageMultiCollector.Count">
+      <summary>
+            Return image count.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageMultiCollector.AddImg(System.Drawing.Bitmap)">
+      <summary>
+            Adds the img.
+            </summary>
+      <param name="img">The img.</param>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageMultiCollector.Dispose">
+      <summary>
+            Dispose collector's.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Collectors.ImageCollector">
+      <summary>
+            Simple collector class.
+            </summary>
+      <seealso cref="T:TwainScanning.Collectors.ImageCollectorBase" />
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.#ctor(System.Nullable{System.Boolean},System.Drawing.Imaging.ImageFormat)">
+      <summary>
+            Simple collector constructor.
+            Initializes a new instance of the <see cref="T:TwainScanning.Collectors.ImageCollector" /> class.
+            </summary>
+      <param name="useTempFiles">if set to <c>true</c> [use tepm files].</param>
+      <param name="tempFileFormat">The temporary file format.</param>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.AddImg(System.Drawing.Bitmap)">
+      <summary>
+            Save image as stream and add to list of bitmaps.
+            </summary>
+      <param name="image">The image.</param>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.GetImg(System.Int32)">
+      <summary>
+            Gets the img.
+            </summary>
+      <param name="ndx">The index if the image.</param>
+      <returns>Collected bitmap.</returns>
+      <exception cref="T:System.Exception">
+      </exception>
+    </member>
+    <member name="P:TwainScanning.Collectors.ImageCollector.Count">
+      <summary>
+            Get image count.
+            </summary>
+      <value>
+            The count.
+            </value>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.Dispose">
+      <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.Bitmaps">
+      <summary>
+            Return new Bitmap from stream.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.SaveAllToJpegs(System.String,System.Int32)">
+      <summary>
+            Save image as JPEG format.
+            </summary>
+      <param name="filename">
+      </param>
+      <param name="quality">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.SaveAllToBitmaps(System.String)">
+      <summary>
+            Save image as bitmap.
+            </summary>
+      <param name="filename">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.SaveAllToTiffs(System.String,System.Nullable{System.Drawing.Imaging.EncoderValue})">
+      <summary>
+            Save images as TIFF format.
+            </summary>
+      <param name="filename">
+      </param>
+      <param name="compression">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.SaveAllToPngs(System.String,System.Int32)">
+      <summary>
+            Save images as PNG format.
+            </summary>
+      <param name="filename">
+      </param>
+      <param name="compression">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.SaveAllToPdfs(System.String,System.Int32,TwainScanning.Collectors.PdfProtection)">
+      <summary>
+            Save image as PDF format.
+            </summary>
+      <param name="filename">
+      </param>
+      <param name="quality">
+      </param>
+      <param name="protection">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.SaveAllToJpegs(System.Collections.Generic.IEnumerable{System.String},System.Int32)">
+      <summary>
+            Save images as JPEG format.
+            </summary>
+      <param name="filenames">
+      </param>
+      <param name="quality">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.SaveAllToBitmaps(System.Collections.Generic.IEnumerable{System.String})">
+      <summary>
+             Save images as BMP format.
+            </summary>
+      <param name="filenames">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.SaveAllToTiffs(System.Collections.Generic.IEnumerable{System.String},System.Nullable{System.Drawing.Imaging.EncoderValue})">
+      <summary>
+            Save all images as TIFF format.
+            </summary>
+      <param name="filenames">
+      </param>
+      <param name="compression">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.SaveAllToPngs(System.Collections.Generic.IEnumerable{System.String},System.Int32)">
+      <summary>
+            Save all images to PNG format.
+            </summary>
+      <param name="filenames">
+      </param>
+      <param name="compression">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.SaveAllToPdfs(System.Collections.Generic.IEnumerable{System.String},System.Int32,TwainScanning.Collectors.PdfProtection)">
+      <summary>
+            Save images as PDF format.
+            </summary>
+      <param name="filenames">
+      </param>
+      <param name="quality">
+      </param>
+      <param name="protection">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.SaveAllToMultipagePdf(System.String,System.Int32,TwainScanning.Collectors.PdfProtection)">
+      <summary>
+            Save all to multipage PDF from filepath.
+            </summary>
+      <param name="filePath">
+      </param>
+      <param name="quality">
+      </param>
+      <param name="protection">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.SaveAllToMultipagePdf(System.IO.Stream,System.Int32,TwainScanning.Collectors.PdfProtection)">
+      <summary>
+            Save stream to multipage PDF.
+            </summary>
+      <param name="strm">
+      </param>
+      <param name="quality">
+      </param>
+      <param name="protection">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.SaveAllToMultipageTiff(System.String,System.Nullable{System.Drawing.Imaging.EncoderValue})">
+      <summary>
+            Save image from filepath to multipage TIFF.
+            </summary>
+      <param name="filePath">
+      </param>
+      <param name="compression">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollector.SaveAllToMultipageTiff(System.IO.Stream,System.Nullable{System.Drawing.Imaging.EncoderValue})">
+      <summary>
+            Save stream to multipage TIFF.
+            </summary>
+      <param name="strm">
+      </param>
+      <param name="compression">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="T:TwainScanning.Collectors.ImageCollector.OnFinishedDelegate">
+      <summary>
+            Finish delegate.
+            <param name="collector">The collector.</param></summary>
+    </member>
+    <member name="E:TwainScanning.Collectors.ImageCollector.OnFinished">
+      <summary>
+            Event delegate finish.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Collectors.PdfProtection">
+      <summary>
+            Settings for PDF protection.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Collectors.PdfProtection.OwnerPassword">
+      <summary>
+            Owner password for opening the PDF document after scanning.
+            Owner has all privileges. <para />
+            Note: Ignored if <see cref="P:TwainScanning.Collectors.PdfProtection.SecurityLevel" /> not set.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Collectors.PdfProtection.UserPassword">
+      <summary>
+            User password for opening the PDF document after scanning.
+            User has limited privileges which are set with permissions. <para />
+            Note: Ignored if <see cref="P:TwainScanning.Collectors.PdfProtection.SecurityLevel" /> not set.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Collectors.PdfProtection.SecurityLevel">
+      <summary>
+            Encryption level to use when protecting the PDF document after scanning. <para />
+            Note: Encryption will not be performed if <see cref="P:TwainScanning.Collectors.PdfProtection.OwnerPassword" /> or <see cref="P:TwainScanning.Collectors.PdfProtection.UserPassword" /> not set.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Collectors.PdfProtection.PermitAccessibilityExtractContent">
+      <summary>
+            Permit extracting content for accessibility purposes from the PDF document after scanning. <para />
+            Note: Will not be applied if <see cref="P:TwainScanning.Collectors.PdfProtection.SecurityLevel" /> is not set to
+            <see cref="F:TwainScanning.Pdf.Security.PdfDocumentSecurityLevel.Encrypted128Bit" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Collectors.PdfProtection.PermitAnnotations">
+      <summary>
+            Permit adding annotations to the PDF document after scanning.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Collectors.PdfProtection.PermitAssembleDocument">
+      <summary>
+            Permit assembling the PDF document after scanning. <para />
+            Note: Will not be applied if <see cref="P:TwainScanning.Collectors.PdfProtection.SecurityLevel" /> is not set to
+            <see cref="F:TwainScanning.Pdf.Security.PdfDocumentSecurityLevel.Encrypted128Bit" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Collectors.PdfProtection.PermitExtractContent">
+      <summary>
+            Permit extracting content from the PDF document after scanning.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Collectors.PdfProtection.PermitFormsFill">
+      <summary>
+            Permit filling interactive form fields (including signing) in the PDF document after scanning. <para />
+            Note: Will not be applied if <see cref="P:TwainScanning.Collectors.PdfProtection.SecurityLevel" /> is not set to
+            <see cref="F:TwainScanning.Pdf.Security.PdfDocumentSecurityLevel.Encrypted128Bit" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Collectors.PdfProtection.PermitFullQualityPrint">
+      <summary>
+            Permit printing the PDF document after scanning in full quality. <para />
+            Note: Will not be applied if <see cref="P:TwainScanning.Collectors.PdfProtection.SecurityLevel" /> is not set to
+            <see cref="F:TwainScanning.Pdf.Security.PdfDocumentSecurityLevel.Encrypted128Bit" />.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Collectors.PdfProtection.PermitModifyDocument">
+      <summary>
+            Permit modifying the PDF document after scanning.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.Collectors.PdfProtection.PermitPrint">
+      <summary>
+            Permit printing the PDF document after scanning.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Collectors.ImageCollectorPdf">
+      <summary>
+            Collector PDF. Should be called when output needs to be PDF.
+            </summary>
+      <seealso cref="T:TwainScanning.Collectors.ImageCollectorBase" />
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollectorPdf.#ctor(System.IO.Stream,System.Int32,System.Boolean,TwainScanning.Collectors.PdfProtection)">
+      <summary>
+            Initializes a new instance of the <see cref="T:TwainScanning.Collectors.ImageCollectorPdf" /> class.
+            </summary>
+      <param name="stream">The stream.</param>
+      <param name="quality">The quality.</param>
+      <param name="closeStreamAfterFinish">if set to <c>true</c> [close stream after finish].</param>
+      <param name="protection">The protection settings to apply.</param>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollectorPdf.#ctor(System.String,System.Int32,TwainScanning.Collectors.PdfProtection)">
+      <summary>
+            Initializes a new instance of the <see cref="T:TwainScanning.Collectors.ImageCollectorPdf" /> class.
+            </summary>
+      <param name="filePath">The file path.</param>
+      <param name="quality">The quality.</param>
+      <param name="protection">The protection settings to apply.</param>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollectorPdf.AddImg(System.Drawing.Bitmap)">
+      <summary>
+            Adds the img.
+            </summary>
+      <param name="img">The img.</param>
+    </member>
+    <member name="P:TwainScanning.Collectors.ImageCollectorPdf.Count">
+      <summary>
+            Get current document page count.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollectorPdf.Dispose(System.Boolean)">
+      <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Collectors.ImageCollectorTiffMultipage">
+      <summary>
+            Collector for multipage Tiff.
+            </summary>
+      <seealso cref="T:TwainScanning.Collectors.ImageCollectorBase" />
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollectorTiffMultipage.#ctor(System.IO.Stream,System.Nullable{System.Drawing.Imaging.EncoderValue},System.Boolean)">
+      <summary>
+            Initializes a new instance of the <see cref="T:TwainScanning.Collectors.ImageCollectorTiffMultipage" /> class.
+            </summary>
+      <param name="stream">The stream.</param>
+      <param name="compression">The compression.</param>
+      <param name="closeStreamAfterFinish">if set to <c>true</c> [close stream after finish].</param>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollectorTiffMultipage.#ctor(System.String,System.Nullable{System.Drawing.Imaging.EncoderValue})">
+      <summary>
+            Initializes a new instance of the <see cref="T:TwainScanning.Collectors.ImageCollectorTiffMultipage" /> class.
+            </summary>
+      <param name="filePath">The file path.</param>
+      <param name="compression">The compression.</param>
+    </member>
+    <member name="P:TwainScanning.Collectors.ImageCollectorTiffMultipage.Count">
+      <summary>
+            Image counter.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollectorTiffMultipage.AddImg(System.Drawing.Bitmap)">
+      <summary>
+            Adds the img.
+            </summary>
+      <param name="img">The img.</param>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollectorTiffMultipage.Dispose">
+      <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.Collectors.ImageCollectorPdfSinglepage">
+      <summary>
+            SinglePage PDF Collectors.
+            </summary>
+      <seealso cref="T:TwainScanning.Collectors.ImageCollectorBase" />
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollectorPdfSinglepage.#ctor(System.String,System.Int32,TwainScanning.Collectors.PdfProtection)">
+      <summary>
+            Initializes a new instance of the <see cref="T:TwainScanning.Collectors.ImageCollectorPdfSinglepage" /> class.
+            </summary>
+      <param name="path">The path.</param>
+      <param name="quality">The quality.</param>
+      <param name="protection">The protection settings to apply.</param>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollectorPdfSinglepage.#ctor(System.Collections.Generic.IEnumerable{System.String},System.Int32,TwainScanning.Collectors.PdfProtection)">
+      <summary>
+            Initializes a new instance of the <see cref="T:TwainScanning.Collectors.ImageCollectorPdfSinglepage" /> class.
+            </summary>
+      <param name="nameGenerator">The name generator.</param>
+      <param name="quality">The quality.</param>
+      <param name="protection">The protection settings to apply.</param>
+    </member>
+    <member name="M:TwainScanning.Collectors.ImageCollectorPdfSinglepage.AddImg(System.Drawing.Bitmap)">
+      <summary>
+            Adds the img to document and save document with new name.
+            </summary>
+      <param name="img">The img.</param>
+    </member>
+    <member name="T:TwainScanning.LibraryInfo">
+      <summary>
+            Gives basic information about library and license.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.LibraryInfo.LibraryReleaseDate">
+      <summary>
+            Library release date.
+            </summary>
+      <returns>Date when library was released.</returns>
+    </member>
+    <member name="M:TwainScanning.LibraryInfo.LicenseCreationDate(System.String,System.String)">
+      <summary>
+            Returns license creation date.
+            </summary>
+      <param name="company">Company key.</param>
+      <param name="key">License key.</param>
+      <returns>If company and key are not valid returns null. If license creation date wasn't set returns DateTime.MinValue otherwise returns license creation date.</returns>
+    </member>
+    <member name="M:TwainScanning.LibraryInfo.LicenseUpgradeValidDate(System.String,System.String)">
+      <summary>
+            Returns until which date license is valid for upgrade versions.
+            </summary>
+      <param name="company">Company key.</param>
+      <param name="key">License key.</param>
+      <returns>If company and key are not valid returns null. If license upgrade valid date wasn't set returns DateTime.MinValue otherwise returns license upgrade valid date.</returns>
+    </member>
+    <member name="T:TwainScanning.NameGenerator">
+      <summary>
+            Class that allows to set generator path/name.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.PageSize">
+      <summary>
+            Enum PageSize
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.Undefined">
+      <summary>
+            Page size undefined.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.A0">
+      <summary>
+            594 x 841 mm	23.4 x 33.1 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.A1">
+      <summary>
+            420 x 594 mm	16.5 x 23.4 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.A2">
+      <summary>
+            297 x 420 mm	11.7 x 16.5 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.A3">
+      <summary>
+            210 x 297 mm	8.3 x 11.7 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.A4">
+      <summary>
+            148 x 210 mm	5.8 x 8.3 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.A5">
+      <summary>
+            105 x 148 mm	4.1 x 5.8 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.RA0">
+      <summary>
+            74 x 105 mm	2.9 x 4.1 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.RA1">
+      <summary>
+            860 x 1220 mm	33.9 x 48.0 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.RA2">
+      <summary>
+            610 x 860 mm	24.0 x 33.9 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.RA3">
+      <summary>
+            430 x 610 mm	16.9 x 24.0 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.RA4">
+      <summary>
+            305 x 430 mm	12.0 x 16.9 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.RA5">
+      <summary>
+            215 x 305 mm	8.5 x 12.0 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.B0">
+      <summary>
+            1000 x 1414 mm	39.4 x 55.7 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.B1">
+      <summary>
+            707 x 1000 mm	27.8 x 39.4 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.B2">
+      <summary>
+            500 x 707 mm	19.7 x 27.8 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.B3">
+      <summary>
+            353 x 500 mm	13.9 x 19.7 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.B4">
+      <summary>
+            250 x 353 mm	9.8 x 13.9 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.B5">
+      <summary>
+            176 x 250 mm	6.9 x 9.8 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.Quarto">
+      <summary>
+            219 x 276
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.Foolscap">
+      <summary>
+            203 x 330 mm	8.0 x 13.0 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.Executive">
+      <summary>
+            184.2 x 266.7mm 	7 x 10 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.GovernmentLetter">
+      <summary>
+            215.9 x 355.6mm  8.5x14 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.Letter">
+      <summary>
+            215.9 x 279.4	8 1/2 x 11
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.Legal">
+      <summary>
+            216 x 356 mm	8.5 x 14.0 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.Ledger">
+      <summary>
+            279 x 432 mm	11.0 x 17.0 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.Tabloid">
+      <summary>
+            279.4 x 431.8	11 x 17
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.Post">
+      <summary>
+            15.25 x 19.0 in	387.4 x 482.6 mm
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.Crown">
+      <summary>
+            30 x 40
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.LargePost">
+      <summary>
+            21 x 33 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.Demy">
+      <summary>
+            394 x 507mm  15.5 x 20in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.Medium">
+      <summary>
+            17.5 x 22.5 in	444.5 x 571.5 mm
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.Royal">
+      <summary>
+            19.0 x 24.0 in	482.6 x 609.6 mm
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.Elephant">
+      <summary>
+            23.0 x 28.0 in	584.2 x 711.2 mm
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.DoubleDemy">
+      <summary>
+            15.5 x 20 in	393.7 x 508.0 mm
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.QuadDemy">
+      <summary>
+            35 x 45 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.STMT">
+      <summary>
+            396, 612
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.Folio">
+      <summary>
+            210 x 330mm	 8 x 13in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.Statement">
+      <summary>
+            396 x 612mm
+            </summary>
+    </member>
+    <member name="F:TwainScanning.PageSize.Size10x14">
+      <summary>
+            720 x 1008mm
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwDG">
+      <summary>
+            Data Groups.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwDG.Control">
+      <summary>
+            Data pertaining to control.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwDG.Image">
+      <summary>
+            Data pertaining to raster images.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwDG.Audio">
+      <summary>
+            Data pertaining to audio.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwDG.DSM2">
+      <summary>
+            added to the identity by the DSM.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwDG.APP2">
+      <summary>
+            Set by the App to indicate it would prefer to use DSM2.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwDG.DS2">
+      <summary>
+            Set by the DS to indicate it would prefer to use DSM2.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwDAT">
+      <summary>
+            Data codes.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwMSG">
+      <summary>
+            Messages.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.Null">
+      <summary>
+            Used in TW_EVENT structure.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.Get">
+      <summary>
+            Get one or more values.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.GetCurrent">
+      <summary>
+            Get current value.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.GetDefault">
+      <summary>
+            Get default (e.g. power up) value.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.GetFirst">
+      <summary>
+            Get first of a series of items, e.g. DSs.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.GetNext">
+      <summary>
+            Iterate through a series of items.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.Set">
+      <summary>
+            Set one or more values.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.Reset">
+      <summary>
+            Set current value to default value.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.QuerySupport">
+      <summary>
+            Get supported operations on the cap.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.CheckStatus">
+      <summary>
+            Get status information.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.OpenDSM">
+      <summary>
+            Open the DSM.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.CloseDSM">
+      <summary>
+            Close the DSM.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.OpenDS">
+      <summary>
+            Open a data source.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.CloseDS">
+      <summary>
+            Close a data source.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.UserSelect">
+      <summary>
+            Put up a dialog of all DS.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.DisableDS">
+      <summary>
+            Disable data transfer in the DS.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.EnableDS">
+      <summary>
+            Enable data transfer in the DS.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMSG.EnableDSUIOnly">
+      <summary>
+            Enable for saving DS state only.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwRC">
+      <summary>
+            Return Codes.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwCC">
+      <summary>
+            Condition Codes.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwType">
+      <summary>
+            Data Types.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwCap">
+      <summary>
+            Capability types.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwQC">
+      <summary>
+            Bit patterns: for query the operation that are supported by the data source on a capability.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwLanguage">
+      <summary>
+            Language Constants.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwCountry">
+      <summary>
+            Country Constants.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwUnits">
+      <summary>
+            Unit of measure.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwPixelType">
+      <summary>
+            Pixel types.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwPixelType.BW">
+      <summary>
+            Black and white.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwCompression">
+      <summary>
+            Compression values.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwCompression.Group31D">
+      <summary>
+            Follows CCITT spec (no End Of Line).
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwCompression.Group31Deol">
+      <summary>
+            Follows CCITT spec (has End Of Line).
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwCompression.Group32D">
+      <summary>
+            Follows CCITT spec (use cap for K Factor).
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwCompression.Group4">
+      <summary>
+            Follows CCITT spec.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwCompression.Jpeg">
+      <summary>
+            Use capability for more info.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwCompression.Lzw">
+      <summary>
+            Must license from Unisys and IBM to use.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwCompression.Jbig">
+      <summary>
+            For Bitonal images  -- Added 1.7 KHL.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwEI">
+      <summary>
+            Extended Image Info Attributes.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwSX">
+      <summary>
+            ICAP_XFERMECH values (SX_ means Setup XFer).
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwSX.Native">
+      <summary>
+            The native image transfer. Image is transfered to this library as a bitmap in memory.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwSX.File">
+      <summary>
+            The file image transfer. Image is stored in the file specified by user.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwSX.Memory">
+      <summary>
+            The memory image transfer. Image is transfered to this library through several chunks of data. Enables progress (<see cref="T:TwainScanning.DataSource" />).
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwSX.MemFile">
+      <summary>
+            The memory image transfer. Image is stored in the file specified by user.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwMF">
+      <summary>
+            Flags used in TW_MEMORY structure.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwSS">
+      <summary>
+            ICAP_SUPPORTEDSIZES values (SS_ means Supported Sizes).
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwSS.A0">
+      <summary>
+            841 x 1189 mm	33.1 x 46.8 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwSS.A1">
+      <summary>
+            594 x 841 mm	23.4 x 33.1 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwSS.A2">
+      <summary>
+            420 x 594 mm	16.5 x 23.4 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwSS.A4">
+      <summary>
+            210 x 297 mm	8.3 x 11.7 in
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwSS.A7">
+      <summary>
+            74 x 105 mm	    2.9 x 4.1 in
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwFF">
+      <summary>
+            ICAP_IMAGEFILEFORMAT values (FF_means File Format).
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFF.Tiff">
+      <summary>
+            Tagged Image File Format.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFF.Pict">
+      <summary>
+            Macintosh PICT.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFF.Bmp">
+      <summary>
+            Windows Bitmap.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFF.Xbm">
+      <summary>
+            X-Windows Bitmap.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFF.Jfif">
+      <summary>
+            Jpeg File Interchange Format.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFF.Fpx">
+      <summary>
+            Flash Pix.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFF.TiffMulti">
+      <summary>
+            Multi-page tiff file.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFF.Png">
+      <summary>
+            Portable Network Graphics.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFF.Spiff">
+      <summary>
+            Still Picture Interchange File Format.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFF.Exif">
+      <summary>
+            Exchangeable Image File Format.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFF.Pdf">
+      <summary>
+            1.91 NB: this is not PDF/A.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFF.Jp2">
+      <summary>
+            1.91
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFF.Jpx">
+      <summary>
+            1.91
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFF.Dejavu">
+      <summary>
+            1.91
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFF.PdfA">
+      <summary>
+            TWAIN v2.0: Adobe PDF/A, Version 1.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFF.PdfA2">
+      <summary>
+            TWAIN v2.1 Adobe PDF/A, Version 2.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFF.PdfRaster">
+      <summary>
+            TWAIN v2.4: Simplified PDF format.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwPA">
+      <summary>
+            Palette types for TW_PALETTE8.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwDE">
+      <summary>
+            CAP_DEVICEEVENT values (DE_ means device event).
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwDX">
+      <summary>
+            ICAP_DUPLEX values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwBP">
+      <summary>
+            ICAP_AUTODISCARDBLANKPAGES values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwAS">
+      <summary>
+            ICAP_AUTOSIZE values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwFR">
+      <summary>
+            ICAP_FLIPROTATION values (FR_ means flip rotation).
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwIM">
+      <summary>
+            ICAP_IMAGEMERGE values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwCS">
+      <summary>
+            CAP_CAMERASIDE and TWEI_PAGESIDE values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwCB">
+      <summary>
+            CAP_CLEARBUFFERS values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwBT">
+      <summary>
+            ICAP_SUPPORTEDBARCODETYPES and TWEI_BARCODETYPE values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwBD">
+      <summary>
+            ICAP_BARCODESEARCHMODE values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwFT">
+      <summary>
+            ICAP_FILTER values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwIC">
+      <summary>
+            ICAP_ICCPROFILE values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwPC">
+      <summary>
+            ICAP_PLANARCHUNKY values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwBO">
+      <summary>
+            ICAP_BITORDER values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwJQ">
+      <summary>
+            ICAP_JPEGQUALITY values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwJS">
+      <summary>
+            ICAP_JPEGSUBSAMPLING values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwPF">
+      <summary>
+            ICAP_PIXELFLAVOR values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwFL">
+      <summary>
+            ICAP_FLASHUSED2 values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwIF">
+      <summary>
+            ICAP_IMAGEFILTER values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwLP">
+      <summary>
+            ICAP_LIGHTPATH values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwLS">
+      <summary>
+            ICAP_LIGHTSOURCE values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwNF">
+      <summary>
+            ICAP_NOISEFILTER values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwOV">
+      <summary>
+            ICAP_OVERSCAN values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwDF">
+      <summary>
+            CAP_DOUBLEFEEDDETECTION.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwUS">
+      <summary>
+            CAP_DOUBLEFEEDDETECTIONSENSITIVITY.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwDP">
+      <summary>
+            CAP_DOUBLEFEEDDETECTIONRESPONSE.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwPR">
+      <summary>
+            CAP_PRINTER values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwPM">
+      <summary>
+            CAP_PRINTERMODE values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwOR">
+      <summary>
+            ICAP_ORIENTATION values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwBR">
+      <summary>
+            ICAP_BITDEPTHREDUCTION values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwSG">
+      <summary>
+            CAP_SEGMENTED values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwFA">
+      <summary>
+            CAP_FEEDERALIGNMENT values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwFO">
+      <summary>
+            CAP_FEEDERORDER values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwFP">
+      <summary>
+            CAP_FEEDERPOCKET values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwPH">
+      <summary>
+            CAP_PAPERHANDLING values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwFE">
+      <summary>
+            ICAP_FEEDERTYPE values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwPCH">
+      <summary>
+            TWEI_PATCHCODE values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwBM1">
+      <summary>
+            CAP_BATTERYMINUTES values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwBM2">
+      <summary>
+            CAP_BATTERYPERCENTAGE values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwPS">
+      <summary>
+            CAP_POWERSUPPLY values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwJC">
+      <summary>
+            CAP_JOBCONTROL values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwCI">
+      <summary>
+            CAP_INDICATORSMODE values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwAL">
+      <summary>
+            CAP_ALARMS values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwPrinterFontStyle">
+      <summary>
+            CAP_PRINTERFONTSTYLE values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwPrinterIndexTrigger">
+      <summary>
+            CAP_PRINTERINDEXTRIGGER values.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwStr32">
+      <summary>
+            TwStr32 fixed length of 32 characters.
+             </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwFrame">
+      <summary>
+            Defines a frame rectangle in ICAP_UNITS coordinates.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFrame.Left">
+      <summary>
+            Gets or sets the x-coordinate of the left edge.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFrame.Top">
+      <summary>
+            Gets or sets the y-coordinate of the top edge.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFrame.Right">
+      <summary>
+            Gets or sets the x-coordinate that is the sum of TwFrame.Left and width of image.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwFrame.Bottom">
+      <summary>
+            Gets or sets the y-coordinate that is the sum of TwFrame.Top and length of image.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwIdentity">
+      <summary>
+            Identifies the program/library/code resource.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwIdentity.Id">
+      <summary>
+            Unique number.  In Windows, application hWnd.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwIdentity.Version">
+      <summary>
+            Identifies the piece of code.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwIdentity.ProtocolMajor">
+      <summary>
+            Application and DS must set to TWON_PROTOCOLMAJOR.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwIdentity.ProtocolMinor">
+      <summary>
+            Application and DS must set to TWON_PROTOCOLMINOR.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwIdentity.SupportedGroups">
+      <summary>
+            Bit field OR combination of DG_ constants.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwIdentity.Manufacturer">
+      <summary>
+            Manufacturer name, e.g. "Hewlett-Packard".
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwIdentity.ProductFamily">
+      <summary>
+            Product family name, e.g. "ScanJet".
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwIdentity.ProductName">
+      <summary>
+            Product name, e.g. "ScanJet Plus".
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwVersion">
+      <summary>
+            Describes version of software currently running.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwVersion.MajorNum">
+      <summary>
+            Major revision number of the software.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwVersion.MinorNum">
+      <summary>
+            Incremental revision number of the software.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwVersion.Language">
+      <summary>
+            e.g. TWLG_SWISSFRENCH.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwVersion.Country">
+      <summary>
+            e.g. TWCY_SWITZERLAND.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwVersion.Info">
+      <summary>
+            e.g. "1.0b3 Beta release".
+            </summary>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwImageInfo">
+      <summary>
+            Application gets detailed image info from DS with this.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwImageInfo.XResolution">
+      <summary>
+            Resolution in the horizontal.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwImageInfo.YResolution">
+      <summary>
+            Resolution in the vertical.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwImageInfo.ImageWidth">
+      <summary>
+            Columns in the image, -1 if unknown by DS.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwImageInfo.ImageLength">
+      <summary>
+            Rows in the image, -1 if unknown by DS.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwImageInfo.SamplesPerPixel">
+      <summary>
+            Number of samples per pixel, 3 for RGB.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwImageInfo.BitsPerSample">
+      <summary>
+            Number of bits for each sample.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwImageInfo.BitsPerPixel">
+      <summary>
+            Number of bits for each padded pixel.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwImageInfo.Planar">
+      <summary>
+            True if Planar, False if chunky.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwImageInfo.PixelType">
+      <summary>
+            How to interp data; photo interp.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwImageInfo.Compression">
+      <summary>
+            How the data is compressed.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwInfo.InfoId">
+      <summary>
+            Tag identifying an information.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwInfo.ItemType">
+      <summary>
+            Item data type.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwInfo.NumItems">
+      <summary>
+            Number of items for this field.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwInfo.ReturnCode">
+      <summary>
+            This is the return code of availability of data for extended image attribute requested.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwInfo.Item">
+      <summary>
+            Contains either data or a handle to data.
+            </summary>
+    </member>
+    <member name="M:TwainScanning.NativeStructs.TwInfo.GetValue">
+      <Summary>
+            Returns the value of the item.
+            </Summary>
+      <Returns> The value of the element. </Returns>
+    </member>
+    <member name="T:TwainScanning.NativeStructs.TwMemory">
+      <summary>
+            / Mem struct used to pass actual image data.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMemory.Flags">
+      <summary>
+            Any combination of the TWMF_ constants.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMemory.Length">
+      <summary>
+            Number of bytes stored in buffer TheMem.
+            </summary>
+    </member>
+    <member name="F:TwainScanning.NativeStructs.TwMemory.TheMem">
+      <summary>
+            Pointer or handle to the allocated memory buffer.
+            </summary>
+    </member>
+    <member name="T:TwainScanning.TwainException">
+      <summary>
+             Base class for all exceptions that can occur during work with TWAIN device manager or device.
+            </summary>
+    </member>
+    <member name="P:TwainScanning.TwainException.Message">
+      <summary>
+            Gets a message that describes the current exception.
+            </summary>
+    </member>
+  </members>
+</doc>
