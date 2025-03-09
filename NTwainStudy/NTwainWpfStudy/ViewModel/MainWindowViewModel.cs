@@ -217,7 +217,13 @@ public partial class MainWindowViewModel : ObservableObject
             // 画像ファイルフォーマットの設定（fileFormat="Jpeg"）
             if (source.Capabilities.ICapImageFileFormat.IsSupported)
             {
-                source.Capabilities.ICapImageFileFormat.SetValue(FileFormat.Jp2);
+                source.Capabilities.ICapImageFileFormat.SetValue(FileFormat.Spiff);
+            }
+
+            // 画像圧縮の設定（compression="Jpeg"）
+            if (source.Capabilities.ICapCompression.IsSupported)
+            {
+                source.Capabilities.ICapCompression.SetValue(CompressionType.Jpeg);
             }
 
             // すべての設定を行った後、スキャナーを有効化、UIなしモード
