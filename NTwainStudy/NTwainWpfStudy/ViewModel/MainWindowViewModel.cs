@@ -160,17 +160,71 @@ public partial class MainWindowViewModel : ObservableObject
     {
         if (_session.State == 4)
         {
-            //if (this.CurrentSource.ICapPixelType.Get().Contains(PixelType.BlackWhite))
-            //{
-            //    this.CurrentSource.ICapPixelType.Set(PixelType.BlackWhite);
-            //}
+            // 現在のソース（スキャナー）を取得
+            var source = _session.CurrentSource;
 
-            //if (this.CurrentSource.ICapXferMech.Get().Contains(XferMech.File))
-            //{
-            //    this.CurrentSource.ICapXferMech.Set(XferMech.File);
-            //}
+            // 自動メディア検出の設定（automaticSenseMedium="True"）
+            if (source.Capabilities.CapAutomaticSenseMedium.IsSupported)
+            {
+                source.Capabilities.CapAutomaticSenseMedium.SetValue(BoolType.True);
+            }
 
-            var rc = _session.CurrentSource.Enable(SourceEnableMode.NoUI, false, WindowHandle);
+            // 給紙方法をADFに設定（paperSupply="Adf"）
+            source.Capabilities.CapFeederEnabled.SetValue(BoolType.True);
+
+            // ピクセルタイプをRGBに設定（pixelType="Rgb"）
+            source.Capabilities.ICapPixelType.SetValue(PixelType.RGB);
+
+            // 解像度を300 DPIに設定（resolution="R300"）
+            if (source.Capabilities.ICapXResolution.IsSupported && source.Capabilities.ICapYResolution.IsSupported)
+            {
+                TWFix32 resolution = 300;
+                source.Capabilities.ICapXResolution.SetValue(resolution);
+                source.Capabilities.ICapYResolution.SetValue(resolution);
+            }
+
+            // 自動境界検出を有効に設定（autoBorderDetection="True"）
+            if (source.Capabilities.ICapAutomaticBorderDetection.IsSupported)
+            {
+                source.Capabilities.ICapAutomaticBorderDetection.SetValue(BoolType.True);
+            }
+
+            // 傾き補正の設定（deSkew="Edge"）
+            if (source.Capabilities.ICapAutomaticDeskew.IsSupported)
+            {
+                source.Capabilities.ICapAutomaticDeskew.SetValue(BoolType.True);
+            }
+
+            // 用紙サイズを最大に設定（paperSize="MaxSize"）
+            if (source.Capabilities.ICapSupportedSizes.IsSupported)
+            {
+                source.Capabilities.ICapSupportedSizes.SetValue(SupportedSize.None); // Noneは通常最大サイズを表します
+            }
+
+            // 自動回転を設定（rotation="Automatic"）
+            if (source.Capabilities.ICapAutomaticRotate.IsSupported)
+            {
+                source.Capabilities.ICapAutomaticRotate.SetValue(BoolType.True);
+            }
+
+            // 空白ページスキップモードと感度の設定（blankPageSkipMode="Sensitivity", blankPageSkip="0"）
+            if (source.Capabilities.ICapAutoDiscardBlankPages.IsSupported)
+            {
+                // 感度が0の場合は空白ページをスキップしない設定
+                source.Capabilities.ICapAutoDiscardBlankPages.SetValue(BlankPage.Disable);
+            }
+
+            // 画像ファイルフォーマットの設定（fileFormat="Jpeg"）
+            if (source.Capabilities.ICapImageFileFormat.IsSupported)
+            {
+                source.Capabilities.ICapImageFileFormat.SetValue(FileFormat.Jp2);
+            }
+
+            // すべての設定を行った後、スキャナーを有効化、UIなしモード
+            if (_session.CurrentSource.Enable(SourceEnableMode.NoUI, false, WindowHandle) == ReturnCode.Success)
+            {
+
+            }
         }
     }
 
@@ -326,6 +380,10 @@ public partial class MainWindowViewModel : ObservableObject
                 {
                     if (stream != null)
                     {
+                        using var writeStream = File.OpenWrite("scan.jpg");
+                        stream.CopyTo(writeStream);
+                        writeStream.Flush();
+                        stream.Seek(0, SeekOrigin.Begin);
                         img = stream.ConvertToWpfBitmap(300, 0);
                     }
                 }
