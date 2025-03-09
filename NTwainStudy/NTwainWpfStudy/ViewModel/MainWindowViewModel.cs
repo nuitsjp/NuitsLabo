@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -17,18 +18,25 @@ public partial class MainWindowViewModel : ObservableObject
 {
     public MainWindowViewModel()
     {
+        PlatformInfo.Current.PreferNewDSM = true;
+
         DataSources = new ObservableCollection<DataSourceVM>();
         CapturedImages = new ObservableCollection<ImageSource>();
 
         //this.SynchronizationContext = SynchronizationContext.Current;
         var appId = TWIdentity.CreateFromAssembly(DataGroups.Image | DataGroups.Audio, Assembly.GetEntryAssembly());
         _session = new TwainSession(appId);
+        _session.DeviceEvent += (sender, args) => { Debug.WriteLine($"DeviceEvent {args}"); };
+        _session.DataTransferred += _session_DataTransferred;
+        _session.PropertyChanged += (sender, args) => { Debug.WriteLine($"PropertyChanged {args}"); };
+        _session.SourceChanged += (sender, args) => { Debug.WriteLine($"SourceChanged {args}"); };
+        _session.SourceDisabled += _session_SourceDisabled;
+        _session.TransferCanceled += (sender, args) => { Debug.WriteLine($"TransferCanceled {args}"); };
         _session.TransferError += _session_TransferError;
         _session.TransferReady += _session_TransferReady;
-        _session.DataTransferred += _session_DataTransferred;
-        _session.SourceDisabled += _session_SourceDisabled;
         _session.StateChanged += (s, e) =>
         {
+            Debug.WriteLine($"SourceDisabled {e}");
             _dispatcher.BeginInvoke(() =>
             {
                 ReloadSourcesCommand.NotifyCanExecuteChanged();
@@ -84,6 +92,7 @@ public partial class MainWindowViewModel : ObservableObject
         get => _selectedSource;
         set
         {
+            Debug.WriteLine($"Session.State before: {_session.StateEx}");
             if (_session.State == 4)
             {
                 _session.CurrentSource.Close();
@@ -93,6 +102,7 @@ public partial class MainWindowViewModel : ObservableObject
             if (_selectedSource != null)
             {
                 _selectedSource.Open();
+                Debug.WriteLine($"Session.State after: {_session.StateEx}");
             }
         }
     }
@@ -227,7 +237,8 @@ public partial class MainWindowViewModel : ObservableObject
             }
 
             // すべての設定を行った後、スキャナーを有効化、UIなしモード
-            if (_session.CurrentSource.Enable(SourceEnableMode.NoUI, false, WindowHandle) == ReturnCode.Success)
+            var returnCode = source.Enable(SourceEnableMode.NoUI, false, WindowHandle);
+            if (returnCode == ReturnCode.Success)
             {
 
             }
@@ -282,9 +293,9 @@ public partial class MainWindowViewModel : ObservableObject
     private void ReloadSources()
     {
         DataSources.Clear();
-        foreach (var s in _session.Select(s => new DataSourceVM { DS = s }))
+        foreach (var dataSource in _session)
         {
-            DataSources.Add(s);
+            DataSources.Add(new DataSourceVM{DS =dataSource});
         }
         //SelectedSource = DataSources.FirstOrDefault();
     }
