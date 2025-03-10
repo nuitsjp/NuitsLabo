@@ -1,0 +1,47 @@
+﻿<Window x:Class="NTwainV4WpfStudy.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NTwainV4WpfStudy"
+        mc:Ignorable="d"
+        Loaded="MainWindow_OnLoaded"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="TextBlock">
+                <Setter Property="Margin" Value="5"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Status:"/>
+            <TextBlock Text="{Binding SessionState}"/>
+            <TextBlock Text="Default Source:"/>
+            <TextBlock Text="{Binding ProductName}"/>
+            <Button Width="120"
+                    Content="Select default source"
+                    Margin="5"
+                    Command="{Binding OpenDefaultSourceCommand}"/>
+            <TextBlock Text="Current Source:"/>
+            <TextBlock Text="{Binding CurrentSource}"/>
+            <Button Width="120"
+                    Content="Show setting only"
+                    Margin="5"
+                    Command="{Binding ShowSettingOnlyCommand}"/>
+            <Button Width="120"
+                    Content="Scan"
+                    Margin="5"
+                    Command="{Binding ScanCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>

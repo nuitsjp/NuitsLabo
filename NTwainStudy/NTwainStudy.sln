@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTwainWpfStudy", "NTwainWpf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTwainWinFormsStudy", "NTwainWinFormsStudy\NTwainWinFormsStudy.csproj", "{3A0B8C21-7409-43B6-8623-FC91D927F2C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTwainV4x86WpfStudy", "NTwainV4WpfStudy\NTwainV4x86WpfStudy.csproj", "{A28493D8-A54E-8615-A615-165A24DDD575}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTwainV4x64WpfStudy", "NTwainV4WpfStudy\NTwainV4x64WpfStudy.csproj", "{EB0A181B-F12D-3AFB-0A91-502E09F2DA15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{3A0B8C21-7409-43B6-8623-FC91D927F2C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A0B8C21-7409-43B6-8623-FC91D927F2C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A0B8C21-7409-43B6-8623-FC91D927F2C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A28493D8-A54E-8615-A615-165A24DDD575}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A28493D8-A54E-8615-A615-165A24DDD575}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A28493D8-A54E-8615-A615-165A24DDD575}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A28493D8-A54E-8615-A615-165A24DDD575}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB0A181B-F12D-3AFB-0A91-502E09F2DA15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB0A181B-F12D-3AFB-0A91-502E09F2DA15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB0A181B-F12D-3AFB-0A91-502E09F2DA15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB0A181B-F12D-3AFB-0A91-502E09F2DA15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
