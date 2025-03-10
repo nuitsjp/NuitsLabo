@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35806.99 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagingDeviceDetectorStudy", "ImagingDeviceDetectorStudy\ImagingDeviceDetectorStudy.csproj", "{92D99A0C-8310-46A9-99B5-9471536C8130}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{92D99A0C-8310-46A9-99B5-9471536C8130}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92D99A0C-8310-46A9-99B5-9471536C8130}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92D99A0C-8310-46A9-99B5-9471536C8130}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92D99A0C-8310-46A9-99B5-9471536C8130}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0E1774BB-A9A9-4CC1-854D-8D210847FF12}
+	EndGlobalSection
+EndGlobal
