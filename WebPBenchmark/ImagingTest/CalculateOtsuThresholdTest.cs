@@ -14,7 +14,7 @@ public class CalculateOtsuThresholdTest : ImageTestBase
     [InlineData(ImageFormat.Tiff)]
     [InlineData(ImageFormat.Jpeg)]
     [InlineData(ImageFormat.WebP)]
-    public void CalculateOtsuThreshold(ImageFormat imageFormat)
+    public void CalculateOtsuThresholdByBitmapSource(ImageFormat imageFormat)
     {
         var bitmapSource = LoadBytes(imageFormat).ToBitmapSource(imageFormat);
         var actual = bitmapSource.CalculateOtsuThreshold(imageFormat);
@@ -31,7 +31,7 @@ public class CalculateOtsuThresholdTest : ImageTestBase
     [InlineData(ImageFormat.Jpeg)]
     // 現状WebPは非対応
     // [InlineData(ImageFormat.WebP)]
-    public void CalculateOtsuThreshold2(ImageFormat imageFormat)
+    public void CalculateOtsuThresholdByBitmap(ImageFormat imageFormat)
     {
         using var bitmap = (Bitmap)Image.FromStream(new MemoryStream(LoadBytes(imageFormat)));
         var actual = bitmap.CalculateOtsuThreshold();
