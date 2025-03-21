@@ -6,6 +6,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using Rectangle = System.Drawing.Rectangle;
+using SkiaSharp;
+
 
 #if NET8_0_OR_GREATER
 using System.Diagnostics;
@@ -268,6 +270,109 @@ public static class BitmapExtensions
         {
             Marshal.FreeCoTaskMem(grayIntPtr);
         }
+    }
+
+    /// <summary>
+    /// 大津の二値化によるしきい値を求める（SkiaSharp版）。
+    /// 画像が既に二値の場合（SKColorType.Index8と仮定）にはデフォルトのしきい値（ここでは50）を返します。
+    /// </summary>
+    /// <param name="bitmap">処理対象のSKBitmap</param>
+    /// <returns>最適なしきい値（0～100の割合）</returns>
+    public static unsafe Threshold CalculateOtsuThreshold(this SKBitmap bitmap)
+    {
+        // 画像が既に二値（インデックスカラー）ならデフォルト値を返す
+        if (bitmap.ColorType == SKColorType.Unknown)
+        {
+            return Threshold.Default;
+        }
+
+        int width = bitmap.Width;
+        int height = bitmap.Height;
+        int totalPixels = width * height;
+        int[] histogram = new int[256];
+        long sumHistogram = 0;
+
+        // グレースケール変換用の係数（各値は元の0.299, 0.587, 0.114を1024倍したもの）
+        const int RedFactor = 306;
+        const int GreenFactor = 601;
+        const int BlueFactor = 117;
+
+        // SKBitmapのピクセルデータにアクセス
+        var pixmap = bitmap.PeekPixels();
+        if (pixmap == null || pixmap.GetPixels() == IntPtr.Zero)
+            throw new InvalidOperationException("ピクセルデータにアクセスできませんでした。");
+
+        // unsafeコードで各ピクセルにアクセス
+        byte* pixels = (byte*)pixmap.GetPixels().ToPointer();
+        int rowBytes = pixmap.RowBytes;
+        for (int y = 0; y < height; y++)
+        {
+            byte* row = pixels + y * rowBytes;
+            for (int x = 0; x < width; x++)
+            {
+                int pixelOffset = x * 4; // 通常は4バイト/ピクセル（Rgba8888またはBgra8888）
+                byte r, g, b;
+                if (pixmap.ColorType == SKColorType.Rgba8888)
+                {
+                    r = row[pixelOffset + 0];
+                    g = row[pixelOffset + 1];
+                    b = row[pixelOffset + 2];
+                }
+                else if (pixmap.ColorType == SKColorType.Bgra8888)
+                {
+                    b = row[pixelOffset + 0];
+                    g = row[pixelOffset + 1];
+                    r = row[pixelOffset + 2];
+                }
+                else
+                {
+                    // 万が一他の形式の場合はGetPixelで取得（ただしパフォーマンスは低下します）
+                    SKColor color = bitmap.GetPixel(x, y);
+                    r = color.Red;
+                    g = color.Green;
+                    b = color.Blue;
+                }
+
+                // グレースケール化（右シフト10で1024で除算）
+                int gray = (r * RedFactor + g * GreenFactor + b * BlueFactor) >> 10;
+                histogram[gray]++;
+            }
+        }
+
+        // 画像全体のグレースケール値の合計（各輝度値×出現回数）
+        for (int i = 0; i < 256; i++)
+        {
+            sumHistogram += i * histogram[i];
+        }
+
+        long sumB = 0; // 背景側のグレースケール値の累積
+        int weightBackground = 0; // 背景のピクセル数
+        double maxVariance = 0;
+        int optimalThreshold = 0;
+
+        // 各グレースケール階調について大津の手法で最適なしきい値を算出
+        for (int t = 0; t < 256; t++)
+        {
+            weightBackground += histogram[t];
+            if (weightBackground == 0) continue;
+
+            int weightForeground = totalPixels - weightBackground;
+            if (weightForeground == 0) break;
+
+            sumB += t * histogram[t];
+            double meanBackground = (double)sumB / weightBackground;
+            double meanForeground = (double)(sumHistogram - sumB) / weightForeground;
+
+            double varianceBetween = weightBackground * (double)weightForeground * (meanBackground - meanForeground) * (meanBackground - meanForeground);
+            if (varianceBetween > maxVariance)
+            {
+                maxVariance = varianceBetween;
+                optimalThreshold = t;
+            }
+        }
+
+        // 元コードでは最終的にしきい値を (optimalThreshold / 256f * 100) として返す
+        return (Threshold)(optimalThreshold / 256f * 100f);
     }
 
 #if NET8_0_OR_GREATER

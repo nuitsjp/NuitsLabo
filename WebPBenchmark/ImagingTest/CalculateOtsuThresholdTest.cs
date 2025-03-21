@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using ImagingTest.Utility;
 using Shouldly;
+using SkiaSharp;
 
 #if NET8_0_OR_GREATER
 using SixLabors.ImageSharp.PixelFormats;
@@ -34,6 +35,22 @@ public class CalculateOtsuThresholdTest : ImageTestBase
     public void CalculateOtsuThresholdByBitmap(ImageFormat imageFormat)
     {
         using var bitmap = (Bitmap)Image.FromStream(new MemoryStream(LoadBytes(imageFormat)));
+        var actual = bitmap.CalculateOtsuThreshold();
+
+        var expected =
+            imageFormat == ImageFormat.Tiff
+                ? Threshold.Default
+                : (Threshold)69;
+        actual.ShouldBe(expected);
+    }
+
+    [Theory]
+    // [InlineData(ImageFormat.Tiff)] // SkiaSharpではTIFF未対応
+    [InlineData(ImageFormat.Jpeg)]
+    [InlineData(ImageFormat.WebP)]
+    public void CalculateOtsuThresholdBySkiaSharp(ImageFormat imageFormat)
+    {
+        using var bitmap = SKBitmap.Decode(LoadBytes(imageFormat));
         var actual = bitmap.CalculateOtsuThreshold();
 
         var expected =
