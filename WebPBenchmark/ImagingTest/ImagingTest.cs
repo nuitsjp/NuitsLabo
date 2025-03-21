@@ -43,6 +43,19 @@ public class ImagingTest : ImageTestBase
     [Theory]
     [InlineData(ImageFormat.Tiff)]
     [InlineData(ImageFormat.Jpeg)]
+    // WebPは未対応
+    // [InlineData(ImageFormat.WebP)]
+    public void DrawingAndImageSharp(ImageFormat imageFormat)
+    {
+        var imageBytes = LoadBytes(imageFormat);
+        Compare(
+            FromDrawing(imageBytes),
+            FromImageSharp(imageBytes));
+    }
+
+    [Theory]
+    [InlineData(ImageFormat.Tiff)]
+    [InlineData(ImageFormat.Jpeg)]
     [InlineData(ImageFormat.WebP)]
     public void SystemWindowsAndImageSharp(ImageFormat imageFormat)
     {
@@ -70,6 +83,22 @@ public class ImagingTest : ImageTestBase
             imageFormat == ImageFormat.Jpeg
                 ? 64 // ImageSharpのJPEGデコーダは色が少し異なる
                 : 0);
+    }
+
+    private static IEnumerable<Color> FromImageSharp(byte[] imageBytes)
+    {
+        using var stream = new MemoryStream(imageBytes);
+        using var imageSharp = SixLabors.ImageSharp.Image.Load<Rgba32>(stream);
+
+        for (var y = 0; y < imageSharp.Height; y++)
+        {
+            for (var x = 0; x < imageSharp.Width; x++)
+            {
+                var pixel = imageSharp[x, y];
+
+                yield return Color.FromArgb(pixel.A, pixel.R, pixel.G, pixel.B);
+            }
+        }
     }
 #endif
 
@@ -119,24 +148,6 @@ public class ImagingTest : ImageTestBase
             }
         }
     }
-
-#if NET8_0_OR_GREATER
-    private static IEnumerable<Color> FromImageSharp(byte[] imageBytes)
-    {
-        using var stream = new MemoryStream(imageBytes);
-        using var imageSharp = SixLabors.ImageSharp.Image.Load<Rgba32>(stream);
-
-        for (var y = 0; y < imageSharp.Height; y++)
-        {
-            for (var x = 0; x < imageSharp.Width; x++)
-            {
-                var pixel = imageSharp[x, y];
-
-                yield return Color.FromArgb(pixel.A, pixel.R, pixel.G, pixel.B);
-            }
-        }
-    }
-#endif
 
     private static IEnumerable<Color> FromSystemWindows(byte[] imageBytes, ImageFormat imageFormat)
     {

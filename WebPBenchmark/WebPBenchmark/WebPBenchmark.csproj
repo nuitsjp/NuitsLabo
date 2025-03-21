@@ -16,7 +16,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="BenchmarkDotNet" Version="0.13.10" />
-		<PackageReference Include="Magick.NET-Q16-OpenMP-x64" Version="13.4.0" />
+		<PackageReference Include="Magick.NET-Q8-OpenMP-x64" Version="14.5.0" />
 		<PackageReference Include="MetadataExtractor" Version="2.8.1" />
 		<PackageReference Include="Sharprompt" Version="2.4.5" />
 		<PackageReference Include="System.Drawing.Common" Version="9.0.3" />

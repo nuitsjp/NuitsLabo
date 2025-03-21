@@ -7,10 +7,12 @@ using System.Windows.Media.Imaging;
 using ImageMagick;
 using Rectangle = System.Drawing.Rectangle;
 using WebPBenchmark.Extensions;
+using BenchmarkDotNet.Jobs;
 
 namespace WebPBenchmark;
 
 [MemoryDiagnoser]
+[SimpleJob]
 public class BinarizeByOtsu : BaseBenchmark
 {
     [Benchmark]

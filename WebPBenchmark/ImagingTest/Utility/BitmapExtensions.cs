@@ -1,9 +1,17 @@
-﻿using System.Drawing.Imaging;
+﻿using System.Diagnostics;
+using System.Drawing.Imaging;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
+using Rectangle = System.Drawing.Rectangle;
+
+#if NET8_0_OR_GREATER
+using System.Diagnostics;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp;
+#endif
 
 namespace ImagingTest.Utility;
 
@@ -213,6 +221,9 @@ public static class BitmapExtensions
                 }
             }
 
+            Debug.Write($"histogram : {string.Join(", ", histogram.Select(x => $"{x:X2}"))}");
+
+
             // 画像全体のピクセル数
             var totalPixels = bitmapSource.PixelWidth * bitmapSource.PixelHeight;
             float sumOfHistogram = 0;
@@ -258,6 +269,113 @@ public static class BitmapExtensions
             Marshal.FreeCoTaskMem(grayIntPtr);
         }
     }
+
+#if NET8_0_OR_GREATER
+    /// <summary>
+    /// Otsu の二値化により最適なしきい値を求める (百分率で返す)。
+    /// ImageSharp は 1bpp をサポートしないため、そのチェックは行っていません。
+    /// </summary>
+    /// <param name="image">対象の Image&lt;Rgba32&gt; 画像</param>
+    /// <returns>最適なしきい値 (Threshold 型にキャスト)</returns>
+    public static Threshold CalculateOtsuThreshold(this Image<Rgba32> image)
+    {
+        int width = image.Width;
+        int height = image.Height;
+        int totalPixels = width * height;
+        int[] histogram = new int[256];
+
+        // 画像全体を走査し、グレイスケール値に変換しながらヒストグラムを作成
+        image.ProcessPixelRows(accessor =>
+        {
+            for (int y = 0; y < height; y++)
+            {
+                Span<Rgba32> pixelRow = accessor.GetRowSpan(y);
+                for (int x = 0; x < width; x++)
+                {
+                    Rgba32 pixel = pixelRow[x];
+                    // (R * 306 + G * 601 + B * 117) >> 10 でグレイスケール値を算出
+                    int gray = (pixel.R * RedFactor + pixel.G * GreenFactor + pixel.B * BlueFactor) >> 10;
+                    histogram[gray]++;
+                }
+            }
+        });
+
+        Debug.Write($"histogram : {string.Join(", ", histogram.Select(x => $"{x:X2}"))}");
+
+        // ヒストグラムの重み付き合計を計算
+        float sumOfHistogram = 0;
+        for (int i = 0; i < 256; i++)
+        {
+            sumOfHistogram += i * histogram[i];
+        }
+
+        float sumB = 0;       // 背景側の輝度合計
+        int weightBackground = 0;
+        float maxVariance = 0;
+        int optimalThreshold = 0;
+
+        // 各階調について背景/前景の重み、平均、及び分散を計算し、最適なしきい値を求める
+        for (int i = 0; i < 256; i++)
+        {
+            weightBackground += histogram[i];
+            if (weightBackground == 0)
+                continue;
+
+            int weightForeground = totalPixels - weightBackground;
+            if (weightForeground == 0)
+                break;
+
+            sumB += i * histogram[i];
+            float meanBackground = sumB / weightBackground;
+            float meanForeground = (sumOfHistogram - sumB) / weightForeground;
+
+            float varianceBetween = weightBackground * weightForeground * (meanBackground - meanForeground) * (meanBackground - meanForeground);
+
+            if (varianceBetween > maxVariance)
+            {
+                maxVariance = varianceBetween;
+                optimalThreshold = i;
+            }
+        }
+
+        // 最適なしきい値を 0～100 の割合に変換して返す
+        float thresholdPercentage = optimalThreshold / 256f * 100f;
+        return (Threshold)thresholdPercentage;
+    }
+
+    /// <summary>
+    /// Otsu の二値化により最適なしきい値を求める (百分率で返す)。
+    /// ImageSharp は 1bpp をサポートしないため、そのチェックは行っていません。
+    /// </summary>
+    /// <param name="image">対象の Image&lt;Rgba32&gt; 画像</param>
+    /// <returns>最適なしきい値 (Threshold 型にキャスト)</returns>
+    public static int[] GetHistogram(this Image<Rgba32> image)
+    {
+        int width = image.Width;
+        int height = image.Height;
+        int totalPixels = width * height;
+        int[] histogram = new int[256];
+
+        // 画像全体を走査し、グレイスケール値に変換しながらヒストグラムを作成
+        image.ProcessPixelRows(accessor =>
+        {
+            for (int y = 0; y < height; y++)
+            {
+                Span<Rgba32> pixelRow = accessor.GetRowSpan(y);
+                for (int x = 0; x < width; x++)
+                {
+                    Rgba32 pixel = pixelRow[x];
+                    // (R * 306 + G * 601 + B * 117) >> 10 でグレイスケール値を算出
+                    int gray = (pixel.R * RedFactor + pixel.G * GreenFactor + pixel.B * BlueFactor) >> 10;
+                    histogram[gray]++;
+                }
+            }
+        });
+
+        return histogram;
+    }
+#endif
+
     /// <summary>
     /// 二値化時に利用する赤色の重み
     /// </summary>
@@ -350,6 +468,65 @@ public static class BitmapExtensions
         finally
         {
             bitmap.UnlockBits(bitmapData);
+        }
+    }
+
+    /// <summary>
+    /// 大津の二値化によるしきい値を求める。
+    /// </summary>
+    public static unsafe int[] GetHistogram(this BitmapSource bitmapSource, ImageFormat imageFormat)
+    {
+        // 1bppIndexedの場合はデフォルトのしきい値を返す
+        // これは二値化の際に、PixelFormat.Format1bppIndexedの画像をそのまま返すため。
+        // 値は何でもよいがデフォルトのしきい値を返す。
+        if (imageFormat == ImageFormat.Tiff)
+        {
+            return [];
+        }
+
+        var pixels = new byte[bitmapSource.PixelHeight * bitmapSource.PixelWidth * 4];
+        bitmapSource.CopyPixels(pixels, bitmapSource.PixelWidth * 4, 0);
+
+
+        // srcからStrideを取得する
+        var bitsPerPixel = bitmapSource.Format.BitsPerPixel;
+        var width = bitmapSource.PixelWidth;
+        var srcStride = (width * bitsPerPixel + 7) / 8;
+
+        var grayIntPtr = Marshal.AllocCoTaskMem(srcStride * bitmapSource.PixelHeight);
+        try
+        {
+            // グレイスケール化
+            var grayScale = (byte*)grayIntPtr;
+            for (var y1 = 0; y1 < bitmapSource.PixelHeight; y1++)
+            {
+                for (var x1 = 0; x1 < bitmapSource.PixelWidth; x1++)
+                {
+                    var index = (y1 * bitmapSource.PixelWidth + x1) * 4;
+                    var r = pixels[index + 2];
+                    var g = pixels[index + 1];
+                    var b = pixels[index];
+
+                    grayScale[srcStride * y1 + x1] = (byte)(r * RedFactor + g * GreenFactor + b * BlueFactor >> 10);
+                }
+            }
+
+            // ヒストグラムの初期化
+            var histogram = new int[256];
+            for (var y = 0; y < bitmapSource.PixelHeight; y++)
+            {
+                for (var x = 0; x < bitmapSource.PixelWidth; x++)
+                {
+                    int grayScaleValue = grayScale[srcStride * y + x];
+                    histogram[grayScaleValue]++;
+                }
+            }
+
+            return histogram;
+        }
+        finally
+        {
+            Marshal.FreeCoTaskMem(grayIntPtr);
         }
     }
 }
