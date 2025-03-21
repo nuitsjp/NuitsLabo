@@ -2,6 +2,10 @@
 using ImagingTest.Utility;
 using Shouldly;
 
+#if NET8_0_OR_GREATER
+using SixLabors.ImageSharp.PixelFormats;
+#endif
+
 namespace ImagingTest;
 
 public class CalculateOtsuThresholdTest : ImageTestBase
@@ -38,4 +42,15 @@ public class CalculateOtsuThresholdTest : ImageTestBase
                 : (Threshold)69;
         actual.ShouldBe(expected);
     }
+
+#if NET8_0_OR_GREATER
+    [Theory]
+    [InlineData(ImageFormat.Jpeg)]
+    public void CalculateOtsuThresholdByImageSharp(ImageFormat imageFormat)
+    {
+        var imageBytes = LoadBytes(imageFormat);
+        using var stream = new MemoryStream(imageBytes);
+        using var imageSharp = SixLabors.ImageSharp.Image.Load(stream);
+    }
+#endif
 }

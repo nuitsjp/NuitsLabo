@@ -1,11 +1,13 @@
 ﻿using ImageMagick;
 using System.Drawing;
 using System.Windows.Media.Imaging;
-using SixLabors.ImageSharp.PixelFormats;
 using System.Windows.Media;
 using Color = System.Drawing.Color;
 using ImagingTest.Utility;
 using Shouldly;
+#if NET8_0_OR_GREATER
+using SixLabors.ImageSharp.PixelFormats;
+#endif
 
 namespace ImagingTest;
 
@@ -37,6 +39,7 @@ public class ImagingTest : ImageTestBase
             FromMagickDotNet(imageBytes));
     }
 
+#if NET8_0_OR_GREATER
     [Theory]
     [InlineData(ImageFormat.Tiff)]
     [InlineData(ImageFormat.Jpeg)]
@@ -68,6 +71,7 @@ public class ImagingTest : ImageTestBase
                 ? 64 // ImageSharpのJPEGデコーダは色が少し異なる
                 : 0);
     }
+#endif
 
     private static void Compare(IEnumerable<Color> colors1, IEnumerable<Color> colors2, double tolerance = 0)
     {
@@ -116,6 +120,7 @@ public class ImagingTest : ImageTestBase
         }
     }
 
+#if NET8_0_OR_GREATER
     private static IEnumerable<Color> FromImageSharp(byte[] imageBytes)
     {
         using var stream = new MemoryStream(imageBytes);
@@ -131,6 +136,7 @@ public class ImagingTest : ImageTestBase
             }
         }
     }
+#endif
 
     private static IEnumerable<Color> FromSystemWindows(byte[] imageBytes, ImageFormat imageFormat)
     {
