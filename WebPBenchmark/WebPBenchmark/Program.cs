@@ -23,14 +23,13 @@ var config =
                 CsProjCoreToolchain.From(
                     new NetCoreAppSettings(
                         targetFrameworkMoniker: "net8.0-windows",
-                        runtimeFrameworkVersion: null,
+                        runtimeFrameworkVersion: string.Empty,
                         name: ".NET 8.0"))))
             .AddJob(job.WithRuntime(ClrRuntime.Net481));
 
 var switcher = new BenchmarkSwitcher(
-    new[]
-    {
-        typeof(BinarizeByFixedThreshold),
+[
+    typeof(BinarizeByFixedThreshold),
         typeof(BinarizeByOtsu),
         typeof(BitmapSourceToBitmap),
         typeof(BitmapToBitmapSource),
@@ -39,6 +38,6 @@ var switcher = new BenchmarkSwitcher(
         typeof(Load),
         typeof(LoadBitmap),
         typeof(CalculateOtsuThreshold)
-    });
+]);
 
 switcher.Run(args, config);

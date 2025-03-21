@@ -3,9 +3,12 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using BenchmarkDotNet.Attributes;
 using ImageMagick;
-using SixLabors.ImageSharp.PixelFormats;
 using WebPBenchmark.Extensions;
+
+#if NET8_0_OR_GREATER
+using SixLabors.ImageSharp.PixelFormats;
 using Image = SixLabors.ImageSharp.Image;
+#endif
 
 namespace WebPBenchmark;
 
@@ -46,6 +49,7 @@ public class LoadBitmap : BaseBenchmark
         return new Bitmap(stream);
     }
 
+#if NET8_0_OR_GREATER
     [Benchmark]
     public Bitmap ImageSharp()
     {
@@ -60,4 +64,5 @@ public class LoadBitmap : BaseBenchmark
         // MemoryStreamからSystem.Drawing.Bitmapを作成
         return new Bitmap(output);
     }
+#endif
 }

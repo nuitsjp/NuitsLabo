@@ -5,7 +5,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using BenchmarkDotNet.Attributes;
 using ImageMagick;
+#if NET8_0_OR_GREATER
 using SixLabors.ImageSharp;
+#endif
 using WebPBenchmark.Extensions;
 
 namespace WebPBenchmark;
@@ -150,6 +152,7 @@ public class Load : BaseBenchmark
         return bitmapImage;
     }
 
+#if NET8_0_OR_GREATER
     [Benchmark]
     public BitmapImage ImageSharp()
     {
@@ -170,4 +173,5 @@ public class Load : BaseBenchmark
 
         return bitmapImage;
     }
+#endif
 }

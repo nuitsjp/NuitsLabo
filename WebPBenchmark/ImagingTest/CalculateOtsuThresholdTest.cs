@@ -1,7 +1,6 @@
 ﻿using System.Drawing;
-using System.Windows;
-using FluentAssertions;
 using ImagingTest.Utility;
+using Shouldly;
 
 namespace ImagingTest;
 
@@ -20,7 +19,7 @@ public class CalculateOtsuThresholdTest : ImageTestBase
             imageFormat == ImageFormat.Tiff
                 ? Threshold.Default
                 : (Threshold)69;
-        actual.Should().Be(expected);
+        actual.ShouldBe(expected);
     }
 
     [Theory]
@@ -37,6 +36,6 @@ public class CalculateOtsuThresholdTest : ImageTestBase
             imageFormat == ImageFormat.Tiff
                 ? Threshold.Default
                 : (Threshold)69;
-        actual.Should().Be(expected);
+        actual.ShouldBe(expected);
     }
 }
