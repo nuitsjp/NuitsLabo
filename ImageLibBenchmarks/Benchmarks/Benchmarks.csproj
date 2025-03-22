@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<OutputType>Exe</OutputType>
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
@@ -11,10 +10,4 @@
 	<ItemGroup>
 		<PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\Benchmarks\Benchmarks.csproj" />
-		<ProjectReference Include="..\ImagingLib\ImagingLib.csproj" />
-	</ItemGroup>
-
 </Project>

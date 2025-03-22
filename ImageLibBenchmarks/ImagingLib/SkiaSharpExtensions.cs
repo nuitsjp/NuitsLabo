@@ -22,6 +22,13 @@ public static class SkiaSharpExtensions
     /// </summary>
     private const int BlueFactor = (int)(0.114478 * 1024);
 
+    public static Binary ToBinary(this byte[] data)
+    {
+        using var bitmap = SKBitmap.Decode(data);
+        var threshold = bitmap.CalculateOtsu();
+        return bitmap.ToBinary(threshold);
+    }
+
     /// <summary>
     /// 大津の二値化によるしきい値を求める（SkiaSharp版）。
     /// 画像が既に二値の場合（SKColorType.Index8と仮定）にはデフォルトのしきい値（ここでは50）を返します。

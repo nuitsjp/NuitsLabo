@@ -13,7 +13,7 @@ public class ToBinaryTest : ImageTestBase
     [InlineData(ImageFormat.Jpeg)]
     // 現状WebPは非対応
     // [InlineData(ImageFormat.WebP)]
-    public void BySystemDrawing(ImageFormat imageFormat)
+    public void SystemDrawing(ImageFormat imageFormat)
     {
         using var bitmap = (Bitmap)Image.FromStream(new MemoryStream(LoadBytes(imageFormat)));
         using var actual = bitmap.ToBinary(75);
@@ -30,7 +30,7 @@ public class ToBinaryTest : ImageTestBase
     // [InlineData(ImageFormat.Tiff)]
     [InlineData(ImageFormat.Jpeg)]
     [InlineData(ImageFormat.WebP)]
-    public void BySkiaSharp(ImageFormat imageFormat)
+    public void SkiaSharp(ImageFormat imageFormat)
     {
         using var bitmap = SKBitmap.Decode(LoadBytes(imageFormat));
         using var actual = bitmap.ToBinary(75);
@@ -47,7 +47,7 @@ public class ToBinaryTest : ImageTestBase
     [InlineData(ImageFormat.Tiff)]
     [InlineData(ImageFormat.Jpeg)]
     [InlineData(ImageFormat.WebP)]
-    public void ByImageSharp(ImageFormat imageFormat)
+    public void ImageSharp(ImageFormat imageFormat)
     {
         var imageBytes = LoadBytes(imageFormat);
         using var stream = new MemoryStream(imageBytes);
@@ -62,6 +62,56 @@ public class ToBinaryTest : ImageTestBase
                 : GetPath($"{imageFormat}.bin", nameof(ToBinaryTest));
 
         //File.WriteAllBytes(binPath, actual.ToBytes());
+
+        actual.ToBytes().ShouldBeEquivalentTo(File.ReadAllBytes(binPath));
+    }
+#endif
+
+    [Theory]
+    [InlineData(ImageFormat.Tiff)]
+    [InlineData(ImageFormat.Jpeg)]
+    // 現状WebPは非対応
+    // [InlineData(ImageFormat.WebP)]
+    public void SystemDrawingByByteArray(ImageFormat imageFormat)
+    {
+        using var actual = SystemDrawingExtensions.ToBinary(LoadBytes(imageFormat));
+
+        var binPath = GetPath($"{imageFormat}-ByteArray.bin", nameof(ToBinaryTest));
+
+        // File.WriteAllBytes(binPath, actual.ToBytes());
+
+        actual.ToBytes().ShouldBeEquivalentTo(File.ReadAllBytes(binPath));
+    }
+
+    [Theory]
+    // SkiaSharpはTiffに対応していない
+    // [InlineData(ImageFormat.Tiff)]
+    [InlineData(ImageFormat.Jpeg)]
+    [InlineData(ImageFormat.WebP)]
+    public void SkiaSharpByteArray(ImageFormat imageFormat)
+    {
+        using var actual = SkiaSharpExtensions.ToBinary(LoadBytes(imageFormat));
+
+        var binPath = GetPath($"{imageFormat}-ByteArray.bin", nameof(ToBinaryTest));
+
+        // File.WriteAllBytes(binPath, actual.ToBytes());
+
+        actual.ToBytes().ShouldBeEquivalentTo(File.ReadAllBytes(binPath));
+    }
+
+#if NET8_0_OR_GREATER
+    [Theory]
+    [InlineData(ImageFormat.Tiff)]
+    [InlineData(ImageFormat.Jpeg)]
+    [InlineData(ImageFormat.WebP)]
+    public void ImageSharpByteArray(ImageFormat imageFormat)
+    {
+        using var actual = ImageSharpExtensions.ToBinary(LoadBytes(imageFormat));
+
+
+        var binPath = GetPath($"ByImageSharp-{imageFormat}-ByteArray.bin", nameof(ToBinaryTest));
+
+        // File.WriteAllBytes(binPath, actual.ToBytes());
 
         actual.ToBytes().ShouldBeEquivalentTo(File.ReadAllBytes(binPath));
     }

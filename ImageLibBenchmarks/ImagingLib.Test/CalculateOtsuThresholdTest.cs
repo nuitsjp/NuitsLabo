@@ -53,12 +53,12 @@ public class CalculateOtsuThresholdTest : ImageTestBase
     // [InlineData(ImageFormat.Tiff)]
     [InlineData(ImageFormat.Jpeg)]
     [InlineData(ImageFormat.WebP)]
-    public void CalculateOtsuThresholdByImageSharp(ImageFormat imageFormat)
+    public void ImageSharp(ImageFormat imageFormat)
     {
         var imageBytes = LoadBytes(imageFormat);
         using var stream = new MemoryStream(imageBytes);
         using var imageSharp = SixLabors.ImageSharp.Image.Load<SixLabors.ImageSharp.PixelFormats.Rgba32>(stream);
-        var actual = imageSharp.CalculateOtsu();
+        var actual = imageSharp.CalculateOtsuThreshold();
 
         var expected = imageFormat == ImageFormat.Tiff ? 75 : 69;
         actual.ShouldBe(expected);

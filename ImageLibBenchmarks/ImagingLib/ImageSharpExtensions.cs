@@ -2,6 +2,7 @@
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace ImagingLib;
 
@@ -24,13 +25,21 @@ public static class ImageSharpExtensions
     /// </summary>
     private const int BlueFactor = (int)(0.114478 * 1024);
 
+    public static Binary ToBinary(this byte[] data)
+    {
+        using var stream = new MemoryStream(data);
+        using var imageSharp = Image.Load<Rgba32>(stream);
+        var threshold = imageSharp.CalculateOtsuThreshold();
+        return imageSharp.ToBinary(threshold);
+    }
+
     /// <summary>
     /// Otsu の二値化により最適なしきい値を求める (百分率で返す)。
     /// ImageSharp は 1bpp をサポートしないため、そのチェックは行っていません。
     /// </summary>
     /// <param name="image">対象の Image&lt;Rgba32&gt; 画像</param>
     /// <returns>最適なしきい値 (Threshold 型にキャスト)</returns>
-    public static int CalculateOtsu(this Image<Rgba32> image)
+    public static int CalculateOtsuThreshold(this Image<Rgba32> image)
     {
         var width = image.Width;
         var height = image.Height;

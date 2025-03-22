@@ -24,6 +24,13 @@ public static class SystemDrawingExtensions
     /// </summary>
     private const int BlueFactor = (int)(0.114478 * 1024);
 
+    public static Binary ToBinary(this byte[] data)
+    {
+        using var bitmap = (Bitmap)Image.FromStream(new MemoryStream(data));
+        var threshold = bitmap.CalculateOtsuThreshold();
+        return bitmap.ToBinary(threshold);
+    }
+
     /// <summary>
     /// 大津の二値化によるしきい値を求める。
     /// </summary>

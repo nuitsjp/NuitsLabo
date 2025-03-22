@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagingLib.Test", "ImagingL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks.SingleThread", "Benchmarks.SingleThread\Benchmarks.SingleThread.csproj", "{6F7F0648-1944-4D3E-A850-087948B4391D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{88A2617A-8279-4339-9C8F-E4BFC9FAAE24}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{6F7F0648-1944-4D3E-A850-087948B4391D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F7F0648-1944-4D3E-A850-087948B4391D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F7F0648-1944-4D3E-A850-087948B4391D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88A2617A-8279-4339-9C8F-E4BFC9FAAE24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88A2617A-8279-4339-9C8F-E4BFC9FAAE24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88A2617A-8279-4339-9C8F-E4BFC9FAAE24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88A2617A-8279-4339-9C8F-E4BFC9FAAE24}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
