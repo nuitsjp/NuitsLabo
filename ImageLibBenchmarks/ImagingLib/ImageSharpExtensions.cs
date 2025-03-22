@@ -56,10 +56,8 @@ public static class ImageSharpExtensions
         return histogram.OptimalThreshold(width, height);
     }
 
-    public static unsafe Binary TobBinary(this byte[] imageBytes, float threshold)
+    public static unsafe Binary ToBinary(this Image<Rgba32> image, float threshold)
     {
-        // ImageSharp により Rgba32 として画像を読み込む
-        using var image = Image.Load<Rgba32>(imageBytes);
         var width = image.Width;
         var height = image.Height;
 

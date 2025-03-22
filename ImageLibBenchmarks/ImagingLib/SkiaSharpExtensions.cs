@@ -90,13 +90,8 @@ public static class SkiaSharpExtensions
     /// SkiaSharpを用いて画像を二値化し、Binaryを返す。
     /// 画像は通常SKBitmapは32bpp（BGRA）として読み込まれるため、各ピクセルは4バイト分のデータとなる。
     /// </summary>
-    public static unsafe Binary ToBinary(this byte[] imageBytes, float threshold)
+    public static unsafe Binary ToBinary(this SKBitmap skBitmap, float threshold)
     {
-        // SKBitmap.Decode(byte[]) は内部で MemoryStream を生成してデコードする
-        using var skBitmap = SKBitmap.Decode(imageBytes);
-        if (skBitmap == null)
-            throw new InvalidOperationException("画像のデコードに失敗しました。");
-
         var width = skBitmap.Width;
         var height = skBitmap.Height;
         var srcStride = skBitmap.RowBytes; // 1行あたりのバイト数（通常 width * 4 となる）

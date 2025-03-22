@@ -90,10 +90,8 @@ public static class SystemDrawingExtensions
         }
     }
 
-    public static unsafe Binary ToBinary(this byte[] imageBytes, float threshold)
+    public static unsafe Binary ToBinary(this Bitmap bitmap, float threshold)
     {
-        using var bitmap = (Bitmap)Image.FromStream(new MemoryStream(imageBytes));
-
         // すでに1bppIndexedの場合は、ロックしたデータをコピーして返す
         if (bitmap.PixelFormat == PixelFormat.Format1bppIndexed)
         {
