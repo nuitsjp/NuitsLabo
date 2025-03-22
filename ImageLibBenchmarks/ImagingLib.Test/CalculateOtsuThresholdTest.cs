@@ -47,4 +47,21 @@ public class CalculateOtsuThresholdTest : ImageTestBase
         actual.ShouldBe(expected);
     }
 
+#if NET8_0_OR_GREATER
+    [Theory]
+    // [InlineData(ImageFormat.Tiff)]
+    [InlineData(ImageFormat.Jpeg)]
+    [InlineData(ImageFormat.WebP)]
+    public void CalculateOtsuThresholdByImageSharp(ImageFormat imageFormat)
+    {
+        var imageBytes = LoadBytes(imageFormat);
+        using var stream = new MemoryStream(imageBytes);
+        using var imageSharp = SixLabors.ImageSharp.Image.Load<SixLabors.ImageSharp.PixelFormats.Rgba32>(stream);
+        var actual = imageSharp.CalculateOtsu();
+
+        var expected = imageFormat == ImageFormat.Tiff ? 75 : 69;
+        actual.ShouldBe(expected);
+    }
+
+#endif
 }
