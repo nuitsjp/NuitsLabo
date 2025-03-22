@@ -1,5 +1,6 @@
 ﻿using System.Drawing.Imaging;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace ImagingLib;
 
@@ -20,83 +21,95 @@ public static class Binarize
     /// </summary>
     private const int BlueFactor = (int)(0.114478 * 1024);
 
-    /// <summary>
-    /// 画像を自動しきい値で二値化してロードする。
-    /// </summary>
-    /// <param name="bitmap"></param>
-    /// <param name="threshold"></param>
-    /// <returns></returns>
-    public static unsafe Bitmap ToBinary(this Bitmap bitmap, float threshold)
+    public static unsafe Binary ToBinary(this Bitmap bitmap, float threshold)
     {
-        // 1bppIndexedの場合はそのまま返す
+        // すでに1bppIndexedの場合は、ロックしたデータをコピーして返す
         if (bitmap.PixelFormat == PixelFormat.Format1bppIndexed)
         {
-            return bitmap;
+            var bitmapData = bitmap.LockBits(
+                new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                ImageLockMode.ReadOnly, PixelFormat.Format1bppIndexed);
+            try
+            {
+                var height = bitmapData.Height;
+                var stride = bitmapData.Stride;
+                // 出力用メモリを確保（呼び出し側で解放）
+                var outBuffer = Marshal.AllocHGlobal(stride * height);
+                var srcPtr = (byte*)bitmapData.Scan0;
+                var destPtr = (byte*)outBuffer;
+                for (var i = 0; i < stride * height; i++)
+                {
+                    destPtr[i] = srcPtr[i];
+                }
+                return new Binary(
+                    outBuffer,
+                    bitmapData.Width,
+                    bitmapData.Height,
+                    bitmapData.Stride);
+            }
+            finally
+            {
+                bitmap.UnlockBits(bitmapData);
+            }
         }
 
-        // もとのBitmapをロックする
-        var bitmapData = bitmap.LockBits(
+        // 元のBitmapを24bppRgbとしてロック
+        var srcData = bitmap.LockBits(
             new Rectangle(0, 0, bitmap.Width, bitmap.Height),
             ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
         try
         {
-            // 1bppイメージを作成する
-            Bitmap binBitmap =
-                new(bitmapData.Width, bitmapData.Height, PixelFormat.Format1bppIndexed);
-            // 解像度を合わせる
-            binBitmap.SetResolution(bitmap.HorizontalResolution, bitmap.VerticalResolution);
+            var width = srcData.Width;
+            var height = srcData.Height;
+            var srcStride = srcData.Stride;
 
-            // 新しいBitmapをロックする
-            var binBitmapData = binBitmap.LockBits(
-                new Rectangle(0, 0, binBitmap.Width, binBitmap.Height),
-                ImageLockMode.WriteOnly, binBitmap.PixelFormat);
-            try
+            // 1bpp画像のストライドは、各行が4バイト境界に揃えられるため次式で計算
+            var binStride = ((width + 7) / 8 + 3) & ~3;
+
+            // 出力先メモリの確保（解放は呼び出し側に委ねる）
+            var outBuffer = Marshal.AllocHGlobal(binStride * height);
+
+            // 確保したメモリ領域をゼロで初期化
+            var binPtr = (byte*)outBuffer;
+            for (var i = 0; i < binStride * height; i++)
             {
-                var srcPtr = (byte*)bitmapData.Scan0;
-                var srcStride = bitmapData.Stride;
-                // しきい値を計算する。
-                // グレイスケール化する際に、明度は0～255の範囲で取得されるため、しきい値を0～255の範囲に合わせる。
-                var grayScaleThreshold = (int)(256 * threshold / 100f);
 
-                //　新しい画像のピクセルデータを作成する
-                var pixels = (byte*)binBitmapData.Scan0;
-                for (var y = 0; y < binBitmapData.Height; y++)
+                binPtr[i] = 0;
+            }
+
+            // しきい値を0～255の範囲に合わせる
+            var grayScaleThreshold = (int)(256 * threshold / 100f);
+
+            var srcPtr = (byte*)srcData.Scan0;
+            for (var y = 0; y < height; y++)
+            {
+                for (var x = 0; x < width; x++)
                 {
-                    for (var x = 0; x < binBitmapData.Width; x++)
-                    {
-                        //　明るさがしきい値以上の時は白くする
-                        var position = x * 3 + srcStride * y;
-                        var b = srcPtr[position + 0];
-                        var g = srcPtr[position + 1];
-                        var r = srcPtr[position + 2];
-                        var grayScale = (r * RedFactor + g * GreenFactor + b * BlueFactor) >> 10;
+                    var pos = x * 3 + y * srcStride;
+                    var b = srcPtr[pos + 0];
+                    var g = srcPtr[pos + 1];
+                    var r = srcPtr[pos + 2];
+                    var grayScale = (r * RedFactor + g * GreenFactor + b * BlueFactor) >> 10;
 
-                        if (grayScaleThreshold <= grayScale)
-                        {
-                            //ピクセルデータの位置
-                            var pos = (x >> 3) + binBitmapData.Stride * y;
-                            //白くする
-                            pixels[pos] |= (byte)(0x80 >> (x & 0x7));
-                        }
+                    if (grayScaleThreshold <= grayScale)
+                    {
+                        // 書き込み先メモリの該当バイト位置を算出し、対応するビットをONにする
+                        var outPos = (x >> 3) + y * binStride;
+                        binPtr[outPos] |= (byte)(0x80 >> (x & 0x7));
                     }
                 }
+            }
 
-                return binBitmap;
-            }
-            catch
-            {
-                binBitmap.UnlockBits(binBitmapData);
-                binBitmap.Dispose();
-                throw;
-            }
-            finally
-            {
-                binBitmap.UnlockBits(binBitmapData);
-            }
+            return new Binary(
+                outBuffer,
+                width,
+                height,
+                binStride);
         }
         finally
         {
-            bitmap.UnlockBits(bitmapData);
+            bitmap.UnlockBits(srcData);
         }
     }
+
 }

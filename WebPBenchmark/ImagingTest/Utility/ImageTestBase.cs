@@ -26,6 +26,10 @@ public abstract class ImageTestBase
     {
         var fileInfo = new FileInfo(filePath);
         var directory = fileInfo.Directory!;
+        if (directory.Exists is false)
+        {
+            directory.Create();
+        }
         return Path.Combine(directory.FullName, memberName, fileName);
     }
 }
