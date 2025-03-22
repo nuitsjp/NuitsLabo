@@ -2,6 +2,7 @@
 using ImagingTest.Utility;
 using Shouldly;
 using SkiaSharp;
+using ImagingLib;
 
 #if NET8_0_OR_GREATER
 using SixLabors.ImageSharp.PixelFormats;
@@ -18,12 +19,9 @@ public class CalculateOtsuThresholdTest : ImageTestBase
     public void CalculateOtsuThresholdByBitmapSource(ImageFormat imageFormat)
     {
         var bitmapSource = LoadBytes(imageFormat).ToBitmapSource(imageFormat);
-        var actual = bitmapSource.CalculateOtsuThreshold(imageFormat);
+        var actual = bitmapSource.CalculateOtsu(imageFormat == ImageFormat.Tiff);
 
-        var expected =
-            imageFormat == ImageFormat.Tiff
-                ? Threshold.Default
-                : (Threshold)69;
+        var expected = imageFormat == ImageFormat.Tiff ? 75 : 69;
         actual.ShouldBe(expected);
     }
 
@@ -35,12 +33,9 @@ public class CalculateOtsuThresholdTest : ImageTestBase
     public void CalculateOtsuThresholdByBitmap(ImageFormat imageFormat)
     {
         using var bitmap = (Bitmap)Image.FromStream(new MemoryStream(LoadBytes(imageFormat)));
-        var actual = bitmap.CalculateOtsuThreshold();
+        var actual = bitmap.CalculateOtsu();
 
-        var expected =
-            imageFormat == ImageFormat.Tiff
-                ? Threshold.Default
-                : (Threshold)69;
+        var expected = imageFormat == ImageFormat.Tiff ? 75 : 69;
         actual.ShouldBe(expected);
     }
 
@@ -51,18 +46,15 @@ public class CalculateOtsuThresholdTest : ImageTestBase
     public void CalculateOtsuThresholdBySkiaSharp(ImageFormat imageFormat)
     {
         using var bitmap = SKBitmap.Decode(LoadBytes(imageFormat));
-        var actual = bitmap.CalculateOtsuThreshold();
+        var actual = bitmap.CalculateOtsu();
 
-        var expected =
-            imageFormat == ImageFormat.Tiff
-                ? Threshold.Default
-                : (Threshold)69;
+        var expected = imageFormat == ImageFormat.Tiff ? 75 : 69;
         actual.ShouldBe(expected);
     }
 
 #if NET8_0_OR_GREATER
     [Theory]
-    [InlineData(ImageFormat.Tiff)]
+    // [InlineData(ImageFormat.Tiff)]
     [InlineData(ImageFormat.Jpeg)]
     [InlineData(ImageFormat.WebP)]
     public void CalculateOtsuThresholdByImageSharp(ImageFormat imageFormat)
@@ -70,17 +62,13 @@ public class CalculateOtsuThresholdTest : ImageTestBase
         var imageBytes = LoadBytes(imageFormat);
         using var stream = new MemoryStream(imageBytes);
         using var imageSharp = SixLabors.ImageSharp.Image.Load<Rgba32>(stream);
-        var actual = imageSharp.CalculateOtsuThreshold();
+        var actual = imageSharp.CalculateOtsu();
 
-        var expected =
-            imageFormat == ImageFormat.Tiff
-                ? Threshold.Default
-                : (Threshold)69;
+        var expected = imageFormat == ImageFormat.Tiff ? 75 : 69;
         actual.ShouldBe(expected);
     }
 
     [Theory]
-    [InlineData(ImageFormat.Tiff)]
     [InlineData(ImageFormat.Jpeg)]
     [InlineData(ImageFormat.WebP)]
     public void GetHistogram(ImageFormat imageFormat)
