@@ -1,6 +1,7 @@
 ﻿#if NET8_0_OR_GREATER
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp;
+using System.Runtime.InteropServices;
 
 namespace ImagingLib;
 
@@ -53,6 +54,53 @@ public static class ImageSharpExtensions
         });
 
         return histogram.OptimalThreshold(width, height);
+    }
+
+    public static unsafe Binary TobBinary(this byte[] imageBytes, float threshold)
+    {
+        // ImageSharp により Rgba32 として画像を読み込む
+        using var image = Image.Load<Rgba32>(imageBytes);
+        var width = image.Width;
+        var height = image.Height;
+
+        // 1bpp画像のストライドは、各行が4バイト境界に揃えられる
+        var binStride = ((width + 7) / 8 + 3) & ~3;
+
+        // 出力先バッファの確保（解放は呼び出し側に委ねる）
+        var outBuffer = Marshal.AllocHGlobal(binStride * height);
+
+        // バッファのゼロ初期化
+        var binPtr = (byte*)outBuffer;
+        for (var i = 0; i < binStride * height; i++)
+        {
+            binPtr[i] = 0;
+        }
+
+        // しきい値を 0～255 の範囲に合わせる
+        var grayScaleThreshold = (int)(256 * threshold / 100f);
+
+        // 各行のピクセルを走査して二値化処理を実施
+        image.ProcessPixelRows(accessor =>
+        {
+            for (var y = 0; y < height; y++)
+            {
+                var rowSpan = accessor.GetRowSpan(y);
+                for (var x = 0; x < width; x++)
+                {
+                    var pixel = rowSpan[x];
+                    // グレースケール値の算出（各色の重み付け）
+                    var grayScale = (pixel.R * RedFactor + pixel.G * GreenFactor + pixel.B * BlueFactor) >> 10;
+                    if (grayScale >= grayScaleThreshold)
+                    {
+                        // 対応するバイト位置とビット位置を算出して白（1）に設定
+                        var outPos = (x >> 3) + y * binStride;
+                        binPtr[outPos] |= (byte)(0x80 >> (x & 0x7));
+                    }
+                }
+            }
+        });
+
+        return new Binary(outBuffer, width, height, binStride);
     }
 }
 #endif
