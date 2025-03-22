@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.IO;
 using Shouldly;
+using SkiaSharp;
 
 namespace ImagingLib.Test;
 
@@ -24,7 +25,7 @@ public class CalculateOtsuThresholdTest : ImageTestBase
     [InlineData(ImageFormat.Tiff)]
     [InlineData(ImageFormat.Jpeg)]
     [InlineData(ImageFormat.WebP)]
-    public void CalculateOtsuThresholdByBitmapSource(ImageFormat imageFormat)
+    public void SystemWindows(ImageFormat imageFormat)
     {
         var bitmapSource = LoadBytes(imageFormat).ToBitmapSource(imageFormat);
         var actual = bitmapSource.CalculateOtsuThreshold(imageFormat == ImageFormat.Tiff);
@@ -32,4 +33,18 @@ public class CalculateOtsuThresholdTest : ImageTestBase
         var expected = imageFormat == ImageFormat.Tiff ? 75 : 69;
         actual.ShouldBe(expected);
     }
+
+    [Theory]
+    // [InlineData(ImageFormat.Tiff)] // SkiaSharpではTIFF未対応
+    [InlineData(ImageFormat.Jpeg)]
+    [InlineData(ImageFormat.WebP)]
+    public void SkiaSharp(ImageFormat imageFormat)
+    {
+        using var bitmap = SKBitmap.Decode(LoadBytes(imageFormat));
+        var actual = bitmap.CalculateOtsu();
+
+        var expected = imageFormat == ImageFormat.Tiff ? 75 : 69;
+        actual.ShouldBe(expected);
+    }
+
 }
