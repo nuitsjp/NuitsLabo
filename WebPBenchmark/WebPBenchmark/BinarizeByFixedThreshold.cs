@@ -8,7 +8,8 @@ using WebPBenchmark.Extensions;
 namespace WebPBenchmark;
 
 [MemoryDiagnoser]
-[SimpleJob]
+[SimpleJob(launchCount: 1, warmupCount: 1, iterationCount: 1, invocationCount: 1)]
+// [SimpleJob]
 public class BinarizeByFixedThreshold : BaseBenchmark
 {
     private readonly byte[] _data = File.ReadAllBytes("Color.jpg");
