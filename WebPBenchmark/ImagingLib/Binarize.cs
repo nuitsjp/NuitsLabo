@@ -1,5 +1,6 @@
 ﻿using System.Drawing.Imaging;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace ImagingLib;
@@ -21,8 +22,10 @@ public static class Binarize
     /// </summary>
     private const int BlueFactor = (int)(0.114478 * 1024);
 
-    public static unsafe Binary ToBinary(this Bitmap bitmap, float threshold)
+    public static unsafe Binary BySystemDrawing(this byte[] imageBytes, float threshold)
     {
+        using var bitmap = (Bitmap)Image.FromStream(new MemoryStream(imageBytes));
+
         // すでに1bppIndexedの場合は、ロックしたデータをコピーして返す
         if (bitmap.PixelFormat == PixelFormat.Format1bppIndexed)
         {

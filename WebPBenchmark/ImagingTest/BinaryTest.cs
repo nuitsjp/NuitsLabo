@@ -15,8 +15,7 @@ public class BinaryTest : ImageTestBase
     // [InlineData(ImageFormat.WebP)]
     public void SystemDrawing(ImageFormat imageFormat)
     {
-        using var bitmap = (Bitmap)Image.FromStream(new MemoryStream(LoadBytes(imageFormat)));
-        using var actual = bitmap.ToBinary(75);
+        using var actual = LoadBytes(imageFormat).BySystemDrawing(75);
 
         var binPath = GetPath($"{nameof(SystemDrawing)}-{imageFormat}.bin");
 
