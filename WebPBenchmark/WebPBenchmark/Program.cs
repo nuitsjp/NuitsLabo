@@ -1,13 +1,7 @@
-﻿using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Environments;
-using BenchmarkDotNet.Jobs;
-using BenchmarkDotNet.Running;
-using BenchmarkDotNet.Toolchains.CsProj;
-using BenchmarkDotNet.Toolchains.DotNetCli;
-using Sharprompt;
+﻿using BenchmarkDotNet.Running;
 using WebPBenchmark;
 
-var summary = BenchmarkRunner.Run<BinarizeByOtsu>();
+var summary = BenchmarkRunner.Run<BinarizeByFixedThreshold>();
 
 //var jobs = new[] { Job.ShortRun, Job.Default };
 //var jobName = Prompt.Select("Job", jobs.Select(x => x.ToString()));
