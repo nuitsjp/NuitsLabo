@@ -13,11 +13,27 @@ public class BinaryTest : ImageTestBase
     [InlineData(ImageFormat.Jpeg)]
     // 現状WebPは非対応
     // [InlineData(ImageFormat.WebP)]
-    public void SystemDrawing(ImageFormat imageFormat)
+    public void BySystemDrawing(ImageFormat imageFormat)
     {
         using var actual = LoadBytes(imageFormat).BySystemDrawing(75);
 
-        var binPath = GetPath($"{nameof(SystemDrawing)}-{imageFormat}.bin");
+        var binPath = GetPath($"{imageFormat}.bin", nameof(BinaryTest));
+
+        // File.WriteAllBytes(binPath, actual.ToBytes());
+
+        actual.ToBytes().ShouldBeEquivalentTo(File.ReadAllBytes(binPath));
+    }
+
+    [Theory]
+    // SkiaSharpはTiffに対応していない
+    // [InlineData(ImageFormat.Tiff)]
+    [InlineData(ImageFormat.Jpeg)]
+    [InlineData(ImageFormat.WebP)]
+    public void BySkiaSharp(ImageFormat imageFormat)
+    {
+        using var actual = LoadBytes(imageFormat).BySkiaSharp(75);
+
+        var binPath = GetPath($"{imageFormat}.bin", nameof(BinaryTest));
 
         // File.WriteAllBytes(binPath, actual.ToBytes());
 

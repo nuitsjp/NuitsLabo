@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using SkiaSharp;
 
 namespace ImagingLib;
 
@@ -113,6 +114,62 @@ public static class Binarize
         {
             bitmap.UnlockBits(srcData);
         }
+    }
+
+    /// <summary>
+    /// SkiaSharpを用いて画像を二値化し、Binaryを返す。
+    /// 画像は通常SKBitmapは32bpp（BGRA）として読み込まれるため、各ピクセルは4バイト分のデータとなる。
+    /// </summary>
+    public static unsafe Binary BySkiaSharp(this byte[] imageBytes, float threshold)
+    {
+        // SKBitmap.Decode(byte[]) は内部で MemoryStream を生成してデコードする
+        using var skBitmap = SKBitmap.Decode(imageBytes);
+        if (skBitmap == null)
+            throw new InvalidOperationException("画像のデコードに失敗しました。");
+
+        int width = skBitmap.Width;
+        int height = skBitmap.Height;
+        int srcStride = skBitmap.RowBytes; // 1行あたりのバイト数（通常 width * 4 となる）
+
+        // SKBitmap のピクセルデータを取得（BGRA順）
+        var srcPtr = (byte*)skBitmap.GetPixels().ToPointer();
+
+        // 1bpp画像のストライドは、各行が4バイト境界に揃えられる
+        int binStride = ((width + 7) / 8 + 3) & ~3;
+
+        // 出力先メモリの確保（呼び出し側で解放）
+        IntPtr outBuffer = Marshal.AllocHGlobal(binStride * height);
+
+        // ゼロ初期化
+        byte* binPtr = (byte*)outBuffer;
+        for (int i = 0; i < binStride * height; i++)
+        {
+            binPtr[i] = 0;
+        }
+
+        // しきい値を0～255の範囲に合わせる
+        int grayScaleThreshold = (int)(256 * threshold / 100f);
+
+        // SKBitmap は通常 32bpp（BGRA）のため、1ピクセルあたり4バイト分のデータ
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                int pos = x * 4 + y * srcStride;
+                byte b = srcPtr[pos + 0];
+                byte g = srcPtr[pos + 1];
+                byte r = srcPtr[pos + 2];
+                int grayScale = (r * RedFactor + g * GreenFactor + b * BlueFactor) >> 10;
+
+                if (grayScaleThreshold <= grayScale)
+                {
+                    int outPos = (x >> 3) + y * binStride;
+                    binPtr[outPos] |= (byte)(0x80 >> (x & 0x7));
+                }
+            }
+        }
+
+        return new Binary(outBuffer, width, height, binStride);
     }
 
 }
