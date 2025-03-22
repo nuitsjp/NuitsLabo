@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Runtime.CompilerServices;
 
-namespace ImagingLib.Test;
+namespace ImagingLib.Test.Utility;
 
 public abstract class ImageTestBase
 {

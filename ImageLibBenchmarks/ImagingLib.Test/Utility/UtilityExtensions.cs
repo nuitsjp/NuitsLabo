@@ -1,8 +1,7 @@
-﻿
-using System.IO;
+﻿using System.IO;
 using System.Windows.Media.Imaging;
 
-namespace ImagingLib.Test;
+namespace ImagingLib.Test.Utility;
 
 public static class UtilityExtensions
 {

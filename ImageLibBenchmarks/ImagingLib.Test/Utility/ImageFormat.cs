@@ -1,4 +1,4 @@
-﻿namespace ImagingLib.Test;
+﻿namespace ImagingLib.Test.Utility;
 
 /// <summary>
 /// 画像フォーマットID

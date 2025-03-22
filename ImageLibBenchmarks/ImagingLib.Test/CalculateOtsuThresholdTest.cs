@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.IO;
+using ImagingLib.Test.Utility;
 using Shouldly;
 using SkiaSharp;
 
