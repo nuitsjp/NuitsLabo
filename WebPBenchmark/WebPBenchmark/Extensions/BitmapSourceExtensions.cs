@@ -1,5 +1,4 @@
-﻿using System.Drawing.Imaging;
-using System.IO;
+﻿using System.IO;
 using System.Windows.Media.Imaging;
 
 namespace WebPBenchmark.Extensions;

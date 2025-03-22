@@ -1,12 +1,8 @@
-﻿using System.Drawing.Imaging;
-using System.Drawing;
-using System.IO;
-using System.Runtime.InteropServices;
+﻿using System.IO;
 using BenchmarkDotNet.Attributes;
 using System.Windows.Media.Imaging;
 using ImageMagick;
 using ImagingLib;
-using Rectangle = System.Drawing.Rectangle;
 using WebPBenchmark.Extensions;
 
 namespace WebPBenchmark;

@@ -1,12 +1,10 @@
-﻿using System.Diagnostics;
-using System.Drawing.Imaging;
+﻿using System.Drawing.Imaging;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using Rectangle = System.Drawing.Rectangle;
-using SkiaSharp;
 
 
 #if NET8_0_OR_GREATER

@@ -1,8 +1,6 @@
 ﻿using ImagingTest.Utility;
-using System.Drawing;
 using ImagingLib;
 using Shouldly;
-using System.Runtime.InteropServices;
 
 namespace ImagingTest;
 
