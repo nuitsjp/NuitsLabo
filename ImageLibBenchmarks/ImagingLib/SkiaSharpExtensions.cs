@@ -43,11 +43,6 @@ public static class SkiaSharpExtensions
         var histogram = new int[256];
         long sumHistogram = 0;
 
-        // グレースケール変換用の係数（各値は元の0.299, 0.587, 0.114を1024倍したもの）
-        const int RedFactor = 306;
-        const int GreenFactor = 601;
-        const int BlueFactor = 117;
-
         // SKBitmapのピクセルデータにアクセス
         var pixmap = bitmap.PeekPixels();
         if (pixmap == null || pixmap.GetPixels() == IntPtr.Zero)
