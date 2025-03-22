@@ -7,8 +7,8 @@ using ImagingLib;
 namespace Benchmarks.SingleThread;
 
 [MemoryDiagnoser]
-[SimpleJob(launchCount: 1, warmupCount: 1, iterationCount: 1, invocationCount: 1)]
-// [SimpleJob]
+//[SimpleJob(launchCount: 1, warmupCount: 1, iterationCount: 1, invocationCount: 1)]
+[SimpleJob]
 public class ToBinaryBenchmarks : BenchmarkBase
 {
     private readonly byte[] _data = File.ReadAllBytes("Color.jpg");

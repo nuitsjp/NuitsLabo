@@ -22,11 +22,103 @@ public static class SkiaSharpExtensions
     /// </summary>
     private const int BlueFactor = (int)(0.114478 * 1024);
 
-    public static Binary ToBinary(this byte[] data)
+    public static unsafe Binary ToBinary(this byte[] data)
     {
         using var bitmap = SKBitmap.Decode(data);
-        var threshold = bitmap.CalculateOtsu();
-        return bitmap.ToBinary(threshold);
+        var width = bitmap.Width;
+        var height = bitmap.Height;
+        var totalPixels = width * height;
+        var histogram = new int[256];
+        long sumHistogram = 0;
+
+        // SKBitmapのピクセルデータにアクセス
+        var pixmap = bitmap.PeekPixels();
+        var pixels = pixmap.GetPixels();
+        if (pixmap == null || pixels == IntPtr.Zero)
+            throw new InvalidOperationException("ピクセルデータにアクセスできませんでした。");
+
+        // unsafeコードで各ピクセルにアクセス
+        var pixelPointer = (byte*)pixels.ToPointer();
+        var rowBytes = pixmap.RowBytes;
+        var colorType = pixmap.ColorType;
+        for (var y = 0; y < height; y++)
+        {
+            var row = pixelPointer + y * rowBytes;
+            for (var x = 0; x < width; x++)
+            {
+                var pixelOffset = x * 4; // 通常は4バイト/ピクセル（Rgba8888またはBgra8888）
+                byte r, g, b;
+                switch (colorType)
+                {
+                    case SKColorType.Rgba8888:
+                        r = row[pixelOffset + 0];
+                        g = row[pixelOffset + 1];
+                        b = row[pixelOffset + 2];
+                        break;
+                    case SKColorType.Bgra8888:
+                        b = row[pixelOffset + 0];
+                        g = row[pixelOffset + 1];
+                        r = row[pixelOffset + 2];
+                        break;
+                    default:
+                    {
+                        // 万が一他の形式の場合はGetPixelで取得（ただしパフォーマンスは低下します）
+                        var color = bitmap.GetPixel(x, y);
+                        r = color.Red;
+                        g = color.Green;
+                        b = color.Blue;
+                        break;
+                    }
+                }
+
+                // グレースケール化（右シフト10で1024で除算）
+                var gray = (r * RedFactor + g * GreenFactor + b * BlueFactor) >> 10;
+                histogram[gray]++;
+            }
+        }
+
+        var threshold = histogram.OptimalThreshold(width, height);
+        var srcStride = bitmap.RowBytes; // 1行あたりのバイト数（通常 width * 4 となる）
+
+        // SKBitmap のピクセルデータを取得（BGRA順）
+        var srcPtr = (byte*)pixels.ToPointer();
+
+        // 1bpp画像のストライドは、各行が4バイト境界に揃えられる
+        var binStride = ((width + 7) / 8 + 3) & ~3;
+
+        // 出力先メモリの確保（呼び出し側で解放）
+        var outBuffer = Marshal.AllocHGlobal(binStride * height);
+
+        // ゼロ初期化
+        var binPtr = (byte*)outBuffer;
+        for (var i = 0; i < binStride * height; i++)
+        {
+            binPtr[i] = 0;
+        }
+
+        // しきい値を0～255の範囲に合わせる
+        var grayScaleThreshold = (int)(256 * (float)threshold / 100f);
+
+        // SKBitmap は通常 32bpp（BGRA）のため、1ピクセルあたり4バイト分のデータ
+        for (var y1 = 0; y1 < height; y1++)
+        {
+            for (var x1 = 0; x1 < width; x1++)
+            {
+                var pos = x1 * 4 + y1 * srcStride;
+                var b1 = srcPtr[pos + 0];
+                var g1 = srcPtr[pos + 1];
+                var r1 = srcPtr[pos + 2];
+                var grayScale = (r1 * RedFactor + g1 * GreenFactor + b1 * BlueFactor) >> 10;
+
+                if (grayScaleThreshold <= grayScale)
+                {
+                    var outPos = (x1 >> 3) + y1 * binStride;
+                    binPtr[outPos] |= (byte)(0x80 >> (x1 & 0x7));
+                }
+            }
+        }
+
+        return new Binary(outBuffer, width, height, binStride);
     }
 
     /// <summary>
@@ -45,38 +137,42 @@ public static class SkiaSharpExtensions
 
         // SKBitmapのピクセルデータにアクセス
         var pixmap = bitmap.PeekPixels();
-        if (pixmap == null || pixmap.GetPixels() == IntPtr.Zero)
+        var pixels = pixmap.GetPixels();
+        if (pixmap == null || pixels == IntPtr.Zero)
             throw new InvalidOperationException("ピクセルデータにアクセスできませんでした。");
 
         // unsafeコードで各ピクセルにアクセス
-        var pixels = (byte*)pixmap.GetPixels().ToPointer();
+        var pixelPointer = (byte*)pixels.ToPointer();
         var rowBytes = pixmap.RowBytes;
+        var colorType = pixmap.ColorType;
         for (var y = 0; y < height; y++)
         {
-            var row = pixels + y * rowBytes;
+            var row = pixelPointer + y * rowBytes;
             for (var x = 0; x < width; x++)
             {
                 var pixelOffset = x * 4; // 通常は4バイト/ピクセル（Rgba8888またはBgra8888）
                 byte r, g, b;
-                if (pixmap.ColorType == SKColorType.Rgba8888)
+                switch (colorType)
                 {
-                    r = row[pixelOffset + 0];
-                    g = row[pixelOffset + 1];
-                    b = row[pixelOffset + 2];
-                }
-                else if (pixmap.ColorType == SKColorType.Bgra8888)
-                {
-                    b = row[pixelOffset + 0];
-                    g = row[pixelOffset + 1];
-                    r = row[pixelOffset + 2];
-                }
-                else
-                {
-                    // 万が一他の形式の場合はGetPixelで取得（ただしパフォーマンスは低下します）
-                    var color = bitmap.GetPixel(x, y);
-                    r = color.Red;
-                    g = color.Green;
-                    b = color.Blue;
+                    case SKColorType.Rgba8888:
+                        r = row[pixelOffset + 0];
+                        g = row[pixelOffset + 1];
+                        b = row[pixelOffset + 2];
+                        break;
+                    case SKColorType.Bgra8888:
+                        b = row[pixelOffset + 0];
+                        g = row[pixelOffset + 1];
+                        r = row[pixelOffset + 2];
+                        break;
+                    default:
+                    {
+                        // 万が一他の形式の場合はGetPixelで取得（ただしパフォーマンスは低下します）
+                        var color = bitmap.GetPixel(x, y);
+                        r = color.Red;
+                        g = color.Green;
+                        b = color.Blue;
+                        break;
+                    }
                 }
 
                 // グレースケール化（右シフト10で1024で除算）

@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Benchmarks\Be
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks.Decode", "Benchmarks.Decode\Benchmarks.Decode.csproj", "{70E6BE43-66D0-44B2-AA2B-195A5F65A390}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profiling", "Profiling\Profiling.csproj", "{63ADCC5C-EB55-4931-BBF0-5EE76227D8E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{70E6BE43-66D0-44B2-AA2B-195A5F65A390}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70E6BE43-66D0-44B2-AA2B-195A5F65A390}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70E6BE43-66D0-44B2-AA2B-195A5F65A390}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63ADCC5C-EB55-4931-BBF0-5EE76227D8E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63ADCC5C-EB55-4931-BBF0-5EE76227D8E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63ADCC5C-EB55-4931-BBF0-5EE76227D8E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63ADCC5C-EB55-4931-BBF0-5EE76227D8E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
