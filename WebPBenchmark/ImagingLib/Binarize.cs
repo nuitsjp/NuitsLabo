@@ -3,6 +3,9 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using SkiaSharp;
+#if NET8_0_OR_GREATER
+using SixLabors.ImageSharp.PixelFormats;
+#endif
 
 namespace ImagingLib;
 
@@ -127,43 +130,43 @@ public static class Binarize
         if (skBitmap == null)
             throw new InvalidOperationException("画像のデコードに失敗しました。");
 
-        int width = skBitmap.Width;
-        int height = skBitmap.Height;
-        int srcStride = skBitmap.RowBytes; // 1行あたりのバイト数（通常 width * 4 となる）
+        var width = skBitmap.Width;
+        var height = skBitmap.Height;
+        var srcStride = skBitmap.RowBytes; // 1行あたりのバイト数（通常 width * 4 となる）
 
         // SKBitmap のピクセルデータを取得（BGRA順）
         var srcPtr = (byte*)skBitmap.GetPixels().ToPointer();
 
         // 1bpp画像のストライドは、各行が4バイト境界に揃えられる
-        int binStride = ((width + 7) / 8 + 3) & ~3;
+        var binStride = ((width + 7) / 8 + 3) & ~3;
 
         // 出力先メモリの確保（呼び出し側で解放）
-        IntPtr outBuffer = Marshal.AllocHGlobal(binStride * height);
+        var outBuffer = Marshal.AllocHGlobal(binStride * height);
 
         // ゼロ初期化
-        byte* binPtr = (byte*)outBuffer;
-        for (int i = 0; i < binStride * height; i++)
+        var binPtr = (byte*)outBuffer;
+        for (var i = 0; i < binStride * height; i++)
         {
             binPtr[i] = 0;
         }
 
         // しきい値を0～255の範囲に合わせる
-        int grayScaleThreshold = (int)(256 * threshold / 100f);
+        var grayScaleThreshold = (int)(256 * threshold / 100f);
 
         // SKBitmap は通常 32bpp（BGRA）のため、1ピクセルあたり4バイト分のデータ
-        for (int y = 0; y < height; y++)
+        for (var y = 0; y < height; y++)
         {
-            for (int x = 0; x < width; x++)
+            for (var x = 0; x < width; x++)
             {
-                int pos = x * 4 + y * srcStride;
-                byte b = srcPtr[pos + 0];
-                byte g = srcPtr[pos + 1];
-                byte r = srcPtr[pos + 2];
-                int grayScale = (r * RedFactor + g * GreenFactor + b * BlueFactor) >> 10;
+                var pos = x * 4 + y * srcStride;
+                var b = srcPtr[pos + 0];
+                var g = srcPtr[pos + 1];
+                var r = srcPtr[pos + 2];
+                var grayScale = (r * RedFactor + g * GreenFactor + b * BlueFactor) >> 10;
 
                 if (grayScaleThreshold <= grayScale)
                 {
-                    int outPos = (x >> 3) + y * binStride;
+                    var outPos = (x >> 3) + y * binStride;
                     binPtr[outPos] |= (byte)(0x80 >> (x & 0x7));
                 }
             }
@@ -171,5 +174,55 @@ public static class Binarize
 
         return new Binary(outBuffer, width, height, binStride);
     }
+
+#if NET8_0_OR_GREATER
+    public static unsafe Binary ByImageSharp(this byte[] imageBytes, float threshold)
+    {
+        // ImageSharp により Rgba32 として画像を読み込む
+        using var image = SixLabors.ImageSharp.Image.Load<Rgba32>(imageBytes);
+        var width = image.Width;
+        var height = image.Height;
+
+        // 1bpp画像のストライドは、各行が4バイト境界に揃えられる
+        var binStride = ((width + 7) / 8 + 3) & ~3;
+
+        // 出力先バッファの確保（解放は呼び出し側に委ねる）
+        var outBuffer = Marshal.AllocHGlobal(binStride * height);
+
+        // バッファのゼロ初期化
+        var binPtr = (byte*)outBuffer;
+        for (var i = 0; i < binStride * height; i++)
+        {
+            binPtr[i] = 0;
+        }
+
+        // しきい値を 0～255 の範囲に合わせる
+        var grayScaleThreshold = (int)(256 * threshold / 100f);
+
+        // 各行のピクセルを走査して二値化処理を実施
+        image.ProcessPixelRows(accessor =>
+        {
+            for (var y = 0; y < height; y++)
+            {
+                var rowSpan = accessor.GetRowSpan(y);
+                for (var x = 0; x < width; x++)
+                {
+                    var pixel = rowSpan[x];
+                    // グレースケール値の算出（各色の重み付け）
+                    var grayScale = (pixel.R * RedFactor + pixel.G * GreenFactor + pixel.B * BlueFactor) >> 10;
+                    if (grayScale >= grayScaleThreshold)
+                    {
+                        // 対応するバイト位置とビット位置を算出して白（1）に設定
+                        var outPos = (x >> 3) + y * binStride;
+                        binPtr[outPos] |= (byte)(0x80 >> (x & 0x7));
+                    }
+                }
+            }
+        });
+
+        return new Binary(outBuffer, width, height, binStride);
+    }
+
+#endif
 
 }
