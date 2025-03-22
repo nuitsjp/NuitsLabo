@@ -22,7 +22,12 @@ public static class SystemDrawingExtensions
     /// 二値化時に利用する青色の重み
     /// </summary>
     private const int BlueFactor = (int)(0.114478 * 1024);
-    
+
+    /// <summary>
+    /// 大津の二値化によるしきい値を求める。
+    /// </summary>
+    /// <param name="src"></param>
+    /// <returns></returns>
     public static unsafe int CalculateOtsuThreshold(this Bitmap src)
     {
         // 1bppIndexedの場合はデフォルトのしきい値を返す
