@@ -3,11 +3,11 @@ using System.IO;
 using BenchmarkDotNet.Attributes;
 using SkiaSharp;
 
-namespace Benchmarks.Decode;
+namespace Benchmarks;
 
 [MemoryDiagnoser]
-[SimpleJob(launchCount: 1, warmupCount: 1, iterationCount: 1, invocationCount: 1)]
-// [SimpleJob]
+//[SimpleJob(launchCount: 1, warmupCount: 1, iterationCount: 1, invocationCount: 1)]
+[SimpleJob]
 public class DecodeBenchmarks : BenchmarkBase
 {
     [Benchmark]

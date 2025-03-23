@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>Benchmarks.ToBinaryMultiThreadBenchmarks-20250323-204338</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.14.0, Windows 11 (10.0.26100.3476)
+AMD Ryzen 9 7950X, 1 CPU, 32 logical and 16 physical cores
+  [Host]     : .NET Framework 4.8.1 (4.8.9290.0), X64 RyuJIT VectorSize=256
+  Job-FBRPBF : .NET Framework 4.8.1 (4.8.9290.0), X64 RyuJIT VectorSize=256
+</code></pre>
+<pre><code>Runtime=.NET Framework 4.8.1  InvocationCount=1  IterationCount=1  
+LaunchCount=1  UnrollFactor=1  WarmupCount=1  
+</code></pre>
+
+<table>
+<thead><tr><th>Method </th><th>Format</th><th>Mean </th><th>Error</th><th>Gen0</th><th>Gen1</th><th>Gen2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>SystemDrawing</td><td>Jpeg</td><td>619.35 ms</td><td>NA</td><td>13000.0000</td><td>-</td><td>-</td><td>82932.61 KB</td>
+</tr><tr><td>SkiaSharp</td><td>Jpeg</td><td>618.98 ms</td><td>NA</td><td>-</td><td>-</td><td>-</td><td>248 KB</td>
+</tr><tr><td>LibTiff</td><td>Jpeg</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
+</tr><tr><td>MagickNet</td><td>Jpeg</td><td>1,071.98 ms</td><td>NA</td><td>8000.0000</td><td>8000.0000</td><td>8000.0000</td><td>3397796.84 KB</td>
+</tr><tr><td>SystemDrawing</td><td>Tiff</td><td>56.98 ms</td><td>NA</td><td>2000.0000</td><td>-</td><td>-</td><td>14082.36 KB</td>
+</tr><tr><td>SkiaSharp</td><td>Tiff</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
+</tr><tr><td>LibTiff</td><td>Tiff</td><td>50.51 ms</td><td>NA</td><td>4000.0000</td><td>1000.0000</td><td>-</td><td>25459.2 KB</td>
+</tr><tr><td>MagickNet</td><td>Tiff</td><td>916.19 ms</td><td>NA</td><td>7000.0000</td><td>7000.0000</td><td>7000.0000</td><td>3397734.18 KB</td>
+</tr><tr><td>SystemDrawing</td><td>WebP</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
+</tr><tr><td>SkiaSharp</td><td>WebP</td><td>672.41 ms</td><td>NA</td><td>-</td><td>-</td><td>-</td><td>248 KB</td>
+</tr><tr><td>LibTiff</td><td>WebP</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
+</tr><tr><td>MagickNet</td><td>WebP</td><td>1,333.51 ms</td><td>NA</td><td>9000.0000</td><td>9000.0000</td><td>9000.0000</td><td>3397814.98 KB</td>
+</tr></tbody></table>
+</body>
+</html>

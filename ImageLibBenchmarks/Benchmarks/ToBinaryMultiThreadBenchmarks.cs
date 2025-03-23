@@ -2,12 +2,14 @@
 using BenchmarkDotNet.Jobs;
 using ImagingLib;
 
-namespace Benchmarks.MultiThread;
+namespace Benchmarks;
 
 [MemoryDiagnoser]
-[SimpleJob] // net8.0-windows の場合も、こちらで実行されます
-// [SimpleJob(launchCount: 1, warmupCount: 1, iterationCount: 1, invocationCount: 1)]
-public class ToBinaryBenchmarks : BenchmarkBase
+//[SimpleJob(RuntimeMoniker.Net481, launchCount: 1, warmupCount: 1, iterationCount: 1, invocationCount: 1)]
+//[SimpleJob(RuntimeMoniker.Net80, launchCount: 1, warmupCount: 1, iterationCount: 1, invocationCount: 1)]
+[SimpleJob(RuntimeMoniker.Net481)]
+[SimpleJob(RuntimeMoniker.Net80)]
+public class ToBinaryMultiThreadBenchmarks : BenchmarkBase
 {
     [Benchmark]
     public async Task SystemDrawing()

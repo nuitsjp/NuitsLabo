@@ -1,12 +1,14 @@
 ﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Jobs;
 using ImagingLib;
 
-namespace Benchmarks.SingleThread;
+namespace Benchmarks;
 
 [MemoryDiagnoser]
 // [SimpleJob(launchCount: 1, warmupCount: 1, iterationCount: 1, invocationCount: 1)]
-[SimpleJob]
-public class ToBinaryBenchmarks : BenchmarkBase
+[SimpleJob(RuntimeMoniker.Net481)]
+[SimpleJob(RuntimeMoniker.Net80)]
+public class ToBinarySingleThreadBenchmarks : BenchmarkBase
 {
     [Benchmark]
     public void SystemDrawing()
