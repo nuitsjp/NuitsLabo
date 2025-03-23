@@ -118,6 +118,22 @@ public class ToBinaryTest : ImageTestBase
     [Theory]
     [InlineData(ImageFormat.Tiff)]
     [InlineData(ImageFormat.Jpeg)]
+    // WebPはAspose.Imagingが非対応
+    // [InlineData(ImageFormat.WebP)]
+    public void AsposeByByteArray(ImageFormat imageFormat)
+    {
+        using var actual = AsposeExtensions.ToBinary(LoadBytes(imageFormat));
+
+        var binPath = GetPath($"{imageFormat}-ByteArray.bin", nameof(ToBinaryTest));
+
+        // File.WriteAllBytes(binPath, actual.ToBytes());
+
+        actual.ToBytes().ShouldBeEquivalentTo(File.ReadAllBytes(binPath));
+    }
+
+    [Theory]
+    [InlineData(ImageFormat.Tiff)]
+    [InlineData(ImageFormat.Jpeg)]
     [InlineData(ImageFormat.WebP)]
     public void ImageSharpByteArray(ImageFormat imageFormat)
     {

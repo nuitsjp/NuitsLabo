@@ -7,8 +7,8 @@ using ImagingLib;
 namespace Benchmarks.SingleThread;
 
 [MemoryDiagnoser]
-// [SimpleJob(launchCount: 1, warmupCount: 1, iterationCount: 1, invocationCount: 1)]
-[SimpleJob]
+[SimpleJob(launchCount: 1, warmupCount: 1, iterationCount: 1, invocationCount: 1)]
+// [SimpleJob]
 public class ToBinaryBenchmarks : BenchmarkBase
 {
     private readonly byte[] _data = File.ReadAllBytes("Color.jpg");
@@ -63,6 +63,12 @@ public class ToBinaryBenchmarks : BenchmarkBase
     }
 
 #if NET8_0_OR_GREATER
+    [Benchmark]
+    public void Aspose()
+    {
+        using var bin = AsposeExtensions.ToBinary(Data);
+    }
+
     [Benchmark]
     public void ImageSharp()
     {
