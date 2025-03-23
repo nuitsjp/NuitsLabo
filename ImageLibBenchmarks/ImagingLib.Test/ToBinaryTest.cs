@@ -102,7 +102,7 @@ public class ToBinaryTest : ImageTestBase
     [Theory]
     // SkiaSharpはTiffに対応していない
     [InlineData(ImageFormat.Tiff)]
-    public void LibTiff(ImageFormat imageFormat)
+    public void LibTiffByteArray(ImageFormat imageFormat)
     {
         using var actual = LibTiffExtensions.ToBinary(LoadBytes(imageFormat));
 
@@ -113,6 +113,20 @@ public class ToBinaryTest : ImageTestBase
         actual.ToBytes().ShouldBeEquivalentTo(File.ReadAllBytes(binPath));
     }
 
+
+    [Theory]
+    [InlineData(ImageFormat.Jpeg)]
+    [InlineData(ImageFormat.WebP)]
+    public void MagickNetByteArray(ImageFormat imageFormat)
+    {
+        using var actual = MagickNetExtensions.ToBinary(LoadBytes(imageFormat));
+
+        var binPath = GetPath($"{imageFormat}-ByteArray.bin", nameof(ToBinaryTest));
+
+        // File.WriteAllBytes(binPath, actual.ToBytes());
+
+        actual.ToBytes().ShouldBeEquivalentTo(File.ReadAllBytes(binPath));
+    }
 
 #if NET8_0_OR_GREATER
     [Theory]
