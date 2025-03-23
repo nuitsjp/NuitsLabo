@@ -1,13 +1,15 @@
 ﻿using System.Drawing;
 using System.IO;
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Jobs;
 using SkiaSharp;
 
 namespace Benchmarks;
 
 [MemoryDiagnoser]
 //[SimpleJob(launchCount: 1, warmupCount: 1, iterationCount: 1, invocationCount: 1)]
-[SimpleJob]
+[SimpleJob(RuntimeMoniker.Net481)]
+[SimpleJob(RuntimeMoniker.Net80)]
 public class DecodeBenchmarks : BenchmarkBase
 {
     [Benchmark]

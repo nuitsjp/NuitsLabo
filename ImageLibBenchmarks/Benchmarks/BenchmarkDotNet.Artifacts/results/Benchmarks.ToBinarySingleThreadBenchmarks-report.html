@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8' />
-<title>Benchmarks.ToBinarySingleThreadBenchmarks-20250323-203841</title>
+<title>Benchmarks.ToBinarySingleThreadBenchmarks-20250324-054109</title>
 
 <style type="text/css">
 	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
@@ -15,38 +15,39 @@
 <pre><code>
 BenchmarkDotNet v0.14.0, Windows 11 (10.0.26100.3476)
 AMD Ryzen 9 7950X, 1 CPU, 32 logical and 16 physical cores
-  [Host]   : .NET Framework 4.8.1 (4.8.9290.0), X64 RyuJIT VectorSize=256
-  .NET 8.0 : .NET 8.0.14 (8.0.1425.11118), X64 RyuJIT AVX-512F+CD+BW+DQ+VL+VBMI
+  [Host]               : .NET Framework 4.8.1 (4.8.9290.0), X64 RyuJIT VectorSize=256
+  .NET 8.0             : .NET 8.0.14 (8.0.1425.11118), X64 RyuJIT AVX-512F+CD+BW+DQ+VL+VBMI
+  .NET Framework 4.8.1 : .NET Framework 4.8.1 (4.8.9290.0), X64 RyuJIT VectorSize=256
 </code></pre>
 <pre><code></code></pre>
 
 <table>
-<thead><tr><th>Method </th><th>Job         </th><th>Runtime     </th><th>Format</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Gen0</th><th>Gen1</th><th>Gen2</th><th>Allocated</th>
+<thead><tr><th>Method </th><th>Job           </th><th>Runtime       </th><th>Format</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Gen0</th><th>Gen1</th><th>Gen2</th><th>Allocated</th>
 </tr>
-</thead><tbody><tr><td>SystemDrawing</td><td>.NET 8.0</td><td>.NET 8.0</td><td>Jpeg</td><td>41.260 ms</td><td>0.8065 ms</td><td>1.2556 ms</td><td>-</td><td>-</td><td>-</td><td>1335 B</td>
-</tr><tr><td>SkiaSharp</td><td>.NET 8.0</td><td>.NET 8.0</td><td>Jpeg</td><td>56.373 ms</td><td>1.1221 ms</td><td>1.2922 ms</td><td>-</td><td>-</td><td>-</td><td>1536 B</td>
+</thead><tbody><tr><td>SystemDrawing</td><td>.NET 8.0</td><td>.NET 8.0</td><td>Jpeg</td><td>39.396 ms</td><td>0.7170 ms</td><td>0.8535 ms</td><td>-</td><td>-</td><td>-</td><td>1335 B</td>
+</tr><tr><td>SkiaSharp</td><td>.NET 8.0</td><td>.NET 8.0</td><td>Jpeg</td><td>53.950 ms</td><td>0.4231 ms</td><td>0.3533 ms</td><td>-</td><td>-</td><td>-</td><td>1536 B</td>
 </tr><tr><td>LibTiff</td><td>.NET 8.0</td><td>.NET 8.0</td><td>Jpeg</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
-</tr><tr><td>MagickNet</td><td>.NET 8.0</td><td>.NET 8.0</td><td>Jpeg</td><td>72.659 ms</td><td>1.4028 ms</td><td>1.1714 ms</td><td>571.4286</td><td>571.4286</td><td>571.4286</td><td>34791184 B</td>
-</tr><tr><td>SystemDrawing</td><td>.NET Framework 4.8</td><td>.NET Framework 4.8</td><td>Jpeg</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
-</tr><tr><td>SkiaSharp</td><td>.NET Framework 4.8</td><td>.NET Framework 4.8</td><td>Jpeg</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
-</tr><tr><td>LibTiff</td><td>.NET Framework 4.8</td><td>.NET Framework 4.8</td><td>Jpeg</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
-</tr><tr><td>MagickNet</td><td>.NET Framework 4.8</td><td>.NET Framework 4.8</td><td>Jpeg</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
-</tr><tr><td>SystemDrawing</td><td>.NET 8.0</td><td>.NET 8.0</td><td>Tiff</td><td>3.897 ms</td><td>0.0558 ms</td><td>0.0522 ms</td><td>-</td><td>-</td><td>-</td><td>258 B</td>
+</tr><tr><td>MagickNet</td><td>.NET 8.0</td><td>.NET 8.0</td><td>Jpeg</td><td>71.032 ms</td><td>1.2735 ms</td><td>1.1913 ms</td><td>571.4286</td><td>571.4286</td><td>571.4286</td><td>34791184 B</td>
+</tr><tr><td>SystemDrawing</td><td>.NET Framework 4.8.1</td><td>.NET Framework 4.8.1</td><td>Jpeg</td><td>40.089 ms</td><td>0.7847 ms</td><td>1.0203 ms</td><td>-</td><td>-</td><td>-</td><td>473246 B</td>
+</tr><tr><td>SkiaSharp</td><td>.NET Framework 4.8.1</td><td>.NET Framework 4.8.1</td><td>Jpeg</td><td>53.585 ms</td><td>0.6615 ms</td><td>0.5524 ms</td><td>-</td><td>-</td><td>-</td><td>2458 B</td>
+</tr><tr><td>LibTiff</td><td>.NET Framework 4.8.1</td><td>.NET Framework 4.8.1</td><td>Jpeg</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
+</tr><tr><td>MagickNet</td><td>.NET Framework 4.8.1</td><td>.NET Framework 4.8.1</td><td>Jpeg</td><td>76.692 ms</td><td>0.8826 ms</td><td>0.7824 ms</td><td>428.5714</td><td>428.5714</td><td>428.5714</td><td>34793234 B</td>
+</tr><tr><td>SystemDrawing</td><td>.NET 8.0</td><td>.NET 8.0</td><td>Tiff</td><td>3.802 ms</td><td>0.0248 ms</td><td>0.0207 ms</td><td>-</td><td>-</td><td>-</td><td>258 B</td>
 </tr><tr><td>SkiaSharp</td><td>.NET 8.0</td><td>.NET 8.0</td><td>Tiff</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
-</tr><tr><td>LibTiff</td><td>.NET 8.0</td><td>.NET 8.0</td><td>Tiff</td><td>3.567 ms</td><td>0.0284 ms</td><td>0.0252 ms</td><td>11.7188</td><td>-</td><td>-</td><td>255874 B</td>
-</tr><tr><td>MagickNet</td><td>.NET 8.0</td><td>.NET 8.0</td><td>Tiff</td><td>44.914 ms</td><td>0.8869 ms</td><td>0.9858 ms</td><td>727.2727</td><td>727.2727</td><td>727.2727</td><td>34790847 B</td>
-</tr><tr><td>SystemDrawing</td><td>.NET Framework 4.8</td><td>.NET Framework 4.8</td><td>Tiff</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
-</tr><tr><td>SkiaSharp</td><td>.NET Framework 4.8</td><td>.NET Framework 4.8</td><td>Tiff</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
-</tr><tr><td>LibTiff</td><td>.NET Framework 4.8</td><td>.NET Framework 4.8</td><td>Tiff</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
-</tr><tr><td>MagickNet</td><td>.NET Framework 4.8</td><td>.NET Framework 4.8</td><td>Tiff</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
+</tr><tr><td>LibTiff</td><td>.NET 8.0</td><td>.NET 8.0</td><td>Tiff</td><td>3.590 ms</td><td>0.0640 ms</td><td>0.0599 ms</td><td>11.7188</td><td>-</td><td>-</td><td>255874 B</td>
+</tr><tr><td>MagickNet</td><td>.NET 8.0</td><td>.NET 8.0</td><td>Tiff</td><td>45.283 ms</td><td>0.8992 ms</td><td>1.9926 ms</td><td>750.0000</td><td>750.0000</td><td>750.0000</td><td>34790797 B</td>
+</tr><tr><td>SystemDrawing</td><td>.NET Framework 4.8.1</td><td>.NET Framework 4.8.1</td><td>Tiff</td><td>4.436 ms</td><td>0.0752 ms</td><td>0.1393 ms</td><td>15.6250</td><td>-</td><td>-</td><td>138328 B</td>
+</tr><tr><td>SkiaSharp</td><td>.NET Framework 4.8.1</td><td>.NET Framework 4.8.1</td><td>Tiff</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
+</tr><tr><td>LibTiff</td><td>.NET Framework 4.8.1</td><td>.NET Framework 4.8.1</td><td>Tiff</td><td>4.146 ms</td><td>0.0110 ms</td><td>0.0092 ms</td><td>39.0625</td><td>7.8125</td><td>-</td><td>256424 B</td>
+</tr><tr><td>MagickNet</td><td>.NET Framework 4.8.1</td><td>.NET Framework 4.8.1</td><td>Tiff</td><td>47.721 ms</td><td>0.5847 ms</td><td>0.5183 ms</td><td>636.3636</td><td>636.3636</td><td>636.3636</td><td>34795133 B</td>
 </tr><tr><td>SystemDrawing</td><td>.NET 8.0</td><td>.NET 8.0</td><td>WebP</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
-</tr><tr><td>SkiaSharp</td><td>.NET 8.0</td><td>.NET 8.0</td><td>WebP</td><td>52.706 ms</td><td>1.0433 ms</td><td>0.8145 ms</td><td>-</td><td>-</td><td>-</td><td>1536 B</td>
+</tr><tr><td>SkiaSharp</td><td>.NET 8.0</td><td>.NET 8.0</td><td>WebP</td><td>51.309 ms</td><td>0.7078 ms</td><td>0.6621 ms</td><td>-</td><td>-</td><td>-</td><td>1536 B</td>
 </tr><tr><td>LibTiff</td><td>.NET 8.0</td><td>.NET 8.0</td><td>WebP</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
-</tr><tr><td>MagickNet</td><td>.NET 8.0</td><td>.NET 8.0</td><td>WebP</td><td>78.412 ms</td><td>1.5562 ms</td><td>1.5981 ms</td><td>571.4286</td><td>571.4286</td><td>571.4286</td><td>34791184 B</td>
-</tr><tr><td>SystemDrawing</td><td>.NET Framework 4.8</td><td>.NET Framework 4.8</td><td>WebP</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
-</tr><tr><td>SkiaSharp</td><td>.NET Framework 4.8</td><td>.NET Framework 4.8</td><td>WebP</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
-</tr><tr><td>LibTiff</td><td>.NET Framework 4.8</td><td>.NET Framework 4.8</td><td>WebP</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
-</tr><tr><td>MagickNet</td><td>.NET Framework 4.8</td><td>.NET Framework 4.8</td><td>WebP</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
+</tr><tr><td>MagickNet</td><td>.NET 8.0</td><td>.NET 8.0</td><td>WebP</td><td>77.205 ms</td><td>1.5419 ms</td><td>2.2114 ms</td><td>571.4286</td><td>571.4286</td><td>571.4286</td><td>34791184 B</td>
+</tr><tr><td>SystemDrawing</td><td>.NET Framework 4.8.1</td><td>.NET Framework 4.8.1</td><td>WebP</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
+</tr><tr><td>SkiaSharp</td><td>.NET Framework 4.8.1</td><td>.NET Framework 4.8.1</td><td>WebP</td><td>49.804 ms</td><td>0.6037 ms</td><td>0.5647 ms</td><td>-</td><td>-</td><td>-</td><td>2234 B</td>
+</tr><tr><td>LibTiff</td><td>.NET Framework 4.8.1</td><td>.NET Framework 4.8.1</td><td>WebP</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
+</tr><tr><td>MagickNet</td><td>.NET Framework 4.8.1</td><td>.NET Framework 4.8.1</td><td>WebP</td><td>80.838 ms</td><td>1.1103 ms</td><td>0.9843 ms</td><td>428.5714</td><td>428.5714</td><td>428.5714</td><td>34793234 B</td>
 </tr></tbody></table>
 </body>
 </html>
