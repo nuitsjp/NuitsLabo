@@ -21,17 +21,17 @@ public static class MagickNetExtensions
         // GetPixelsUnsafe() を使い、BGR の順（3チャネル）でピクセルデータを一括取得
         using var pixels = image.GetPixelsUnsafe();
         // ToByteArray() で全ピクセルのバイト配列を取得（各ピクセルは B, G, R の順に格納）
-        var pixelBytes = pixels.ToByteArray(0, 0, width, height, "BGR");
+        var pixelBytes = pixels.ToByteArray(0, 0, width, height, "BGR")!;
         var gray = new byte[width * height];
         var histogram = new int[256];
 
         // 各ピクセルは3バイトずつ格納されているので、ループで走査
         for (int i = 0, pixelIndex = 0; i < pixelBytes.Length; i += 3, pixelIndex++)
         {
-            byte b = pixelBytes[i];
-            byte g = pixelBytes[i + 1];
-            byte r = pixelBytes[i + 2];
-            int grayValue = (r * RedFactor + g * GreenFactor + b * BlueFactor) >> 10;
+            var b = pixelBytes[i];
+            var g = pixelBytes[i + 1];
+            var r = pixelBytes[i + 2];
+            var grayValue = (r * RedFactor + g * GreenFactor + b * BlueFactor) >> 10;
             gray[pixelIndex] = (byte)grayValue;
             histogram[grayValue]++;
         }
@@ -45,26 +45,26 @@ public static class MagickNetExtensions
         var outBuffer = Marshal.AllocHGlobal(binStride * (int)height);
         unsafe
         {
-            byte* binPtr = (byte*)outBuffer.ToPointer();
-            for (int i = 0; i < binStride * height; i++)
+            var binPtr = (byte*)outBuffer.ToPointer();
+            for (var i = 0; i < binStride * height; i++)
             {
                 binPtr[i] = 0;
             }
         }
 
         // 二値化処理
-        for (int y = 0; y < height; y++)
+        for (var y = 0; y < height; y++)
         {
-            for (int x = 0; x < width; x++)
+            for (var x = 0; x < width; x++)
             {
                 int grayValue = gray[y * width + x];
                 if (grayValue >= grayScaleThreshold)
                 {
-                    int outPos = (x >> 3) + y * binStride;
-                    int bitIndex = x & 7;
+                    var outPos = (x >> 3) + y * binStride;
+                    var bitIndex = x & 7;
                     unsafe
                     {
-                        byte* p = (byte*)outBuffer.ToPointer();
+                        var p = (byte*)outBuffer.ToPointer();
                         p[outPos] |= (byte)(0x80 >> bitIndex);
                     }
                 }
