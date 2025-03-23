@@ -18,24 +18,22 @@ public static class MagickNetExtensions
 
         // ※既にバイナリの場合の処理は必要に応じて追加してください
 
-        // BGR順でピクセルを取得（3チャネル: B,G,R）
-        var pixelData = image.GetPixelsUnsafe();
+        // GetPixelsUnsafe() を使い、BGR の順（3チャネル）でピクセルデータを一括取得
+        using var pixels = image.GetPixelsUnsafe();
+        // ToByteArray() で全ピクセルのバイト配列を取得（各ピクセルは B, G, R の順に格納）
+        var pixelBytes = pixels.ToByteArray(0, 0, width, height, "BGR");
         var gray = new byte[width * height];
         var histogram = new int[256];
 
-        for (var y = 0; y < height; y++)
+        // 各ピクセルは3バイトずつ格納されているので、ループで走査
+        for (int i = 0, pixelIndex = 0; i < pixelBytes.Length; i += 3, pixelIndex++)
         {
-            for (var x = 0; x < width; x++)
-            {
-                var pos = (y * width + x) * 3;
-                var pixel = pixelData.GetPixel(x, y).ToColor()!;
-                var b = pixel.B;
-                var g = pixel.G;
-                var r = pixel.R;
-                var grayValue = (r * RedFactor + g * GreenFactor + b * BlueFactor) >> 10;
-                gray[y * width + x] = (byte)grayValue;
-                histogram[grayValue]++;
-            }
+            byte b = pixelBytes[i];
+            byte g = pixelBytes[i + 1];
+            byte r = pixelBytes[i + 2];
+            int grayValue = (r * RedFactor + g * GreenFactor + b * BlueFactor) >> 10;
+            gray[pixelIndex] = (byte)grayValue;
+            histogram[grayValue]++;
         }
 
         // OptimalThresholdは各自実装済みの拡張メソッドと仮定
@@ -47,26 +45,26 @@ public static class MagickNetExtensions
         var outBuffer = Marshal.AllocHGlobal(binStride * (int)height);
         unsafe
         {
-            var binPtr = (byte*)outBuffer.ToPointer();
-            for (var i = 0; i < binStride * height; i++)
+            byte* binPtr = (byte*)outBuffer.ToPointer();
+            for (int i = 0; i < binStride * height; i++)
             {
                 binPtr[i] = 0;
             }
         }
 
         // 二値化処理
-        for (var y = 0; y < height; y++)
+        for (int y = 0; y < height; y++)
         {
-            for (var x = 0; x < width; x++)
+            for (int x = 0; x < width; x++)
             {
                 int grayValue = gray[y * width + x];
                 if (grayValue >= grayScaleThreshold)
                 {
-                    var outPos = (x >> 3) + y * binStride;
-                    var bitIndex = x & 7;
+                    int outPos = (x >> 3) + y * binStride;
+                    int bitIndex = x & 7;
                     unsafe
                     {
-                        var p = (byte*)outBuffer.ToPointer();
+                        byte* p = (byte*)outBuffer.ToPointer();
                         p[outPos] |= (byte)(0x80 >> bitIndex);
                     }
                 }

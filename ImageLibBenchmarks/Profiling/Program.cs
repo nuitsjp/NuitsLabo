@@ -5,5 +5,5 @@ var imageBytes = File.ReadAllBytes("Color.jpg");
 
 for (var i = 0; i < 5; i++)
 {
-    using var bin = SkiaSharpExtensions.ToBinary(imageBytes);
+    using var bin = MagickNetExtensions.ToBinary(imageBytes);
 }
