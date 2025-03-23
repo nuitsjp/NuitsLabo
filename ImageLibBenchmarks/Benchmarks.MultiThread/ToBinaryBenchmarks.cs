@@ -5,8 +5,7 @@ using ImagingLib;
 namespace Benchmarks.MultiThread;
 
 [MemoryDiagnoser]
-[SimpleJob(RuntimeMoniker.Net48)]
-[SimpleJob(RuntimeMoniker.Net80)] // net8.0-windows の場合も、こちらで実行されます
+[SimpleJob] // net8.0-windows の場合も、こちらで実行されます
 // [SimpleJob(launchCount: 1, warmupCount: 1, iterationCount: 1, invocationCount: 1)]
 public class ToBinaryBenchmarks : BenchmarkBase
 {

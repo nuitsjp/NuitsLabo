@@ -16,6 +16,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profiling", "Profiling\Prof
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks.MultiThread", "Benchmarks.MultiThread\Benchmarks.MultiThread.csproj", "{D910C60B-CE1E-4638-B725-753C2FB9E986}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks.MultiThread.Net481", "Benchmarks.MultiThread\Benchmarks.MultiThread.Net481.csproj", "{90165540-3BDF-5204-12E5-FFDBE2862A9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks.SingleThread.Net481", "Benchmarks.SingleThread\Benchmarks.SingleThread.Net481.csproj", "{4EE8EB1C-BD2D-5FD4-1CDE-FB1A075049DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +54,14 @@ Global
 		{D910C60B-CE1E-4638-B725-753C2FB9E986}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D910C60B-CE1E-4638-B725-753C2FB9E986}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D910C60B-CE1E-4638-B725-753C2FB9E986}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90165540-3BDF-5204-12E5-FFDBE2862A9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90165540-3BDF-5204-12E5-FFDBE2862A9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90165540-3BDF-5204-12E5-FFDBE2862A9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90165540-3BDF-5204-12E5-FFDBE2862A9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EE8EB1C-BD2D-5FD4-1CDE-FB1A075049DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EE8EB1C-BD2D-5FD4-1CDE-FB1A075049DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EE8EB1C-BD2D-5FD4-1CDE-FB1A075049DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EE8EB1C-BD2D-5FD4-1CDE-FB1A075049DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
