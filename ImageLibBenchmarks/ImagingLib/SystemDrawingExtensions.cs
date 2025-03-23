@@ -60,7 +60,7 @@ public static class SystemDrawingExtensions
         }
 
 
-        var srcBitmapData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
+        var srcBitmapData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
         try
         {
             var srcStride = srcBitmapData.Stride;
@@ -171,7 +171,7 @@ public static class SystemDrawingExtensions
         }
 
         // Bitmapをロックし、BitmapDataを取得する
-        var srcBitmapData = src.LockBits(new System.Drawing.Rectangle(0, 0, src.Width, src.Height), ImageLockMode.ReadOnly, src.PixelFormat);
+        var srcBitmapData = src.LockBits(new Rectangle(0, 0, src.Width, src.Height), ImageLockMode.ReadOnly, src.PixelFormat);
         try
         {
             var srcStride = srcBitmapData.Stride;
