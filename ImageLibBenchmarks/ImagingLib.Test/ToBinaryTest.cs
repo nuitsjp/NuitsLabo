@@ -115,6 +115,7 @@ public class ToBinaryTest : ImageTestBase
 
 
     [Theory]
+    [InlineData(ImageFormat.Tiff)]
     [InlineData(ImageFormat.Jpeg)]
     [InlineData(ImageFormat.WebP)]
     public void MagickNetByteArray(ImageFormat imageFormat)
