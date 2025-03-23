@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net8.0-windows</TargetFramework>
+		<TargetFrameworks>net8.0-windows;net481</TargetFrameworks>
 		<PlatformTarget>x64</PlatformTarget>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
@@ -17,6 +17,18 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Benchmarks\Benchmarks.csproj" />
 		<ProjectReference Include="..\ImagingLib\ImagingLib.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Color.jpg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Color.tiff">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Color.webp">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

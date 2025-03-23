@@ -19,4 +19,16 @@
 		<ProjectReference Include="..\ImagingLib\ImagingLib.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="Color.jpg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Color.tiff">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Color.webp">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>
