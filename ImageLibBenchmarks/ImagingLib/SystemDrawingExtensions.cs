@@ -68,7 +68,6 @@ public static class SystemDrawingExtensions
             var srcPtr = (byte*)srcBitmapData.Scan0;
             var srcStride1 = srcBitmapData.Stride;
             var grayIntPtr = Marshal.AllocCoTaskMem(srcStride1 * srcBitmapData.Height);
-            int threshold;
             try
             {
                 // グレイスケール化
@@ -97,58 +96,58 @@ public static class SystemDrawingExtensions
                 }
 
 
-                threshold = histogram.OptimalThreshold(srcBitmapData.Width, srcBitmapData.Height);
+                var threshold = histogram.OptimalThreshold(srcBitmapData.Width, srcBitmapData.Height);
+
+                var width = srcBitmapData.Width;
+                var height = srcBitmapData.Height;
+
+                // 1bpp画像のストライドは、各行が4バイト境界に揃えられるため次式で計算
+                var binStride = ((width + 7) / 8 + 3) & ~3;
+
+                // 出力先メモリの確保（解放は呼び出し側に委ねる）
+                var outBuffer = Marshal.AllocHGlobal(binStride * height);
+
+                // 確保したメモリ領域をゼロで初期化
+                var binPtr = (byte*)outBuffer;
+                for (var i = 0; i < binStride * height; i++)
+                {
+
+                    binPtr[i] = 0;
+                }
+
+                // しきい値を0～255の範囲に合わせる
+                var grayScaleThreshold = (int)(256 * (float)threshold / 100f);
+
+                var srcPtr2 = (byte*)srcBitmapData.Scan0;
+                for (var y2 = 0; y2 < height; y2++)
+                {
+                    for (var x2 = 0; x2 < width; x2++)
+                    {
+                        var pos = x2 * 3 + y2 * srcStride;
+                        var b1 = srcPtr2[pos + 0];
+                        var g1 = srcPtr2[pos + 1];
+                        var r1 = srcPtr2[pos + 2];
+                        var grayScale1 = (r1 * RedFactor + g1 * GreenFactor + b1 * BlueFactor) >> 10;
+
+                        if (grayScaleThreshold <= grayScale1)
+                        {
+                            // 書き込み先メモリの該当バイト位置を算出し、対応するビットをONにする
+                            var outPos = (x2 >> 3) + y2 * binStride;
+                            binPtr[outPos] |= (byte)(0x80 >> (x2 & 0x7));
+                        }
+                    }
+                }
+
+                return new Binary(
+                    outBuffer,
+                    width,
+                    height,
+                    binStride);
             }
             finally
             {
                 Marshal.FreeCoTaskMem(grayIntPtr);
             }
-
-            var width = srcBitmapData.Width;
-            var height = srcBitmapData.Height;
-
-            // 1bpp画像のストライドは、各行が4バイト境界に揃えられるため次式で計算
-            var binStride = ((width + 7) / 8 + 3) & ~3;
-
-            // 出力先メモリの確保（解放は呼び出し側に委ねる）
-            var outBuffer = Marshal.AllocHGlobal(binStride * height);
-
-            // 確保したメモリ領域をゼロで初期化
-            var binPtr = (byte*)outBuffer;
-            for (var i = 0; i < binStride * height; i++)
-            {
-
-                binPtr[i] = 0;
-            }
-
-            // しきい値を0～255の範囲に合わせる
-            var grayScaleThreshold = (int)(256 * (float)threshold / 100f);
-
-            var srcPtr2 = (byte*)srcBitmapData.Scan0;
-            for (var y2 = 0; y2 < height; y2++)
-            {
-                for (var x2 = 0; x2 < width; x2++)
-                {
-                    var pos = x2 * 3 + y2 * srcStride;
-                    var b1 = srcPtr2[pos + 0];
-                    var g1 = srcPtr2[pos + 1];
-                    var r1 = srcPtr2[pos + 2];
-                    var grayScale1 = (r1 * RedFactor + g1 * GreenFactor + b1 * BlueFactor) >> 10;
-
-                    if (grayScaleThreshold <= grayScale1)
-                    {
-                        // 書き込み先メモリの該当バイト位置を算出し、対応するビットをONにする
-                        var outPos = (x2 >> 3) + y2 * binStride;
-                        binPtr[outPos] |= (byte)(0x80 >> (x2 & 0x7));
-                    }
-                }
-            }
-
-            return new Binary(
-                outBuffer,
-                width,
-                height,
-                binStride);
         }
         finally
         {
