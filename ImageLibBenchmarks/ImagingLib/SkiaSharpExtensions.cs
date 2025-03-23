@@ -27,9 +27,7 @@ public static class SkiaSharpExtensions
         using var bitmap = SKBitmap.Decode(data);
         var width = bitmap.Width;
         var height = bitmap.Height;
-        var totalPixels = width * height;
         var histogram = new int[256];
-        long sumHistogram = 0;
 
         // SKBitmapのピクセルデータにアクセス
         var pixmap = bitmap.PeekPixels();
@@ -133,7 +131,6 @@ public static class SkiaSharpExtensions
         var height = bitmap.Height;
         var totalPixels = width * height;
         var histogram = new int[256];
-        long sumHistogram = 0;
 
         // SKBitmapのピクセルデータにアクセス
         var pixmap = bitmap.PeekPixels();
