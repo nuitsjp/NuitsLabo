@@ -33,7 +33,10 @@ public static class ImageSharpExtensions
         var height = imageSharp.Height;
         var histogram = new int[256];
 
-        // 画像全体を走査し、グレイスケール値に変換しながらヒストグラムを作成
+        // グレースケール値を格納するバッファを用意（1次元配列で y * width + x でアクセス）
+        var grayscaleBuffer = new byte[width * height];
+
+        // 画像全体を走査し、グレースケール値に変換しながらヒストグラムを作成し、結果をグレースケールバッファに格納
         imageSharp.ProcessPixelRows(accessor =>
         {
             for (var y = 0; y < height; y++)
@@ -42,12 +45,14 @@ public static class ImageSharpExtensions
                 for (var x = 0; x < width; x++)
                 {
                     var pixel = pixelRow[x];
-                    // (R * 306 + G * 601 + B * 117) >> 10 でグレイスケール値を算出
                     var gray = (pixel.R * RedFactor + pixel.G * GreenFactor + pixel.B * BlueFactor) >> 10;
+                    grayscaleBuffer[y * width + x] = (byte)gray;
                     histogram[gray]++;
                 }
             }
         });
+
+        // ヒストグラムから最適なしきい値を算出
         var threshold = histogram.OptimalThreshold(width, height);
 
         // 1bpp画像のストライドは、各行が4バイト境界に揃えられる
@@ -66,26 +71,20 @@ public static class ImageSharpExtensions
         // しきい値を 0～255 の範囲に合わせる
         var grayScaleThreshold = (int)(256 * (float)threshold / 100f);
 
-        // 各行のピクセルを走査して二値化処理を実施
-        imageSharp.ProcessPixelRows(accessor =>
+        // 既に計算済みのグレースケール値を利用して二値化処理
+        for (var y = 0; y < height; y++)
         {
-            for (var y1 = 0; y1 < height; y1++)
+            for (var x = 0; x < width; x++)
             {
-                var rowSpan = accessor.GetRowSpan(y1);
-                for (var x1 = 0; x1 < width; x1++)
+                var grayScale = grayscaleBuffer[y * width + x];
+                if (grayScale >= grayScaleThreshold)
                 {
-                    var pixel1 = rowSpan[x1];
-                    // グレースケール値の算出（各色の重み付け）
-                    var grayScale = (pixel1.R * RedFactor + pixel1.G * GreenFactor + pixel1.B * BlueFactor) >> 10;
-                    if (grayScale >= grayScaleThreshold)
-                    {
-                        // 対応するバイト位置とビット位置を算出して白（1）に設定
-                        var outPos = (x1 >> 3) + y1 * binStride;
-                        binPtr[outPos] |= (byte)(0x80 >> (x1 & 0x7));
-                    }
+                    // 対応するバイト位置とビット位置を計算し、該当ビットをONにする
+                    var outPos = (x >> 3) + y * binStride;
+                    binPtr[outPos] |= (byte)(0x80 >> (x & 0x7));
                 }
             }
-        });
+        }
 
         return new Binary(outBuffer, width, height, binStride);
     }
