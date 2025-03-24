@@ -26,13 +26,14 @@ public class DecodeBenchmarks : BenchmarkBase
         using var bitmap = SKBitmap.Decode(Data);
     }
 
-    [Benchmark]
-    public void LibTiff()
-    {
-        using var ms = new MemoryStream(Data);
-        var memStream = new MemoryStreamTiffStream(ms);
-        using var tiff = Tiff.ClientOpen("in-memory", "r", ms, memStream);
-    }
+    // LibTiffは純粋にデコードだけ評価するのが難しいので除外
+    //[Benchmark]
+    //public void LibTiff()
+    //{
+    //    using var ms = new MemoryStream(Data);
+    //    var memStream = new MemoryStreamTiffStream(ms);
+    //    using var tiff = Tiff.ClientOpen("in-memory", "r", ms, memStream);
+    //}
 
     [Benchmark]
     public void MagickNet()

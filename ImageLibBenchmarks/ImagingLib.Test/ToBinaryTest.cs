@@ -100,8 +100,10 @@ public class ToBinaryTest : ImageTestBase
     }
 
     [Theory]
-    // SkiaSharpはTiffに対応していない
     [InlineData(ImageFormat.Tiff)]
+    // LibTiffはTIFFのみ対応
+    //[InlineData(ImageFormat.Jpeg)]
+    //[InlineData(ImageFormat.WebP)]
     public void LibTiffByteArray(ImageFormat imageFormat)
     {
         using var actual = LibTiffExtensions.ToBinary(LoadBytes(imageFormat));
