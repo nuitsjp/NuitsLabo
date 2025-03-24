@@ -5,10 +5,7 @@ using ImagingLib;
 namespace Benchmarks;
 
 [MemoryDiagnoser]
-//[SimpleJob(RuntimeMoniker.Net481, launchCount: 1, warmupCount: 1, iterationCount: 1, invocationCount: 1)]
-//[SimpleJob(RuntimeMoniker.Net80, launchCount: 1, warmupCount: 1, iterationCount: 1, invocationCount: 1)]
-[SimpleJob(RuntimeMoniker.Net481)]
-[SimpleJob(RuntimeMoniker.Net80)]
+[SimpleJob]
 public class ToBinaryMultiThreadBenchmarks : BenchmarkBase
 {
     [Benchmark]
@@ -75,38 +72,4 @@ public class ToBinaryMultiThreadBenchmarks : BenchmarkBase
             .ToList();
         await Task.WhenAll(tasks);
     }
-
-#if NET8_0_OR_GREATER
-    [Benchmark]
-    public async Task Aspose()
-    {
-        var tasks = Enumerable
-            .Range(1, 10)
-            .Select(_ => Task.Run(() =>
-            {
-                for (var i = 0; i < 10; i++)
-                {
-                    using var bin = AsposeExtensions.ToBinary(Data);
-                }
-            }))
-            .ToList();
-        await Task.WhenAll(tasks);
-    }
-
-    [Benchmark]
-    public async Task ImageSharp()
-    {
-        var tasks = Enumerable
-            .Range(1, 10)
-            .Select(_ => Task.Run(() =>
-            {
-                for (var i = 0; i < 10; i++)
-                {
-                    using var bin = ImageSharpExtensions.ToBinary(Data);
-                }
-            }))
-            .ToList();
-        await Task.WhenAll(tasks);
-    }
-#endif
 }

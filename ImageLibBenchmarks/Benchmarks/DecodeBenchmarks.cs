@@ -10,9 +10,7 @@ using SkiaSharp;
 namespace Benchmarks;
 
 [MemoryDiagnoser]
-//[SimpleJob(launchCount: 1, warmupCount: 1, iterationCount: 1, invocationCount: 1)]
-[SimpleJob(RuntimeMoniker.Net481)]
-[SimpleJob(RuntimeMoniker.Net80)]
+[SimpleJob]
 public class DecodeBenchmarks : BenchmarkBase
 {
     [Benchmark]
@@ -41,19 +39,4 @@ public class DecodeBenchmarks : BenchmarkBase
     {
         using var image = new MagickImage(Data);
     }
-
-#if NET8_0_OR_GREATER
-    [Benchmark]
-    public void Aspose()
-    {
-        using var bitmap = (Bitmap)Image.FromStream(new MemoryStream(Data));
-    }
-
-    [Benchmark]
-    public void ImageSharp()
-    {
-        using var stream = new MemoryStream(Data);
-        using var imageSharp = SixLabors.ImageSharp.Image.Load<Rgba32>(stream);
-    }
-#endif
 }

@@ -34,18 +34,4 @@ public class ToBinarySingleThreadBenchmarks : BenchmarkBase
     {
         using var bin = MagickNetExtensions.ToBinary(Data);
     }
-
-#if NET8_0_OR_GREATER
-    [Benchmark]
-    public void Aspose()
-    {
-        using var bin = AsposeExtensions.ToBinary(Data);
-    }
-
-    [Benchmark]
-    public void ImageSharp()
-    {
-        using var bin = ImageSharpExtensions.ToBinary(Data);
-    }
-#endif
 }

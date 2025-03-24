@@ -1,39 +1,39 @@
 ```
 
-BenchmarkDotNet v0.14.0, Windows 11 (10.0.26100.3476)
-AMD Ryzen 9 7950X, 1 CPU, 32 logical and 16 physical cores
+BenchmarkDotNet v0.14.0, Windows 11 (10.0.22631.5039/23H2/2023Update/SunValley3)
+13th Gen Intel Core i9-13900H, 1 CPU, 20 logical and 14 physical cores
   [Host]               : .NET Framework 4.8.1 (4.8.9290.0), X64 RyuJIT VectorSize=256
-  .NET 8.0             : .NET 8.0.14 (8.0.1425.11118), X64 RyuJIT AVX-512F+CD+BW+DQ+VL+VBMI
+  .NET 8.0             : .NET 8.0.14 (8.0.1425.11118), X64 RyuJIT AVX2
   .NET Framework 4.8.1 : .NET Framework 4.8.1 (4.8.9290.0), X64 RyuJIT VectorSize=256
 
 
 ```
-| Method        | Job                  | Runtime              | Format | Mean      | Error     | StdDev    | Gen0     | Gen1     | Gen2     | Allocated  |
-|-------------- |--------------------- |--------------------- |------- |----------:|----------:|----------:|---------:|---------:|---------:|-----------:|
-| **SystemDrawing** | **.NET 8.0**             | **.NET 8.0**             | **Jpeg**   | **39.396 ms** | **0.7170 ms** | **0.8535 ms** |        **-** |        **-** |        **-** |     **1335 B** |
-| SkiaSharp     | .NET 8.0             | .NET 8.0             | Jpeg   | 53.950 ms | 0.4231 ms | 0.3533 ms |        - |        - |        - |     1536 B |
-| LibTiff       | .NET 8.0             | .NET 8.0             | Jpeg   |        NA |        NA |        NA |       NA |       NA |       NA |         NA |
-| MagickNet     | .NET 8.0             | .NET 8.0             | Jpeg   | 71.032 ms | 1.2735 ms | 1.1913 ms | 571.4286 | 571.4286 | 571.4286 | 34791184 B |
-| SystemDrawing | .NET Framework 4.8.1 | .NET Framework 4.8.1 | Jpeg   | 40.089 ms | 0.7847 ms | 1.0203 ms |        - |        - |        - |   473246 B |
-| SkiaSharp     | .NET Framework 4.8.1 | .NET Framework 4.8.1 | Jpeg   | 53.585 ms | 0.6615 ms | 0.5524 ms |        - |        - |        - |     2458 B |
-| LibTiff       | .NET Framework 4.8.1 | .NET Framework 4.8.1 | Jpeg   |        NA |        NA |        NA |       NA |       NA |       NA |         NA |
-| MagickNet     | .NET Framework 4.8.1 | .NET Framework 4.8.1 | Jpeg   | 76.692 ms | 0.8826 ms | 0.7824 ms | 428.5714 | 428.5714 | 428.5714 | 34793234 B |
-| **SystemDrawing** | **.NET 8.0**             | **.NET 8.0**             | **Tiff**   |  **3.802 ms** | **0.0248 ms** | **0.0207 ms** |        **-** |        **-** |        **-** |      **258 B** |
-| SkiaSharp     | .NET 8.0             | .NET 8.0             | Tiff   |        NA |        NA |        NA |       NA |       NA |       NA |         NA |
-| LibTiff       | .NET 8.0             | .NET 8.0             | Tiff   |  3.590 ms | 0.0640 ms | 0.0599 ms |  11.7188 |        - |        - |   255874 B |
-| MagickNet     | .NET 8.0             | .NET 8.0             | Tiff   | 45.283 ms | 0.8992 ms | 1.9926 ms | 750.0000 | 750.0000 | 750.0000 | 34790797 B |
-| SystemDrawing | .NET Framework 4.8.1 | .NET Framework 4.8.1 | Tiff   |  4.436 ms | 0.0752 ms | 0.1393 ms |  15.6250 |        - |        - |   138328 B |
-| SkiaSharp     | .NET Framework 4.8.1 | .NET Framework 4.8.1 | Tiff   |        NA |        NA |        NA |       NA |       NA |       NA |         NA |
-| LibTiff       | .NET Framework 4.8.1 | .NET Framework 4.8.1 | Tiff   |  4.146 ms | 0.0110 ms | 0.0092 ms |  39.0625 |   7.8125 |        - |   256424 B |
-| MagickNet     | .NET Framework 4.8.1 | .NET Framework 4.8.1 | Tiff   | 47.721 ms | 0.5847 ms | 0.5183 ms | 636.3636 | 636.3636 | 636.3636 | 34795133 B |
-| **SystemDrawing** | **.NET 8.0**             | **.NET 8.0**             | **WebP**   |        **NA** |        **NA** |        **NA** |       **NA** |       **NA** |       **NA** |         **NA** |
-| SkiaSharp     | .NET 8.0             | .NET 8.0             | WebP   | 51.309 ms | 0.7078 ms | 0.6621 ms |        - |        - |        - |     1536 B |
-| LibTiff       | .NET 8.0             | .NET 8.0             | WebP   |        NA |        NA |        NA |       NA |       NA |       NA |         NA |
-| MagickNet     | .NET 8.0             | .NET 8.0             | WebP   | 77.205 ms | 1.5419 ms | 2.2114 ms | 571.4286 | 571.4286 | 571.4286 | 34791184 B |
-| SystemDrawing | .NET Framework 4.8.1 | .NET Framework 4.8.1 | WebP   |        NA |        NA |        NA |       NA |       NA |       NA |         NA |
-| SkiaSharp     | .NET Framework 4.8.1 | .NET Framework 4.8.1 | WebP   | 49.804 ms | 0.6037 ms | 0.5647 ms |        - |        - |        - |     2234 B |
-| LibTiff       | .NET Framework 4.8.1 | .NET Framework 4.8.1 | WebP   |        NA |        NA |        NA |       NA |       NA |       NA |         NA |
-| MagickNet     | .NET Framework 4.8.1 | .NET Framework 4.8.1 | WebP   | 80.838 ms | 1.1103 ms | 0.9843 ms | 428.5714 | 428.5714 | 428.5714 | 34793234 B |
+| Method        | Job                  | Runtime              | Format | Mean      | Error     | StdDev     | Median    | Gen0     | Gen1     | Gen2     | Allocated  |
+|-------------- |--------------------- |--------------------- |------- |----------:|----------:|-----------:|----------:|---------:|---------:|---------:|-----------:|
+| **SystemDrawing** | **.NET 8.0**             | **.NET 8.0**             | **Jpeg**   | **53.099 ms** | **1.6153 ms** |  **4.7629 ms** | **52.471 ms** |        **-** |        **-** |        **-** |     **1354 B** |
+| SkiaSharp     | .NET 8.0             | .NET 8.0             | Jpeg   | 62.296 ms | 2.6347 ms |  7.7684 ms | 60.897 ms |        - |        - |        - |     1540 B |
+| LibTiff       | .NET 8.0             | .NET 8.0             | Jpeg   |        NA |        NA |         NA |        NA |       NA |       NA |       NA |         NA |
+| MagickNet     | .NET 8.0             | .NET 8.0             | Jpeg   | 89.162 ms | 3.7075 ms | 10.6374 ms | 87.420 ms | 500.0000 | 500.0000 | 500.0000 | 34791339 B |
+| SystemDrawing | .NET Framework 4.8.1 | .NET Framework 4.8.1 | Jpeg   | 60.426 ms | 3.2306 ms |  9.5255 ms | 56.716 ms |        - |        - |        - |   473316 B |
+| SkiaSharp     | .NET Framework 4.8.1 | .NET Framework 4.8.1 | Jpeg   | 68.492 ms | 3.3886 ms |  9.8310 ms | 67.431 ms |        - |        - |        - |     2731 B |
+| LibTiff       | .NET Framework 4.8.1 | .NET Framework 4.8.1 | Jpeg   |        NA |        NA |         NA |        NA |       NA |       NA |       NA |         NA |
+| MagickNet     | .NET Framework 4.8.1 | .NET Framework 4.8.1 | Jpeg   | 90.782 ms | 2.9283 ms |  8.5882 ms | 88.923 ms | 500.0000 | 500.0000 | 500.0000 | 34792992 B |
+| **SystemDrawing** | **.NET 8.0**             | **.NET 8.0**             | **Tiff**   | **23.233 ms** | **1.0063 ms** |  **2.9034 ms** | **21.904 ms** |        **-** |        **-** |        **-** |      **268 B** |
+| SkiaSharp     | .NET 8.0             | .NET 8.0             | Tiff   |        NA |        NA |         NA |        NA |       NA |       NA |       NA |         NA |
+| LibTiff       | .NET 8.0             | .NET 8.0             | Tiff   |  4.121 ms | 0.1670 ms |  0.4790 ms |  3.895 ms |  15.6250 |        - |        - |   255875 B |
+| MagickNet     | .NET 8.0             | .NET 8.0             | Tiff   | 59.520 ms | 3.4200 ms |  9.6463 ms | 55.631 ms | 666.6667 | 666.6667 | 666.6667 | 34790183 B |
+| SystemDrawing | .NET Framework 4.8.1 | .NET Framework 4.8.1 | Tiff   | 24.392 ms | 0.8953 ms |  2.5397 ms | 23.799 ms |        - |        - |        - |   138392 B |
+| SkiaSharp     | .NET Framework 4.8.1 | .NET Framework 4.8.1 | Tiff   |        NA |        NA |         NA |        NA |       NA |       NA |       NA |         NA |
+| LibTiff       | .NET Framework 4.8.1 | .NET Framework 4.8.1 | Tiff   |  4.254 ms | 0.1467 ms |  0.4326 ms |  4.060 ms |  39.0625 |   7.8125 |        - |   256424 B |
+| MagickNet     | .NET Framework 4.8.1 | .NET Framework 4.8.1 | Tiff   | 61.111 ms | 2.1118 ms |  6.0929 ms | 59.742 ms | 600.0000 | 600.0000 | 600.0000 | 34793818 B |
+| **SystemDrawing** | **.NET 8.0**             | **.NET 8.0**             | **WebP**   |        **NA** |        **NA** |         **NA** |        **NA** |       **NA** |       **NA** |       **NA** |         **NA** |
+| SkiaSharp     | .NET 8.0             | .NET 8.0             | WebP   | 58.757 ms | 2.0580 ms |  5.9048 ms | 56.949 ms |        - |        - |        - |     1546 B |
+| LibTiff       | .NET 8.0             | .NET 8.0             | WebP   |        NA |        NA |         NA |        NA |       NA |       NA |       NA |         NA |
+| MagickNet     | .NET 8.0             | .NET 8.0             | WebP   | 95.550 ms | 5.1050 ms | 14.5649 ms | 89.137 ms | 500.0000 | 500.0000 | 500.0000 | 34790147 B |
+| SystemDrawing | .NET Framework 4.8.1 | .NET Framework 4.8.1 | WebP   |        NA |        NA |         NA |        NA |       NA |       NA |       NA |         NA |
+| SkiaSharp     | .NET Framework 4.8.1 | .NET Framework 4.8.1 | WebP   | 65.602 ms | 3.0847 ms |  8.8009 ms | 63.200 ms |        - |        - |        - |     2458 B |
+| LibTiff       | .NET Framework 4.8.1 | .NET Framework 4.8.1 | WebP   |        NA |        NA |         NA |        NA |       NA |       NA |       NA |         NA |
+| MagickNet     | .NET Framework 4.8.1 | .NET Framework 4.8.1 | WebP   | 99.683 ms | 3.9751 ms | 11.3411 ms | 96.210 ms | 250.0000 | 250.0000 | 250.0000 | 34794156 B |
 
 Benchmarks with issues:
   ToBinarySingleThreadBenchmarks.LibTiff: .NET 8.0(Runtime=.NET 8.0) [Format=Jpeg]

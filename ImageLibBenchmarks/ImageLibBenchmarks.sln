@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Benchmarks\Be
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profiling", "Profiling\Profiling.csproj", "{63ADCC5C-EB55-4931-BBF0-5EE76227D8E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks.Net80", "Benchmarks.Net80\Benchmarks.Net80.csproj", "{47E10267-5192-FE13-4EA1-2D6EB899C347}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{63ADCC5C-EB55-4931-BBF0-5EE76227D8E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63ADCC5C-EB55-4931-BBF0-5EE76227D8E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63ADCC5C-EB55-4931-BBF0-5EE76227D8E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47E10267-5192-FE13-4EA1-2D6EB899C347}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47E10267-5192-FE13-4EA1-2D6EB899C347}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47E10267-5192-FE13-4EA1-2D6EB899C347}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47E10267-5192-FE13-4EA1-2D6EB899C347}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
