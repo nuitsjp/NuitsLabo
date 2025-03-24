@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>Benchmarks.Net80.ToBinarySingleThreadBenchmarks-20250324-141326</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.14.0, Windows 11 (10.0.22631.5039/23H2/2023Update/SunValley3)
+13th Gen Intel Core i9-13900H, 1 CPU, 20 logical and 14 physical cores
+.NET SDK 9.0.202
+  [Host]     : .NET 8.0.14 (8.0.1425.11118), X64 RyuJIT AVX2
+  DefaultJob : .NET 8.0.14 (8.0.1425.11118), X64 RyuJIT AVX2
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>Method </th><th>Format</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Gen0</th><th>Gen1</th><th>Gen2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>SystemDrawing</td><td>Jpeg</td><td>55.056 ms</td><td>2.1043 ms</td><td>6.2046 ms</td><td>-</td><td>-</td><td>-</td><td>1354 B</td>
+</tr><tr><td>SkiaSharp</td><td>Jpeg</td><td>59.796 ms</td><td>1.1864 ms</td><td>1.2694 ms</td><td>-</td><td>-</td><td>-</td><td>1540 B</td>
+</tr><tr><td>LibTiff</td><td>Jpeg</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
+</tr><tr><td>MagickNet</td><td>Jpeg</td><td>85.561 ms</td><td>3.1730 ms</td><td>9.2559 ms</td><td>500.0000</td><td>500.0000</td><td>500.0000</td><td>34790147 B</td>
+</tr><tr><td>Aspose</td><td>Jpeg</td><td>142.754 ms</td><td>4.1228 ms</td><td>12.0915 ms</td><td>3500.0000</td><td>1250.0000</td><td>1000.0000</td><td>137316584 B</td>
+</tr><tr><td>ImageSharp</td><td>Jpeg</td><td>47.437 ms</td><td>1.1655 ms</td><td>3.4365 ms</td><td>461.5385</td><td>461.5385</td><td>461.5385</td><td>8720823 B</td>
+</tr><tr><td>SystemDrawing</td><td>Tiff</td><td>21.203 ms</td><td>0.5848 ms</td><td>1.7153 ms</td><td>-</td><td>-</td><td>-</td><td>268 B</td>
+</tr><tr><td>SkiaSharp</td><td>Tiff</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
+</tr><tr><td>LibTiff</td><td>Tiff</td><td>3.735 ms</td><td>0.1464 ms</td><td>0.4317 ms</td><td>19.5313</td><td>3.9063</td><td>-</td><td>255874 B</td>
+</tr><tr><td>MagickNet</td><td>Tiff</td><td>55.609 ms</td><td>1.1100 ms</td><td>1.7281 ms</td><td>700.0000</td><td>700.0000</td><td>700.0000</td><td>34790190 B</td>
+</tr><tr><td>Aspose</td><td>Tiff</td><td>38.273 ms</td><td>1.1580 ms</td><td>3.4145 ms</td><td>1000.0000</td><td>1000.0000</td><td>1000.0000</td><td>72120697 B</td>
+</tr><tr><td>ImageSharp</td><td>Tiff</td><td>34.751 ms</td><td>1.1810 ms</td><td>3.4075 ms</td><td>642.8571</td><td>500.0000</td><td>500.0000</td><td>10494166 B</td>
+</tr><tr><td>SystemDrawing</td><td>WebP</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
+</tr><tr><td>SkiaSharp</td><td>WebP</td><td>59.879 ms</td><td>2.1882 ms</td><td>6.3135 ms</td><td>-</td><td>-</td><td>-</td><td>1536 B</td>
+</tr><tr><td>LibTiff</td><td>WebP</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
+</tr><tr><td>MagickNet</td><td>WebP</td><td>87.400 ms</td><td>3.2438 ms</td><td>9.4110 ms</td><td>500.0000</td><td>500.0000</td><td>500.0000</td><td>34790147 B</td>
+</tr><tr><td>Aspose</td><td>WebP</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td><td>NA</td>
+</tr><tr><td>ImageSharp</td><td>WebP</td><td>86.115 ms</td><td>2.6689 ms</td><td>7.8273 ms</td><td>1000.0000</td><td>1000.0000</td><td>1000.0000</td><td>9857778 B</td>
+</tr></tbody></table>
+</body>
+</html>

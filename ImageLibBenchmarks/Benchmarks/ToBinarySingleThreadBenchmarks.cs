@@ -6,8 +6,7 @@ namespace Benchmarks;
 
 [MemoryDiagnoser]
 // [SimpleJob(launchCount: 1, warmupCount: 1, iterationCount: 1, invocationCount: 1)]
-[SimpleJob(RuntimeMoniker.Net481)]
-[SimpleJob(RuntimeMoniker.Net80)]
+[SimpleJob]
 public class ToBinarySingleThreadBenchmarks : BenchmarkBase
 {
     [Benchmark]
