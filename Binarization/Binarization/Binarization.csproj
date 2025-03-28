@@ -2,13 +2,15 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net9.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Emgu.CV" Version="4.8.0.5324" />
+    <PackageReference Include="Sharprompt" Version="3.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.3" />
   </ItemGroup>
 
 </Project>
