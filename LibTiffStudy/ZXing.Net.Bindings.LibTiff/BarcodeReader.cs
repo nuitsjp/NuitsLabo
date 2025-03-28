@@ -3,21 +3,13 @@
 namespace ZXing.Net.Bindings.LibTiff;
 
 /// <summary>
-/// a barcode reader class which can be used with the SKBitmap type from SkiaSharp
+/// TIFF画像をデコードするためのバーコードリーダークラスです。
 /// </summary>
-public class BarcodeReader : BarcodeReader<Tiff>
+public class BarcodeReader() : BarcodeReader<Tiff>(null, DefaultCreateLuminanceSource, null)
 {
     /// <summary>
-    /// define a custom function for creation of a luminance source with our specialized SKBitmap-supporting class
+    /// デフォルトの輝度ソースを作成するためのデリゲートです。
     /// </summary>
-    private static readonly Func<Tiff, LuminanceSource> defaultCreateLuminanceSource =
+    private static readonly Func<Tiff, LuminanceSource> DefaultCreateLuminanceSource =
         (image) => new TiffLuminanceSource(image);
-
-    /// <summary>
-    /// constructor which uses a custom luminance source with SKImage support
-    /// </summary>
-    public BarcodeReader()
-        : base(null, defaultCreateLuminanceSource, null)
-    {
-    }
 }
