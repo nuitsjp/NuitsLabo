@@ -1,8 +1,7 @@
 ﻿using BitMiracle.LibTiff.Classic;
 using ZXing.Net.Bindings.LibTiff;
 
-var imageBytes = File.ReadAllBytes("MultiPage.tif");
-using var stream = new MemoryStream(imageBytes);
+using var stream = File.Open("MultiPage.tif", FileMode.Open);
 using var tiff = Tiff.ClientOpen("in-memory", "r", stream, new TiffStream());
 
 var reader = new BarcodeReader();
