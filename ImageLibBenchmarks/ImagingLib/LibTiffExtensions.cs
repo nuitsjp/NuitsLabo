@@ -9,7 +9,7 @@ public static class LibTiffExtensions
     public static unsafe Binary ToBinary(byte[] tiffData)
     {
         using var ms = new MemoryStream(tiffData);
-        var memStream = new MemoryStreamTiffStream(ms);
+        var memStream = new TiffStream();
         using var tiff = Tiff.ClientOpen("in-memory", "r", ms, memStream);
         if (tiff == null)
             throw new Exception("TIFFイメージの読み込みに失敗しました。");
@@ -59,33 +59,5 @@ public static class LibTiffExtensions
         }
 
         return new Binary(outBuffer, width, height, outputStride);
-    }
-}
-
-public class MemoryStreamTiffStream(MemoryStream ms) : TiffStream
-{
-    public override int Read(object clientData, byte[] buffer, int offset, int count)
-    {
-        return ms.Read(buffer, offset, count);
-    }
-
-    public override void Write(object clientData, byte[] buffer, int offset, int count)
-    {
-        ms.Write(buffer, offset, count);
-    }
-
-    public override long Seek(object clientData, long offset, SeekOrigin origin)
-    {
-        return ms.Seek(offset, origin);
-    }
-
-    public override void Close(object clientData)
-    {
-        ms.Close();
-    }
-
-    public override long Size(object clientData)
-    {
-        return ms.Length;
     }
 }
