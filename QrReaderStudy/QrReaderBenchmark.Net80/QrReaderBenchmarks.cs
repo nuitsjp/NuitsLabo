@@ -22,7 +22,7 @@ public class QrReaderBenchmarks
     [Benchmark]
     public Result[] ZXing()
     {
-        using var stream = File.Open("MultiPage.tif", FileMode.Open);
+        using var stream = new MemoryStream(QrCodeBytes);
         using var tiff = Tiff.ClientOpen("in-memory", "r", stream, new TiffStream());
 
         var reader = new BarcodeReader();
