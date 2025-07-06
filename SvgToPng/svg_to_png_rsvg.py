@@ -1,22 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-SVG to PNG Converter
+SVG to PNG Converter using rsvg-convert
 
 This script converts all SVG files in the source folder to PNG format
-and saves them in the destination folder using cairosvg.
+and saves them in the destination folder using rsvg-convert.
 """
 
 import os
 import sys
+import subprocess
 from pathlib import Path
 from typing import List, Tuple
-
-try:
-    import cairosvg
-except ImportError:
-    print("Error: cairosvg is not installed. Please run: uv sync")
-    sys.exit(1)
 
 
 def get_svg_files(source_dir: Path) -> List[Path]:
@@ -33,29 +28,27 @@ def get_svg_files(source_dir: Path) -> List[Path]:
 
 
 def convert_svg_to_png(svg_path: Path, png_path: Path) -> bool:
-    """Convert a single SVG file to PNG format."""
+    """Convert a single SVG file to PNG format using rsvg-convert."""
     try:
-        # Read SVG file with UTF-8 encoding
-        with open(svg_path, 'r', encoding='utf-8') as f:
-            svg_content = f.read()
+        # Use rsvg-convert with specific options to preserve text spacing
+        cmd = [
+            "rsvg-convert",
+            "--format=png",
+            "--dpi-x=300",
+            "--dpi-y=300",
+            "--background-color=white",
+            f"--output={png_path}",
+            str(svg_path)
+        ]
         
-        # Fix font rendering by preprocessing the SVG content
-        # Replace problematic font stack with system fonts
-        svg_content = svg_content.replace(
-            'font-family:"trebuchet ms",verdana,arial,sans-serif',
-            'font-family:"DejaVu Sans",Arial,sans-serif'
-        )
+        result = subprocess.run(cmd, capture_output=True, text=True)
         
-        # Fix font rendering issues by setting specific parameters
-        cairosvg.svg2png(
-            bytestring=svg_content.encode('utf-8'),
-            write_to=str(png_path),
-            dpi=300,  # Higher DPI for better text rendering
-            output_width=None,  # Let SVG determine dimensions
-            output_height=None,
-            unsafe=True  # Allow loading external resources if needed
-        )
-        return True
+        if result.returncode == 0:
+            return True
+        else:
+            print(f"Error converting {svg_path.name}: {result.stderr}")
+            return False
+            
     except Exception as e:
         print(f"Error converting {svg_path.name}: {e}")
         return False
@@ -85,7 +78,7 @@ def main():
     successful_conversions = 0
     failed_conversions = 0
     
-    print(f"Found {total_files} SVG files to convert...")
+    print(f"Found {total_files} SVG files to convert using rsvg-convert...")
     print("-" * 50)
     
     for i, svg_file in enumerate(svg_files, 1):
