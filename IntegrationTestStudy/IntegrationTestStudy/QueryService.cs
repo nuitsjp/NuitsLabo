@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace IntegrationTestStudy;
 
-public class QueryService
+public class QueryService(IDbContextProvider<SqlBulkCopierDbContext> dbContextProvider)
 {
     public async Task DeleteCustomerAsync()
     {
-        await using SqlBulkCopierDbContext context = new();
+        await using SqlBulkCopierDbContext context = dbContextProvider.Provide();
         var transaction = await context.Database.BeginTransactionAsync();
 
-        context.Customers.RemoveRange(context.Customers);
+        context.Customers.Remove(context.Customers.First());
         await context.SaveChangesAsync();
 
         await transaction.CommitAsync();
@@ -46,19 +46,22 @@ public class SqlBulkCopierDbContext : DbContextBase
     public DbSet<Customer> Customers { get; set; }
 }
 
-public class DatabaseProxy(DbContext context) : DatabaseFacade(context)
+public class DatabaseProxy(DbContext context, IDbContextTransaction? baseTransaction) : DatabaseFacade(context)
 {
-    public override async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = new CancellationToken())
+    public override async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = new())
     {
-        var transaction = await base.BeginTransactionAsync(cancellationToken);
-        return new DbContextTransactionProxy(transaction);
+        if (baseTransaction is not null)
+        {
+            return baseTransaction;
+        }
+        return await base.BeginTransactionAsync(cancellationToken);
     }
 }
 
 public abstract class DbContextBase : DbContext
 {
     private DatabaseFacade? _databaseFacade;
-    public override DatabaseFacade Database => _databaseFacade ??= new DatabaseProxy(this);
+    public override DatabaseFacade Database => _databaseFacade ??= new DatabaseProxy(this, null);
 }
 
 public class DbContextTransactionProxy(IDbContextTransaction transaction) : IDbContextTransaction
@@ -75,12 +78,13 @@ public class DbContextTransactionProxy(IDbContextTransaction transaction) : IDbC
 
     public void Commit()
     {
-        transaction.Commit();
+        // transaction.Commit();
     }
 
     public Task CommitAsync(CancellationToken cancellationToken = new CancellationToken())
     {
-        return transaction.CommitAsync(cancellationToken);
+        // return transaction.CommitAsync(cancellationToken);
+        return Task.CompletedTask;
     }
 
     public void Rollback()

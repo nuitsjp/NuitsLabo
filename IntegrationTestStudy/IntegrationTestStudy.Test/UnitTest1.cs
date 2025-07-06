@@ -9,7 +9,7 @@ public class UnitTest1
     [Fact]
     public async Task Test1()
     {
-        await new QueryService().DeleteCustomerAsync();
+        await new QueryService(new DbContextProvider<SqlBulkCopierDbContext>()).DeleteCustomerAsync();
 
         // Assert
         // Customerテーブルが9件になっていることを確認する
