@@ -1,6 +1,6 @@
-using System.Net;
 using System.Text;
 using System.Linq;
+using FluentFTP;
 using Renci.SshNet;
 
 namespace SendFtpTestStudy;
@@ -77,22 +77,25 @@ public sealed class FtpClient
         cancellationToken.ThrowIfCancellationRequested();
 
         var normalizedPath = NormalizeFilePath(remotePath);
-        var directory = GetDirectoryPath(normalizedPath);
-        if (!string.IsNullOrEmpty(directory))
-        {
-            await EnsureFtpDirectoryExistsAsync(options, directory, cancellationToken).ConfigureAwait(false);
-        }
 
-        var request = CreateFtpRequest(options, normalizedPath, WebRequestMethods.Ftp.UploadFile);
-        using var registration = cancellationToken.Register(request.Abort);
-        await using (var requestStream = await request.GetRequestStreamAsync().ConfigureAwait(false))
+        await using var ftp = CreateAsyncFtpClient(options);
+        await ftp.Connect(cancellationToken).ConfigureAwait(false);
+        try
         {
+            var directory = GetDirectoryPath(normalizedPath);
+            if (!string.IsNullOrEmpty(directory))
+            {
+                var directoryPath = NormalizeDirectory(directory).TrimEnd('/');
+                await ftp.CreateDirectory(directoryPath, true, cancellationToken).ConfigureAwait(false);
+            }
+
             ResetPosition(content);
-            await content.CopyToAsync(requestStream, DefaultBufferSize, cancellationToken).ConfigureAwait(false);
+            await ftp.UploadStream(content, normalizedPath, FtpRemoteExists.Overwrite, false, null, cancellationToken).ConfigureAwait(false);
         }
-
-        using var response = (FtpWebResponse)await request.GetResponseAsync().ConfigureAwait(false);
-        _ = response.StatusCode;
+        finally
+        {
+            await ftp.Disconnect(cancellationToken).ConfigureAwait(false);
+        }
     }
 
     private async Task<byte[]> DownloadViaFtpAsync(
@@ -102,13 +105,18 @@ public sealed class FtpClient
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var request = CreateFtpRequest(options, remotePath, WebRequestMethods.Ftp.DownloadFile);
-        using var registration = cancellationToken.Register(request.Abort);
-        using var response = (FtpWebResponse)await request.GetResponseAsync().ConfigureAwait(false);
-        await using var responseStream = response.GetResponseStream() ?? Stream.Null;
-        using var buffer = new MemoryStream();
-        await responseStream.CopyToAsync(buffer, DefaultBufferSize, cancellationToken).ConfigureAwait(false);
-        return buffer.ToArray();
+        await using var ftp = CreateAsyncFtpClient(options);
+        await ftp.Connect(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            var normalizedPath = NormalizeFilePath(remotePath);
+            var data = await ftp.DownloadBytes(normalizedPath, cancellationToken).ConfigureAwait(false);
+            return data ?? Array.Empty<byte>();
+        }
+        finally
+        {
+            await ftp.Disconnect(cancellationToken).ConfigureAwait(false);
+        }
     }
 
     private async Task<IReadOnlyList<string>> ListViaFtpAsync(
@@ -118,24 +126,21 @@ public sealed class FtpClient
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var request = CreateFtpRequest(options, NormalizeDirectory(remoteDirectory), WebRequestMethods.Ftp.ListDirectory);
-        using var registration = cancellationToken.Register(request.Abort);
-        using var response = (FtpWebResponse)await request.GetResponseAsync().ConfigureAwait(false);
-        await using var responseStream = response.GetResponseStream() ?? Stream.Null;
-        using var reader = new StreamReader(responseStream, Encoding.UTF8, leaveOpen: true);
-
-        var entries = new List<string>();
-        while (!reader.EndOfStream)
+        await using var ftp = CreateAsyncFtpClient(options);
+        await ftp.Connect(cancellationToken).ConfigureAwait(false);
+        try
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            var line = await reader.ReadLineAsync().ConfigureAwait(false);
-            if (!string.IsNullOrWhiteSpace(line))
-            {
-                entries.Add(line.Trim());
-            }
+            var normalizedDirectory = NormalizeDirectory(remoteDirectory);
+            var listing = await ftp.GetListing(normalizedDirectory, FtpListOption.AllFiles, cancellationToken).ConfigureAwait(false);
+            return listing
+                .Where(item => item.Type is FtpObjectType.File or FtpObjectType.Directory)
+                .Select(item => item.Name)
+                .ToList();
         }
-
-        return entries;
+        finally
+        {
+            await ftp.Disconnect(cancellationToken).ConfigureAwait(false);
+        }
     }
 
     private async Task UploadViaSftpAsync(
@@ -202,52 +207,6 @@ public sealed class FtpClient
         return Task.FromResult<IReadOnlyList<string>>(entries);
     }
 
-    private async Task EnsureFtpDirectoryExistsAsync(
-        FtpConnectionOptions options,
-        string remoteDirectory,
-        CancellationToken cancellationToken)
-    {
-        var segments = SplitSegments(remoteDirectory);
-        if (!segments.Any())
-        {
-            return;
-        }
-
-        var current = new StringBuilder();
-        foreach (var segment in segments)
-        {
-            if (current.Length > 0)
-            {
-                current.Append('/');
-            }
-
-            current.Append(segment);
-            var makeDirRequest = CreateFtpRequest(options, current + "/", WebRequestMethods.Ftp.MakeDirectory);
-            using var registration = cancellationToken.Register(makeDirRequest.Abort);
-            try
-            {
-                using var _ = (FtpWebResponse)await makeDirRequest.GetResponseAsync().ConfigureAwait(false);
-            }
-            catch (WebException ex) when (IsAlreadyExistsResponse(ex))
-            {
-                // Directory already exists; ignore.
-            }
-        }
-    }
-
-    private static bool IsAlreadyExistsResponse(WebException ex)
-    {
-        if (ex.Response is FtpWebResponse ftpResponse)
-        {
-            using (ftpResponse)
-            {
-                return ftpResponse.StatusCode is FtpStatusCode.ActionNotTakenFileUnavailable or FtpStatusCode.ActionNotTakenFilenameNotAllowed;
-            }
-        }
-
-        return false;
-    }
-
     private static void EnsureSftpDirectoryExists(SftpClient client, string remoteDirectory)
     {
         var segments = SplitSegments(remoteDirectory);
@@ -267,19 +226,16 @@ public sealed class FtpClient
         }
     }
 
-    private static FtpWebRequest CreateFtpRequest(
-        FtpConnectionOptions options,
-        string remotePath,
-        string method)
+    private static AsyncFtpClient CreateAsyncFtpClient(FtpConnectionOptions options)
     {
-        var builder = new UriBuilder("ftp", options.Host, options.Port, NormalizePathForUri(remotePath));
-        var request = (FtpWebRequest)WebRequest.Create(builder.Uri);
-        request.Method = method;
-        request.Credentials = new NetworkCredential(options.Username, options.Password);
-        request.UseBinary = true;
-        request.UsePassive = true;
-        request.KeepAlive = false;
-        return request;
+        var ftp = new AsyncFtpClient(options.Host, options.Username, options.Password, options.Port);
+        ftp.Config.DataConnectionType = FtpDataConnectionType.AutoPassive;
+        if (options.AcceptAnyCertificate)
+        {
+            ftp.Config.ValidateAnyCertificate = true;
+        }
+
+        return ftp;
     }
 
     private static SftpClient CreateSftpClient(FtpConnectionOptions options)
@@ -299,17 +255,6 @@ public sealed class FtpClient
         {
             stream.Seek(0, SeekOrigin.Begin);
         }
-    }
-
-    private static string NormalizePathForUri(string path)
-    {
-        if (string.IsNullOrWhiteSpace(path) || path == "/")
-        {
-            return "/";
-        }
-
-        var trimmed = path.Replace('\\', '/').TrimStart('/');
-        return Uri.EscapeUriString(trimmed);
     }
 
     private static string NormalizeFilePath(string path)

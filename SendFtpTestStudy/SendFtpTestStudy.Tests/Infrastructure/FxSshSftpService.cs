@@ -10,11 +10,12 @@ using System.Threading.Tasks;
 
 namespace SendFtpTestStudy.Tests.Infrastructure
 {
-    internal class FxSshSftpService
+    internal class FxSshSftpService(string rootPath)
     {
         // just implement sftp version 3
         // https://datatracker.ietf.org/doc/html/draft-ietf-secsh-filexfer-02
 
+        // ReSharper disable IdentifierTypo
         #region defines
         private const byte SSH_FXP_INIT = 1;
         private const byte SSH_FXP_VERSION = 2;
@@ -70,14 +71,10 @@ namespace SendFtpTestStudy.Tests.Infrastructure
 
         private readonly CancellationTokenSource _cancellationTokenSource = new();
         private readonly Dictionary<string, (string path, FileStream? fs)> _mapOfHandle = [];
-        private readonly string _rootPath;
+        private readonly string _rootPath = Path.GetFullPath(rootPath + Path.DirectorySeparatorChar);
         private byte[]? _pandingBytes;
         private int _handleCursor = 0;
-
-        public FxSshSftpService(string rootPath)
-        {
-            _rootPath = Path.GetFullPath(rootPath + Path.DirectorySeparatorChar);
-        }
+        // ReSharper restore IdentifierTypo
 
         public void OnData(byte[] data)
         {
@@ -166,7 +163,7 @@ namespace SendFtpTestStudy.Tests.Infrastructure
             var path = reader.ReadString(Encoding.UTF8);
 
             var relativePath = GetRelativePath(path);
-            var dummyFile = new FileStruct { FileName = relativePath, LongName = "", fileAttr = new FileAttr() };
+            var dummyFile = new FileStruct { FileName = relativePath, LongName = "", FileAttr = new FileAttr() };
             SendName(requestId, [dummyFile]);
         }
 
@@ -512,7 +509,7 @@ namespace SendFtpTestStudy.Tests.Infrastructure
                 {
                     FileName = isReal ? x.FullName : x.Name,
                     LongName = "",
-                    fileAttr = GetAttr(x)
+                    FileAttr = GetAttr(x)
                 })
                 .ToArray();
         }
@@ -607,7 +604,7 @@ namespace SendFtpTestStudy.Tests.Infrastructure
             {
                 writer.Write(file.FileName, Encoding.UTF8);
                 writer.Write(file.LongName, Encoding.UTF8);
-                WriteFileAttr(writer, file.fileAttr);
+                WriteFileAttr(writer, file.FileAttr);
             }
             SendPacket(writer.ToByteArray());
         }
@@ -667,7 +664,7 @@ namespace SendFtpTestStudy.Tests.Infrastructure
         {
             public string FileName = string.Empty;
             public string LongName = string.Empty;
-            public FileAttr fileAttr = new FileAttr();
+            public FileAttr FileAttr = new();
         }
 
         private class FileAttr

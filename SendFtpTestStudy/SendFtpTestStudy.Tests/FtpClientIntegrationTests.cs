@@ -4,20 +4,14 @@ using SendFtpTestStudy.Tests.Infrastructure;
 
 namespace SendFtpTestStudy.Tests;
 
-public class FtpClientFtpTests : IClassFixture<FtpServerFixture>
+public class FtpClientFtpTests(FtpServerFixture fixture) : IClassFixture<FtpServerFixture>
 {
-    private readonly FtpServerFixture _fixture;
     private readonly FtpClient _client = new();
-
-    public FtpClientFtpTests(FtpServerFixture fixture)
-    {
-        _fixture = fixture;
-    }
 
     [Fact]
     public async Task UploadDownloadAndListOverFtp()
     {
-        var options = _fixture.Options;
+        var options = fixture.Options;
         var remotePath = "/uploads/hello.txt";
         var payload = "Hello via FTP";
 
@@ -26,7 +20,7 @@ public class FtpClientFtpTests : IClassFixture<FtpServerFixture>
             await _client.UploadAsync(options, remotePath, uploadStream);
         }
 
-        var expectedLocalPath = Path.Combine(_fixture.RootPath, "uploads", "hello.txt");
+        var expectedLocalPath = Path.Combine(fixture.RootPath, "uploads", "hello.txt");
         Assert.True(File.Exists(expectedLocalPath));
         Assert.Equal(payload, await File.ReadAllTextAsync(expectedLocalPath));
 
@@ -38,20 +32,14 @@ public class FtpClientFtpTests : IClassFixture<FtpServerFixture>
     }
 }
 
-public class FtpClientSftpTests : IClassFixture<SftpServerFixture>
+public class FtpClientSftpTests(SftpServerFixture fixture) : IClassFixture<SftpServerFixture>
 {
-    private readonly SftpServerFixture _fixture;
     private readonly FtpClient _client = new();
-
-    public FtpClientSftpTests(SftpServerFixture fixture)
-    {
-        _fixture = fixture;
-    }
 
     [Fact]
     public async Task UploadDownloadAndListOverSftp()
     {
-        var options = _fixture.Options;
+        var options = fixture.Options;
         var remotePath = "/data/inbound/world.txt";
         var payload = "Hello via SFTP";
 
@@ -60,7 +48,7 @@ public class FtpClientSftpTests : IClassFixture<SftpServerFixture>
             await _client.UploadAsync(options, remotePath, uploadStream);
         }
 
-        var expectedLocalPath = Path.Combine(_fixture.RootPath, "data", "inbound", "world.txt");
+        var expectedLocalPath = Path.Combine(fixture.RootPath, "data", "inbound", "world.txt");
         Assert.True(File.Exists(expectedLocalPath));
         Assert.Equal(payload, await File.ReadAllTextAsync(expectedLocalPath));
 

@@ -1,5 +1,8 @@
 # Repository Guidelines
 
+- ユーザーとの対話は日本語で行う
+- t_wada式TDDを徹底する
+
 ## Project Structure & Module Organization
 - `SendFtpTestStudy.sln` binds the main library in `SendFtpTestStudy/` and the xUnit suite in `SendFtpTestStudy.Tests/`.
 - Keep product code under `SendFtpTestStudy/` with namespaces matching folder names; reserve `SendFtpTestStudy.Tests/` for mirrors of the production namespaces.

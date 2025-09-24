@@ -68,27 +68,18 @@ public sealed class FtpServerFixture : IAsyncLifetime
         }
     }
 
-    private sealed class SingleUserMembershipProvider : IMembershipProviderAsync
+    private sealed class SingleUserMembershipProvider(string username, string password) : IMembershipProviderAsync
     {
-        private readonly string _username;
-        private readonly string _password;
-
-        public SingleUserMembershipProvider(string username, string password)
-        {
-            _username = username;
-            _password = password;
-        }
-
         public Task<MemberValidationResult> ValidateUserAsync(
-            string username,
-            string password,
+            string username1,
+            string password1,
             CancellationToken cancellationToken)
         {
-            if (string.Equals(username, _username, StringComparison.Ordinal) &&
-                string.Equals(password, _password, StringComparison.Ordinal))
+            if (string.Equals(username1, username, StringComparison.Ordinal) &&
+                string.Equals(password1, password, StringComparison.Ordinal))
             {
                 var identity = new ClaimsIdentity(authenticationType: "ftp-basic");
-                identity.AddClaim(new Claim(ClaimsIdentity.DefaultNameClaimType, username));
+                identity.AddClaim(new Claim(ClaimsIdentity.DefaultNameClaimType, username1));
                 var principal = new ClaimsPrincipal(identity);
                 return Task.FromResult(new MemberValidationResult(MemberValidationStatus.AuthenticatedUser, principal));
             }
