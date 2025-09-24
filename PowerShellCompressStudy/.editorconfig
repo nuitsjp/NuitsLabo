@@ -1,0 +1,19 @@
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+max_line_length = 120
+
+[*.ps1]
+indent_style = space
+indent_size = 4
+# PowerShell の括弧スタイル（拡張/フォーマッタが対応している場合に有効）
+# 例: VS Code PowerShell 拡張は Allman/OTBS のプリセットを持つ
+# 開き波括弧を改行にする（Allman）
+powershell.codeFormatting.preset = Allman
+powershell.codeFormatting.openBraceOnSameLine = false
+
