@@ -1,4 +1,3 @@
-using SendFtpTestStudy;
 using System.Text;
 using SendFtpTestStudy.Tests.Infrastructure;
 

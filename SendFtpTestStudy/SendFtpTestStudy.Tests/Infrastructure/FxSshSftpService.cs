@@ -1,12 +1,8 @@
 // Adapted from FxSsh SshServerLoader.SftpService (MIT License).
 using FxSsh;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+
+#pragma warning disable IDE0051
 
 namespace SendFtpTestStudy.Tests.Infrastructure
 {
@@ -73,15 +69,14 @@ namespace SendFtpTestStudy.Tests.Infrastructure
         private readonly Dictionary<string, (string path, FileStream? fs)> _mapOfHandle = [];
         private readonly string _rootPath = Path.GetFullPath(rootPath + Path.DirectorySeparatorChar);
         private byte[]? _pandingBytes;
-        private int _handleCursor = 0;
+        private int _handleCursor;
         // ReSharper restore IdentifierTypo
 
         public void OnData(byte[] data)
         {
-            if (_pandingBytes == null)
-                _pandingBytes = data;
-            else
-                _pandingBytes = [.. _pandingBytes, .. data];
+            _pandingBytes = _pandingBytes == null 
+                ? data 
+                : [.. _pandingBytes, .. data];
 
             var reader = new SshDataReader(_pandingBytes);
             var length = (int)reader.ReadUInt32() + 4;
@@ -153,7 +148,7 @@ namespace SendFtpTestStudy.Tests.Infrastructure
 
         private void ProcessInit(SshDataReader reader)
         {
-            var clientVersion = reader.ReadUInt32();
+            reader.ReadUInt32();
             SendInit();
         }
 
@@ -275,14 +270,14 @@ namespace SendFtpTestStudy.Tests.Infrastructure
             var requestId = reader.ReadUInt32();
             var filename = reader.ReadString(Encoding.UTF8);
             var pflags = reader.ReadUInt32();
-            var attr = ReadFileAttrs(reader);
+            ReadFileAttrs(reader);
 
             try
             {
                 var access = default(FileAccess);
                 if ((pflags & SSH_FXF_READ) != 0) access |= FileAccess.Read;
                 if ((pflags & SSH_FXF_WRITE) != 0) access |= FileAccess.Write;
-                var mode = default(FileMode);
+                FileMode mode;
                 if ((pflags & SSH_FXF_TRUNC) != 0) mode = FileMode.Create;
                 else if ((pflags & SSH_FXF_CREAT) != 0) mode = FileMode.CreateNew;
                 else if ((pflags & SSH_FXF_APPEND) != 0) mode = FileMode.Append;
@@ -309,18 +304,18 @@ namespace SendFtpTestStudy.Tests.Infrastructure
 
             if (_mapOfHandle.TryGetValue(handle, out var map))
             {
-                var (path, fs) = map;
-                if (fs is null)
+                var (_, fileStream) = map;
+                if (fileStream is null)
                 {
                     SendStatus(requestId, SSH_FX_FAILURE, $"Unknow handle '{handle}'.", "en");
                     return;
                 }
 
-                fs.Position = (long)offset;
+                fileStream.Position = (long)offset;
                 var buffer = new byte[length];
-                var readLenth = fs.Read(buffer);
-                if (readLenth > 0)
-                    SendData(requestId, buffer.AsMemory()[..readLenth]);
+                var readLength = fileStream.Read(buffer);
+                if (readLength > 0)
+                    SendData(requestId, buffer.AsMemory()[..readLength]);
                 else
                     SendStatus(requestId, SSH_FX_EOF, "", "");
             }
@@ -337,15 +332,15 @@ namespace SendFtpTestStudy.Tests.Infrastructure
 
             if (_mapOfHandle.TryGetValue(handle, out var map))
             {
-                var (path, fs) = map;
-                if (fs is null)
+                var (_, fileStream) = map;
+                if (fileStream is null)
                 {
                     SendStatus(requestId, SSH_FX_FAILURE, $"Unknow handle '{handle}'.", "en");
                     return;
                 }
 
-                fs.Position = (long)offset;
-                fs.Write(data);
+                fileStream.Position = (long)offset;
+                fileStream.Write(data);
                 SendStatus(requestId, SSH_FX_OK, "", "");
             }
             else
@@ -400,11 +395,11 @@ namespace SendFtpTestStudy.Tests.Infrastructure
         private void ProcessRename(SshDataReader reader)
         {
             var requestId = reader.ReadUInt32();
-            var oldpath = reader.ReadString(Encoding.UTF8);
-            var newpath = reader.ReadString(Encoding.UTF8);
+            var oldPath = reader.ReadString(Encoding.UTF8);
+            var newPath = reader.ReadString(Encoding.UTF8);
 
-            var absOldPath = GetAbsolutePath(oldpath);
-            var absNewPath = GetAbsolutePath(newpath);
+            var absOldPath = GetAbsolutePath(oldPath);
+            var absNewPath = GetAbsolutePath(newPath);
 
             try
             {
@@ -416,7 +411,7 @@ namespace SendFtpTestStudy.Tests.Infrastructure
             }
             catch (Exception)
             {
-                SendStatus(requestId, SSH_FX_FAILURE, $"Failure to rename '{oldpath}' to '{newpath}'.", "en");
+                SendStatus(requestId, SSH_FX_FAILURE, $"Failure to rename '{oldPath}' to '{newPath}'.", "en");
             }
         }
 
@@ -489,7 +484,8 @@ namespace SendFtpTestStudy.Tests.Infrastructure
                     using (File.Open(path, FileMode.Open, FileAccess.Read))
                         return true;
                 }
-                else if (Directory.Exists(path))
+
+                if (Directory.Exists(path))
                 {
                     new DirectoryInfo(path).GetFileSystemInfos();
                     return true;
@@ -497,7 +493,9 @@ namespace SendFtpTestStudy.Tests.Infrastructure
             }
             catch
             {
+                // ignored
             }
+
             return false;
         }
 
@@ -519,12 +517,14 @@ namespace SendFtpTestStudy.Tests.Infrastructure
             try
             {
                 var isDir = info.Attributes.HasFlag(FileAttributes.Directory);
-                var attr = new FileAttr();
-                attr.Size = isDir ? null : (ulong)new FileInfo(info.FullName).Length;
-                // 0x4000 is directory, 0x8000 is regular file, 0x01B6 equal 0o666
-                attr.Permissions = isDir ? 0x41B6u : 0x81B6u;
-                attr.AccessTime = (uint)new DateTimeOffset(info.LastAccessTimeUtc, TimeSpan.Zero).ToUnixTimeSeconds();
-                attr.ModificationTime = (uint)new DateTimeOffset(info.LastWriteTimeUtc, TimeSpan.Zero).ToUnixTimeSeconds();
+                var attr = new FileAttr
+                {
+                    Size = isDir ? null : (ulong)new FileInfo(info.FullName).Length,
+                    // 0x4000 is directory, 0x8000 is regular file, 0x01B6 equal 0o666
+                    Permissions = isDir ? 0x41B6u : 0x81B6u,
+                    AccessTime = (uint)new DateTimeOffset(info.LastAccessTimeUtc, TimeSpan.Zero).ToUnixTimeSeconds(),
+                    ModificationTime = (uint)new DateTimeOffset(info.LastWriteTimeUtc, TimeSpan.Zero).ToUnixTimeSeconds()
+                };
 
                 return attr;
             }
@@ -649,7 +649,7 @@ namespace SendFtpTestStudy.Tests.Infrastructure
             if (attr.AccessTime != null) writer.Write(attr.AccessTime.Value);
             if (attr.ModificationTime != null) writer.Write(attr.ModificationTime.Value);
             if (attr.ExtendedCount != null) writer.Write(attr.ExtendedCount.Value);
-            if (attr.ExtendedCount > 0 && attr.Extends is not null)
+            if (attr is { ExtendedCount: > 0, Extends: not null })
             {
                 foreach (var item in attr.Extends)
                 {

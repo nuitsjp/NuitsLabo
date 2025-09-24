@@ -1,5 +1,3 @@
-using System.Text;
-using System.Linq;
 using FluentFTP;
 using Renci.SshNet;
 
@@ -7,8 +5,6 @@ namespace SendFtpTestStudy;
 
 public sealed class FtpClient
 {
-    private const int DefaultBufferSize = 81920;
-
     public Task UploadAsync(
         FtpConnectionOptions options,
         string remotePath,
@@ -111,7 +107,7 @@ public sealed class FtpClient
         {
             var normalizedPath = NormalizeFilePath(remotePath);
             var data = await ftp.DownloadBytes(normalizedPath, cancellationToken).ConfigureAwait(false);
-            return data ?? Array.Empty<byte>();
+            return data ?? [];
         }
         finally
         {
@@ -152,7 +148,7 @@ public sealed class FtpClient
         cancellationToken.ThrowIfCancellationRequested();
 
         using var client = CreateSftpClient(options);
-        client.Connect();
+        await client.ConnectAsync(cancellationToken);
 
         var normalizedPath = NormalizeFilePath(remotePath);
         var directory = GetDirectoryPath(normalizedPath);
@@ -174,7 +170,7 @@ public sealed class FtpClient
         cancellationToken.ThrowIfCancellationRequested();
 
         using var client = CreateSftpClient(options);
-        client.Connect();
+        await client.ConnectAsync(cancellationToken);
 
         var normalizedPath = NormalizeFilePath(remotePath);
         using var buffer = new MemoryStream();
@@ -209,7 +205,7 @@ public sealed class FtpClient
 
     private static void EnsureSftpDirectoryExists(SftpClient client, string remoteDirectory)
     {
-        var segments = SplitSegments(remoteDirectory);
+        var segments = SplitSegments(remoteDirectory).ToArray();
         if (!segments.Any())
         {
             return;

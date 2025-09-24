@@ -1,8 +1,3 @@
-using SendFtpTestStudy;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 using FxSsh;
 using FxSsh.Services;
 using System.Net;
@@ -13,7 +8,7 @@ public sealed class SftpServerFixture : IAsyncLifetime
 {
     private readonly object _lock = new();
     private SshServer? _server;
-    private readonly List<FxSshSftpService> _services = new();
+    private readonly List<FxSshSftpService> _services = [];
 
     public string RootPath { get; private set; } = null!;
 

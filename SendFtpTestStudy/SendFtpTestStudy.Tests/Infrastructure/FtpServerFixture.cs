@@ -1,18 +1,15 @@
-using SendFtpTestStudy;
 using FubarDev.FtpServer;
 using FubarDev.FtpServer.AccountManagement;
 using FubarDev.FtpServer.FileSystem.DotNet;
 using Microsoft.Extensions.DependencyInjection;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Security.Claims;
 
 namespace SendFtpTestStudy.Tests.Infrastructure;
 
 public sealed class FtpServerFixture : IAsyncLifetime
 {
-    private const string TestUsername = "tester";
-    private const string TestPassword = "test-pass";
+    private const string TEST_USERNAME = "tester";
+    private const string TEST_PASSWORD = "test-pass";
 
     private ServiceProvider? _provider;
     private IFtpServerHost? _host;
@@ -25,8 +22,8 @@ public sealed class FtpServerFixture : IAsyncLifetime
         FtpProtocol.Ftp,
         "127.0.0.1",
         Port,
-        TestUsername,
-        TestPassword);
+        TEST_USERNAME,
+        TEST_PASSWORD);
 
     public async Task InitializeAsync()
     {
@@ -37,7 +34,7 @@ public sealed class FtpServerFixture : IAsyncLifetime
 
         var services = new ServiceCollection();
         services.Configure<DotNetFileSystemOptions>(opt => opt.RootPath = RootPath);
-        var membershipProvider = new SingleUserMembershipProvider(TestUsername, TestPassword);
+        var membershipProvider = new SingleUserMembershipProvider(TEST_USERNAME, TEST_PASSWORD);
         services.AddSingleton<IMembershipProvider>(membershipProvider);
         services.AddSingleton<IMembershipProviderAsync>(membershipProvider);
         services.AddFtpServer(builder => builder
@@ -60,7 +57,10 @@ public sealed class FtpServerFixture : IAsyncLifetime
             await _host.StopAsync(CancellationToken.None).ConfigureAwait(false);
         }
 
-        _provider?.Dispose();
+        if (_provider is not null)
+        {
+            await _provider.DisposeAsync();
+        }
 
         if (!string.IsNullOrEmpty(RootPath) && Directory.Exists(RootPath))
         {
@@ -92,9 +92,9 @@ public sealed class FtpServerFixture : IAsyncLifetime
             return Task.CompletedTask;
         }
 
-        public Task<MemberValidationResult> ValidateUserAsync(string username, string password)
+        public Task<MemberValidationResult> ValidateUserAsync(string userName, string passWord)
         {
-            return ValidateUserAsync(username, password, CancellationToken.None);
+            return ValidateUserAsync(userName, passWord, CancellationToken.None);
         }
     }
 }

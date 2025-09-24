@@ -1,11 +1,5 @@
 namespace SendFtpTestStudy;
 
-public enum FtpProtocol
-{
-    Ftp,
-    Sftp
-}
-
 public sealed class FtpConnectionOptions(
     FtpProtocol protocol,
     string host,
