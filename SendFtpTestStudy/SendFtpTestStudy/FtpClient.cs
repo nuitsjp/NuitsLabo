@@ -4,29 +4,17 @@ namespace SendFtpTestStudy;
 
 public sealed class FtpClient
 {
-    public Task UploadAsync(
+    public async Task UploadAsync(
         FtpConnectionOptions options,
         string remotePath,
         Stream content,
         CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(options);
-        ArgumentNullException.ThrowIfNull(content);
-
         if (string.IsNullOrWhiteSpace(remotePath))
         {
             throw new ArgumentException("Remote path is required.", nameof(remotePath));
         }
 
-        return UploadViaFtpAsync(options, remotePath, content, cancellationToken);
-    }
-
-    private static async Task UploadViaFtpAsync(
-        FtpConnectionOptions options,
-        string remotePath,
-        Stream content,
-        CancellationToken cancellationToken)
-    {
         cancellationToken.ThrowIfCancellationRequested();
 
         var normalizedPath = NormalizeFilePath(remotePath);
@@ -100,3 +88,4 @@ public sealed class FtpClient
         return normalized[..lastSlash];
     }
 }
+

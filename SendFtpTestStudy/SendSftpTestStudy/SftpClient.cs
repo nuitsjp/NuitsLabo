@@ -11,9 +11,6 @@ public sealed class SftpClient
         Stream content,
         CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(options);
-        ArgumentNullException.ThrowIfNull(content);
-
         if (string.IsNullOrWhiteSpace(remotePath))
         {
             throw new ArgumentException("Remote path is required.", nameof(remotePath));
@@ -112,6 +109,4 @@ public sealed class SftpClient
             .Split("/", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     }
 }
-
-
 
