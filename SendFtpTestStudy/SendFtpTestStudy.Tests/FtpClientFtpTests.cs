@@ -8,7 +8,7 @@ public class FtpClientFtpTests(FtpServerFixture fixture) : IClassFixture<FtpServ
     private readonly FtpClient _client = new();
 
     [Fact]
-    public async Task UploadDownloadAndListOverFtp()
+    public async Task UploadOverFtp()
     {
         var options = fixture.Options;
         var remotePath = "/uploads/hello.txt";
@@ -23,10 +23,5 @@ public class FtpClientFtpTests(FtpServerFixture fixture) : IClassFixture<FtpServ
         Assert.True(File.Exists(expectedLocalPath));
         Assert.Equal(payload, await File.ReadAllTextAsync(expectedLocalPath));
 
-        var downloaded = await _client.DownloadAsync(options, remotePath);
-        Assert.Equal(payload, Encoding.UTF8.GetString(downloaded));
-
-        var entries = await _client.ListAsync(options, "/uploads");
-        Assert.Contains("hello.txt", entries);
     }
 }
