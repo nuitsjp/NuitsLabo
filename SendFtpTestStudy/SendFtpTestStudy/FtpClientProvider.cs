@@ -30,7 +30,7 @@ public sealed class FtpClientProvider : IFtpClientProvider
     {
         // AsyncFtpClientを作成し、基本設定を行う
         // FTPクライアントを接続情報で初期化
-        var ftp = new AsyncFtpClient(_options.Host, _options.Username, _options.Password, _options.Port);
+        var ftp = new AsyncFtpClient(_options.Host, _options.User, _options.Password, _options.Port);
 
         // データ接続タイプを設定
         ftp.Config.DataConnectionType = _options.DataConnectionType;
@@ -38,12 +38,10 @@ public sealed class FtpClientProvider : IFtpClientProvider
         // 任意の証明書を受け入れる（信頼された環境でしか利用しないため）
         ftp.Config.ValidateAnyCertificate = true;
 
-        var asyncFtpClient = ftp;
-
         // FTP接続を確立
-        await asyncFtpClient.Connect(cancellationToken).ConfigureAwait(false);
+        await ftp.Connect(cancellationToken).ConfigureAwait(false);
 
         // 接続済みのFtpClientを作成して返す
-        return new FtpClient(asyncFtpClient);
+        return new FtpClient(ftp);
     }
 }

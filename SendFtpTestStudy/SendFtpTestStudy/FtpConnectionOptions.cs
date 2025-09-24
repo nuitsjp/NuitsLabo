@@ -14,7 +14,7 @@ namespace SendFtpTestStudy;
 public sealed class FtpConnectionOptions(
     string host,
     int port,
-    string username,
+    string user,
     string password,
     FtpDataConnectionType dataConnectionType = FtpDataConnectionType.AutoPassive)
 {
@@ -31,7 +31,7 @@ public sealed class FtpConnectionOptions(
     /// <summary>
     /// FTP認証に使用するユーザー名
     /// </summary>
-    public string Username { get; } = username ?? throw new ArgumentNullException(nameof(username));
+    public string User { get; } = user ?? throw new ArgumentNullException(nameof(user));
 
     /// <summary>
     /// FTP認証に使用するパスワード
