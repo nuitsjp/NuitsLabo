@@ -11,11 +11,6 @@ namespace SendFtpTestStudy.Tests;
 /// <param name="fixture">FTPサーバーのテストフィクスチャ</param>
 public class FtpClientFtpTests(FtpServerFixture fixture) : IClassFixture<FtpServerFixture>
 {
-    /// <summary>
-    /// テスト対象のFtpClientインスタンス。
-    /// 各テストメソッドで共有され、テスト用FTPサーバーへのアップロード機能をテストする。
-    /// </summary>
-    private readonly FtpClient _client = new();
 
     /// <summary>
     /// FTPサーバーへのファイルアップロード機能をテストする
@@ -36,10 +31,11 @@ public class FtpClientFtpTests(FtpServerFixture fixture) : IClassFixture<FtpServ
         // アップロードするテストデータ
         var payload = "Hello via FTP";
 
-        // メモリストリームでテストデータをラップしてアップロード実行
+        // FtpClientProviderを使用してFtpClientを作成し、アップロード実行
+        await using var client = await FtpClientProvider.CreateAsync(options);
         await using (var uploadStream = new MemoryStream(Encoding.UTF8.GetBytes(payload)))
         {
-            await _client.UploadAsync(options, remotePath, uploadStream);
+            await client.UploadAsync(remotePath, uploadStream);
         }
 
         // サーバーサイドのローカルファイルシステムでファイルの存在を検証
