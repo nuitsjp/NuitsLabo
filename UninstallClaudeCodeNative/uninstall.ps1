@@ -11,12 +11,17 @@ $DOWNLOADS_DIR = "$CLAUDE_DIR\downloads"
 $BIN_DIR = "$CLAUDE_DIR\bin"
 $DATA_DIR = "$env:LOCALAPPDATA\Claude"
 $APPDATA_DIR = "$env:APPDATA\Claude"
+$PROGRAMS_DIRS = @(
+    "$env:LOCALAPPDATA\Programs\Claude",
+    "$env:LOCALAPPDATA\Programs\Claude Code",
+    "$env:LOCALAPPDATA\Programs\claude-code"
+)
 
 # プロセスが実行中でないか確認
 $claudeProcesses = Get-Process -Name "claude*" -ErrorAction SilentlyContinue
 if ($claudeProcesses) {
     Write-Output "Stopping Claude Code processes..."
-    $claudeProcesses | Stop-Process -Force
+    $claudeProcesses | Stop-Process -Force -ErrorAction SilentlyContinue
     Start-Sleep -Seconds 2
 }
 
@@ -27,6 +32,19 @@ if ($userPath) {
     $paths = $userPath -split ';' | Where-Object { $_ -and $_ -notlike "*\.claude\bin*" }
     $newPath = $paths -join ';'
     [Environment]::SetEnvironmentVariable("Path", $newPath, "User")
+}
+
+$machinePath = [Environment]::GetEnvironmentVariable("Path", "Machine")
+if ($machinePath -and $machinePath -like "*.claude\bin*") {
+    Write-Output "Attempting to remove Claude from system PATH..."
+    try {
+        $machinePaths = $machinePath -split ';' | Where-Object { $_ -and $_ -notlike "*.claude\bin*" }
+        $newMachinePath = $machinePaths -join ';'
+        [Environment]::SetEnvironmentVariable("Path", $newMachinePath, "Machine")
+    }
+    catch {
+        Write-Warning "Could not modify system PATH. Administrative privileges may be required. Error: $_"
+    }
 }
 
 # Windowsのスタートメニューショートカットを削除
@@ -68,7 +86,7 @@ foreach ($regPath in $registryPaths) {
 }
 
 # Claude関連のディレクトリを削除
-$dirsToRemove = @($CLAUDE_DIR, $DATA_DIR, $APPDATA_DIR)
+$dirsToRemove = @($CLAUDE_DIR, $DATA_DIR, $APPDATA_DIR) + $PROGRAMS_DIRS
 foreach ($dir in $dirsToRemove) {
     if (Test-Path $dir) {
         Write-Output "Removing directory: $dir"

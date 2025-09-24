@@ -1,11 +1,11 @@
-namespace SendFtpTestStudy;
+namespace SendSftpTestStudy;
 
-public sealed class FtpConnectionOptions(
+public sealed class SftpConnectionOptions(
     string host,
     int port,
     string username,
     string password,
-    bool acceptAnyCertificate = false)
+    bool acceptAnySshHostKey = false)
 {
     public string Host { get; } = host ?? throw new ArgumentNullException(nameof(host));
 
@@ -15,5 +15,5 @@ public sealed class FtpConnectionOptions(
 
     public string Password { get; } = password ?? throw new ArgumentNullException(nameof(password));
 
-    public bool AcceptAnyCertificate { get; } = acceptAnyCertificate;
+    public bool AcceptAnySshHostKey { get; } = acceptAnySshHostKey;
 }

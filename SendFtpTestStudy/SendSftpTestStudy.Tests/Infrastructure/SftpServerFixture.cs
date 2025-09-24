@@ -1,8 +1,9 @@
 using FxSsh;
 using FxSsh.Services;
+using SendSftpTestStudy;
 using System.Net;
 
-namespace SendFtpTestStudy.Tests.Infrastructure;
+namespace SendSftpTestStudy.Tests.Infrastructure;
 
 public sealed class SftpServerFixture : IAsyncLifetime
 {
@@ -18,8 +19,7 @@ public sealed class SftpServerFixture : IAsyncLifetime
 
     public string Password { get; } = "testpass";
 
-    public FtpConnectionOptions Options => new(
-        FtpProtocol.Sftp,
+    public SftpConnectionOptions Options => new(
         "127.0.0.1",
         Port,
         Username,
@@ -28,7 +28,7 @@ public sealed class SftpServerFixture : IAsyncLifetime
 
     public Task InitializeAsync()
     {
-        RootPath = Path.Combine(Path.GetTempPath(), "SendFtpTestStudy", "sftp", Guid.NewGuid().ToString("N"));
+        RootPath = Path.Combine(Path.GetTempPath(), "SendSftpTestStudy", "sftp", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(RootPath);
 
         Port = PortHelper.GetAvailablePort();
@@ -103,7 +103,6 @@ public sealed class SftpServerFixture : IAsyncLifetime
             return;
         }
 
-
         var subsystem = new FxSshSftpService(RootPath);
         EventHandler<byte[]> outbound = (_, payload) => e.Channel.SendData(payload);
         subsystem.DataReceived += outbound;
@@ -155,15 +154,3 @@ public sealed class SftpServerFixture : IAsyncLifetime
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

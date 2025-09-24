@@ -19,7 +19,6 @@ public sealed class FtpServerFixture : IAsyncLifetime
     public int Port { get; private set; }
 
     public FtpConnectionOptions Options => new(
-        FtpProtocol.Ftp,
         "127.0.0.1",
         Port,
         TEST_USERNAME,
@@ -98,5 +97,3 @@ public sealed class FtpServerFixture : IAsyncLifetime
         }
     }
 }
-
-

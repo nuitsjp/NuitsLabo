@@ -1,11 +1,12 @@
 using System.Text;
-using SendFtpTestStudy.Tests.Infrastructure;
+using SendSftpTestStudy;
+using SendSftpTestStudy.Tests.Infrastructure;
 
-namespace SendFtpTestStudy.Tests;
+namespace SendSftpTestStudy.Tests;
 
-public class FtpClientSftpTests(SftpServerFixture fixture) : IClassFixture<SftpServerFixture>
+public class SftpClientTests(SftpServerFixture fixture) : IClassFixture<SftpServerFixture>
 {
-    private readonly FtpClient _client = new();
+    private readonly SftpClient _client = new();
 
     [Fact]
     public async Task UploadOverSftp()
@@ -22,6 +23,5 @@ public class FtpClientSftpTests(SftpServerFixture fixture) : IClassFixture<SftpS
         var expectedLocalPath = Path.Combine(fixture.RootPath, "data", "inbound", "world.txt");
         Assert.True(File.Exists(expectedLocalPath));
         Assert.Equal(payload, await File.ReadAllTextAsync(expectedLocalPath));
-
     }
 }

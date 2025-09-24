@@ -1,13 +1,9 @@
-using System.Linq;
 using FluentFTP;
-using Renci.SshNet;
 
 namespace SendFtpTestStudy;
 
 public sealed class FtpClient
 {
-    private const int DefaultBufferSize = 81920;
-
     public Task UploadAsync(
         FtpConnectionOptions options,
         string remotePath,
@@ -22,15 +18,10 @@ public sealed class FtpClient
             throw new ArgumentException("Remote path is required.", nameof(remotePath));
         }
 
-        return options.Protocol switch
-        {
-            FtpProtocol.Ftp => UploadViaFtpAsync(options, remotePath, content, cancellationToken),
-            FtpProtocol.Sftp => UploadViaSftpAsync(options, remotePath, content, cancellationToken),
-            _ => throw new NotSupportedException($"Unsupported protocol: {options.Protocol}.")
-        };
+        return UploadViaFtpAsync(options, remotePath, content, cancellationToken);
     }
 
-    private async Task UploadViaFtpAsync(
+    private static async Task UploadViaFtpAsync(
         FtpConnectionOptions options,
         string remotePath,
         Stream content,
@@ -60,29 +51,6 @@ public sealed class FtpClient
         }
     }
 
-    private async Task UploadViaSftpAsync(
-        FtpConnectionOptions options,
-        string remotePath,
-        Stream content,
-        CancellationToken cancellationToken)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-
-        using var client = CreateSftpClient(options);
-        client.Connect();
-
-        var normalizedPath = NormalizeFilePath(remotePath);
-        var directory = GetDirectoryPath(normalizedPath);
-        EnsureSftpDirectoryExists(client, directory);
-
-        ResetPosition(content);
-        await Task.Run(
-            () => client.UploadFile(content, normalizedPath, true, _ => cancellationToken.ThrowIfCancellationRequested()),
-            cancellationToken).ConfigureAwait(false);
-
-        client.Disconnect();
-    }
-
     private static AsyncFtpClient CreateAsyncFtpClient(FtpConnectionOptions options)
     {
         var ftp = new AsyncFtpClient(options.Host, options.Username, options.Password, options.Port);
@@ -95,41 +63,11 @@ public sealed class FtpClient
         return ftp;
     }
 
-    private static SftpClient CreateSftpClient(FtpConnectionOptions options)
-    {
-        var client = new SftpClient(options.Host, options.Port, options.Username, options.Password);
-        if (options.AcceptAnySshHostKey)
-        {
-            client.HostKeyReceived += (_, e) => e.CanTrust = true;
-        }
-
-        return client;
-    }
-
     private static void ResetPosition(Stream stream)
     {
         if (stream.CanSeek)
         {
             stream.Seek(0, SeekOrigin.Begin);
-        }
-    }
-
-    private static void EnsureSftpDirectoryExists(SftpClient client, string remoteDirectory)
-    {
-        var segments = SplitSegments(remoteDirectory);
-        if (!segments.Any())
-        {
-            return;
-        }
-
-        var current = "/";
-        foreach (var segment in segments)
-        {
-            current = current == "/" ? $"/{segment}" : $"{current}/{segment}";
-            if (!client.Exists(current))
-            {
-                client.CreateDirectory(current);
-            }
         }
     }
 
@@ -160,12 +98,5 @@ public sealed class FtpClient
         }
 
         return normalized[..lastSlash];
-    }
-
-    private static IEnumerable<string> SplitSegments(string path)
-    {
-        return path
-            .Replace("\\", "/")
-            .Split("/", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     }
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 #pragma warning disable IDE0051
 
-namespace SendFtpTestStudy.Tests.Infrastructure
+namespace SendSftpTestStudy.Tests.Infrastructure
 {
     internal class FxSshSftpService(string rootPath)
     {
