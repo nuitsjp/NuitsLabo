@@ -25,6 +25,19 @@ if ($claudeProcesses) {
     Start-Sleep -Seconds 2
 }
 
+# npm経由でインストールされたClaude Codeを削除
+Write-Output "Checking for npm-installed Claude Code..."
+try {
+    $npmList = npm list -g 2>$null | Select-String "@anthropic-ai/claude-code"
+    if ($npmList) {
+        Write-Output "Removing Claude Code from npm global packages..."
+        npm uninstall -g @anthropic-ai/claude-code
+    }
+}
+catch {
+    Write-Warning "Could not check or remove npm package. Error: $_"
+}
+
 # PATHからClaude binディレクトリを削除
 Write-Output "Removing Claude from PATH..."
 $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
