@@ -8,7 +8,7 @@ namespace SendFtpTestStudy;
 /// </summary>
 /// <param name="host">FTPサーバーのホスト名またはIPアドレス</param>
 /// <param name="port">FTPサーバーのポート番号（通常21）</param>
-/// <param name="username">FTP認証用のユーザー名</param>
+/// <param name="user">FTP認証用のユーザー名</param>
 /// <param name="password">FTP認証用のパスワード</param>
 /// <param name="dataConnectionType">FTPデータ接続タイプ（デフォルト: AutoPassive）</param>
 public sealed class FtpConnectionOptions(

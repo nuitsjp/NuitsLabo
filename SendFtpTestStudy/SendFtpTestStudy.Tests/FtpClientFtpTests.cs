@@ -1,4 +1,6 @@
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using SendFtpTestStudy.Tests.Infrastructure;
 
 namespace SendFtpTestStudy.Tests;
@@ -7,6 +9,7 @@ namespace SendFtpTestStudy.Tests;
 /// FtpClientクラスの統合テストクラス
 /// テスト用のFTPサーバーを使用して、実際のFTP通信を行いアップロード機能を検証する
 /// xUnitのIClassFixtureを使用してテストクラス全体でFTPサーバーを共有
+/// ServiceCollectionを使用してDI経由でFtpClientProviderを取得する
 /// </summary>
 /// <param name="fixture">FTPサーバーのテストフィクスチャ</param>
 public class FtpClientFtpTests(FtpServerFixture fixture) : IClassFixture<FtpServerFixture>
@@ -15,9 +18,11 @@ public class FtpClientFtpTests(FtpServerFixture fixture) : IClassFixture<FtpServ
     /// <summary>
     /// FTPサーバーへのファイルアップロード機能をテストする
     /// テストシナリオ：
-    /// 1. メモリストリームでテキストデータを作成
-    /// 2. FtpClient.UploadAsyncでファイルをアップロード
-    /// 3. サーバーのローカルファイルシステムでファイルの存在と内容を検証
+    /// 1. ServiceCollectionにFtpClientProviderを登録
+    /// 2. DIコンテナからIFtpClientProviderを取得
+    /// 3. メモリストリームでテキストデータを作成
+    /// 4. FtpClient.UploadAsyncでファイルをアップロード
+    /// 5. サーバーのローカルファイルシステムでファイルの存在と内容を検証
     /// </summary>
     [Fact]
     public async Task UploadOverFtp()
@@ -25,14 +30,21 @@ public class FtpClientFtpTests(FtpServerFixture fixture) : IClassFixture<FtpServ
         // テスト用FTPサーバーの接続オプションを取得
         var options = fixture.Options;
 
+        // ServiceCollectionを設定してDI経由でFtpClientProviderを取得
+        var services = new ServiceCollection();
+        services.AddFtpClient(options);
+
+        await using var serviceProvider = services.BuildServiceProvider();
+        var provider = serviceProvider.GetRequiredService<IFtpClientProvider>();
+
         // アップロード先のリモートパス（ディレクトリは事前に存在している必要がある）
         var remotePath = "/uploads/hello.txt";
 
         // アップロードするテストデータ
         var payload = "Hello via FTP";
 
-        // FtpClientProviderを使用してFtpClientを作成し、アップロード実行
-        await using var client = await FtpClientProvider.CreateAsync(options);
+        // DI経由でFtpClientを作成し、アップロード実行
+        await using var client = await provider.CreateAsync();
         await using (var uploadStream = new MemoryStream(Encoding.UTF8.GetBytes(payload)))
         {
             await client.UploadAsync(remotePath, uploadStream);
