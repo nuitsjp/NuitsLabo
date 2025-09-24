@@ -1,3 +1,5 @@
+using FluentFTP;
+
 namespace SendFtpTestStudy;
 
 /// <summary>
@@ -9,12 +11,14 @@ namespace SendFtpTestStudy;
 /// <param name="username">FTP認証用のユーザー名</param>
 /// <param name="password">FTP認証用のパスワード</param>
 /// <param name="acceptAnyCertificate">SSL証明書の検証を無効にするかどうか（テスト環境用）</param>
+/// <param name="dataConnectionType">FTPデータ接続タイプ（デフォルト: AutoPassive）</param>
 public sealed class FtpConnectionOptions(
     string host,
     int port,
     string username,
     string password,
-    bool acceptAnyCertificate = false)
+    bool acceptAnyCertificate = false,
+    FtpDataConnectionType dataConnectionType = FtpDataConnectionType.AutoPassive)
 {
     /// <summary>
     /// FTPサーバーのホスト名またはIPアドレス
@@ -43,4 +47,10 @@ public sealed class FtpConnectionOptions(
     /// 本番環境では必ずfalseにして適切な証明書検証を行うべき
     /// </summary>
     public bool AcceptAnyCertificate { get; } = acceptAnyCertificate;
+
+    /// <summary>
+    /// FTPデータ接続タイプ
+    /// AutoPassiveはファイアウォール環境でも動作しやすい（デフォルト）
+    /// </summary>
+    public FtpDataConnectionType DataConnectionType { get; } = dataConnectionType;
 }

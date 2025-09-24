@@ -63,6 +63,9 @@ public sealed class FtpServerFixture : IAsyncLifetime
         // ユニークな一時ディレクトリを作成（テスト関競合回避のためGUIDを使用）
         RootPath = Path.Combine(Path.GetTempPath(), "SendFtpTestStudy", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(RootPath);
+        
+        // テストで使用するuploadsディレクトリを事前に作成
+        Directory.CreateDirectory(Path.Combine(RootPath, "uploads"));
 
         // 利用可能なポートを取得
         Port = PortHelper.GetAvailablePort();

@@ -30,7 +30,7 @@ public class FtpClientFtpTests(FtpServerFixture fixture) : IClassFixture<FtpServ
         // テスト用FTPサーバーの接続オプションを取得
         var options = fixture.Options;
 
-        // アップロード先のリモートパス（ディレクトリは自動作成される）
+        // アップロード先のリモートパス（ディレクトリは事前に存在している必要がある）
         var remotePath = "/uploads/hello.txt";
 
         // アップロードするテストデータ
