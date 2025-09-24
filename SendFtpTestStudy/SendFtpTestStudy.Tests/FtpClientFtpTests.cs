@@ -1,4 +1,5 @@
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SendFtpTestStudy.Tests.Infrastructure;
@@ -18,21 +19,28 @@ public class FtpClientFtpTests(FtpServerFixture fixture) : IClassFixture<FtpServ
     /// <summary>
     /// FTPサーバーへのファイルアップロード機能をテストする
     /// テストシナリオ：
-    /// 1. ServiceCollectionにFtpClientProviderを登録
-    /// 2. DIコンテナからIFtpClientProviderを取得
-    /// 3. メモリストリームでテキストデータを作成
-    /// 4. FtpClient.UploadAsyncでファイルをアップロード
-    /// 5. サーバーのローカルファイルシステムでファイルの存在と内容を検証
+    /// 1. appsettings.jsonから設定を読み込み
+    /// 2. 動的ポートで設定を上書き
+    /// 3. ServiceCollectionにFtpClientProviderを登録
+    /// 4. DIコンテナからIFtpClientProviderを取得
+    /// 5. メモリストリームでテキストデータを作成
+    /// 6. FtpClient.UploadAsyncでファイルをアップロード
+    /// 7. サーバーのローカルファイルシステムでファイルの存在と内容を検証
     /// </summary>
     [Fact]
     public async Task UploadOverFtp()
     {
-        // テスト用FTPサーバーの接続オプションを取得
-        var options = fixture.Options;
+        // appsettings.jsonから設定を読み込み
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+        // テスト用FTPサーバーの動的ポートで設定を上書き
+        configuration["FtpConnection:Port"] = fixture.Port.ToString();
 
         // ServiceCollectionを設定してDI経由でFtpClientProviderを取得
         var services = new ServiceCollection();
-        services.AddFtpClient(options);
+        services.AddFtpClient(configuration, "FtpConnection");
 
         await using var serviceProvider = services.BuildServiceProvider();
         var provider = serviceProvider.GetRequiredService<IFtpClientProvider>();
