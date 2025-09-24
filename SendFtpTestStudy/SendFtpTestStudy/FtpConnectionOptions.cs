@@ -10,14 +10,12 @@ namespace SendFtpTestStudy;
 /// <param name="port">FTPサーバーのポート番号（通常21）</param>
 /// <param name="username">FTP認証用のユーザー名</param>
 /// <param name="password">FTP認証用のパスワード</param>
-/// <param name="acceptAnyCertificate">SSL証明書の検証を無効にするかどうか（テスト環境用）</param>
 /// <param name="dataConnectionType">FTPデータ接続タイプ（デフォルト: AutoPassive）</param>
 public sealed class FtpConnectionOptions(
     string host,
     int port,
     string username,
     string password,
-    bool acceptAnyCertificate = false,
     FtpDataConnectionType dataConnectionType = FtpDataConnectionType.AutoPassive)
 {
     /// <summary>
@@ -40,13 +38,6 @@ public sealed class FtpConnectionOptions(
     /// セキュリティ上、実際のアプリケーションでは環境変数やSecure Stringを使用することを推奨
     /// </summary>
     public string Password { get; } = password ?? throw new ArgumentNullException(nameof(password));
-
-    /// <summary>
-    /// SSL証明書の検証を無効にするかどうか
-    /// trueの場合、自己署名証明書や無効な証明書も受け入れる（テスト環境専用）
-    /// 本番環境では必ずfalseにして適切な証明書検証を行うべき
-    /// </summary>
-    public bool AcceptAnyCertificate { get; } = acceptAnyCertificate;
 
     /// <summary>
     /// FTPデータ接続タイプ
