@@ -1,6 +1,5 @@
 using FxSsh;
 using FxSsh.Services;
-using SendSftpTestStudy;
 using System.Net;
 
 namespace SendSftpTestStudy.Tests.Infrastructure;

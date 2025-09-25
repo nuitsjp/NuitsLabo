@@ -1,5 +1,3 @@
-using System.Linq;
-
 namespace SendSftpTestStudy;
 
 /// <summary>
@@ -79,7 +77,7 @@ public sealed class SftpClient : IAsyncDisposable
 
     private static void EnsureDirectoryExists(Renci.SshNet.SftpClient client, string remoteDirectory)
     {
-        var segments = SplitSegments(remoteDirectory);
+        var segments = SplitSegments(remoteDirectory).ToArray();
         if (!segments.Any())
         {
             return;
