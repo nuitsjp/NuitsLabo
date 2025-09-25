@@ -19,31 +19,11 @@ public static class FtpClientServiceCollectionExtensions
     public static IServiceCollection AddFtpClient(
         this IServiceCollection services,
         IConfiguration configuration,
-        string configSectionName = "FtpConnection")
+        string configSectionName)
     {
         // FtpConnectionOptionsを設定セクションから読み込んでOptions登録
         services.Configure<FtpConnectionOptions>(
             configuration.GetSection(configSectionName));
-
-        // IFtpClientProviderとして実装クラスを登録
-        services.AddScoped<IFtpClientProvider, FtpClientProvider>();
-
-        return services;
-    }
-
-    /// <summary>
-    /// FtpClientプロバイダーをサービスコンテナに登録する（設定オブジェクト直接指定版）
-    /// </summary>
-    /// <param name="services">サービスコレクション</param>
-    /// <param name="options">FTP接続オプション</param>
-    /// <returns>更新されたサービスコレクション</returns>
-    public static IServiceCollection AddFtpClient(
-        this IServiceCollection services,
-        FtpConnectionOptions options)
-    {
-        // FtpConnectionOptionsをそのまま登録
-        services.AddScoped<Microsoft.Extensions.Options.IOptions<FtpConnectionOptions>>(
-            provider => Microsoft.Extensions.Options.Options.Create(options));
 
         // IFtpClientProviderとして実装クラスを登録
         services.AddScoped<IFtpClientProvider, FtpClientProvider>();
