@@ -1,55 +1,62 @@
 using System.Text;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using SendSftpTestStudy;
 using SendSftpTestStudy.Tests.Infrastructure;
+using Shouldly;
 
 namespace SendSftpTestStudy.Tests;
 
 /// <summary>
-/// SftpClientクラスの統合テストクラス
-/// テスト用のSFTPサーバーを使用して、実際のSFTP通信を行いアップロード機能を検証する
-/// FxSshライブラリを使用したSSH/SFTPサーバーとSSH.NETクライアントの組み合わせをテスト
-/// xUnitのIClassFixtureを使用してテストクラス全体でSFTPサーバーを共有
+/// SftpClientの振る舞いを検証するテストクラス
+/// FxSshで起動したテスト用SFTPサーバーと実際に通信し、アップロード機能を確認する
 /// </summary>
 /// <param name="fixture">SFTPサーバーのテストフィクスチャ</param>
 public class SftpClientTests(SftpServerFixture fixture) : IClassFixture<SftpServerFixture>
 {
-    /// <summary>
-    /// テスト対象のSftpClientインスタンス。
-    /// 各テストメソッドで共有され、テスト用SFTPサーバーへのアップロード機能をテストする。
-    /// </summary>
-    private readonly SftpClient _client = new();
-
-    /// <summary>
-    /// SFTPサーバーへのファイルアップロード機能をテストする
-    /// テストシナリオ：
-    /// 1. メモリストリームでテキストデータを作成
-    /// 2. SftpClient.UploadAsyncでファイルをアップロード（ディレクトリ自動作成あり）
-    /// 3. サーバーのローカルファイルシステムでファイルの存在と内容を検証
-    /// FTPとは異なりSSHプロトコルでのセキュアなファイル転送を検証
-    /// </summary>
     [Fact]
     public async Task UploadOverSftp()
     {
-        // テスト用SFTPサーバーの接続オプションを取得（SSHホストキー検証無効化済み）
-        var options = fixture.Options;
+        // ------------------------------------------------------------------------------------
+        // Arrange
+        // ------------------------------------------------------------------------------------
 
-        // アップロード先のリモートパス（多層ディレクトリ構造でテスト）
+        var builder = Host.CreateApplicationBuilder();
+        builder.Configuration
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json");
+
+        builder.Configuration["SftpClient:Port"] = fixture.Port.ToString();
+
+        builder.Services
+            .AddScoped<ISftpClientProvider, SftpClientProvider>()
+            .AddOptions<SftpConnectionOptions>().BindConfiguration("SftpClient");
+
+        await using var serviceProvider = builder.Services.BuildServiceProvider();
+        var provider = serviceProvider.GetRequiredService<ISftpClientProvider>();
+
         var remotePath = "/data/inbound/world.txt";
-
-        // アップロードするテストデータ
         var payload = "Hello via SFTP";
 
-        // メモリストリームでテストデータをラップしてアップロード実行
+        // ------------------------------------------------------------------------------------
+        // Act
+        // ------------------------------------------------------------------------------------
+
+        await using var client = await provider.CreateAsync();
         await using (var uploadStream = new MemoryStream(Encoding.UTF8.GetBytes(payload)))
         {
-            await _client.UploadAsync(options, remotePath, uploadStream);
+            await client.UploadAsync(remotePath, uploadStream);
         }
 
-        // サーバーサイドのローカルファイルシステムでファイルの存在を検証
-        var expectedLocalPath = Path.Combine(fixture.RootPath, "data", "inbound", "world.txt");
-        Assert.True(File.Exists(expectedLocalPath));
+        // ------------------------------------------------------------------------------------
+        // Assert
+        // ------------------------------------------------------------------------------------
 
-        // アップロードされたファイルの内容が期待値と一致するか検証
-        Assert.Equal(payload, await File.ReadAllTextAsync(expectedLocalPath));
+        var expectedLocalPath = Path.Combine(fixture.RootPath, "data", "inbound", "world.txt");
+        File.Exists(expectedLocalPath).ShouldBeTrue();
+
+        var content = await File.ReadAllTextAsync(expectedLocalPath);
+        content.ShouldBe(payload);
     }
 }
