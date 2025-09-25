@@ -1,0 +1,56 @@
+{
+    // チーム開発用の共有設定
+    "chat.tools.terminal.autoApprove": {
+        // 基本的なナビゲーション
+        ".": true,
+        "cd": true,
+        
+        // .NET開発関連
+        "dotnet": true,
+        "dotnet-watch": true,
+        
+        // バージョン管理
+        "git": true,
+        
+        // ファイル操作
+        "rm": true,
+        "rmdir": true,
+        "del": true,
+        
+        // PowerShell関連
+        "Get-Command": true,
+        "Get-ChildItem": true,
+        "Import-Module": true,
+        "Remove-Item": true,
+        "Remove-Module": true,
+        "Test-Path": true,
+        
+        // テスト実行
+        "Invoke-Pester": true,
+        
+        // ビルドツール
+        "make": true,
+        
+        // データベース関連
+        "sqlcmd": true,
+        
+        // セキュリティ考慮で無効化
+        "wget": false,
+        "eval": false
+    },
+    
+    // C#開発用の設定
+    "[csharp]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true
+    },
+    
+    // JSON設定
+    "[json]": {
+        "editor.quickSuggestions": {
+            "strings": true
+        },
+        "editor.suggest.insertMode": "replace"
+    }
+}
