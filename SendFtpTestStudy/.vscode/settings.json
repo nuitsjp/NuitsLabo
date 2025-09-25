@@ -4,19 +4,15 @@
         // 基本的なナビゲーション
         ".": true,
         "cd": true,
-        
         // .NET開発関連
         "dotnet": true,
         "dotnet-watch": true,
-        
         // バージョン管理
         "git": true,
-        
         // ファイル操作
         "rm": true,
         "rmdir": true,
         "del": true,
-        
         // PowerShell関連
         "Get-Command": true,
         "Get-ChildItem": true,
@@ -24,28 +20,43 @@
         "Remove-Item": true,
         "Remove-Module": true,
         "Test-Path": true,
-        
+        // Serena関連
+        "mcp__serena__check_onboarding_performed": true,
+        "mcp__serena__onboarding": true,
+        "mcp__serena__get_symbols_overview": true,
+        "mcp__serena__list_dir": true,
+        "mcp__serena__find_symbol": true,
+        "mcp__serena__write_memory": true,
+        "mcp__serena__find_referencing_symbols": true,
+        "mcp__serena__search_for_pattern": true,
+        "mcp__serena__think_about_task_adherence": true,
+        "mcp__serena__replace_regex": true,
+        "mcp__serena__replace_symbol_body": true,
+        "mcp__serena__find_file": true,
+        "mcp__serena__insert_after_symbol": true,
+        "mcp__serena__insert_before_symbol": true,
+        "mcp__serena__read_memory": true,
+        "mcp__serena__list_memories": true,
+        "mcp__serena__delete_memory": true,
+        "mcp__serena__restart_language_server": true,
+        "mcp__serena__think_about_collected_information": true,
+        "mcp__serena__think_about_whether_you_are_done": true,
         // テスト実行
         "Invoke-Pester": true,
-        
         // ビルドツール
         "make": true,
-        
         // データベース関連
         "sqlcmd": true,
-        
         // セキュリティ考慮で無効化
         "wget": false,
         "eval": false
     },
-    
     // C#開発用の設定
     "[csharp]": {
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.formatOnSave": true
     },
-    
     // JSON設定
     "[json]": {
         "editor.quickSuggestions": {
