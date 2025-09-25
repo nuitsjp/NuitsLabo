@@ -43,6 +43,30 @@ public sealed class FtpClientOptionsValidator : IValidateOptions<FtpClientOption
             errors.Add("Password is required and cannot be empty.");
         }
 
+        // RetryCount範囲チェック（0以上）
+        if (options.RetryCount < 0)
+        {
+            errors.Add("RetryCount must be 0 or greater.");
+        }
+
+        // RetryInterval範囲チェック（1以上）
+        if (options.RetryInterval <= 0)
+        {
+            errors.Add("RetryInterval must be greater than 0.");
+        }
+
+        // ConnectionTimeout範囲チェック（1000ms以上）
+        if (options.ConnectionTimeout < 1000)
+        {
+            errors.Add("ConnectionTimeout must be at least 1000 milliseconds.");
+        }
+
+        // DataTimeout範囲チェック（1000ms以上）
+        if (options.DataTimeout < 1000)
+        {
+            errors.Add("DataTimeout must be at least 1000 milliseconds.");
+        }
+
         // エラーがある場合は失敗結果を返す
         if (errors.Count > 0)
         {

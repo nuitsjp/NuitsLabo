@@ -205,4 +205,192 @@ public class FtpClientFtpTests(FtpServer ftpServer) : IClassFixture<FtpServer>
         await using var client = await provider.CreateAsync();
         client.ShouldNotBeNull();
     }
+
+    [Fact]
+    public async Task FtpClientProvider_CreateAsync_WhenRetryCountInvalid_Throws()
+    {
+        // ------------------------------------------------------------------------------------
+        // Arrange
+        // ------------------------------------------------------------------------------------
+
+        var builder = Host.CreateApplicationBuilder();
+        
+        builder.Configuration["FtpClient:Host"] = "127.0.0.1";
+        builder.Configuration["FtpClient:Port"] = "21";
+        builder.Configuration["FtpClient:User"] = "tester";
+        builder.Configuration["FtpClient:Password"] = "test-pass";
+        builder.Configuration["FtpClient:RetryCount"] = "-1"; // 無効な再試行回数
+
+        builder.Services.AddFtpClientProvider(builder.Configuration, "FtpClient");
+
+        await using var serviceProvider = builder.Services.BuildServiceProvider();
+        var provider = serviceProvider.GetRequiredService<IFtpClientProvider>();
+
+        // ------------------------------------------------------------------------------------
+        // Act & Assert
+        // ------------------------------------------------------------------------------------
+
+        var exception = await Should.ThrowAsync<OptionsValidationException>(() => provider.CreateAsync());
+        exception.Message.ShouldContain("RetryCount");
+    }
+
+    [Fact]
+    public async Task FtpClientProvider_CreateAsync_WhenRetryIntervalInvalid_Throws()
+    {
+        // ------------------------------------------------------------------------------------
+        // Arrange
+        // ------------------------------------------------------------------------------------
+
+        var builder = Host.CreateApplicationBuilder();
+        
+        builder.Configuration["FtpClient:Host"] = "127.0.0.1";
+        builder.Configuration["FtpClient:Port"] = "21";
+        builder.Configuration["FtpClient:User"] = "tester";
+        builder.Configuration["FtpClient:Password"] = "test-pass";
+        builder.Configuration["FtpClient:RetryInterval"] = "0"; // 無効な再試行間隔
+
+        builder.Services.AddFtpClientProvider(builder.Configuration, "FtpClient");
+
+        await using var serviceProvider = builder.Services.BuildServiceProvider();
+        var provider = serviceProvider.GetRequiredService<IFtpClientProvider>();
+
+        // ------------------------------------------------------------------------------------
+        // Act & Assert
+        // ------------------------------------------------------------------------------------
+
+        var exception = await Should.ThrowAsync<OptionsValidationException>(() => provider.CreateAsync());
+        exception.Message.ShouldContain("RetryInterval");
+    }
+
+    [Fact]
+    public async Task FtpClientProvider_CreateAsync_WhenConnectionTimeoutInvalid_Throws()
+    {
+        // ------------------------------------------------------------------------------------
+        // Arrange
+        // ------------------------------------------------------------------------------------
+
+        var builder = Host.CreateApplicationBuilder();
+        
+        builder.Configuration["FtpClient:Host"] = "127.0.0.1";
+        builder.Configuration["FtpClient:Port"] = "21";
+        builder.Configuration["FtpClient:User"] = "tester";
+        builder.Configuration["FtpClient:Password"] = "test-pass";
+        builder.Configuration["FtpClient:ConnectionTimeout"] = "500"; // 無効な接続タイムアウト
+
+        builder.Services.AddFtpClientProvider(builder.Configuration, "FtpClient");
+
+        await using var serviceProvider = builder.Services.BuildServiceProvider();
+        var provider = serviceProvider.GetRequiredService<IFtpClientProvider>();
+
+        // ------------------------------------------------------------------------------------
+        // Act & Assert
+        // ------------------------------------------------------------------------------------
+
+        var exception = await Should.ThrowAsync<OptionsValidationException>(() => provider.CreateAsync());
+        exception.Message.ShouldContain("ConnectionTimeout");
+    }
+
+    [Fact]
+    public async Task FtpClientProvider_CreateAsync_WhenDataTimeoutInvalid_Throws()
+    {
+        // ------------------------------------------------------------------------------------
+        // Arrange
+        // ------------------------------------------------------------------------------------
+
+        var builder = Host.CreateApplicationBuilder();
+        
+        builder.Configuration["FtpClient:Host"] = "127.0.0.1";
+        builder.Configuration["FtpClient:Port"] = "21";
+        builder.Configuration["FtpClient:User"] = "tester";
+        builder.Configuration["FtpClient:Password"] = "test-pass";
+        builder.Configuration["FtpClient:DataTimeout"] = "500"; // 無効なデータタイムアウト
+
+        builder.Services.AddFtpClientProvider(builder.Configuration, "FtpClient");
+
+        await using var serviceProvider = builder.Services.BuildServiceProvider();
+        var provider = serviceProvider.GetRequiredService<IFtpClientProvider>();
+
+        // ------------------------------------------------------------------------------------
+        // Act & Assert
+        // ------------------------------------------------------------------------------------
+
+        var exception = await Should.ThrowAsync<OptionsValidationException>(() => provider.CreateAsync());
+        exception.Message.ShouldContain("DataTimeout");
+    }
+
+    [Fact]
+    public async Task CreateAsync_RetriesOnTransientFailure()
+    {
+        // ------------------------------------------------------------------------------------
+        // Arrange
+        // ------------------------------------------------------------------------------------
+
+        var builder = Host.CreateApplicationBuilder();
+        
+        // 間違ったポートを指定してConnectionRefusedエラーをシミュレート
+        builder.Configuration["FtpClient:Host"] = "127.0.0.1";
+        builder.Configuration["FtpClient:Port"] = "22222"; // 使用されていないポート
+        builder.Configuration["FtpClient:User"] = "tester";
+        builder.Configuration["FtpClient:Password"] = "test-pass";
+        builder.Configuration["FtpClient:RetryCount"] = "2";
+        builder.Configuration["FtpClient:RetryInterval"] = "500"; // 短い間隔でテスト高速化
+        builder.Configuration["FtpClient:ConnectionTimeout"] = "2000"; // 短いタイムアウト
+
+        builder.Services.AddFtpClientProvider(builder.Configuration, "FtpClient");
+
+        await using var serviceProvider = builder.Services.BuildServiceProvider();
+        var provider = serviceProvider.GetRequiredService<IFtpClientProvider>();
+
+        // ------------------------------------------------------------------------------------
+        // Act & Assert
+        // ------------------------------------------------------------------------------------
+
+        // 再試行後も接続に失敗することを確認
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        await Should.ThrowAsync<Exception>(() => provider.CreateAsync());
+        stopwatch.Stop();
+
+        // 再試行により実行時間が延びることを確認（概算でチェック）
+        // 再試行間隔 500ms × 2回 = 1000ms以上の追加時間
+        stopwatch.ElapsedMilliseconds.ShouldBeGreaterThan(800);
+    }
+
+    [Fact]
+    public async Task CreateAsync_TimesOutOnSlowConnection()
+    {
+        // ------------------------------------------------------------------------------------
+        // Arrange
+        // ------------------------------------------------------------------------------------
+
+        var builder = Host.CreateApplicationBuilder();
+        
+        // ルーティングされないアドレスでタイムアウトをシミュレート
+        // 10.255.255.1は予約されたプライベートアドレスで応答なし
+        builder.Configuration["FtpClient:Host"] = "10.255.255.1";
+        builder.Configuration["FtpClient:Port"] = "21";
+        builder.Configuration["FtpClient:User"] = "tester";
+        builder.Configuration["FtpClient:Password"] = "test-pass";
+        builder.Configuration["FtpClient:RetryCount"] = "0"; // リトライなし
+        builder.Configuration["FtpClient:ConnectionTimeout"] = "2000"; // 短いタイムアウト
+
+        builder.Services.AddFtpClientProvider(builder.Configuration, "FtpClient");
+
+        await using var serviceProvider = builder.Services.BuildServiceProvider();
+        var provider = serviceProvider.GetRequiredService<IFtpClientProvider>();
+
+        // ------------------------------------------------------------------------------------
+        // Act & Assert
+        // ------------------------------------------------------------------------------------
+
+        // タイムアウトにより例外が発生することを確認
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        await Should.ThrowAsync<Exception>(() => provider.CreateAsync());
+        stopwatch.Stop();
+
+        // タイムアウト設定に近い時間で処理が終了することを確認（余裕をもって4秒以内）
+        stopwatch.ElapsedMilliseconds.ShouldBeLessThan(4000);
+        
+        // 少なくともタイムアウト設定の時間は経過していることを確認
+        stopwatch.ElapsedMilliseconds.ShouldBeGreaterThan(1500);
+    }
 }

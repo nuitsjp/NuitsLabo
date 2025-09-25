@@ -34,4 +34,24 @@ public sealed class FtpClientOptions
     /// AutoPassiveはファイアウォール環境でも動作しやすい（デフォルト）
     /// </summary>
     public FtpDataConnectionType DataConnectionType { get; set; }
+
+    /// <summary>
+    /// 接続失敗時の再試行回数（デフォルト: 3回）
+    /// </summary>
+    public int RetryCount { get; set; } = 3;
+
+    /// <summary>
+    /// 再試行間隔（ミリ秒）（デフォルト: 1000ms）
+    /// </summary>
+    public int RetryInterval { get; set; } = 1000;
+
+    /// <summary>
+    /// 接続タイムアウト時間（ミリ秒）（デフォルト: 30秒）
+    /// </summary>
+    public int ConnectionTimeout { get; set; } = 30000;
+
+    /// <summary>
+    /// データ転送のタイムアウト時間（ミリ秒）（デフォルト: 120秒）
+    /// </summary>
+    public int DataTimeout { get; set; } = 120000;
 }
