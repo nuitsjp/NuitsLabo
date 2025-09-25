@@ -36,11 +36,11 @@ public class FtpClientFtpTests(FtpServerFixture fixture) : IClassFixture<FtpServ
             .Build();
 
         // テスト用FTPサーバーの動的ポートで設定を上書き
-        configuration["FtpConnection:Port"] = fixture.Port.ToString();
+        configuration["FtpClient:Port"] = fixture.Port.ToString();
 
         // ServiceCollectionを設定してDI経由でFtpClientProviderを取得
         var services = new ServiceCollection();
-        services.AddFtpClient(configuration,  "FtpConnection");
+        services.AddFtpClient(configuration,  "FtpClient");
 
         await using var serviceProvider = services.BuildServiceProvider();
         var provider = serviceProvider.GetRequiredService<IFtpClientProvider>();
