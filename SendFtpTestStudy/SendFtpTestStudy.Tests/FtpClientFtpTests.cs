@@ -29,6 +29,11 @@ public class FtpClientFtpTests(FtpServer ftpServer) : IClassFixture<FtpServer>
     [Fact]
     public async Task UploadOverFtp()
     {
+        // ------------------------------------------------------------------------------------
+        // Arrange
+        // ------------------------------------------------------------------------------------
+
+
         // appsettings.jsonから設定を読み込み
         var configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
@@ -50,12 +55,20 @@ public class FtpClientFtpTests(FtpServer ftpServer) : IClassFixture<FtpServer>
         // アップロードするテストデータ
         var payload = "Hello via FTP";
 
+        // ------------------------------------------------------------------------------------
+        // Act
+        // ------------------------------------------------------------------------------------
+
         // DI経由でFtpClientを作成し、アップロード実行
         await using var client = await provider.CreateAsync();
         await using (var uploadStream = new MemoryStream(Encoding.UTF8.GetBytes(payload)))
         {
             await client.UploadAsync(remotePath, uploadStream);
         }
+
+        // ------------------------------------------------------------------------------------
+        // Assert
+        // ------------------------------------------------------------------------------------
 
         // サーバーサイドのローカルファイルシステムでファイルの存在を検証
         var expectedLocalPath = Path.Combine(ftpServer.RootPath, "uploads", "hello.txt");
