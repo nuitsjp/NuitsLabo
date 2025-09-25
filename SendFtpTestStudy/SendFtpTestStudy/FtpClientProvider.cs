@@ -8,25 +8,16 @@ namespace SendFtpTestStudy;
 /// FTP接続を確立してからFtpClientインスタンスを提供する
 /// IOptions経由で設定を注入し、Dependency Injectionに対応
 /// </summary>
-public sealed class FtpClientProvider : IFtpClientProvider
+public sealed class FtpClientProvider(IOptions<FtpClientOptions> options) : IFtpClientProvider
 {
-    private readonly FtpClientOptions _options;
-
-    /// <summary>
-    /// FtpClientProviderのコンストラクタ
-    /// </summary>
-    /// <param name="options">DI経由で注入されるFTP接続設定</param>
-    public FtpClientProvider(IOptions<FtpClientOptions> options)
-    {
-        _options = options.Value ?? throw new ArgumentNullException(nameof(options));
-    }
+    private readonly FtpClientOptions _options = options.Value;
 
     /// <summary>
     /// FTP接続を確立してFtpClientを作成する
     /// </summary>
     /// <param name="cancellationToken">キャンセル処理用のトークン</param>
     /// <returns>接続済みのFtpClientインスタンス</returns>
-    public async Task<FtpClient> CreateAsync(CancellationToken cancellationToken = default)
+    public async Task<IFtpClient> CreateAsync(CancellationToken cancellationToken = default)
     {
         // AsyncFtpClientを作成し、基本設定を行う
         // FTPクライアントを接続情報で初期化

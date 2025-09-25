@@ -11,5 +11,5 @@ public interface IFtpClientProvider
     /// </summary>
     /// <param name="cancellationToken">キャンセル処理用のトークン</param>
     /// <returns>接続済みのFtpClientインスタンス</returns>
-    Task<FtpClient> CreateAsync(CancellationToken cancellationToken = default);
+    Task<IFtpClient> CreateAsync(CancellationToken cancellationToken = default);
 }

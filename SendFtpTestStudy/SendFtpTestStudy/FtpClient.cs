@@ -6,7 +6,7 @@ namespace SendFtpTestStudy;
 /// FTPサーバーへのファイルアップロード機能を提供するクライアントクラス
 /// FluentFTPライブラリを使用して非同期のFTP通信を行う
 /// </summary>
-public sealed class FtpClient : IAsyncDisposable
+public sealed class FtpClient : IFtpClient
 {
     private readonly IAsyncFtpClient _ftp;
 
