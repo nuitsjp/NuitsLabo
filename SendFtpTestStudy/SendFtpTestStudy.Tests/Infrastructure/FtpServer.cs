@@ -11,7 +11,7 @@ namespace SendFtpTestStudy.Tests.Infrastructure;
 /// FubarDev.FtpServerを使用してテスト用のインメモリFTPサーバーを起動し、テスト終了時にクリーンアップを行う
 /// xUnitのIAsyncLifetimeインターフェイスを実装して非同期初期化と破棄をサポート
 /// </summary>
-public sealed class FtpServerFixture : IAsyncLifetime
+public sealed class FtpServer : IAsyncLifetime
 {
     /// <summary>
     /// テスト用のFTPユーザー名。ハードコーディングした値を使用。

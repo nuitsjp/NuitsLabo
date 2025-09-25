@@ -12,8 +12,7 @@ namespace SendFtpTestStudy.Tests;
 /// xUnitのIClassFixtureを使用してテストクラス全体でFTPサーバーを共有
 /// ServiceCollectionを使用してDI経由でFtpClientProviderを取得する
 /// </summary>
-/// <param name="fixture">FTPサーバーのテストフィクスチャ</param>
-public class FtpClientFtpTests(FtpServerFixture fixture) : IClassFixture<FtpServerFixture>
+public class FtpClientFtpTests(FtpServer ftpServer) : IClassFixture<FtpServer>
 {
 
     /// <summary>
@@ -36,7 +35,7 @@ public class FtpClientFtpTests(FtpServerFixture fixture) : IClassFixture<FtpServ
             .Build();
 
         // テスト用FTPサーバーの動的ポートで設定を上書き
-        configuration["FtpClient:Port"] = fixture.Port.ToString();
+        configuration["FtpClient:Port"] = ftpServer.Port.ToString();
 
         // ServiceCollectionを設定してDI経由でFtpClientProviderを取得
         var services = new ServiceCollection();
@@ -59,7 +58,7 @@ public class FtpClientFtpTests(FtpServerFixture fixture) : IClassFixture<FtpServ
         }
 
         // サーバーサイドのローカルファイルシステムでファイルの存在を検証
-        var expectedLocalPath = Path.Combine(fixture.RootPath, "uploads", "hello.txt");
+        var expectedLocalPath = Path.Combine(ftpServer.RootPath, "uploads", "hello.txt");
         Assert.True(File.Exists(expectedLocalPath));
 
         // アップロードされたファイルの内容が期待値と一致するか検証
