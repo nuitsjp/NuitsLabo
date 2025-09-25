@@ -7,7 +7,7 @@ namespace SendFtpTestStudy;
 /// IServiceCollectionの拡張メソッドを提供するクラス
 /// FtpClientプロバイダーのDI登録を簡素化する
 /// </summary>
-public static class FtpClientServiceCollectionExtensions
+public static class FtpClientProviderServiceCollectionExtensions
 {
     /// <summary>
     /// FtpClientプロバイダーをサービスコンテナに登録する
@@ -16,7 +16,7 @@ public static class FtpClientServiceCollectionExtensions
     /// <param name="configuration">設定オブジェクト（appsettings.jsonから読み込み）</param>
     /// <param name="configSectionName">設定セクション名（デフォルト: "FtpConnection"）</param>
     /// <returns>更新されたサービスコレクション</returns>
-    public static IServiceCollection AddFtpClient(
+    public static IServiceCollection AddFtpClientProvider(
         this IServiceCollection services,
         IConfiguration configuration,
         string configSectionName)

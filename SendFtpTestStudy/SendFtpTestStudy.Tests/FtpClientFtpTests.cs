@@ -44,7 +44,7 @@ public class FtpClientFtpTests(FtpServer ftpServer) : IClassFixture<FtpServer>
 
         // ServiceCollectionを設定してDI経由でFtpClientProviderを取得
         var services = new ServiceCollection();
-        services.AddFtpClient(configuration,  "FtpClient");
+        services.AddFtpClientProvider(configuration,  "FtpClient");
 
         await using var serviceProvider = services.BuildServiceProvider();
         var provider = serviceProvider.GetRequiredService<IFtpClientProvider>();
