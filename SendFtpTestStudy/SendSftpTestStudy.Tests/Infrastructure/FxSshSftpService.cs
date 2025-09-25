@@ -12,6 +12,7 @@ namespace SendSftpTestStudy.Tests.Infrastructure
         // https://datatracker.ietf.org/doc/html/draft-ietf-secsh-filexfer-02
 
         // ReSharper disable IdentifierTypo
+        // ReSharper disable UnusedMember.Local
         #region defines
         private const byte SSH_FXP_INIT = 1;
         private const byte SSH_FXP_VERSION = 2;

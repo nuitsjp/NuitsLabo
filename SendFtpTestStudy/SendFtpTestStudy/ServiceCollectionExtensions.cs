@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace SendFtpTestStudy;
 
@@ -24,6 +25,9 @@ public static class ServiceCollectionExtensions
         // FtpConnectionOptionsを設定セクションから読み込んでOptions登録
         services.Configure<FtpClientOptions>(
             configuration.GetSection(configSectionName));
+
+        // FtpClientOptionsValidatorをバリデータとして登録
+        services.AddSingleton<IValidateOptions<FtpClientOptions>, FtpClientOptionsValidator>();
 
         // IFtpClientProviderとして実装クラスを登録
         services.AddScoped<IFtpClientProvider, FtpClientProvider>();

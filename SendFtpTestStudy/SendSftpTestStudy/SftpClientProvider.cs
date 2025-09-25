@@ -7,7 +7,7 @@ namespace SendSftpTestStudy;
 /// </summary>
 public sealed class SftpClientProvider(IOptions<SftpConnectionOptions> options) : ISftpClientProvider
 {
-    private readonly SftpConnectionOptions _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+    private readonly SftpConnectionOptions _options = options.Value;
 
     public async Task<SftpClient> CreateAsync(CancellationToken cancellationToken = default)
     {

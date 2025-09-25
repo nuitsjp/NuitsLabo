@@ -18,13 +18,6 @@ public sealed class SftpServerFixture : IAsyncLifetime
 
     public string Password { get; } = "testpass";
 
-    public SftpConnectionOptions Options => new(
-        "127.0.0.1",
-        Port,
-        Username,
-        Password,
-        acceptAnySshHostKey: true);
-
     public Task InitializeAsync()
     {
         RootPath = Path.Combine(Path.GetTempPath(), "SendSftpTestStudy", "sftp", Guid.NewGuid().ToString("N"));
