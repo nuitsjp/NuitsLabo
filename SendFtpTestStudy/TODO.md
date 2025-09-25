@@ -96,8 +96,6 @@
 - [ ] アップロード失敗シナリオテスト (`FtpClient_UploadAsync_NetworkFailure`)
 - [ ] 再接続テスト (`FtpClient_UploadAsync_ReconnectsOnDisconnect`)
 - [ ] キャンセレーションテスト (`FtpClient_UploadAsync_CancellationToken`)
-- [ ] 大容量ファイルテスト (`FtpClient_UploadAsync_LargeFile`)
-- [ ] 並列アップロードテスト (`FtpClient_UploadAsync_Parallel`)
 - [ ] `FtpServer` フィクスチャクリーンアップ強化
 - [ ] テスト並列実行対応 (`FtpServer_DisposeAsync_RemovesTempDirectory`)
 - **見積工数**: 8-12時間
