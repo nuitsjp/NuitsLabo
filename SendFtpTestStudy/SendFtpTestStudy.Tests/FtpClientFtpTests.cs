@@ -1,8 +1,9 @@
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Hosting;
 using SendFtpTestStudy.Tests.Infrastructure;
+using Shouldly;
 
 namespace SendFtpTestStudy.Tests;
 
@@ -15,17 +16,6 @@ namespace SendFtpTestStudy.Tests;
 public class FtpClientFtpTests(FtpServer ftpServer) : IClassFixture<FtpServer>
 {
 
-    /// <summary>
-    /// FTPサーバーへのファイルアップロード機能をテストする
-    /// テストシナリオ：
-    /// 1. appsettings.jsonから設定を読み込み
-    /// 2. 動的ポートで設定を上書き
-    /// 3. ServiceCollectionにFtpClientProviderを登録
-    /// 4. DIコンテナからIFtpClientProviderを取得
-    /// 5. メモリストリームでテキストデータを作成
-    /// 6. FtpClient.UploadAsyncでファイルをアップロード
-    /// 7. サーバーのローカルファイルシステムでファイルの存在と内容を検証
-    /// </summary>
     [Fact]
     public async Task UploadOverFtp()
     {
@@ -33,20 +23,20 @@ public class FtpClientFtpTests(FtpServer ftpServer) : IClassFixture<FtpServer>
         // Arrange
         // ------------------------------------------------------------------------------------
 
+        var builder = Host.CreateApplicationBuilder();
+        builder.Configuration
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json");
 
-        // appsettings.jsonから設定を読み込み
-        var configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
-            .Build();
 
         // テスト用FTPサーバーの動的ポートで設定を上書き
-        configuration["FtpClient:Port"] = ftpServer.Port.ToString();
+        builder.Configuration["FtpClient:Port"] = ftpServer.Port.ToString();
 
-        // ServiceCollectionを設定してDI経由でFtpClientProviderを取得
-        var services = new ServiceCollection();
-        services.AddFtpClientProvider(configuration,  "FtpClient");
+        builder.Services
+            .AddTransient<IFtpClientProvider, FtpClientProvider>()
+            .AddOptions<FtpConnectionOptions>().BindConfiguration("FtpClient"); 
 
-        await using var serviceProvider = services.BuildServiceProvider();
+        await using var serviceProvider = builder.Services.BuildServiceProvider();
         var provider = serviceProvider.GetRequiredService<IFtpClientProvider>();
 
         // アップロード先のリモートパス（ディレクトリは事前に存在している必要がある）
@@ -72,9 +62,10 @@ public class FtpClientFtpTests(FtpServer ftpServer) : IClassFixture<FtpServer>
 
         // サーバーサイドのローカルファイルシステムでファイルの存在を検証
         var expectedLocalPath = Path.Combine(ftpServer.RootPath, "uploads", "hello.txt");
-        Assert.True(File.Exists(expectedLocalPath));
+        File.Exists(expectedLocalPath).ShouldBeTrue();
 
         // アップロードされたファイルの内容が期待値と一致するか検証
-        Assert.Equal(payload, await File.ReadAllTextAsync(expectedLocalPath));
+        var content = await File.ReadAllTextAsync(expectedLocalPath);
+        content.ShouldBe(payload);
     }
 }
