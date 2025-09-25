@@ -7,7 +7,7 @@ namespace SendFtpTestStudy;
 /// IServiceCollectionの拡張メソッドを提供するクラス
 /// FtpClientプロバイダーのDI登録を簡素化する
 /// </summary>
-public static class FtpClientProviderServiceCollectionExtensions
+public static class ServiceCollectionExtensions
 {
     /// <summary>
     /// FtpClientプロバイダーをサービスコンテナに登録する

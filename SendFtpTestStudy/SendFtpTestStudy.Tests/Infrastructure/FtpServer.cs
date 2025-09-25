@@ -83,8 +83,7 @@ public sealed class FtpServer : IAsyncLifetime
         services.AddSingleton<IMembershipProviderAsync>(membershipProvider);
 
         // FTPサーバーサービスを追加
-        services.AddFtpServer(builder => builder
-            .UseDotNetFileSystem());
+        services.AddFtpServer(builder => builder.UseDotNetFileSystem());
 
         // FTPサーバーのアドレスとポートを構成
         services.Configure<FtpServerOptions>(opt =>
