@@ -64,7 +64,6 @@ public sealed class FtpServer : IAsyncLifetime
     {
         // ユニークな一時ディレクトリを作成（テスト関競合回避のためGUIDを使用）
         RootPath = Path.Combine(Path.GetTempPath(), "SendFtpTestStudy", Guid.NewGuid().ToString("N"));
-        Directory.CreateDirectory(RootPath);
         
         // テストで使用するuploadsディレクトリを事前に作成
         Directory.CreateDirectory(Path.Combine(RootPath, "uploads"));
@@ -129,6 +128,28 @@ public sealed class FtpServer : IAsyncLifetime
     }
 
     /// <summary>
+    /// システムで現在利用可能なポート番号を動的に取得する
+    /// 複数のテストが同時実行されても競合しないよう、OSが自動割り当てする仕組みを利用
+    /// </summary>
+    /// <returns>利用可能なポート番号</returns>
+    private static int GetAvailablePort()
+    {
+        // ポート番号0を指定してTcpListenerを作成（OSが自動で利用可能ポートを割り当て）
+        var listener = new TcpListener(IPAddress.Loopback, 0);
+
+        // リスナーを開始して実際のポート番号を確定
+        listener.Start();
+
+        // 割り当てられたポート番号を取得
+        var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+
+        // テスト用サーバーで使用するためリスナーを停止
+        listener.Stop();
+
+        return port;
+    }
+
+    /// <summary>
     /// テスト用のシンプルなユーザー認証プロバイダー。
     /// 単一のユーザー名とパスワードの組み合わせのみを受け入れる。
     /// プライマリコンストラクタで認証情報を受け取り、IMembershipProviderAsyncを実装している。
@@ -188,27 +209,5 @@ public sealed class FtpServer : IAsyncLifetime
         {
             return ValidateUserAsync(userName, passWord, CancellationToken.None);
         }
-    }
-
-    /// <summary>
-    /// システムで現在利用可能なポート番号を動的に取得する
-    /// 複数のテストが同時実行されても競合しないよう、OSが自動割り当てする仕組みを利用
-    /// </summary>
-    /// <returns>利用可能なポート番号</returns>
-    public static int GetAvailablePort()
-    {
-        // ポート番号0を指定してTcpListenerを作成（OSが自動で利用可能ポートを割り当て）
-        var listener = new TcpListener(IPAddress.Loopback, 0);
-
-        // リスナーを開始して実際のポート番号を確定
-        listener.Start();
-
-        // 割り当てられたポート番号を取得
-        var port = ((IPEndPoint)listener.LocalEndpoint).Port;
-
-        // テスト用サーバーで使用するためリスナーを停止
-        listener.Stop();
-
-        return port;
     }
 }
