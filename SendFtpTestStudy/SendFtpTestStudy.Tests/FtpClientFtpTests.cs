@@ -34,7 +34,7 @@ public class FtpClientFtpTests(FtpServer ftpServer) : IClassFixture<FtpServer>
 
         builder.Services
             .AddTransient<IFtpClientProvider, FtpClientProvider>()
-            .AddOptions<FtpConnectionOptions>().BindConfiguration("FtpClient"); 
+            .AddOptions<FtpClientOptions>().BindConfiguration("FtpClient"); 
 
         await using var serviceProvider = builder.Services.BuildServiceProvider();
         var provider = serviceProvider.GetRequiredService<IFtpClientProvider>();

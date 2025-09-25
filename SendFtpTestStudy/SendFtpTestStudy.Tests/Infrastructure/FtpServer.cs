@@ -49,11 +49,13 @@ public sealed class FtpServer : IAsyncLifetime
     /// テスト用FTPクライアントの接続オプション。
     /// ローカルホスト、動的ポート、固定のテスト用認証情報を使用。
     /// </summary>
-    public FtpConnectionOptions Options => new(
-        "127.0.0.1",
-        Port,
-        TEST_USERNAME,
-        TEST_PASSWORD);
+    public FtpClientOptions Options => new()
+    {
+        Host = "127.0.0.1",
+        Port = Port,
+        User = TEST_USERNAME,
+        Password = TEST_PASSWORD
+    };
 
     /// <summary>
     /// FTPサーバーの初期化を非同期で実行する。

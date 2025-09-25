@@ -10,13 +10,13 @@ namespace SendFtpTestStudy;
 /// </summary>
 public sealed class FtpClientProvider : IFtpClientProvider
 {
-    private readonly FtpConnectionOptions _options;
+    private readonly FtpClientOptions _options;
 
     /// <summary>
     /// FtpClientProviderのコンストラクタ
     /// </summary>
     /// <param name="options">DI経由で注入されるFTP接続設定</param>
-    public FtpClientProvider(IOptions<FtpConnectionOptions> options)
+    public FtpClientProvider(IOptions<FtpClientOptions> options)
     {
         _options = options.Value ?? throw new ArgumentNullException(nameof(options));
     }

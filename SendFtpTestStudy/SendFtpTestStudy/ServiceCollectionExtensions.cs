@@ -22,7 +22,7 @@ public static class ServiceCollectionExtensions
         string configSectionName)
     {
         // FtpConnectionOptionsを設定セクションから読み込んでOptions登録
-        services.Configure<FtpConnectionOptions>(
+        services.Configure<FtpClientOptions>(
             configuration.GetSection(configSectionName));
 
         // IFtpClientProviderとして実装クラスを登録
