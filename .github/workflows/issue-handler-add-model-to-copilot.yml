@@ -40,5 +40,5 @@ jobs:
 
       - name: Assign Copilot to issue
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: gh issue edit ${{ inputs.issue_number }} --add-assignee "@copilot"
