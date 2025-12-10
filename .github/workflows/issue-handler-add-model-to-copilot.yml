@@ -15,7 +15,7 @@ on:
 
 permissions:
   issues: write
-  contents: read
+  contents: write
 
 jobs:
   handle:
@@ -40,6 +40,5 @@ jobs:
 
       - name: Assign Copilot to issue
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT || github.token }}
-        run: |
-          gh issue edit ${{ inputs.issue_number }} --add-assignee "@copilot" || echo "Warning: Failed to assign @copilot. Please assign manually or configure GH_PAT secret."
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue edit ${{ inputs.issue_number }} --add-assignee "@copilot"
