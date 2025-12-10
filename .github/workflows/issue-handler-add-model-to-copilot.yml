@@ -29,22 +29,14 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const content = fs.readFileSync('.github/agents/add-model-to-copilot.agent.md', 'utf8');
+            const agentContent = fs.readFileSync('.github/agents/add-model-to-copilot.agent.md', 'utf8');
+            
+            // エージェント指示の後に @copilot をメンションして作業を依頼
+            const content = agentContent + '\n\n---\n\n@copilot 上記の手順に従って、このIssueを処理してください。';
             
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: ${{ inputs.issue_number }},
               body: content
-            });
-
-      - name: Assign copilot
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.issues.addAssignees({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: ${{ inputs.issue_number }},
-              assignees: ['copilot']
             });
