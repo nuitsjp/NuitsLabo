@@ -2,7 +2,7 @@ name: ➕ Copilotへ新しいモデルの追加
 title: "Copilotへ新しいモデル <model_name in Copilot> の追加リクエスト"
 description: Copilotへ新しいモデルを追加するリクエスト
 labels: ["enhancement"]
-assignees: []
+assignees: ["copilot"]
 projects: []
 body:
   - type: markdown
