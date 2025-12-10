@@ -1,0 +1,79 @@
+name: ❓ 質問・相談
+description: 質問やテスト以外の問題、相談事項
+labels: ["question"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ご質問ありがとうございます！
+        バグ報告や機能要求などの場合は、適切なテンプレートを使ってくださいね。
+
+  - type: dropdown
+    id: question-type
+    attributes:
+      label: 質問の種類
+      description: どんな質問ですか？
+      options:
+        - 使い方について
+        - 実装方法について
+        - ベストプラクティスについて
+        - 設計・アーキテクチャについて
+        - トラブルシューティング
+        - その他
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: 質問内容
+      description: 何について知りたいですか？
+      placeholder: 困っていることや知りたいことを詳しく教えてください
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: 背景・状況（あれば）
+      description: どんな状況での質問か教えてください
+      placeholder: |
+        - 何を実現しようとしているか
+        - 現在どのような状況か
+        - どこで詰まっているか
+    validations:
+      required: false
+
+  - type: textarea
+    id: attempted-solutions
+    attributes:
+      label: 試したこと（あれば）
+      description: これまでに試したことがあれば教えてください
+      placeholder: |
+        - 試したアプローチ
+        - 参考にしたドキュメントやリソース
+        - 発生したエラーメッセージ
+    validations:
+      required: false
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 環境情報（あれば）
+      description: 関連する環境情報があれば教えてください
+      placeholder: |
+        - OS・ブラウザ
+        - Node.js/Python などのバージョン
+        - 使用しているライブラリやツール
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: 補足情報（あれば）
+      description: その他参考になる情報があれば追加してください
+      placeholder: スクリーンショット、ログ、関連リンクなど
+    validations:
+      required: false

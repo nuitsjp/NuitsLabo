@@ -7,12 +7,16 @@ marp: true
 backgroundImage: url('https://marp.app/assets/hero-background.svg')
 ---
 
-# Slide 1
+# First page
 
-foo
+<!-- HTML comment recognizes as a presenter note per pages. -->
+<!-- You may place multiple comments in a single page. -->
 
 ---
 
-# Slide 2
+## Second page
 
-bar
+<!--
+Also supports multiline.
+We bet these comments would help your presentation...
+-->

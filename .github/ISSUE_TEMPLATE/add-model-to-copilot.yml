@@ -1,0 +1,23 @@
+name: ➕ Copilotへ新しいモデルの追加
+title: "Copilotへ新しいモデル <model_name in Copilot> の追加リクエスト"
+description: Copilotへ新しいモデルを追加するリクエスト
+labels: ["enhancement"]
+assignees: []
+projects: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        以下のチェック項目を確認のうえ、モデル名をタイトルに入力してください。
+        
+        **モデル名の形式**: `<ベンダー名> <モデル名> in Copilot`
+        
+        例: `OpenAI GPT-6 in Copilot` または `Anthropic Claude Sonnet 5 in Copilot`
+        
+        ※ `(Preview)` が含まれている場合は自動的に削除されます。
+
+  - type: checkboxes
+    attributes:
+      label: 確認事項
+      options:
+        - label: 対象のモデルが現在Disableで有効化できないことを確認しました
