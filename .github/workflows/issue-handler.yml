@@ -7,7 +7,7 @@ on:
 jobs:
   add-model-to-copilot:
     if: startsWith(github.event.issue.title, 'Copilotへ新しいモデル')
-    uses: ./.github/workflows/issue-handlers/add-model-to-copilot.yml
+    uses: ./.github/workflows/issue-handler-add-model-to-copilot.yml
     with:
       issue_number: ${{ github.event.issue.number }}
 
