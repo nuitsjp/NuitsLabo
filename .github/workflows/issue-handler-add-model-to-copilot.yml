@@ -31,12 +31,14 @@ jobs:
             const fs = require('fs');
             const agentContent = fs.readFileSync('.github/agents/add-model-to-copilot.agent.md', 'utf8');
             
-            // エージェント指示の後に @copilot をメンションして作業を依頼
-            const content = agentContent + '\n\n---\n\n@copilot 上記の手順に従って、このIssueを処理してください。';
-            
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: ${{ inputs.issue_number }},
-              body: content
+              body: agentContent
             });
+
+      - name: Assign Copilot to issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue edit ${{ inputs.issue_number }} --add-assignee "@copilot"

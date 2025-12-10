@@ -1,0 +1,47 @@
+---
+name: Copilot縺ｸ譁ｰ縺励＞繝｢繝・Ν縺ｮ霑ｽ蜉
+description: Copilot縺ｸ譁ｰ縺励＞繝｢繝・Ν繧定ｿｽ蜉縺吶ｋ繝ｪ繧ｯ繧ｨ繧ｹ繝医ｒ閾ｪ蜍輔〒謾ｯ謠ｴ縺吶ｋ繧ｨ繝ｼ繧ｸ繧ｧ繝ｳ繝・---
+
+## Add Model to Copilot
+
+縺薙・繧ｨ繝ｼ繧ｸ繧ｧ繝ｳ繝医・縲；itHub Issue縺ｧ蟒ｺ縺ｦ繧峨ｌ縺溘靴opilot縺ｸ譁ｰ縺励＞繝｢繝・Ν縺ｮ霑ｽ蜉繝ｪ繧ｯ繧ｨ繧ｹ繝医阪↓蟇ｾ蠢懊＠縲∬・蜍慕噪縺ｫ繝峨く繝･繝｡繝ｳ繝医ｒ譖ｴ譁ｰ縺励※Pull Request繧剃ｽ懈・縺励∪縺吶・
+### 螳溯｡梧焔鬆・
+1. **Issue縺九ｉ繝｢繝・Ν蜷阪ｒ謚ｽ蜃ｺ**
+   - Issue縺ｮ繧ｿ繧､繝医Ν縺九ｉ譁ｰ縺励＞繝｢繝・Ν蜷阪ｒ蜿門ｾ励＠縺ｾ縺・   - 繧ｿ繧､繝医Ν蠖｢蠑・ "Copilot縺ｸ譁ｰ縺励＞繝｢繝・Ν <model_name in Copilot> 縺ｮ霑ｽ蜉繝ｪ繧ｯ繧ｨ繧ｹ繝・
+   - 繝｢繝・Ν蜷阪・譌｢縺ｫ " in Copilot" 繧貞性繧薙〒縺・∪縺呻ｼ井ｾ・ "OpenAI GPT-6 in Copilot"・・   - 繝｢繝・Ν蜷阪↓ "(Preview)" 縺悟性縺ｾ繧後※縺・ｋ蝣ｴ蜷医・蜑企勁縺励∪縺・
+2. **繝｢繝・Ν諠・ｱ縺ｮ貅門ｙ**
+   - 謚ｽ蜃ｺ縺励◆繝｢繝・Ν蜷阪°繧・"(Preview)" 繧貞炎髯､縺励◆蠖｢蠑上ｒ菴ｿ逕ｨ縺励∪縺・   - 繝・ヵ繧ｩ繝ｫ繝医・險ｭ螳壼､: "Let Organizations decide"
+
+3. **AI Controls.md縺ｮ譖ｴ譁ｰ**
+   - 繝輔ぃ繧､繝ｫ繝代せ: `enterprise-settings/AI Controls.md`
+   - 蟇ｾ雎｡繧ｻ繧ｯ繧ｷ繝ｧ繝ｳ: "Configure allowed models" 竊・"迴ｾ迥ｶ縺ｮ險ｭ螳・ 縺ｮ繝・・繝悶Ν・・1-47陦檎岼莉倩ｿ托ｼ・   - 譁ｰ縺励＞繝｢繝・Ν繧剃ｻ･荳九・繝ｫ繝ｼ繝ｫ縺ｫ蠕薙▲縺ｦ謖ｿ蜈･:
+     - 繝吶Φ繝繝ｼ鬆・ｼ・nthropic 竊・Google 竊・OpenAI 竊・xAI・・     - 蜷・・繝ｳ繝繝ｼ蜀・〒縺ｯ繝｢繝・Ν蜷阪・繧｢繝ｫ繝輔ぃ繝吶ャ繝磯・   
+   繝・・繝悶Ν蠖｢蠑・
+   ```markdown
+   | <Model Name> in Copilot | Let Organizations decide |
+   ```
+
+4. **Pull Request縺ｮ菴懈・**
+   - 繝悶Λ繝ｳ繝∝錐: `add-model/<model-name-slug>` ・井ｾ・ `add-model/openai-gpt-6`・・   - PR繝・Φ繝励Ξ繝ｼ繝・ `.github/PULL_REQUEST_TEMPLATE/add-model-to-copilot.md` 繧剃ｽｿ逕ｨ
+   - PR繧ｿ繧､繝医Ν: Issue繧ｿ繧､繝医Ν縺ｨ螳悟・縺ｫ荳閾ｴ縺輔○繧具ｼ井ｾ・ "Copilot縺ｸ譁ｰ縺励＞繝｢繝・Ν OpenAI GPT-6 in Copilot 縺ｮ霑ｽ蜉繝ｪ繧ｯ繧ｨ繧ｹ繝・・・   - PR譛ｬ譁・〒莉･荳九ｒ險伜・:
+     - 繝｢繝・Ν蜷・     - 險ｭ螳壼､・医ョ繝輔か繝ｫ繝・ "Let Organizations decide"・・     - 螟画峩繝輔ぃ繧､繝ｫ縺ｮ繝√ぉ繝・け
+     - 髢｢騾｣Issue逡ｪ蜿ｷ
+
+5. **繝舌Μ繝・・繧ｷ繝ｧ繝ｳ**
+   - 繝｢繝・Ν蜷阪′豁｣遒ｺ縺ｫ險倩ｼ峨＆繧後※縺・ｋ縺狗｢ｺ隱・   - 繝・・繝悶Ν縺ｮMarkdown蠖｢蠑上′豁｣縺励＞縺狗｢ｺ隱・   - 繧｢繝ｫ繝輔ぃ繝吶ャ繝磯・・陬ｽ蜩・・↓驕ｩ蛻・↑菴咲ｽｮ縺ｫ謖ｿ蜈･縺輔ｌ縺ｦ縺・ｋ縺狗｢ｺ隱・
+### 繧ｨ繝ｩ繝ｼ繝上Φ繝峨Μ繝ｳ繧ｰ
+
+- Issue繧ｿ繧､繝医Ν縺九ｉ繝｢繝・Ν蜷阪ｒ謚ｽ蜃ｺ縺ｧ縺阪↑縺・ｴ蜷医・縲√Θ繝ｼ繧ｶ繝ｼ縺ｫ遒ｺ隱阪ｒ豎ゅａ繧・- 譌｢縺ｫ蜷後§繝｢繝・Ν縺後ユ繝ｼ繝悶Ν縺ｫ蟄伜惠縺吶ｋ蝣ｴ蜷医・縲・㍾隍・ｿｽ蜉繧帝亟縺・- 繝・・繝悶Ν縺ｮ蠖｢蠑上′螢翫ｌ縺ｪ縺・ｈ縺・∵・驥阪↓邱ｨ髮・☆繧・
+### 蜃ｺ蜉帑ｾ・
+Issue繧ｿ繧､繝医Ν: "Copilot縺ｸ譁ｰ縺励＞繝｢繝・Ν OpenAI GPT-6 in Copilot 縺ｮ霑ｽ蜉繝ｪ繧ｯ繧ｨ繧ｹ繝・
+
+譖ｴ譁ｰ蜀・ｮｹ:
+```markdown
+| OpenAI GPT-6 in Copilot | Let Organizations decide |
+```
+
+謖ｿ蜈･菴咲ｽｮ: OpenAI GPT-5.1繧ｷ繝ｪ繝ｼ繧ｺ縺ｮ蠕後』AI Grok Code Fast 1縺ｮ蜑・
+
+---
+
+@copilot 荳願ｨ倥・謇矩・↓蠕薙▲縺ｦ縲√％縺ｮIssue繧貞・逅・＠縺ｦ縺上□縺輔＞縲・
