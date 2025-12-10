@@ -2,7 +2,7 @@ name: ➕ Copilotへ新しいモデルの追加
 title: "Copilotへ新しいモデル <model_name in Copilot> の追加リクエスト"
 description: Copilotへ新しいモデルを追加するリクエスト
 labels: ["enhancement"]
-assignees: ["copilot"]
+assignees: []
 projects: []
 body:
   - type: markdown
@@ -21,10 +21,3 @@ body:
       label: 確認事項
       options:
         - label: 対象のモデルが現在Disableで有効化できないことを確認しました
-
-  - type: markdown
-    attributes:
-      value: |
-        ---
-        
-        📋 **対応手順**: [add-model-to-copilot.agent.md](/.github/agents/add-model-to-copilot.agent.md) を参照してください。
