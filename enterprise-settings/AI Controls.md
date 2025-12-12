@@ -30,6 +30,7 @@
 
 | Model | 現状の設定 |
 |---|---|
+| Foo in Copilot | Let Organizations decide |
 | Anthropic Claude Sonnet 4 in Copilot | Let Organizations decide |
 | Anthropic Claude Sonnet 4.5 in Copilot | Let Organizations decide |
 | Anthropic Claude Haiku 4.5 in Copilot | Let Organizations decide |
