@@ -19,3 +19,4 @@ body:
       label: 確認事項
       options:
         - label: 対象のモデルが現在Disableで有効化できないことを確認しました
+          required: true
