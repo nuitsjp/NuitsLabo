@@ -110,35 +110,37 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ERROR_MESSAGE: ${{ steps.check.outputs.error_message }}
         run: |
-          gh issue create \
+          cat << EOF | gh issue create \
             --repo "${GITHUB_REPOSITORY}" \
             --title "🔑 COPILOT_ASSIGN_PAT の更新が必要です" \
             --label "pat-expired" \
-            --body "## 概要
+            --body-file -
+          ## 概要
 
-PAT (Personal Access Token) の有効性チェックで問題が検出されました。
+          PAT (Personal Access Token) の有効性チェックで問題が検出されました。
 
-## エラー内容
+          ## エラー内容
 
-${ERROR_MESSAGE}
+          ${ERROR_MESSAGE}
 
-## 対応方法
+          ## 対応方法
 
-1. GitHub の Settings > Developer settings > Personal access tokens から新しい Fine-grained PAT を作成してください
-2. 必要な権限:
-   - \`Actions: Read and write\`
-   - \`Contents: Read and write\`
-   - \`Issues: Read and write\`
-   - \`Pull requests: Read and write\`
-3. リポジトリの Settings > Secrets and variables > Actions から \`COPILOT_ASSIGN_PAT\` シークレットを更新してください
+          1. GitHub の Settings > Developer settings > Personal access tokens から新しい Fine-grained PAT を作成してください
+          2. 必要な権限:
+             - \`Actions: Read and write\`
+             - \`Contents: Read and write\`
+             - \`Issues: Read and write\`
+             - \`Pull requests: Read and write\`
+          3. リポジトリの Settings > Secrets and variables > Actions から \`COPILOT_ASSIGN_PAT\` シークレットを更新してください
 
-## 関連ワークフロー
+          ## 関連ワークフロー
 
-- [issue-handler-add-model-to-copilot.yml](.github/workflows/issue-handler-add-model-to-copilot.yml)
+          - [issue-handler-add-model-to-copilot.yml](.github/workflows/issue-handler-add-model-to-copilot.yml)
 
----
-*このIssueは自動生成されました。*
-検出日時: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          ---
+          *このIssueは自動生成されました。*
+          検出日時: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          EOF
 
       - name: Add comment to existing issue
         if: steps.check.outputs.valid == 'false' && steps.existing_issue.outputs.exists == 'true'
@@ -147,12 +149,14 @@ ${ERROR_MESSAGE}
           ISSUE_NUMBER: ${{ steps.existing_issue.outputs.issue_number }}
           ERROR_MESSAGE: ${{ steps.check.outputs.error_message }}
         run: |
-          gh issue comment "${ISSUE_NUMBER}" \
+          cat << EOF | gh issue comment "${ISSUE_NUMBER}" \
             --repo "${GITHUB_REPOSITORY}" \
-            --body "## 定期チェック結果
+            --body-file -
+          ## 定期チェック結果
 
-PAT はまだ無効な状態です。
+          PAT はまだ無効な状態です。
 
-**エラー内容:** ${ERROR_MESSAGE}
+          **エラー内容:** ${ERROR_MESSAGE}
 
-検出日時: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          検出日時: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          EOF
