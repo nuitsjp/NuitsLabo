@@ -54,6 +54,18 @@ jobs:
             echo "PAT is not set"
             echo "valid=false" >> $GITHUB_OUTPUT
             echo "error_message=COPILOT_ASSIGN_PAT シークレットが設定されていません。" >> $GITHUB_OUTPUT
+            
+            # 未設定時のサマリー出力
+            echo "## ❌ PAT 有効性チェック: 失敗" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "| 項目 | 値 |" >> $GITHUB_STEP_SUMMARY
+            echo "|------|-----|" >> $GITHUB_STEP_SUMMARY
+            echo "| ステータス | シークレット未設定 |" >> $GITHUB_STEP_SUMMARY
+            echo "| 確認日時 | $(date -u '+%Y-%m-%d %H:%M:%S UTC') |" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### 対応方法" >> $GITHUB_STEP_SUMMARY
+            echo "1. GitHub の Settings > Developer settings > Personal access tokens から新しい Fine-grained PAT を作成" >> $GITHUB_STEP_SUMMARY
+            echo "2. リポジトリの Settings > Secrets and variables > Actions から \`COPILOT_ASSIGN_PAT\` を設定" >> $GITHUB_STEP_SUMMARY
             exit 0
           fi
           
