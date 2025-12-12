@@ -14,8 +14,36 @@ jobs:
   check-pat:
     runs-on: ubuntu-latest
     steps:
+      - name: Check for existing issue
+        id: existing_issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 同じタイトルの Open な Issue が既に存在するか確認
+          EXISTING_ISSUE=$(gh issue list \
+            --repo "${GITHUB_REPOSITORY}" \
+            --state open \
+            --search "COPILOT_ASSIGN_PAT の更新が必要です in:title" \
+            --json number \
+            --jq '.[0].number // empty')
+          
+          if [ -n "$EXISTING_ISSUE" ]; then
+            echo "Existing issue found: #$EXISTING_ISSUE"
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "issue_number=$EXISTING_ISSUE" >> $GITHUB_OUTPUT
+            
+            # サマリー出力
+            echo "## ℹ️ PAT 有効性チェック: スキップ" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "既存の Issue #${EXISTING_ISSUE} が Open のため、チェックをスキップしました。" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No existing issue found"
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Check PAT validity
         id: check
+        if: steps.existing_issue.outputs.exists != 'true'
         env:
           GH_TOKEN: ${{ secrets.COPILOT_ASSIGN_PAT }}
         run: |
@@ -81,31 +109,8 @@ jobs:
             echo "| 確認日時 | $(date -u '+%Y-%m-%d %H:%M:%S UTC') |" >> $GITHUB_STEP_SUMMARY
           fi
 
-      - name: Check for existing issue
-        id: existing_issue
-        if: steps.check.outputs.valid == 'false'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # 同じタイトルの Open な Issue が既に存在するか確認
-          EXISTING_ISSUE=$(gh issue list \
-            --repo "${GITHUB_REPOSITORY}" \
-            --state open \
-            --label "pat-expired" \
-            --json number \
-            --jq '.[0].number // empty')
-          
-          if [ -n "$EXISTING_ISSUE" ]; then
-            echo "Existing issue found: #$EXISTING_ISSUE"
-            echo "exists=true" >> $GITHUB_OUTPUT
-            echo "issue_number=$EXISTING_ISSUE" >> $GITHUB_OUTPUT
-          else
-            echo "No existing issue found"
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
-
       - name: Create issue for invalid PAT
-        if: steps.check.outputs.valid == 'false' && steps.existing_issue.outputs.exists == 'false'
+        if: steps.existing_issue.outputs.exists != 'true' && steps.check.outputs.valid == 'false'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ERROR_MESSAGE: ${{ steps.check.outputs.error_message }}
@@ -113,7 +118,6 @@ jobs:
           cat << EOF | gh issue create \
             --repo "${GITHUB_REPOSITORY}" \
             --title "🔑 COPILOT_ASSIGN_PAT の更新が必要です" \
-            --label "pat-expired" \
             --body-file -
           ## 概要
 
@@ -139,24 +143,5 @@ jobs:
 
           ---
           *このIssueは自動生成されました。*
-          検出日時: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
-          EOF
-
-      - name: Add comment to existing issue
-        if: steps.check.outputs.valid == 'false' && steps.existing_issue.outputs.exists == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_NUMBER: ${{ steps.existing_issue.outputs.issue_number }}
-          ERROR_MESSAGE: ${{ steps.check.outputs.error_message }}
-        run: |
-          cat << EOF | gh issue comment "${ISSUE_NUMBER}" \
-            --repo "${GITHUB_REPOSITORY}" \
-            --body-file -
-          ## 定期チェック結果
-
-          PAT はまだ無効な状態です。
-
-          **エラー内容:** ${ERROR_MESSAGE}
-
           検出日時: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
           EOF
