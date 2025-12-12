@@ -31,10 +31,11 @@ description: Copilotへ新しいモデルを追加するリクエストを自動
    | <Model Name> in Copilot | Let Organizations decide |
    ```
 
-4. **Pull Requestの作成**
+4. **Pull Requestの作成（Draft）**
    - ブランチ名: `add-model/<model-name-slug>` （例: `add-model/openai-gpt-6`）
    - PRテンプレート: `.github/PULL_REQUEST_TEMPLATE/add-model-to-copilot.md` を使用
    - PRタイトル: Issueタイトルと完全に一致させる（例: "Copilotへ新しいモデル OpenAI GPT-6 in Copilot の追加リクエスト"）
+   - **Draft PRとして作成**: `gh pr create --draft` オプションを使用
    - PR本文で以下を記入:
      - モデル名
      - 設定値（デフォルト: "Let Organizations decide"）
@@ -45,6 +46,10 @@ description: Copilotへ新しいモデルを追加するリクエストを自動
    - モデル名が正確に記載されているか確認
    - テーブルのMarkdown形式が正しいか確認
    - アルファベット順・製品順に適切な位置に挿入されているか確認
+
+6. **PRをレビュー可能状態に変更**
+   - Draft PRを「Ready for review」に変更
+   - コマンド: `gh pr ready <PR番号>`
 
 ### エラーハンドリング
 
