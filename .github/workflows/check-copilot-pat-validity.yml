@@ -31,11 +31,6 @@ jobs:
             echo "Existing issue found: #$EXISTING_ISSUE"
             echo "exists=true" >> $GITHUB_OUTPUT
             echo "issue_number=$EXISTING_ISSUE" >> $GITHUB_OUTPUT
-            
-            # サマリー出力
-            echo "## ℹ️ PAT 有効性チェック: スキップ" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "既存の Issue #${EXISTING_ISSUE} が Open のため、チェックをスキップしました。" >> $GITHUB_STEP_SUMMARY
           else
             echo "No existing issue found"
             echo "exists=false" >> $GITHUB_OUTPUT
@@ -54,18 +49,6 @@ jobs:
             echo "PAT is not set"
             echo "valid=false" >> $GITHUB_OUTPUT
             echo "error_message=COPILOT_ASSIGN_PAT シークレットが設定されていません。" >> $GITHUB_OUTPUT
-            
-            # 未設定時のサマリー出力
-            echo "## ❌ PAT 有効性チェック: 失敗" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "| 項目 | 値 |" >> $GITHUB_STEP_SUMMARY
-            echo "|------|-----|" >> $GITHUB_STEP_SUMMARY
-            echo "| ステータス | シークレット未設定 |" >> $GITHUB_STEP_SUMMARY
-            echo "| 確認日時 | $(date -u '+%Y-%m-%d %H:%M:%S UTC') |" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### 対応方法" >> $GITHUB_STEP_SUMMARY
-            echo "1. GitHub の Settings > Developer settings > Personal access tokens から新しい Fine-grained PAT を作成" >> $GITHUB_STEP_SUMMARY
-            echo "2. リポジトリの Settings > Secrets and variables > Actions から \`COPILOT_ASSIGN_PAT\` を設定" >> $GITHUB_STEP_SUMMARY
             exit 0
           fi
           
@@ -82,43 +65,15 @@ jobs:
             
             # 成功時のサマリー出力
             USERNAME=$(jq -r '.login' /tmp/response.json)
-            echo "## ✅ PAT 有効性チェック: 成功" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "| 項目 | 値 |" >> $GITHUB_STEP_SUMMARY
-            echo "|------|-----|" >> $GITHUB_STEP_SUMMARY
-            echo "| ステータス | 有効 |" >> $GITHUB_STEP_SUMMARY
-            echo "| 認証ユーザー | \`${USERNAME}\` |" >> $GITHUB_STEP_SUMMARY
-            echo "| 確認日時 | $(date -u '+%Y-%m-%d %H:%M:%S UTC') |" >> $GITHUB_STEP_SUMMARY
+            echo "✅ PAT 有効 (user: ${USERNAME})" >> $GITHUB_STEP_SUMMARY
           elif [ "$HTTP_STATUS" -eq 401 ]; then
             echo "PAT is invalid or expired"
             echo "valid=false" >> $GITHUB_OUTPUT
             echo "error_message=COPILOT_ASSIGN_PAT が無効または期限切れです。(HTTP $HTTP_STATUS)" >> $GITHUB_OUTPUT
-            
-            # 失敗時のサマリー出力
-            echo "## ❌ PAT 有効性チェック: 失敗" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "| 項目 | 値 |" >> $GITHUB_STEP_SUMMARY
-            echo "|------|-----|" >> $GITHUB_STEP_SUMMARY
-            echo "| ステータス | 無効または期限切れ |" >> $GITHUB_STEP_SUMMARY
-            echo "| HTTP ステータス | $HTTP_STATUS |" >> $GITHUB_STEP_SUMMARY
-            echo "| 確認日時 | $(date -u '+%Y-%m-%d %H:%M:%S UTC') |" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### 対応方法" >> $GITHUB_STEP_SUMMARY
-            echo "1. GitHub の Settings > Developer settings > Personal access tokens から新しい Fine-grained PAT を作成" >> $GITHUB_STEP_SUMMARY
-            echo "2. リポジトリの Settings > Secrets and variables > Actions から \`COPILOT_ASSIGN_PAT\` を更新" >> $GITHUB_STEP_SUMMARY
           else
             echo "Unexpected response: HTTP $HTTP_STATUS"
             echo "valid=false" >> $GITHUB_OUTPUT
             echo "error_message=PAT の検証中に予期しないエラーが発生しました。(HTTP $HTTP_STATUS)" >> $GITHUB_OUTPUT
-            
-            # エラー時のサマリー出力
-            echo "## ⚠️ PAT 有効性チェック: エラー" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "| 項目 | 値 |" >> $GITHUB_STEP_SUMMARY
-            echo "|------|-----|" >> $GITHUB_STEP_SUMMARY
-            echo "| ステータス | 予期しないエラー |" >> $GITHUB_STEP_SUMMARY
-            echo "| HTTP ステータス | $HTTP_STATUS |" >> $GITHUB_STEP_SUMMARY
-            echo "| 確認日時 | $(date -u '+%Y-%m-%d %H:%M:%S UTC') |" >> $GITHUB_STEP_SUMMARY
           fi
 
       - name: Create issue for invalid PAT
