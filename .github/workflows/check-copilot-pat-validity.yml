@@ -1,0 +1,158 @@
+name: Check Copilot PAT Validity
+
+on:
+  schedule:
+    # 毎日 9:00 JST (0:00 UTC) に実行
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  check-pat:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PAT validity
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.COPILOT_ASSIGN_PAT }}
+        run: |
+          echo "Checking PAT validity..."
+          
+          # PAT が設定されているか確認
+          if [ -z "${GH_TOKEN}" ]; then
+            echo "PAT is not set"
+            echo "valid=false" >> $GITHUB_OUTPUT
+            echo "error_message=COPILOT_ASSIGN_PAT シークレットが設定されていません。" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          # GitHub API を呼び出して PAT の有効性を確認
+          HTTP_STATUS=$(curl -s -o /tmp/response.json -w "%{http_code}" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/user)
+          
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "PAT is valid"
+            echo "valid=true" >> $GITHUB_OUTPUT
+            
+            # 成功時のサマリー出力
+            USERNAME=$(jq -r '.login' /tmp/response.json)
+            echo "## ✅ PAT 有効性チェック: 成功" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "| 項目 | 値 |" >> $GITHUB_STEP_SUMMARY
+            echo "|------|-----|" >> $GITHUB_STEP_SUMMARY
+            echo "| ステータス | 有効 |" >> $GITHUB_STEP_SUMMARY
+            echo "| 認証ユーザー | \`${USERNAME}\` |" >> $GITHUB_STEP_SUMMARY
+            echo "| 確認日時 | $(date -u '+%Y-%m-%d %H:%M:%S UTC') |" >> $GITHUB_STEP_SUMMARY
+          elif [ "$HTTP_STATUS" -eq 401 ]; then
+            echo "PAT is invalid or expired"
+            echo "valid=false" >> $GITHUB_OUTPUT
+            echo "error_message=COPILOT_ASSIGN_PAT が無効または期限切れです。(HTTP $HTTP_STATUS)" >> $GITHUB_OUTPUT
+            
+            # 失敗時のサマリー出力
+            echo "## ❌ PAT 有効性チェック: 失敗" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "| 項目 | 値 |" >> $GITHUB_STEP_SUMMARY
+            echo "|------|-----|" >> $GITHUB_STEP_SUMMARY
+            echo "| ステータス | 無効または期限切れ |" >> $GITHUB_STEP_SUMMARY
+            echo "| HTTP ステータス | $HTTP_STATUS |" >> $GITHUB_STEP_SUMMARY
+            echo "| 確認日時 | $(date -u '+%Y-%m-%d %H:%M:%S UTC') |" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### 対応方法" >> $GITHUB_STEP_SUMMARY
+            echo "1. GitHub の Settings > Developer settings > Personal access tokens から新しい Fine-grained PAT を作成" >> $GITHUB_STEP_SUMMARY
+            echo "2. リポジトリの Settings > Secrets and variables > Actions から \`COPILOT_ASSIGN_PAT\` を更新" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Unexpected response: HTTP $HTTP_STATUS"
+            echo "valid=false" >> $GITHUB_OUTPUT
+            echo "error_message=PAT の検証中に予期しないエラーが発生しました。(HTTP $HTTP_STATUS)" >> $GITHUB_OUTPUT
+            
+            # エラー時のサマリー出力
+            echo "## ⚠️ PAT 有効性チェック: エラー" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "| 項目 | 値 |" >> $GITHUB_STEP_SUMMARY
+            echo "|------|-----|" >> $GITHUB_STEP_SUMMARY
+            echo "| ステータス | 予期しないエラー |" >> $GITHUB_STEP_SUMMARY
+            echo "| HTTP ステータス | $HTTP_STATUS |" >> $GITHUB_STEP_SUMMARY
+            echo "| 確認日時 | $(date -u '+%Y-%m-%d %H:%M:%S UTC') |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Check for existing issue
+        id: existing_issue
+        if: steps.check.outputs.valid == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 同じタイトルの Open な Issue が既に存在するか確認
+          EXISTING_ISSUE=$(gh issue list \
+            --repo "${GITHUB_REPOSITORY}" \
+            --state open \
+            --label "pat-expired" \
+            --json number \
+            --jq '.[0].number // empty')
+          
+          if [ -n "$EXISTING_ISSUE" ]; then
+            echo "Existing issue found: #$EXISTING_ISSUE"
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "issue_number=$EXISTING_ISSUE" >> $GITHUB_OUTPUT
+          else
+            echo "No existing issue found"
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create issue for invalid PAT
+        if: steps.check.outputs.valid == 'false' && steps.existing_issue.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ERROR_MESSAGE: ${{ steps.check.outputs.error_message }}
+        run: |
+          gh issue create \
+            --repo "${GITHUB_REPOSITORY}" \
+            --title "🔑 COPILOT_ASSIGN_PAT の更新が必要です" \
+            --label "pat-expired" \
+            --body "## 概要
+
+PAT (Personal Access Token) の有効性チェックで問題が検出されました。
+
+## エラー内容
+
+${ERROR_MESSAGE}
+
+## 対応方法
+
+1. GitHub の Settings > Developer settings > Personal access tokens から新しい Fine-grained PAT を作成してください
+2. 必要な権限:
+   - \`Actions: Read and write\`
+   - \`Contents: Read and write\`
+   - \`Issues: Read and write\`
+   - \`Pull requests: Read and write\`
+3. リポジトリの Settings > Secrets and variables > Actions から \`COPILOT_ASSIGN_PAT\` シークレットを更新してください
+
+## 関連ワークフロー
+
+- [issue-handler-add-model-to-copilot.yml](.github/workflows/issue-handler-add-model-to-copilot.yml)
+
+---
+*このIssueは自動生成されました。*
+検出日時: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+
+      - name: Add comment to existing issue
+        if: steps.check.outputs.valid == 'false' && steps.existing_issue.outputs.exists == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ steps.existing_issue.outputs.issue_number }}
+          ERROR_MESSAGE: ${{ steps.check.outputs.error_message }}
+        run: |
+          gh issue comment "${ISSUE_NUMBER}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --body "## 定期チェック結果
+
+PAT はまだ無効な状態です。
+
+**エラー内容:** ${ERROR_MESSAGE}
+
+検出日時: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
