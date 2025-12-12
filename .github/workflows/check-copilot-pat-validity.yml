@@ -1,4 +1,4 @@
-name: Check Copilot PAT Validity
+name: Copilotアサイン用PAT有効性チェック
 
 on:
   schedule:
