@@ -14,6 +14,15 @@ description: Copilotへ新しいモデルを追加するリクエストを自動
    - タイトル形式: "Copilotへ新しいモデル <model_name in Copilot> の追加リクエスト"
    - モデル名は既に " in Copilot" を含んでいます（例: "OpenAI GPT-6 in Copilot"）
    - モデル名に "(Preview)" が含まれている場合は削除します
+   - **エラー時の処理**: Issueタイトルからモデル名を抽出できない場合は、**以降の手順を一切実行せず処理を中断**し、Issueに以下のメッセージを投稿する:
+     ```
+     @<Issue作成者> Issueタイトルからモデル名を抽出できませんでした。
+     
+     タイトルは以下の形式で記載してください:
+     「Copilotへ新しいモデル <モデル名> in Copilot の追加リクエスト」
+     
+     例: 「Copilotへ新しいモデル OpenAI GPT-6 in Copilot の追加リクエスト」
+     ```
 
 2. **モデル情報の準備**
    - 抽出したモデル名から "(Preview)" を削除した形式を使用します
@@ -22,9 +31,17 @@ description: Copilotへ新しいモデルを追加するリクエストを自動
 3. **AI Controls.mdの更新**
    - ファイルパス: `enterprise-settings/AI Controls.md`
    - 対象セクション: "Configure allowed models" → "現状の設定" のテーブル（31-47行目付近）
+   - **重複チェック**: 既に同じモデルがテーブルに存在するか確認する
+   - **エラー時の処理**: 既に同じモデルが登録済みの場合は、**以降の手順を一切実行せず処理を中断**し、Issueに以下のメッセージを投稿した後、Issueをクローズする:
+     ```
+     @<Issue作成者> 指定されたモデル「<モデル名>」は既に登録済みです。
+     
+     新しいモデルを追加する場合は、未登録のモデル名でIssueを作成してください。
+     ```
    - 新しいモデルを以下のルールに従って挿入:
      - ベンダー順（Anthropic → Google → OpenAI → xAI）
      - 各ベンダー内ではモデル名のアルファベット順
+   - **注意**: テーブルの形式が壊れないよう、慎重に編集する
    
    テーブル形式:
    ```markdown
@@ -50,20 +67,3 @@ description: Copilotへ新しいモデルを追加するリクエストを自動
 6. **PRをレビュー可能状態に変更**
    - Draft PRを「Ready for review」に変更
    - コマンド: `gh pr ready <PR番号>`
-
-### エラーハンドリング
-
-- Issueタイトルからモデル名を抽出できない場合は、Pull Requestを作成せず、IssueにIssue作成者へメンションを付けてエラーメッセージを投稿する
-- 既に同じモデルがテーブルに存在する場合は、重複追加を防ぐ
-- テーブルの形式が壊れないよう、慎重に編集する
-
-### 出力例
-
-Issueタイトル: "Copilotへ新しいモデル OpenAI GPT-6 in Copilot の追加リクエスト"
-
-更新内容:
-```markdown
-| OpenAI GPT-6 in Copilot | Let Organizations decide |
-```
-
-挿入位置: OpenAI GPT-5.1シリーズの後、xAI Grok Code Fast 1の前
