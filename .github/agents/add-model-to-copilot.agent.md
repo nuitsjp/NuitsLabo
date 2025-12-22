@@ -14,14 +14,18 @@ description: Copilotへ新しいモデルを追加するリクエストを自動
    - タイトル形式: "Copilotへ新しいモデル <model_name in Copilot> の追加リクエスト"
    - モデル名は既に " in Copilot" を含んでいます（例: "OpenAI GPT-6 in Copilot"）
    - モデル名に "(Preview)" が含まれている場合は削除します
-   - **エラー時の処理**: Issueタイトルからモデル名を抽出できない場合は、**以降の手順を一切実行せず処理を中断**し、Issueに以下のメッセージを投稿した後、Pull RequestをCloseする:
-     ```
-     @<Issue作成者> Issueタイトルからモデル名を抽出できませんでした。
-     
+   - **エラー時の処理**: Issueタイトルからモデル名を抽出できない場合は、**以降の手順を一切実行せず処理を中断**し、以下のコマンドを実行する:
+     ```bash
+     # Issueにエラーメッセージを投稿
+     gh issue comment <Issue番号> --body "@<Issue作成者> Issueタイトルからモデル名を抽出できませんでした。
+
      タイトルは以下の形式で記載してください:
      「Copilotへ新しいモデル <モデル名> in Copilot の追加リクエスト」
-     
-     例: 「Copilotへ新しいモデル OpenAI GPT-6 in Copilot の追加リクエスト」
+
+     例: 「Copilotへ新しいモデル OpenAI GPT-6 in Copilot の追加リクエスト」"
+
+     # Pull RequestをClose
+     gh pr close <PR番号>
      ```
 
 2. **モデル情報の準備**
@@ -32,11 +36,18 @@ description: Copilotへ新しいモデルを追加するリクエストを自動
    - ファイルパス: `enterprise-settings/AI Controls.md`
    - 対象セクション: "Configure allowed models" → "現状の設定" のテーブル（31-47行目付近）
    - **重複チェック**: 既に同じモデルがテーブルに存在するか確認する
-   - **エラー時の処理**: 既に同じモデルが登録済みの場合は、**以降の手順を一切実行せず処理を中断**し、Issueに以下のメッセージを投稿した後、IssueとPull RequestをCloseする:
-     ```
-     @<Issue作成者> 指定されたモデル「<モデル名>」は既に登録済みです。
-     
-     新しいモデルを追加する場合は、未登録のモデル名でIssueを作成してください。
+   - **エラー時の処理**: 既に同じモデルが登録済みの場合は、**以降の手順を一切実行せず処理を中断**し、以下のコマンドを実行する:
+     ```bash
+     # Issueにエラーメッセージを投稿
+     gh issue comment <Issue番号> --body "@<Issue作成者> 指定されたモデル「<モデル名>」は既に登録済みです。
+
+     新しいモデルを追加する場合は、未登録のモデル名でIssueを作成してください。"
+
+     # IssueをClose
+     gh issue close <Issue番号>
+
+     # Pull RequestをClose
+     gh pr close <PR番号>
      ```
    - 新しいモデルを以下のルールに従って挿入:
      - ベンダー順（Anthropic → Google → OpenAI → xAI）
