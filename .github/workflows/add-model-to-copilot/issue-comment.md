@@ -1,8 +1,3 @@
----
-name: Copilotへ新しいモデルの追加
-description: Copilotへ新しいモデルを追加するリクエストを自動で支援するエージェント
----
-
 ## Add Model to Copilot
 
 「Copilotへ新しいモデルの追加リクエスト」を下記にしたがって処理してください。
