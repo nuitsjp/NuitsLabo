@@ -26,6 +26,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Add agent instructions as comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const agentContent = fs.readFileSync('.github/add-model-to-copilot.yml/add-model-to-copilot/issue-message.md', 'utf8');
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ env.ISSUE_NUMBER }},
+              body: agentContent
+            });
+
       - name: Assign Copilot to issue
         env:
           GH_TOKEN: ${{ secrets.COPILOT_ASSIGN_PAT }}  # サービスアカウントの Fine-grained PAT
