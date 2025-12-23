@@ -31,7 +31,7 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const agentContent = fs.readFileSync('.github/add-model-to-copilot.yml/add-model-to-copilot/issue-message.md', 'utf8');
+            const agentContent = fs.readFileSync('.github/workflows/add-model-to-copilot/issue-message.md', 'utf8');
             
             await github.rest.issues.createComment({
               owner: context.repo.owner,
