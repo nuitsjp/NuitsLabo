@@ -1,11 +1,17 @@
-import { useBroadcastSync } from "./useBroadcastSync";
+import { useSharedSync } from "./useSharedSync";
 
 export function ChildWindow() {
-  const { state, updateState } = useBroadcastSync();
+  const { state, updateState, supported } = useSharedSync();
 
   return (
     <div style={{ padding: 32, fontFamily: "sans-serif" }}>
       <h1>子ウィンドウ</h1>
+
+      {!supported && (
+        <p style={{ color: "#c00", fontWeight: "bold" }}>
+          このブラウザではウィンドウ間同期は利用できません（Chrome 80+ / Edge 80+ / Safari 16+ が必要です）
+        </p>
+      )}
 
       <div style={{ marginBottom: 16 }}>
         <label>カウンター: </label>

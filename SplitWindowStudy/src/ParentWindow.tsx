@@ -1,8 +1,8 @@
 import { useRef } from "react";
-import { useBroadcastSync } from "./useBroadcastSync";
+import { useSharedSync } from "./useSharedSync";
 
 export function ParentWindow() {
-  const { state, updateState } = useBroadcastSync();
+  const { state, updateState, supported } = useSharedSync();
   const childWindowRef = useRef<Window | null>(null);
 
   const openChild = () => {
@@ -20,6 +20,12 @@ export function ParentWindow() {
   return (
     <div style={{ padding: 32, fontFamily: "sans-serif" }}>
       <h1>親ウィンドウ</h1>
+
+      {!supported && (
+        <p style={{ color: "#c00", fontWeight: "bold" }}>
+          このブラウザではウィンドウ間同期は利用できません（Chrome 80+ / Edge 80+ / Safari 16+ が必要です）
+        </p>
+      )}
 
       <button onClick={openChild} style={{ marginBottom: 24, padding: "8px 16px", fontSize: 16 }}>
         子ウィンドウを開く

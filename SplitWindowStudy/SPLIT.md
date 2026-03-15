@@ -1,6 +1,6 @@
 # SplitWindowStudy
 
-React で親ウィンドウからポップアップ（子ウィンドウ）を開き、**BroadcastChannel API** を用いて双方向にデータをリアルタイム同期するサンプルアプリケーションです。
+React で親ウィンドウからポップアップ（子ウィンドウ）を開き、**SharedWorker** を用いて双方向にデータをリアルタイム同期するサンプルアプリケーションです。SharedWorker が Single Source of Truth として状態を一元管理し、途中参加タブにも現在の状態を即座に提供します。
 
 ## 起動方法
 
@@ -11,6 +11,20 @@ npm run dev
 
 ブラウザで表示された URL（例: `http://localhost:5173/`）を開き、「子ウィンドウを開く」ボタンを押してください。
 
+### 対応ブラウザ
+
+本アプリは `new SharedWorker(..., { type: "module" })` (Module SharedWorker) を使用しています。以下のブラウザが必要です。
+
+| ブラウザ | 最低バージョン |
+|---|---|
+| Chrome | 80+ |
+| Edge | 80+ |
+| macOS Safari | 16.0+ |
+
+未対応ブラウザではウィンドウ間同期が無効になり、画面上にその旨が表示されます（クラッシュはしません）。
+
+> **参考:** [MDN SharedWorker](https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker) / [Can I use: SharedWorkers](https://caniuse.com/sharedworkers) / [Can I use: JS modules in shared workers](https://caniuse.com/wf-js-modules-shared-workers)
+
 ---
 
 ## アーキテクチャ概要
@@ -20,17 +34,20 @@ npm run dev
 ```mermaid
 graph TB
     subgraph Browser["ブラウザ (同一オリジン)"]
+        SW["SharedWorker<br/>sync-worker.ts<br/>(Single Source of Truth)"]
+
         subgraph ParentTab["親ウィンドウ<br/>URL: /"]
             main_p["main.tsx<br/>(mode判定)"] --> PW["ParentWindow.tsx"]
-            PW --> hook_p["useBroadcastSync()"]
+            PW --> hook_p["useSharedSync()"]
         end
 
         subgraph ChildTab["子ウィンドウ (ポップアップ)<br/>URL: /?mode=child"]
             main_c["main.tsx<br/>(mode判定)"] --> CW["ChildWindow.tsx"]
-            CW --> hook_c["useBroadcastSync()"]
+            CW --> hook_c["useSharedSync()"]
         end
 
-        hook_p <-->|"BroadcastChannel<br/>split-window-sync"| hook_c
+        hook_p <-->|"MessagePort"| SW
+        hook_c <-->|"MessagePort"| SW
     end
 ```
 
@@ -41,8 +58,9 @@ graph LR
     subgraph src
         M["main.tsx"] -->|"?mode=child なし"| P["ParentWindow.tsx"]
         M -->|"?mode=child あり"| C["ChildWindow.tsx"]
-        P --> H["useBroadcastSync.ts"]
+        P --> H["useSharedSync.ts"]
         C --> H
+        H -->|"MessagePort"| W["sync-worker.ts"]
     end
 ```
 
@@ -51,7 +69,8 @@ graph LR
 | `main.tsx` | エントリポイント。URL の `?mode=child` パラメータで描画コンポーネントを切り替え |
 | `ParentWindow.tsx` | 親画面 UI。`window.open()` で子ウィンドウをポップアップとして起動 |
 | `ChildWindow.tsx` | 子画面 UI。親と同じ操作（カウンター・テキスト入力）を提供 |
-| `useBroadcastSync.ts` | 双方向同期のカスタムフック。BroadcastChannel による送受信ロジックをカプセル化 |
+| `useSharedSync.ts` | 双方向同期のカスタムフック。SharedWorker への接続・メッセージ送受信をカプセル化 |
+| `sync-worker.ts` | SharedWorker スクリプト。状態の一元管理（Single Source of Truth）と全クライアントへのブロードキャストを担当 |
 
 ---
 
@@ -72,20 +91,20 @@ interface SyncState {
 sequenceDiagram
     actor User as ユーザー
     participant PW as 親ウィンドウ<br/>(ParentWindow)
-    participant Hook_P as useBroadcastSync<br/>(親側インスタンス)
-    participant BC as BroadcastChannel<br/>"split-window-sync"
-    participant Hook_C as useBroadcastSync<br/>(子側インスタンス)
+    participant Hook_P as useSharedSync<br/>(親側インスタンス)
+    participant SW as SharedWorker<br/>(sync-worker.ts)
+    participant Hook_C as useSharedSync<br/>(子側インスタンス)
     participant CW as 子ウィンドウ<br/>(ChildWindow)
 
     User->>PW: カウンター「+」ボタンをクリック
     PW->>Hook_P: updateState(s => ({...s, count: s.count + 1}))
-    Hook_P->>Hook_P: setState で count を更新
-    Hook_P->>BC: postMessage({ count: 1, text: "" })
-    BC-->>Hook_C: onmessage イベント発火
-    Hook_C->>Hook_C: isReceiving = true
+    Hook_P->>Hook_P: setState で count を楽観的に更新
+    Hook_P->>SW: port.postMessage({ type: "update", state })
+    SW->>SW: currentState を更新
+    SW->>Hook_P: port.postMessage({ type: "sync", state })
+    SW->>Hook_C: port.postMessage({ type: "sync", state })
     Hook_C->>Hook_C: setState({ count: 1, text: "" })
     Hook_C-->>CW: 再レンダリング (count: 1)
-    Hook_C->>Hook_C: requestAnimationFrame で<br/>isReceiving = false に戻す
 ```
 
 ### シーケンス図: 子 → 親の同期
@@ -94,32 +113,41 @@ sequenceDiagram
 sequenceDiagram
     actor User as ユーザー
     participant CW as 子ウィンドウ<br/>(ChildWindow)
-    participant Hook_C as useBroadcastSync<br/>(子側インスタンス)
-    participant BC as BroadcastChannel<br/>"split-window-sync"
-    participant Hook_P as useBroadcastSync<br/>(親側インスタンス)
+    participant Hook_C as useSharedSync<br/>(子側インスタンス)
+    participant SW as SharedWorker<br/>(sync-worker.ts)
+    participant Hook_P as useSharedSync<br/>(親側インスタンス)
     participant PW as 親ウィンドウ<br/>(ParentWindow)
 
     User->>CW: テキスト入力欄に "Hello" と入力
     CW->>Hook_C: updateState(s => ({...s, text: "Hello"}))
-    Hook_C->>Hook_C: setState で text を更新
-    Hook_C->>BC: postMessage({ count: 1, text: "Hello" })
-    BC-->>Hook_P: onmessage イベント発火
-    Hook_P->>Hook_P: isReceiving = true
+    Hook_C->>Hook_C: setState で text を楽観的に更新
+    Hook_C->>SW: port.postMessage({ type: "update", state })
+    SW->>SW: currentState を更新
+    SW->>Hook_C: port.postMessage({ type: "sync", state })
+    SW->>Hook_P: port.postMessage({ type: "sync", state })
     Hook_P->>Hook_P: setState({ count: 1, text: "Hello" })
     Hook_P-->>PW: 再レンダリング (text: "Hello")
-    Hook_P->>Hook_P: requestAnimationFrame で<br/>isReceiving = false に戻す
 ```
 
-### 再送防止メカニズム
+### シーケンス図: 途中参加タブの状態取得
 
-BroadcastChannel は受信側で `setState` を呼ぶと `updateState` 経由で再度 `postMessage` してしまう可能性があります。これを防ぐために `isReceiving` フラグを使用しています。
+SharedWorker の最大の利点 — 後から開いたタブが初期値ではなく現在の状態を即座に取得できます。
 
 ```mermaid
-flowchart TD
-    A["updateState が呼ばれる"] --> B{"isReceiving<br/>フラグは true?"}
-    B -->|"Yes (受信による更新)"| C["setState のみ実行<br/>postMessage しない"]
-    B -->|"No (ユーザー操作)"| D["setState 実行"]
-    D --> E["postMessage で<br/>相手ウィンドウに送信"]
+sequenceDiagram
+    actor User as ユーザー
+    participant PW as 親ウィンドウ
+    participant SW as SharedWorker<br/>(currentState を保持)
+    participant NewTab as 新しい子ウィンドウ
+
+    Note over PW,SW: 親ウィンドウで操作済み<br/>currentState = { count: 5, text: "Hello" }
+
+    User->>PW: 「子ウィンドウを開く」クリック
+    PW->>NewTab: window.open("/?mode=child")
+    NewTab->>SW: new SharedWorker() で接続
+    SW->>NewTab: port.postMessage({ type: "init",<br/>state: { count: 5, text: "Hello" } })
+    NewTab->>NewTab: setState({ count: 5, text: "Hello" })
+    Note over NewTab: 初期値 (0, "") ではなく<br/>現在値 (5, "Hello") で表示開始
 ```
 
 ---
@@ -132,6 +160,7 @@ sequenceDiagram
     participant PW as ParentWindow
     participant W as window.open()
     participant Browser as ブラウザ
+    participant SW as SharedWorker
 
     User->>PW: 「子ウィンドウを開く」クリック
     PW->>PW: childWindowRef が<br/>既に開いている？
@@ -144,7 +173,8 @@ sequenceDiagram
         W->>Browser: ポップアップウィンドウを生成
         Browser->>Browser: main.tsx が ?mode=child を検出
         Browser->>Browser: ChildWindow を描画
-        Browser->>Browser: useBroadcastSync() で<br/>BroadcastChannel に接続
+        Browser->>SW: useSharedSync() で<br/>SharedWorker に接続
+        SW->>Browser: { type: "init", state } で<br/>現在の状態を即送信
     end
 ```
 
@@ -188,6 +218,8 @@ flowchart TD
 
 ### 本サンプルでの選定理由
 
-本サンプルでは学習目的でのシンプルさを優先し **BroadcastChannel** を採用しています。
+本サンプルでは **SharedWorker** を採用しています。
 
-ただし、途中参加タブへの状態提供・競合制御・重い計算のオフロードが必要になった場合は **SharedWorker** への移行を検討してください。
+- **途中参加タブへの状態提供**: 後から開いたタブが即座に現在の状態を取得でき、BroadcastChannel の「初期値から開始」問題を解決
+- **Single Source of Truth**: SharedWorker が唯一の状態管理者となり、各タブ間の状態不整合を防止
+- **再送防止ロジック不要**: プロトコル設計により、BroadcastChannel で必要だった `isReceiving` フラグが不要に
