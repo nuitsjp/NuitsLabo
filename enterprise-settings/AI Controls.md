@@ -43,6 +43,7 @@
 | OpenAI GPT-5.1 in Copilot (Preview) | Let Organizations decide |
 | OpenAI GPT-5.1-Codex in Copilot (Preview) | Let Organizations decide |
 | OpenAI GPT-5.1-Codex-Mini in Copilot (Preview) | Let Organizations decide |
+| OpenAI GPT-5.2 in Copilot | Let Organizations decide |
 | xAI Grok Code Fast 1 in Copilot | Let Organizations decide |
 
 ## Privacy
