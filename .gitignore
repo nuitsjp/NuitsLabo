@@ -13,6 +13,7 @@ vosk-model-small-ja-0.22/
 **/PowerShellModuleStudy/nuget.config
 
 **/launchSettings.json
+.playwright-cli/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
