@@ -9,13 +9,20 @@ namespace TypoDetectionBenchmark;
 
 public record TestCase(int Id, bool IsTypo, string Category, string Text);
 
-public record ApiResult(
+public record CorrectionResult(
     int Id,
     string Model,
     bool GroundTruth,
-    double Probability,
-    bool PredictedTypo,
+    string Category,
+    string OriginalText,
+    string CorrectedText,
+    bool WasModified,
     long LatencyMs,
+    int PromptTokens,
+    int CompletionTokens,
+    int ReasoningTokens,
+    int TotalTokens,
+    double CostUsd,
     bool IsSuccess,
     string? ErrorMessage
 );
@@ -93,128 +100,70 @@ public class Program
     {
         Console.OutputEncoding = Encoding.UTF8;
         Console.WriteLine("================================================================================");
-        Console.WriteLine(" 誤字脱字判定ベンチマーク: OpenAI Decisions API vs TypeSafe AI System One");
-        Console.WriteLine($" テストデータ件数: {TestCases.Length} 件 (正常文 15件 / 誤字脱字文 15件, 各120〜126文字)");
+        Console.WriteLine(" 誤字脱字補正ベンチマーク: gpt-6-luna vs gpt-5.6-luna");
+        Console.WriteLine($" テストデータ件数: {TestCases.Length} 件 (正常文 15件 / 誤字脱字文 15件)");
         Console.WriteLine("================================================================================");
 
         string openAiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY")
             ?? Environment.GetEnvironmentVariable("OPENAI_API_KEY", EnvironmentVariableTarget.User)
             ?? throw new InvalidOperationException("OPENAI_API_KEY not found.");
 
-        string typeSafeKey = Environment.GetEnvironmentVariable("TYPESAFE_API_KEY")
-            ?? Environment.GetEnvironmentVariable("TYPESAFE_API_KEY", EnvironmentVariableTarget.User)
-            ?? throw new InvalidOperationException("TYPESAFE_API_KEY not found.");
+        using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(60) };
 
-        using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(30) };
+        var luna6Results = new List<CorrectionResult>();
+        var luna56Results = new List<CorrectionResult>();
 
-        // ウォームアップ
-        Console.WriteLine("\n[1/3] ウォームアップ実行中...");
-        await EvaluateOpenAiAsync(http, openAiKey, "ウォームアップテスト用の文章です。");
-        await EvaluateTypeSafeAsync(http, typeSafeKey, "ウォームアップテスト用の文章です。");
-        Console.WriteLine("ウォームアップ完了。\n");
-
-        // ベンチマーク実行
-        Console.WriteLine("[2/3] ベンチマーク測定開始 (全30件)...");
-        var openAiResults = new List<ApiResult>();
-        var typeSafeResults = new List<ApiResult>();
-
+        Console.WriteLine("\n[1/2] gpt-6-luna の補正測定開始...");
         for (int i = 0; i < TestCases.Length; i++)
         {
             var tc = TestCases[i];
-            Console.Write($"[{i + 1:D2}/{TestCases.Length}] ID:{tc.Id:D2} (Typo={tc.IsTypo, -5}) ... ");
-
-            // OpenAI Decisions
-            var oRes = await EvaluateOpenAiAsync(http, openAiKey, tc.Text, tc.Id, tc.IsTypo);
-            openAiResults.Add(oRes);
-
-            // TypeSafe AI
-            var tRes = await EvaluateTypeSafeAsync(http, typeSafeKey, tc.Text, tc.Id, tc.IsTypo);
-            typeSafeResults.Add(tRes);
-
-            Console.WriteLine(
-                $"OpenAI: {oRes.Probability:F2} ({oRes.LatencyMs,4}ms, pred={oRes.PredictedTypo}) | " +
-                $"TypeSafe: {tRes.Probability:F2} ({tRes.LatencyMs,4}ms, pred={tRes.PredictedTypo})"
-            );
-
-            // レートリミット配慮で微小待機
+            Console.Write($"[{i + 1:D2}/30] ID:{tc.Id:D2} (Typo={tc.IsTypo, -5}) ... ");
+            var res = await CorrectTextAsync(http, openAiKey, "gpt-6-luna", tc, 0.10, 0.50);
+            luna6Results.Add(res);
+            Console.WriteLine($"{res.LatencyMs,4}ms | In:{res.PromptTokens,3} Out:{res.CompletionTokens,3} (R:{res.ReasoningTokens,3}) | Mod={res.WasModified}");
             await Task.Delay(100);
         }
 
-        Console.WriteLine("\n[3/3] 結果集計・レポート作成中...");
-        PrintSummary("OpenAI Decisions (gpt-6-luna)", openAiResults);
-        PrintSummary("TypeSafe AI System One (jev-latest)", typeSafeResults);
+        Console.WriteLine("\n[2/2] gpt-5.6-luna の補正測定開始...");
+        for (int i = 0; i < TestCases.Length; i++)
+        {
+            var tc = TestCases[i];
+            Console.Write($"[{i + 1:D2}/30] ID:{tc.Id:D2} (Typo={tc.IsTypo, -5}) ... ");
+            var res = await CorrectTextAsync(http, openAiKey, "gpt-5.6-luna", tc, 0.20, 1.20);
+            luna56Results.Add(res);
+            Console.WriteLine($"{res.LatencyMs,4}ms | In:{res.PromptTokens,3} Out:{res.CompletionTokens,3} (R:{res.ReasoningTokens,3}) | Mod={res.WasModified}");
+            await Task.Delay(100);
+        }
 
-        // CSV出力
-        SaveCsv("benchmark_results.csv", openAiResults, typeSafeResults);
-        Console.WriteLine("\n結果を benchmark_results.csv に保存しました。");
+        Console.WriteLine("\n=== 集計結果 ===");
+        PrintSummary("gpt-6-luna", luna6Results, 0.10, 0.50, 250_000);
+        PrintSummary("gpt-5.6-luna", luna56Results, 0.20, 1.20, 2_500_000);
+
+        SaveCsv("correction_benchmark_results.csv", luna6Results, luna56Results);
+        Console.WriteLine("\n結果を correction_benchmark_results.csv に保存しました。");
     }
 
-    private static async Task<ApiResult> EvaluateOpenAiAsync(
-        HttpClient http, string apiKey, string text, int id = 0, bool isTypo = false)
+    private static async Task<CorrectionResult> CorrectTextAsync(
+        HttpClient http, string apiKey, string model, TestCase tc, double inputPricePerM, double outputPricePerM)
     {
         try
         {
-            using var req = new HttpRequestMessage(HttpMethod.Post, "https://api.openai.com/v1/decisions");
+            using var req = new HttpRequestMessage(HttpMethod.Post, "https://api.openai.com/v1/chat/completions");
             req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
             var body = new
             {
-                model = "gpt-6-luna",
-                input = text,
-                questions = new[]
+                model = model,
+                messages = new[]
                 {
                     new
                     {
-                        type = "predicate",
-                        name = "has_typo",
-                        instructions = "この日本語の文章に、誤字、脱字、変換ミス、助詞の抜けや重複などの誤りが含まれているか判定してください。"
-                    }
-                }
-            };
-            req.Content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
-
-            var sw = Stopwatch.StartNew();
-            using var res = await http.SendAsync(req);
-            sw.Stop();
-
-            if (!res.IsSuccessStatusCode)
-            {
-                var err = await res.Content.ReadAsStringAsync();
-                return new ApiResult(id, "OpenAI", isTypo, 0, false, sw.ElapsedMilliseconds, false, $"{(int)res.StatusCode}: {err}");
-            }
-
-            var json = await res.Content.ReadAsStringAsync();
-            var doc = JsonNode.Parse(json);
-            double prob = doc?["answers"]?[0]?["probability"]?.GetValue<double>() ?? 0.0;
-            return new ApiResult(id, "OpenAI", isTypo, prob, prob >= 0.5, sw.ElapsedMilliseconds, true, null);
-        }
-        catch (Exception ex)
-        {
-            return new ApiResult(id, "OpenAI", isTypo, 0, false, 0, false, ex.Message);
-        }
-    }
-
-    private static async Task<ApiResult> EvaluateTypeSafeAsync(
-        HttpClient http, string apiKey, string text, int id = 0, bool isTypo = false)
-    {
-        try
-        {
-            using var req = new HttpRequestMessage(HttpMethod.Post, "https://api.typesafe.ai/v1/systemone");
-            req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
-            var body = new
-            {
-                model = "jev-latest",
-                state = text,
-                questions = new Dictionary<string, object>
-                {
-                    ["has_typo"] = new
+                        role = "system",
+                        content = "あなたは高精度な日本語文章校正AIです。入力された文章を検査し、誤字・脱字・変換ミス・助詞の脱落や重複などの誤りがあれば修正してください。原文の文体・ニュアンス・表現は極力そのまま維持し、必要最小限の修正を行ってください。解説や前置きは一切出力せず、修正後の文章のみを出力してください。誤字脱字がない場合は、入力文章をそのまま完全一致で出力してください。"
+                    },
+                    new
                     {
-                        type = "noul",
-                        instructions = "Does this Japanese text contain any typos, omitted characters, wrong kanji/words, grammatical errors, or duplicates?",
-                        criteria = new
-                        {
-                            @true = "Contains typos, omitted characters, wrong words, or grammatical errors",
-                            @false = "Correct, standard, natural Japanese text without any errors"
-                        }
+                        role = "user",
+                        content = tc.Text
                     }
                 }
             };
@@ -227,107 +176,118 @@ public class Program
             if (!res.IsSuccessStatusCode)
             {
                 var err = await res.Content.ReadAsStringAsync();
-                return new ApiResult(id, "TypeSafe", isTypo, 0, false, sw.ElapsedMilliseconds, false, $"{(int)res.StatusCode}: {err}");
+                return new CorrectionResult(tc.Id, model, tc.IsTypo, tc.Category, tc.Text, "", false, sw.ElapsedMilliseconds, 0, 0, 0, 0, 0, false, err);
             }
 
             var json = await res.Content.ReadAsStringAsync();
             var doc = JsonNode.Parse(json);
-            double prob = doc?["answers"]?["has_typo"]?["noul"]?.GetValue<double>() ?? 0.0;
-            return new ApiResult(id, "TypeSafe", isTypo, prob, prob >= 0.5, sw.ElapsedMilliseconds, true, null);
+            var reply = doc?["choices"]?[0]?["message"]?["content"]?.ToString().Trim() ?? "";
+            int promptTok = doc?["usage"]?["prompt_tokens"]?.GetValue<int>() ?? 0;
+            int compTok = doc?["usage"]?["completion_tokens"]?.GetValue<int>() ?? 0;
+            int reasonTok = doc?["usage"]?["completion_tokens_details"]?["reasoning_tokens"]?.GetValue<int>() ?? 0;
+            int totalTok = doc?["usage"]?["total_tokens"]?.GetValue<int>() ?? (promptTok + compTok);
+
+            double cost = (promptTok * inputPricePerM / 1_000_000.0) + (compTok * outputPricePerM / 1_000_000.0);
+            bool wasModified = !string.Equals(tc.Text.Trim(), reply, StringComparison.Ordinal);
+
+            return new CorrectionResult(tc.Id, model, tc.IsTypo, tc.Category, tc.Text, reply, wasModified, sw.ElapsedMilliseconds, promptTok, compTok, reasonTok, totalTok, cost, true, null);
         }
         catch (Exception ex)
         {
-            return new ApiResult(id, "TypeSafe", isTypo, 0, false, 0, false, ex.Message);
+            return new CorrectionResult(tc.Id, model, tc.IsTypo, tc.Category, tc.Text, "", false, 0, 0, 0, 0, 0, 0, false, ex.Message);
         }
     }
 
-    private static void PrintSummary(string title, List<ApiResult> results)
+    private static void PrintSummary(string modelName, List<CorrectionResult> list, double inPrice, double outPrice, int freeQuota)
     {
-        var valid = results.Where(r => r.IsSuccess).ToList();
-        if (valid.Count == 0)
-        {
-            Console.WriteLine($"\n[{title}] 全リクエストが失敗しました。");
-            return;
-        }
+        var valid = list.Where(x => x.IsSuccess).ToList();
+        if (valid.Count == 0) return;
 
-        int tp = valid.Count(r => r.GroundTruth && r.PredictedTypo);
-        int fp = valid.Count(r => !r.GroundTruth && r.PredictedTypo);
-        int tn = valid.Count(r => !r.GroundTruth && !r.PredictedTypo);
-        int fn = valid.Count(r => r.GroundTruth && !r.PredictedTypo);
+        var normals = valid.Where(x => !x.GroundTruth).ToList();
+        var typos = valid.Where(x => x.GroundTruth).ToList();
 
-        double accuracy = (double)(tp + tn) / valid.Count;
-        double precision = (tp + fp) > 0 ? (double)tp / (tp + fp) : 0.0;
-        double recall = (tp + fn) > 0 ? (double)tp / (tp + fn) : 0.0;
-        double f1 = (precision + recall) > 0 ? 2 * (precision * recall) / (precision + recall) : 0.0;
+        // 正常文のうち、変更されなかった割合（過剰修正なし率）
+        int normalPreserved = normals.Count(x => !x.WasModified);
+        // 誤字文のうち、変更された割合（修正実行率）
+        int typoModified = typos.Count(x => x.WasModified);
 
-        var latencies = valid.Select(r => (double)r.LatencyMs).OrderBy(x => x).ToList();
-        double min = latencies.First();
-        double max = latencies.Last();
-        double avg = latencies.Average();
-        double median = latencies[latencies.Count / 2];
-        double p90 = latencies[(int)(latencies.Count * 0.9)];
-        double p95 = latencies[(int)(latencies.Count * 0.95)];
+        var latencies = valid.Select(x => (double)x.LatencyMs).OrderBy(x => x).ToList();
+        double avgLat = latencies.Average();
+        double medLat = latencies[latencies.Count / 2];
+        double minLat = latencies.First();
+        double maxLat = latencies.Last();
+        double p90Lat = latencies[(int)(latencies.Count * 0.9)];
+        double p95Lat = latencies[(int)(latencies.Count * 0.95)];
 
-        Console.WriteLine("\n--------------------------------------------------------------------------------");
-        Console.WriteLine($"■ モデル: {title}");
+        double avgPromptTok = valid.Average(x => x.PromptTokens);
+        double avgCompTok = valid.Average(x => x.CompletionTokens);
+        double avgReasonTok = valid.Average(x => x.ReasoningTokens);
+        double avgTotalTok = valid.Average(x => x.TotalTokens);
+        double totalCost = valid.Sum(x => x.CostUsd);
+        double avgCost = valid.Average(x => x.CostUsd);
+
+        int maxFreeRequests = (int)(freeQuota / avgTotalTok);
+
         Console.WriteLine("--------------------------------------------------------------------------------");
-        Console.WriteLine($"【精度 (閾値 0.5)】");
-        Console.WriteLine($"  正解率 (Accuracy) : {accuracy:P1} ({tp + tn}/{valid.Count})");
-        Console.WriteLine($"  適合率 (Precision): {precision:P1} (誤字と判定したうち実際に誤字だった割合)");
-        Console.WriteLine($"  再現率 (Recall)   : {recall:P1} (実際の誤字のうち検知できた割合)");
-        Console.WriteLine($"  F1 スコア         : {f1:F3}");
-        Console.WriteLine($"  混同行列          : TP={tp}, FP={fp}, TN={tn}, FN={fn}");
-
-        Console.WriteLine($"【反応速度 (Latency)】");
-        Console.WriteLine($"  平均 (Mean)       : {avg:F1} ms");
-        Console.WriteLine($"  中央値 (Median)   : {median:F1} ms");
-        Console.WriteLine($"  最小 (Min)        : {min:F1} ms");
-        Console.WriteLine($"  最大 (Max)        : {max:F1} ms");
-        Console.WriteLine($"  90%タイル (P90)   : {p90:F1} ms");
-        Console.WriteLine($"  95%タイル (P95)   : {p95:F1} ms");
-
-        // 閾値感度分析
-        Console.WriteLine($"【閾値感度 (Accuracy / F1)】");
-        foreach (var th in new[] { 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8 })
-        {
-            int t_tp = valid.Count(r => r.GroundTruth && r.Probability >= th);
-            int t_fp = valid.Count(r => !r.GroundTruth && r.Probability >= th);
-            int t_tn = valid.Count(r => !r.GroundTruth && r.Probability < th);
-            int t_fn = valid.Count(r => r.GroundTruth && r.Probability < th);
-
-            double acc_th = (double)(t_tp + t_tn) / valid.Count;
-            double prec_th = (t_tp + t_fp) > 0 ? (double)t_tp / (t_tp + t_fp) : 0.0;
-            double rec_th = (t_tp + t_fn) > 0 ? (double)t_tp / (t_tp + t_fn) : 0.0;
-            double f1_th = (prec_th + rec_th) > 0 ? 2 * (prec_th * rec_th) / (prec_th + rec_th) : 0.0;
-
-            Console.WriteLine($"  閾値 {th:F1} => 正解率: {acc_th:P1}, 再現率: {rec_th:P1}, 適合率: {prec_th:P1}, F1: {f1_th:F3}");
-        }
+        Console.WriteLine($"■ モデル: {modelName}");
+        Console.WriteLine("--------------------------------------------------------------------------------");
+        Console.WriteLine($"【補正挙動・品質】");
+        Console.WriteLine($"  正常文の維持率 (過剰修正なし) : {(double)normalPreserved / normals.Count:P1} ({normalPreserved}/{normals.Count})");
+        Console.WriteLine($"  誤字文の修正着手率 (変更検知) : {(double)typoModified / typos.Count:P1} ({typoModified}/{typos.Count})");
+        Console.WriteLine($"【レスポンスタイム (Latency)】");
+        Console.WriteLine($"  平均 (Mean)   : {avgLat:F1} ms");
+        Console.WriteLine($"  中央値 (Median): {medLat:F1} ms");
+        Console.WriteLine($"  最小 (Min)    : {minLat:F1} ms");
+        Console.WriteLine($"  最大 (Max)    : {maxLat:F1} ms");
+        Console.WriteLine($"  P90           : {p90Lat:F1} ms");
+        Console.WriteLine($"  P95           : {p95Lat:F1} ms");
+        Console.WriteLine($"【トークン消費量 (平均)】");
+        Console.WriteLine($"  入力 (Prompt) : {avgPromptTok:F1} tokens");
+        Console.WriteLine($"  出力 (Comp)   : {avgCompTok:F1} tokens (うち推論思考: {avgReasonTok:F1} tokens)");
+        Console.WriteLine($"  合計 (Total)  : {avgTotalTok:F1} tokens");
+        Console.WriteLine($"【コスト評価】");
+        Console.WriteLine($"  単価設定      : 入力 ${inPrice:F2} / Mtok, 出力 ${outPrice:F2} / Mtok");
+        Console.WriteLine($"  1件あたり平均 : ${avgCost:F6} (約 {avgCost * 155:F4} 円)");
+        Console.WriteLine($"  30件合計費用  : ${totalCost:F6} (約 {totalCost * 155:F3} 円)");
+        Console.WriteLine($"  日次無料枠    : {freeQuota:N0} tokens/day (Build ティア)");
+        Console.WriteLine($"  完全無償可能数: 1日あたり 約 {maxFreeRequests:N0} 件");
     }
 
-    private static void SaveCsv(string path, List<ApiResult> oRes, List<ApiResult> tRes)
+    private static void SaveCsv(string path, List<CorrectionResult> l6, List<CorrectionResult> l56)
     {
         var sb = new StringBuilder();
-        sb.AppendLine("Id,GroundTruth,Category,TextLength,OpenAi_Prob,OpenAi_Pred,OpenAi_LatencyMs,TypeSafe_Prob,TypeSafe_Pred,TypeSafe_LatencyMs,Text");
+        sb.AppendLine("Id,GroundTruth,Category,OriginalText," +
+                      "Luna6_Modified,Luna6_LatencyMs,Luna6_PromptTok,Luna6_CompTok,Luna6_ReasonTok,Luna6_TotalTok,Luna6_CostUsd,Luna6_Output," +
+                      "Luna56_Modified,Luna56_LatencyMs,Luna56_PromptTok,Luna56_CompTok,Luna56_ReasonTok,Luna56_TotalTok,Luna56_CostUsd,Luna56_Output");
 
         for (int i = 0; i < TestCases.Length; i++)
         {
             var tc = TestCases[i];
-            var o = oRes.FirstOrDefault(x => x.Id == tc.Id);
-            var t = tRes.FirstOrDefault(x => x.Id == tc.Id);
+            var r6 = l6.FirstOrDefault(x => x.Id == tc.Id);
+            var r56 = l56.FirstOrDefault(x => x.Id == tc.Id);
 
             sb.AppendLine(string.Format(CultureInfo.InvariantCulture,
-                "{0},{1},\"{2}\",{3},{4:F3},{5},{6},{7:F3},{8},{9},\"{10}\"",
+                "{0},{1},\"{2}\",\"{3}\",{4},{5},{6},{7},{8},{9},{10:F6},\"{11}\",{12},{13},{14},{15},{16},{17},{18:F6},\"{19}\"",
                 tc.Id,
                 tc.IsTypo,
                 tc.Category,
-                tc.Text.Length,
-                o?.Probability ?? 0,
-                o?.PredictedTypo ?? false,
-                o?.LatencyMs ?? 0,
-                t?.Probability ?? 0,
-                t?.PredictedTypo ?? false,
-                t?.LatencyMs ?? 0,
-                tc.Text.Replace("\"", "\"\"")
+                tc.Text.Replace("\"", "\"\""),
+                r6?.WasModified ?? false,
+                r6?.LatencyMs ?? 0,
+                r6?.PromptTokens ?? 0,
+                r6?.CompletionTokens ?? 0,
+                r6?.ReasoningTokens ?? 0,
+                r6?.TotalTokens ?? 0,
+                r6?.CostUsd ?? 0,
+                (r6?.CorrectedText ?? "").Replace("\"", "\"\""),
+                r56?.WasModified ?? false,
+                r56?.LatencyMs ?? 0,
+                r56?.PromptTokens ?? 0,
+                r56?.CompletionTokens ?? 0,
+                r56?.ReasoningTokens ?? 0,
+                r56?.TotalTokens ?? 0,
+                r56?.CostUsd ?? 0,
+                (r56?.CorrectedText ?? "").Replace("\"", "\"\"")
             ));
         }
 
