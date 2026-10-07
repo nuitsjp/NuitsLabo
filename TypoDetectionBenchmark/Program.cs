@@ -98,7 +98,7 @@ public class PromptOptimization
     {
         Console.OutputEncoding = Encoding.UTF8;
         Console.WriteLine("================================================================================");
-        Console.WriteLine(" gpt-5.6-luna プロンプト最適化検証 (Prompt v2 による正常文維持率改善テスト)");
+        Console.WriteLine(" gpt-6-luna プロンプト最適化検証 (Prompt v2 適用テスト)");
         Console.WriteLine("================================================================================");
 
         string openAiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY")
@@ -118,7 +118,7 @@ public class PromptOptimization
             req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", openAiKey);
             var body = new
             {
-                model = "gpt-5.6-luna",
+                model = "gpt-6-luna",
                 messages = new[]
                 {
                     new { role = "system", content = OptimizedSystemPrompt },
