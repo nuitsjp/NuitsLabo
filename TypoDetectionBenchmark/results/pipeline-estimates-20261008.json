@@ -1,0 +1,797 @@
+{
+  "Method": "Offline replay of matching ID and repetition in the saved holdout responses. Sum measured API latency and usage-derived cost only for routed calls. This is NOT a separately measured end-to-end pipeline. Typo prevalence is 50%.",
+  "Results": [
+    {
+      "Label": "before",
+      "Decision": "decision-openai-baseline",
+      "Correction": "correction-luna56-v3",
+      "Count": 48,
+      "Correct": 47,
+      "CorrectionCalls": 32,
+      "MeanEstimatedMs": 1551.3543479166667,
+      "MeanEstimatedCostUsd": 0.00023255000000000001,
+      "Samples": [
+        {
+          "Id": 105,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 346.8385,
+          "EstimatedCostUsd": 2.5e-05,
+          "Correct": true
+        },
+        {
+          "Id": 119,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2139.6244,
+          "EstimatedCostUsd": 0.0003286,
+          "Correct": true
+        },
+        {
+          "Id": 103,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 321.2798,
+          "EstimatedCostUsd": 2.49e-05,
+          "Correct": true
+        },
+        {
+          "Id": 114,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2110.2122,
+          "EstimatedCostUsd": 0.00033370000000000003,
+          "Correct": true
+        },
+        {
+          "Id": 112,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 313.0465,
+          "EstimatedCostUsd": 2.58e-05,
+          "Correct": true
+        },
+        {
+          "Id": 106,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 305.7722,
+          "EstimatedCostUsd": 2.55e-05,
+          "Correct": true
+        },
+        {
+          "Id": 111,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1973.6586,
+          "EstimatedCostUsd": 0.00030460000000000003,
+          "Correct": true
+        },
+        {
+          "Id": 110,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 315.3167,
+          "EstimatedCostUsd": 2.56e-05,
+          "Correct": true
+        },
+        {
+          "Id": 109,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 312.9884,
+          "EstimatedCostUsd": 2.63e-05,
+          "Correct": true
+        },
+        {
+          "Id": 113,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2438.8557,
+          "EstimatedCostUsd": 0.0003394,
+          "Correct": true
+        },
+        {
+          "Id": 116,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2150.061,
+          "EstimatedCostUsd": 0.0003481,
+          "Correct": true
+        },
+        {
+          "Id": 108,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 318.4964,
+          "EstimatedCostUsd": 2.58e-05,
+          "Correct": true
+        },
+        {
+          "Id": 101,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2199.1906,
+          "EstimatedCostUsd": 0.0002971,
+          "Correct": false
+        },
+        {
+          "Id": 121,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1800.4485,
+          "EstimatedCostUsd": 0.0003184,
+          "Correct": true
+        },
+        {
+          "Id": 120,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1973.7390999999998,
+          "EstimatedCostUsd": 0.0003478,
+          "Correct": true
+        },
+        {
+          "Id": 124,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2400.0688,
+          "EstimatedCostUsd": 0.00037749999999999996,
+          "Correct": true
+        },
+        {
+          "Id": 102,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1769.4615000000001,
+          "EstimatedCostUsd": 0.0003061,
+          "Correct": true
+        },
+        {
+          "Id": 115,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1872.9986999999999,
+          "EstimatedCostUsd": 0.000319,
+          "Correct": true
+        },
+        {
+          "Id": 107,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2157.1866,
+          "EstimatedCostUsd": 0.0003031,
+          "Correct": true
+        },
+        {
+          "Id": 122,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2351.9445,
+          "EstimatedCostUsd": 0.000352,
+          "Correct": true
+        },
+        {
+          "Id": 117,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 4086.8994000000002,
+          "EstimatedCostUsd": 0.0004792,
+          "Correct": true
+        },
+        {
+          "Id": 123,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1925.461,
+          "EstimatedCostUsd": 0.00033580000000000003,
+          "Correct": true
+        },
+        {
+          "Id": 104,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 317.6575,
+          "EstimatedCostUsd": 2.62e-05,
+          "Correct": true
+        },
+        {
+          "Id": 118,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2105.7821,
+          "EstimatedCostUsd": 0.0003373,
+          "Correct": true
+        },
+        {
+          "Id": 107,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2020.4899,
+          "EstimatedCostUsd": 0.0003031,
+          "Correct": true
+        },
+        {
+          "Id": 123,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2359.3477,
+          "EstimatedCostUsd": 0.00033820000000000003,
+          "Correct": true
+        },
+        {
+          "Id": 121,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1943.3043,
+          "EstimatedCostUsd": 0.0003184,
+          "Correct": true
+        },
+        {
+          "Id": 113,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2120.8997,
+          "EstimatedCostUsd": 0.00033820000000000003,
+          "Correct": true
+        },
+        {
+          "Id": 103,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 308.8581,
+          "EstimatedCostUsd": 2.49e-05,
+          "Correct": true
+        },
+        {
+          "Id": 116,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2443.5419,
+          "EstimatedCostUsd": 0.00034449999999999997,
+          "Correct": true
+        },
+        {
+          "Id": 115,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1957.3252,
+          "EstimatedCostUsd": 0.0002974,
+          "Correct": true
+        },
+        {
+          "Id": 119,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2401.4001,
+          "EstimatedCostUsd": 0.00032980000000000005,
+          "Correct": true
+        },
+        {
+          "Id": 105,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 313.5437,
+          "EstimatedCostUsd": 2.5e-05,
+          "Correct": true
+        },
+        {
+          "Id": 101,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1805.7439,
+          "EstimatedCostUsd": 0.0002971,
+          "Correct": true
+        },
+        {
+          "Id": 112,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 311.2439,
+          "EstimatedCostUsd": 2.58e-05,
+          "Correct": true
+        },
+        {
+          "Id": 124,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2159.4975,
+          "EstimatedCostUsd": 0.0003535,
+          "Correct": true
+        },
+        {
+          "Id": 110,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 309.3747,
+          "EstimatedCostUsd": 2.56e-05,
+          "Correct": true
+        },
+        {
+          "Id": 104,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 321.0399,
+          "EstimatedCostUsd": 2.62e-05,
+          "Correct": true
+        },
+        {
+          "Id": 122,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2170.8737,
+          "EstimatedCostUsd": 0.0003388,
+          "Correct": true
+        },
+        {
+          "Id": 118,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2344.1518,
+          "EstimatedCostUsd": 0.0003373,
+          "Correct": true
+        },
+        {
+          "Id": 117,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2915.1416999999997,
+          "EstimatedCostUsd": 0.000442,
+          "Correct": true
+        },
+        {
+          "Id": 120,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1905.3241,
+          "EstimatedCostUsd": 0.00034179999999999996,
+          "Correct": true
+        },
+        {
+          "Id": 114,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1968.2355,
+          "EstimatedCostUsd": 0.00033370000000000003,
+          "Correct": true
+        },
+        {
+          "Id": 108,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 306.1348,
+          "EstimatedCostUsd": 2.58e-05,
+          "Correct": true
+        },
+        {
+          "Id": 109,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 302.4903,
+          "EstimatedCostUsd": 2.63e-05,
+          "Correct": true
+        },
+        {
+          "Id": 111,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1703.1968000000002,
+          "EstimatedCostUsd": 0.00030460000000000003,
+          "Correct": true
+        },
+        {
+          "Id": 106,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 299.4043,
+          "EstimatedCostUsd": 2.55e-05,
+          "Correct": true
+        },
+        {
+          "Id": 102,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1767.4565,
+          "EstimatedCostUsd": 0.0003061,
+          "Correct": true
+        }
+      ]
+    },
+    {
+      "Label": "after",
+      "Decision": "decision-openai-english",
+      "Correction": "correction-luna56-v3-edits-low",
+      "Count": 48,
+      "Correct": 48,
+      "CorrectionCalls": 24,
+      "MeanEstimatedMs": 1078.6693895833334,
+      "MeanEstimatedCostUsd": 0.00014943333333333332,
+      "Samples": [
+        {
+          "Id": 105,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 321.9863,
+          "EstimatedCostUsd": 2.53e-05,
+          "Correct": true
+        },
+        {
+          "Id": 119,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2144.0186,
+          "EstimatedCostUsd": 0.0002709,
+          "Correct": true
+        },
+        {
+          "Id": 103,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 312.0639,
+          "EstimatedCostUsd": 2.52e-05,
+          "Correct": true
+        },
+        {
+          "Id": 114,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1534.9871,
+          "EstimatedCostUsd": 0.000234,
+          "Correct": true
+        },
+        {
+          "Id": 112,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 337.1754,
+          "EstimatedCostUsd": 2.61e-05,
+          "Correct": true
+        },
+        {
+          "Id": 106,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 328.1428,
+          "EstimatedCostUsd": 2.58e-05,
+          "Correct": true
+        },
+        {
+          "Id": 111,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 306.9791,
+          "EstimatedCostUsd": 2.57e-05,
+          "Correct": true
+        },
+        {
+          "Id": 110,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 303.9624,
+          "EstimatedCostUsd": 2.59e-05,
+          "Correct": true
+        },
+        {
+          "Id": 109,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 306.2233,
+          "EstimatedCostUsd": 2.66e-05,
+          "Correct": true
+        },
+        {
+          "Id": 113,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1916.7133,
+          "EstimatedCostUsd": 0.00027330000000000003,
+          "Correct": true
+        },
+        {
+          "Id": 116,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1741.8168,
+          "EstimatedCostUsd": 0.0002724,
+          "Correct": true
+        },
+        {
+          "Id": 108,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 313.6647,
+          "EstimatedCostUsd": 2.61e-05,
+          "Correct": true
+        },
+        {
+          "Id": 101,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 310.4822,
+          "EstimatedCostUsd": 2.52e-05,
+          "Correct": true
+        },
+        {
+          "Id": 121,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1288.8413,
+          "EstimatedCostUsd": 0.0002379,
+          "Correct": true
+        },
+        {
+          "Id": 120,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1942.3486,
+          "EstimatedCostUsd": 0.0002961,
+          "Correct": true
+        },
+        {
+          "Id": 124,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1973.3848,
+          "EstimatedCostUsd": 0.0002922,
+          "Correct": true
+        },
+        {
+          "Id": 102,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 320.011,
+          "EstimatedCostUsd": 2.58e-05,
+          "Correct": true
+        },
+        {
+          "Id": 115,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1458.5451,
+          "EstimatedCostUsd": 0.00023129999999999998,
+          "Correct": true
+        },
+        {
+          "Id": 107,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 306.3669,
+          "EstimatedCostUsd": 2.56e-05,
+          "Correct": true
+        },
+        {
+          "Id": 122,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1648.3417,
+          "EstimatedCostUsd": 0.00027269999999999996,
+          "Correct": true
+        },
+        {
+          "Id": 117,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2541.6444,
+          "EstimatedCostUsd": 0.00033630000000000004,
+          "Correct": true
+        },
+        {
+          "Id": 123,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1816.0877,
+          "EstimatedCostUsd": 0.0002337,
+          "Correct": true
+        },
+        {
+          "Id": 104,
+          "Repetition": 1,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 317.0108,
+          "EstimatedCostUsd": 2.65e-05,
+          "Correct": true
+        },
+        {
+          "Id": 118,
+          "Repetition": 1,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1802.0276,
+          "EstimatedCostUsd": 0.00026639999999999997,
+          "Correct": true
+        },
+        {
+          "Id": 107,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 333.2744,
+          "EstimatedCostUsd": 2.56e-05,
+          "Correct": true
+        },
+        {
+          "Id": 123,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1865.8258,
+          "EstimatedCostUsd": 0.00028530000000000005,
+          "Correct": true
+        },
+        {
+          "Id": 121,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1949.9071,
+          "EstimatedCostUsd": 0.0002451,
+          "Correct": true
+        },
+        {
+          "Id": 113,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1643.7906,
+          "EstimatedCostUsd": 0.0002625,
+          "Correct": true
+        },
+        {
+          "Id": 103,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 303.053,
+          "EstimatedCostUsd": 2.52e-05,
+          "Correct": true
+        },
+        {
+          "Id": 116,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1817.6941000000002,
+          "EstimatedCostUsd": 0.0002904,
+          "Correct": true
+        },
+        {
+          "Id": 115,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1571.875,
+          "EstimatedCostUsd": 0.0002661,
+          "Correct": true
+        },
+        {
+          "Id": 119,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1583.6408,
+          "EstimatedCostUsd": 0.00027210000000000005,
+          "Correct": true
+        },
+        {
+          "Id": 105,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 311.9039,
+          "EstimatedCostUsd": 2.53e-05,
+          "Correct": true
+        },
+        {
+          "Id": 101,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 332.7827,
+          "EstimatedCostUsd": 2.52e-05,
+          "Correct": true
+        },
+        {
+          "Id": 112,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 304.7017,
+          "EstimatedCostUsd": 2.61e-05,
+          "Correct": true
+        },
+        {
+          "Id": 124,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2198.8359,
+          "EstimatedCostUsd": 0.000285,
+          "Correct": true
+        },
+        {
+          "Id": 110,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 312.2491,
+          "EstimatedCostUsd": 2.59e-05,
+          "Correct": true
+        },
+        {
+          "Id": 104,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 310.0043,
+          "EstimatedCostUsd": 2.65e-05,
+          "Correct": true
+        },
+        {
+          "Id": 122,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2025.2468,
+          "EstimatedCostUsd": 0.0003027,
+          "Correct": true
+        },
+        {
+          "Id": 118,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1808.605,
+          "EstimatedCostUsd": 0.0002688,
+          "Correct": true
+        },
+        {
+          "Id": 117,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 2792.3680999999997,
+          "EstimatedCostUsd": 0.0003687,
+          "Correct": true
+        },
+        {
+          "Id": 120,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1588.9956,
+          "EstimatedCostUsd": 0.00025529999999999997,
+          "Correct": true
+        },
+        {
+          "Id": 114,
+          "Repetition": 2,
+          "CorrectionCalled": true,
+          "EstimatedLatencyMs": 1561.0632,
+          "EstimatedCostUsd": 0.000234,
+          "Correct": true
+        },
+        {
+          "Id": 108,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 322.7196,
+          "EstimatedCostUsd": 2.61e-05,
+          "Correct": true
+        },
+        {
+          "Id": 109,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 303.3727,
+          "EstimatedCostUsd": 2.66e-05,
+          "Correct": true
+        },
+        {
+          "Id": 111,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 305.452,
+          "EstimatedCostUsd": 2.57e-05,
+          "Correct": true
+        },
+        {
+          "Id": 106,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 314.8818,
+          "EstimatedCostUsd": 2.58e-05,
+          "Correct": true
+        },
+        {
+          "Id": 102,
+          "Repetition": 2,
+          "CorrectionCalled": false,
+          "EstimatedLatencyMs": 321.0617,
+          "EstimatedCostUsd": 2.58e-05,
+          "Correct": true
+        }
+      ]
+    }
+  ]
+}

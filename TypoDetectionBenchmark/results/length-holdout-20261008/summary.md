@@ -1,0 +1,34 @@
+| Variant | Split | Target length | Correct / attempts | Errors | Normal | Typo | Mean ms | P95 ms | USD / request |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| decision-typesafe-baseline | length-holdout | 100 | 80/96 | 0 | 48/48 | 32/48 | 282.8 | 348.4 | 0.00002510 |
+| correction-luna56-v3-edits-low | length-holdout | 100 | 94/96 | 0 | 48/48 | 46/48 | 1277.3 | 2076.0 | 0.00022585 |
+| correction-luna56-v3 | length-holdout | 100 | 95/96 | 0 | 48/48 | 47/48 | 1805.7 | 2353.4 | 0.00029853 |
+| correction-luna6-v3-edits-low | length-holdout | 100 | 96/96 | 0 | 48/48 | 48/48 | 1390.7 | 1981.0 | 0.00012179 |
+| decision-openai-english | length-holdout | 100 | 94/96 | 0 | 48/48 | 46/48 | 339.7 | 374.2 | 0.00002554 |
+| decision-openai-baseline | length-holdout | 100 | 86/96 | 0 | 38/48 | 48/48 | 328.6 | 527.9 | 0.00002524 |
+| decision-typesafe-lean-calibrated | length-holdout | 100 | 78/96 | 0 | 48/48 | 30/48 | 279.7 | 320.7 | 0.00002414 |
+| correction-luna6-v3 | length-holdout | 100 | 96/96 | 0 | 48/48 | 48/48 | 1912.1 | 2767.7 | 0.00015074 |
+| correction-luna6-v3-edits-low | length-holdout | 800 | 96/96 | 0 | 48/48 | 48/48 | 1647.7 | 2338.5 | 0.00017844 |
+| correction-luna56-v3 | length-holdout | 800 | 95/96 | 0 | 47/48 | 48/48 | 6826.3 | 8161.8 | 0.00115816 |
+| correction-luna6-v3 | length-holdout | 800 | 94/96 | 0 | 46/48 | 48/48 | 4949.4 | 6541.5 | 0.00051006 |
+| decision-typesafe-lean-calibrated | length-holdout | 800 | 76/96 | 0 | 48/48 | 28/48 | 285.6 | 351.9 | 0.00005398 |
+| correction-luna56-v3-edits-low | length-holdout | 800 | 92/96 | 0 | 46/48 | 46/48 | 1799.5 | 2537.9 | 0.00036224 |
+| decision-openai-baseline | length-holdout | 800 | 76/96 | 0 | 28/48 | 48/48 | 309.6 | 340.4 | 0.00008211 |
+| decision-openai-english | length-holdout | 800 | 90/96 | 0 | 46/48 | 44/48 | 316.6 | 366.5 | 0.00008241 |
+| decision-typesafe-baseline | length-holdout | 800 | 77/96 | 0 | 47/48 | 30/48 | 283.4 | 338.6 | 0.00005495 |
+| correction-luna56-v3-edits-low | length-holdout | 200 | 96/96 | 0 | 48/48 | 48/48 | 1374.2 | 2231.7 | 0.00024782 |
+| correction-luna6-v3-edits-low | length-holdout | 200 | 96/96 | 0 | 48/48 | 48/48 | 1632.1 | 2496.6 | 0.00013633 |
+| decision-openai-baseline | length-holdout | 200 | 84/96 | 0 | 36/48 | 48/48 | 314.0 | 337.6 | 0.00003337 |
+| decision-openai-english | length-holdout | 200 | 92/96 | 0 | 48/48 | 44/48 | 312.1 | 344.6 | 0.00003367 |
+| decision-typesafe-lean-calibrated | length-holdout | 200 | 78/96 | 0 | 48/48 | 30/48 | 280.7 | 333.7 | 0.00002839 |
+| correction-luna6-v3 | length-holdout | 200 | 96/96 | 0 | 48/48 | 48/48 | 2364.4 | 3106.8 | 0.00021091 |
+| correction-luna56-v3 | length-holdout | 200 | 95/96 | 0 | 48/48 | 47/48 | 2516.1 | 3085.4 | 0.00042973 |
+| decision-typesafe-baseline | length-holdout | 200 | 77/96 | 0 | 48/48 | 29/48 | 287.0 | 354.6 | 0.00002936 |
+| decision-typesafe-lean-calibrated | length-holdout | 400 | 75/96 | 0 | 48/48 | 27/48 | 287.8 | 356.5 | 0.00003693 |
+| correction-luna6-v3 | length-holdout | 400 | 96/96 | 0 | 48/48 | 48/48 | 3272.3 | 4053.8 | 0.00030483 |
+| correction-luna56-v3 | length-holdout | 400 | 91/96 | 0 | 46/48 | 45/48 | 4023.0 | 5333.4 | 0.00066394 |
+| decision-typesafe-baseline | length-holdout | 400 | 78/96 | 0 | 48/48 | 30/48 | 285.1 | 348.0 | 0.00003790 |
+| decision-openai-baseline | length-holdout | 400 | 80/96 | 0 | 32/48 | 48/48 | 330.0 | 635.7 | 0.00004989 |
+| correction-luna56-v3-edits-low | length-holdout | 400 | 93/96 | 0 | 46/48 | 47/48 | 1490.3 | 2078.3 | 0.00027173 |
+| decision-openai-english | length-holdout | 400 | 92/96 | 0 | 48/48 | 44/48 | 313.3 | 375.2 | 0.00005019 |
+| correction-luna6-v3-edits-low | length-holdout | 400 | 95/96 | 0 | 48/48 | 47/48 | 1612.1 | 2268.6 | 0.00014317 |

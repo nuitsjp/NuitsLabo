@@ -1,0 +1,1341 @@
+{
+  "Source": "holdout-20261008/requests.jsonl",
+  "Method": "For gated combinations, offline replay joins saved responses by Id and Repetition and sums measured API latency and usage-derived cost only for routed calls. Not measured end-to-end. Direct correction aggregates measured correction calls.",
+  "UniqueTexts": 24,
+  "Repetitions": 2,
+  "TypoPrevalence": 0.5,
+  "Results": [
+    {
+      "Decision": "decision-openai-english",
+      "Correction": "correction-luna56-v3-edits-low",
+      "Count": 48,
+      "NormalUnchanged": 24,
+      "TypoExactMatch": 24,
+      "CorrectionCalls": 24,
+      "MeanMs": 1078.6693895833334,
+      "MeanCostUsd": 0.00014943333333333332,
+      "Samples": [
+        {
+          "Id": 101,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 310.4822,
+          "CostUsd": 2.52e-05
+        },
+        {
+          "Id": 101,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 332.7827,
+          "CostUsd": 2.52e-05
+        },
+        {
+          "Id": 102,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 320.011,
+          "CostUsd": 2.58e-05
+        },
+        {
+          "Id": 102,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 321.0617,
+          "CostUsd": 2.58e-05
+        },
+        {
+          "Id": 103,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 312.0639,
+          "CostUsd": 2.52e-05
+        },
+        {
+          "Id": 103,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 303.053,
+          "CostUsd": 2.52e-05
+        },
+        {
+          "Id": 104,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 317.0108,
+          "CostUsd": 2.65e-05
+        },
+        {
+          "Id": 104,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 310.0043,
+          "CostUsd": 2.65e-05
+        },
+        {
+          "Id": 105,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 321.9863,
+          "CostUsd": 2.53e-05
+        },
+        {
+          "Id": 105,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 311.9039,
+          "CostUsd": 2.53e-05
+        },
+        {
+          "Id": 106,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 328.1428,
+          "CostUsd": 2.58e-05
+        },
+        {
+          "Id": 106,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 314.8818,
+          "CostUsd": 2.58e-05
+        },
+        {
+          "Id": 107,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 306.3669,
+          "CostUsd": 2.56e-05
+        },
+        {
+          "Id": 107,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 333.2744,
+          "CostUsd": 2.56e-05
+        },
+        {
+          "Id": 108,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 313.6647,
+          "CostUsd": 2.61e-05
+        },
+        {
+          "Id": 108,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 322.7196,
+          "CostUsd": 2.61e-05
+        },
+        {
+          "Id": 109,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 306.2233,
+          "CostUsd": 2.66e-05
+        },
+        {
+          "Id": 109,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 303.3727,
+          "CostUsd": 2.66e-05
+        },
+        {
+          "Id": 110,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 303.9624,
+          "CostUsd": 2.59e-05
+        },
+        {
+          "Id": 110,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 312.2491,
+          "CostUsd": 2.59e-05
+        },
+        {
+          "Id": 111,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 306.9791,
+          "CostUsd": 2.57e-05
+        },
+        {
+          "Id": 111,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 305.452,
+          "CostUsd": 2.57e-05
+        },
+        {
+          "Id": 112,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 337.1754,
+          "CostUsd": 2.61e-05
+        },
+        {
+          "Id": 112,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 304.7017,
+          "CostUsd": 2.61e-05
+        },
+        {
+          "Id": 113,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1916.7133,
+          "CostUsd": 0.00027330000000000003
+        },
+        {
+          "Id": 113,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1643.7906,
+          "CostUsd": 0.0002625
+        },
+        {
+          "Id": 114,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1534.9871,
+          "CostUsd": 0.000234
+        },
+        {
+          "Id": 114,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1561.0632,
+          "CostUsd": 0.000234
+        },
+        {
+          "Id": 115,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1458.5451,
+          "CostUsd": 0.00023129999999999998
+        },
+        {
+          "Id": 115,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1571.875,
+          "CostUsd": 0.0002661
+        },
+        {
+          "Id": 116,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1741.8168,
+          "CostUsd": 0.0002724
+        },
+        {
+          "Id": 116,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1817.6941000000002,
+          "CostUsd": 0.0002904
+        },
+        {
+          "Id": 117,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2541.6444,
+          "CostUsd": 0.00033630000000000004
+        },
+        {
+          "Id": 117,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2792.3680999999997,
+          "CostUsd": 0.0003687
+        },
+        {
+          "Id": 118,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1802.0276,
+          "CostUsd": 0.00026639999999999997
+        },
+        {
+          "Id": 118,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1808.605,
+          "CostUsd": 0.0002688
+        },
+        {
+          "Id": 119,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2144.0186,
+          "CostUsd": 0.0002709
+        },
+        {
+          "Id": 119,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1583.6408,
+          "CostUsd": 0.00027210000000000005
+        },
+        {
+          "Id": 120,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1942.3486,
+          "CostUsd": 0.0002961
+        },
+        {
+          "Id": 120,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1588.9956,
+          "CostUsd": 0.00025529999999999997
+        },
+        {
+          "Id": 121,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1288.8413,
+          "CostUsd": 0.0002379
+        },
+        {
+          "Id": 121,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1949.9071,
+          "CostUsd": 0.0002451
+        },
+        {
+          "Id": 122,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1648.3417,
+          "CostUsd": 0.00027269999999999996
+        },
+        {
+          "Id": 122,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2025.2468,
+          "CostUsd": 0.0003027
+        },
+        {
+          "Id": 123,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1816.0877,
+          "CostUsd": 0.0002337
+        },
+        {
+          "Id": 123,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1865.8258,
+          "CostUsd": 0.00028530000000000005
+        },
+        {
+          "Id": 124,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1973.3848,
+          "CostUsd": 0.0002922
+        },
+        {
+          "Id": 124,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2198.8359,
+          "CostUsd": 0.000285
+        }
+      ]
+    },
+    {
+      "Decision": "decision-openai-english",
+      "Correction": "correction-luna6-v3",
+      "Count": 48,
+      "NormalUnchanged": 24,
+      "TypoExactMatch": 24,
+      "CorrectionCalls": 24,
+      "MeanMs": 1385.4133166666668,
+      "MeanCostUsd": 9.861666666666667e-05,
+      "Samples": [
+        {
+          "Id": 101,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 310.4822,
+          "CostUsd": 2.52e-05
+        },
+        {
+          "Id": 101,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 332.7827,
+          "CostUsd": 2.52e-05
+        },
+        {
+          "Id": 102,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 320.011,
+          "CostUsd": 2.58e-05
+        },
+        {
+          "Id": 102,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 321.0617,
+          "CostUsd": 2.58e-05
+        },
+        {
+          "Id": 103,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 312.0639,
+          "CostUsd": 2.52e-05
+        },
+        {
+          "Id": 103,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 303.053,
+          "CostUsd": 2.52e-05
+        },
+        {
+          "Id": 104,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 317.0108,
+          "CostUsd": 2.65e-05
+        },
+        {
+          "Id": 104,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 310.0043,
+          "CostUsd": 2.65e-05
+        },
+        {
+          "Id": 105,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 321.9863,
+          "CostUsd": 2.53e-05
+        },
+        {
+          "Id": 105,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 311.9039,
+          "CostUsd": 2.53e-05
+        },
+        {
+          "Id": 106,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 328.1428,
+          "CostUsd": 2.58e-05
+        },
+        {
+          "Id": 106,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 314.8818,
+          "CostUsd": 2.58e-05
+        },
+        {
+          "Id": 107,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 306.3669,
+          "CostUsd": 2.56e-05
+        },
+        {
+          "Id": 107,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 333.2744,
+          "CostUsd": 2.56e-05
+        },
+        {
+          "Id": 108,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 313.6647,
+          "CostUsd": 2.61e-05
+        },
+        {
+          "Id": 108,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 322.7196,
+          "CostUsd": 2.61e-05
+        },
+        {
+          "Id": 109,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 306.2233,
+          "CostUsd": 2.66e-05
+        },
+        {
+          "Id": 109,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 303.3727,
+          "CostUsd": 2.66e-05
+        },
+        {
+          "Id": 110,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 303.9624,
+          "CostUsd": 2.59e-05
+        },
+        {
+          "Id": 110,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 312.2491,
+          "CostUsd": 2.59e-05
+        },
+        {
+          "Id": 111,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 306.9791,
+          "CostUsd": 2.57e-05
+        },
+        {
+          "Id": 111,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 305.452,
+          "CostUsd": 2.57e-05
+        },
+        {
+          "Id": 112,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 337.1754,
+          "CostUsd": 2.61e-05
+        },
+        {
+          "Id": 112,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": false,
+          "Correct": true,
+          "LatencyMs": 304.7017,
+          "CostUsd": 2.61e-05
+        },
+        {
+          "Id": 113,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2059.2651,
+          "CostUsd": 0.0001648
+        },
+        {
+          "Id": 113,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2091.4115,
+          "CostUsd": 0.0001638
+        },
+        {
+          "Id": 114,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2029.3358,
+          "CostUsd": 0.0001678
+        },
+        {
+          "Id": 114,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2152.2803,
+          "CostUsd": 0.0001678
+        },
+        {
+          "Id": 115,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1652.9909,
+          "CostUsd": 0.0001613
+        },
+        {
+          "Id": 115,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1819.0429000000001,
+          "CostUsd": 0.0001623
+        },
+        {
+          "Id": 116,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2116.1472000000003,
+          "CostUsd": 0.0001739
+        },
+        {
+          "Id": 116,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2606.9408,
+          "CostUsd": 0.0001739
+        },
+        {
+          "Id": 117,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2366.0839,
+          "CostUsd": 0.0001807
+        },
+        {
+          "Id": 117,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1956.0139,
+          "CostUsd": 0.0001772
+        },
+        {
+          "Id": 118,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1944.7042,
+          "CostUsd": 0.0001698
+        },
+        {
+          "Id": 118,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1954.7416,
+          "CostUsd": 0.0001703
+        },
+        {
+          "Id": 119,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2093.3357,
+          "CostUsd": 0.0001686
+        },
+        {
+          "Id": 119,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 3344.5696000000003,
+          "CostUsd": 0.0001666
+        },
+        {
+          "Id": 120,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2570.0619,
+          "CostUsd": 0.0001729
+        },
+        {
+          "Id": 120,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2866.4851,
+          "CostUsd": 0.0001739
+        },
+        {
+          "Id": 121,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1843.6209,
+          "CostUsd": 0.0001741
+        },
+        {
+          "Id": 121,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1710.2716999999998,
+          "CostUsd": 0.0001721
+        },
+        {
+          "Id": 122,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2366.1831,
+          "CostUsd": 0.0001765
+        },
+        {
+          "Id": 122,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2142.9684,
+          "CostUsd": 0.00018
+        },
+        {
+          "Id": 123,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1816.0525,
+          "CostUsd": 0.0001691
+        },
+        {
+          "Id": 123,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2122.5344,
+          "CostUsd": 0.0001686
+        },
+        {
+          "Id": 124,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2665.7583000000004,
+          "CostUsd": 0.000176
+        },
+        {
+          "Id": 124,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 8649.513799999999,
+          "CostUsd": 0.00018199999999999998
+        }
+      ]
+    },
+    {
+      "Decision": null,
+      "Correction": "correction-luna56-v3-edits-low",
+      "Count": 48,
+      "NormalUnchanged": 24,
+      "TypoExactMatch": 24,
+      "CorrectionCalls": 48,
+      "MeanMs": 1248.1951604166668,
+      "MeanCostUsd": 0.00021989166666666667,
+      "Samples": [
+        {
+          "Id": 101,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 846.8119,
+          "CostUsd": 0.0001914
+        },
+        {
+          "Id": 101,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 953.5404,
+          "CostUsd": 0.0001914
+        },
+        {
+          "Id": 102,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 816.2373,
+          "CostUsd": 0.0001926
+        },
+        {
+          "Id": 102,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 869.0839,
+          "CostUsd": 0.0001926
+        },
+        {
+          "Id": 103,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1029.5246,
+          "CostUsd": 0.0001914
+        },
+        {
+          "Id": 103,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 783.97,
+          "CostUsd": 0.0001914
+        },
+        {
+          "Id": 104,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 825.999,
+          "CostUsd": 0.000194
+        },
+        {
+          "Id": 104,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1028.5947,
+          "CostUsd": 0.000194
+        },
+        {
+          "Id": 105,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 979.1236,
+          "CostUsd": 0.0001916
+        },
+        {
+          "Id": 105,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 873.7744,
+          "CostUsd": 0.0001916
+        },
+        {
+          "Id": 106,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 717.2521,
+          "CostUsd": 0.0001926
+        },
+        {
+          "Id": 106,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1042.0978,
+          "CostUsd": 0.0001926
+        },
+        {
+          "Id": 107,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 907.417,
+          "CostUsd": 0.0001922
+        },
+        {
+          "Id": 107,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 916.131,
+          "CostUsd": 0.0001922
+        },
+        {
+          "Id": 108,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 966.0075,
+          "CostUsd": 0.0001932
+        },
+        {
+          "Id": 108,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 995.0535,
+          "CostUsd": 0.0001932
+        },
+        {
+          "Id": 109,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 996.7976,
+          "CostUsd": 0.0001942
+        },
+        {
+          "Id": 109,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1152.0665,
+          "CostUsd": 0.0001942
+        },
+        {
+          "Id": 110,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 879.4181,
+          "CostUsd": 0.0001928
+        },
+        {
+          "Id": 110,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 854.7953,
+          "CostUsd": 0.0001928
+        },
+        {
+          "Id": 111,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 917.7112,
+          "CostUsd": 0.0001924
+        },
+        {
+          "Id": 111,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2119.1914,
+          "CostUsd": 0.0001924
+        },
+        {
+          "Id": 112,
+          "Repetition": 1,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 795.0561,
+          "CostUsd": 0.0001932
+        },
+        {
+          "Id": 112,
+          "Repetition": 2,
+          "IsTypo": false,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 924.6296,
+          "CostUsd": 0.0001932
+        },
+        {
+          "Id": 113,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1618.0937,
+          "CostUsd": 0.000248
+        },
+        {
+          "Id": 113,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1319.0869,
+          "CostUsd": 0.0002372
+        },
+        {
+          "Id": 114,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1207.1068,
+          "CostUsd": 0.0002082
+        },
+        {
+          "Id": 114,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1256.3116,
+          "CostUsd": 0.0002082
+        },
+        {
+          "Id": 115,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1164.1484,
+          "CostUsd": 0.000206
+        },
+        {
+          "Id": 115,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1255.2937,
+          "CostUsd": 0.0002408
+        },
+        {
+          "Id": 116,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1429.0705,
+          "CostUsd": 0.0002458
+        },
+        {
+          "Id": 116,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1517.6582,
+          "CostUsd": 0.0002638
+        },
+        {
+          "Id": 117,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2226.2447,
+          "CostUsd": 0.0003108
+        },
+        {
+          "Id": 117,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 2475.6452,
+          "CostUsd": 0.0003432
+        },
+        {
+          "Id": 118,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1497.2076,
+          "CostUsd": 0.0002406
+        },
+        {
+          "Id": 118,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1491.2149,
+          "CostUsd": 0.000243
+        },
+        {
+          "Id": 119,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1854.3278,
+          "CostUsd": 0.0002452
+        },
+        {
+          "Id": 119,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1298.6106,
+          "CostUsd": 0.0002464
+        },
+        {
+          "Id": 120,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1637.4311,
+          "CostUsd": 0.00027
+        },
+        {
+          "Id": 120,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1281.158,
+          "CostUsd": 0.0002292
+        },
+        {
+          "Id": 121,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 981.2351,
+          "CostUsd": 0.0002112
+        },
+        {
+          "Id": 121,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1636.3486,
+          "CostUsd": 0.0002184
+        },
+        {
+          "Id": 122,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1346.568,
+          "CostUsd": 0.0002468
+        },
+        {
+          "Id": 122,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1701.4305,
+          "CostUsd": 0.0002768
+        },
+        {
+          "Id": 123,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1489.4346,
+          "CostUsd": 0.000208
+        },
+        {
+          "Id": 123,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1514.6384,
+          "CostUsd": 0.0002596
+        },
+        {
+          "Id": 124,
+          "Repetition": 1,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1670.1131,
+          "CostUsd": 0.0002658
+        },
+        {
+          "Id": 124,
+          "Repetition": 2,
+          "IsTypo": true,
+          "CorrectionCalled": true,
+          "Correct": true,
+          "LatencyMs": 1854.7052,
+          "CostUsd": 0.0002586
+        }
+      ]
+    }
+  ]
+}

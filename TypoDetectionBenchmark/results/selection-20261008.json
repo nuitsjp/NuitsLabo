@@ -1,0 +1,26 @@
+{
+  "selected_before_holdout_utc": "2026-10-07T21:06:58.306050+00:00",
+  "development_runs": [
+    "development-20261008",
+    "development-followup-20261008",
+    "development-criteria-20261008",
+    "development-lean-20261008"
+  ],
+  "holdout_repetitions": 2,
+  "variants": [
+    "decision-openai-baseline",
+    "decision-openai-english",
+    "decision-typesafe-baseline",
+    "decision-typesafe-lean-calibrated",
+    "correction-luna6-v3",
+    "correction-luna6-v3-edits-low",
+    "correction-luna56-v3",
+    "correction-luna56-v3-edits-low"
+  ],
+  "selection": {
+    "openai": "English objective typo predicate: 28/30 vs 23/30. Accepts recall tradeoff 13/15 vs 15/15; no claim of lower input cost.",
+    "typesafe": "Retain original criteria; shorten redundant question. On development, threshold 0.35 (grid step 0.05, lowest best-accuracy threshold) removes the normal ID4 false positive without new false negatives: 29/30, recalculated from probabilities. Raw run threshold was 0.25, 28/30. One missed typo ID22 remains.",
+    "correction": "Preserve v3 policy, output edits, reasoning_effort=low. Both models 30/30 on development. Reject none: invalid no-op edits or overcorrection. Reject compact policy: lower strict accuracy.",
+    "evaluation": "Holdout prompts, thresholds and gold will not be changed after evaluation. It contains 24 new synthetic cases (12 pairs), not 48 independent cases."
+  }
+}

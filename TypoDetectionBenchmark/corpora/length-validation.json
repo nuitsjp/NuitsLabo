@@ -1,0 +1,955 @@
+{
+  "Cases": 192,
+  "Families": 24,
+  "SourceHashes": {
+    "length-families-a.json": "1fe17abf93f9f5b46963331792ece7b421c6ceca7aba944a73e9f233a9e879bf",
+    "length-families-b.json": "c8080a2a971b2cb27ae7e7b5505d701464323e5d9696345eb25b8aa580d4c274"
+  },
+  "CorpusFileSha256": "71380d7c120faa1bc148cf33dd6a46883df13011aad1f8771dde53f5d0e9217f",
+  "PerLength": [
+    {
+      "TargetLength": 100,
+      "Normal": 24,
+      "Typo": 24,
+      "MinChars": 96,
+      "MaxChars": 105
+    },
+    {
+      "TargetLength": 200,
+      "Normal": 24,
+      "Typo": 24,
+      "MinChars": 192,
+      "MaxChars": 208
+    },
+    {
+      "TargetLength": 400,
+      "Normal": 24,
+      "Typo": 24,
+      "MinChars": 397,
+      "MaxChars": 411
+    },
+    {
+      "TargetLength": 800,
+      "Normal": 24,
+      "Typo": 24,
+      "MinChars": 795,
+      "MaxChars": 819
+    }
+  ],
+  "TypoTypes": {
+    "漢字誤変換": 12,
+    "かな・カナ誤り": 12,
+    "文字脱落": 12,
+    "助詞脱落": 12,
+    "文字・語重複": 12,
+    "文字転置": 12,
+    "複数箇所（漢字誤変換・文字重複）": 4,
+    "複数箇所（かな・カナ誤り・助詞脱落）": 4,
+    "複数箇所（漢字誤変換・文字転置）": 4,
+    "複数箇所（漢字誤変換・文字転置・文字重複）": 4,
+    "複数箇所（文字重複・文字転置・助詞脱落）": 4,
+    "複数箇所（漢字誤変換・文字転置・文字脱落）": 4
+  },
+  "Pairs": [
+    {
+      "FamilyId": 1,
+      "TargetLength": 100,
+      "NormalLength": 102,
+      "TypoLength": 102,
+      "ErrorPositions": [
+        0.16666666666666666
+      ]
+    },
+    {
+      "FamilyId": 2,
+      "TargetLength": 100,
+      "NormalLength": 100,
+      "TypoLength": 100,
+      "ErrorPositions": [
+        0.07
+      ]
+    },
+    {
+      "FamilyId": 3,
+      "TargetLength": 100,
+      "NormalLength": 103,
+      "TypoLength": 102,
+      "ErrorPositions": [
+        0.16666666666666666
+      ]
+    },
+    {
+      "FamilyId": 4,
+      "TargetLength": 100,
+      "NormalLength": 100,
+      "TypoLength": 99,
+      "ErrorPositions": [
+        0.1111111111111111
+      ]
+    },
+    {
+      "FamilyId": 5,
+      "TargetLength": 100,
+      "NormalLength": 98,
+      "TypoLength": 99,
+      "ErrorPositions": [
+        0.08080808080808081
+      ]
+    },
+    {
+      "FamilyId": 6,
+      "TargetLength": 100,
+      "NormalLength": 97,
+      "TypoLength": 97,
+      "ErrorPositions": [
+        0.12371134020618557
+      ]
+    },
+    {
+      "FamilyId": 7,
+      "TargetLength": 100,
+      "NormalLength": 96,
+      "TypoLength": 96,
+      "ErrorPositions": [
+        0.40625
+      ]
+    },
+    {
+      "FamilyId": 8,
+      "TargetLength": 100,
+      "NormalLength": 99,
+      "TypoLength": 99,
+      "ErrorPositions": [
+        0.42424242424242425
+      ]
+    },
+    {
+      "FamilyId": 9,
+      "TargetLength": 100,
+      "NormalLength": 102,
+      "TypoLength": 101,
+      "ErrorPositions": [
+        0.37623762376237624
+      ]
+    },
+    {
+      "FamilyId": 10,
+      "TargetLength": 100,
+      "NormalLength": 99,
+      "TypoLength": 98,
+      "ErrorPositions": [
+        0.4489795918367347
+      ]
+    },
+    {
+      "FamilyId": 11,
+      "TargetLength": 100,
+      "NormalLength": 99,
+      "TypoLength": 100,
+      "ErrorPositions": [
+        0.48
+      ]
+    },
+    {
+      "FamilyId": 12,
+      "TargetLength": 100,
+      "NormalLength": 101,
+      "TypoLength": 101,
+      "ErrorPositions": [
+        0.3564356435643564
+      ]
+    },
+    {
+      "FamilyId": 13,
+      "TargetLength": 100,
+      "NormalLength": 98,
+      "TypoLength": 98,
+      "ErrorPositions": [
+        0.8673469387755102
+      ]
+    },
+    {
+      "FamilyId": 14,
+      "TargetLength": 100,
+      "NormalLength": 102,
+      "TypoLength": 102,
+      "ErrorPositions": [
+        0.7549019607843137
+      ]
+    },
+    {
+      "FamilyId": 15,
+      "TargetLength": 100,
+      "NormalLength": 104,
+      "TypoLength": 103,
+      "ErrorPositions": [
+        0.7281553398058253
+      ]
+    },
+    {
+      "FamilyId": 16,
+      "TargetLength": 100,
+      "NormalLength": 98,
+      "TypoLength": 97,
+      "ErrorPositions": [
+        0.7628865979381443
+      ]
+    },
+    {
+      "FamilyId": 17,
+      "TargetLength": 100,
+      "NormalLength": 101,
+      "TypoLength": 103,
+      "ErrorPositions": [
+        0.7961165048543689
+      ]
+    },
+    {
+      "FamilyId": 18,
+      "TargetLength": 100,
+      "NormalLength": 103,
+      "TypoLength": 103,
+      "ErrorPositions": [
+        0.7087378640776699
+      ]
+    },
+    {
+      "FamilyId": 19,
+      "TargetLength": 100,
+      "NormalLength": 104,
+      "TypoLength": 105,
+      "ErrorPositions": [
+        0.08571428571428572,
+        0.8761904761904762
+      ]
+    },
+    {
+      "FamilyId": 20,
+      "TargetLength": 100,
+      "NormalLength": 104,
+      "TypoLength": 103,
+      "ErrorPositions": [
+        0.0970873786407767,
+        0.8737864077669902
+      ]
+    },
+    {
+      "FamilyId": 21,
+      "TargetLength": 100,
+      "NormalLength": 104,
+      "TypoLength": 104,
+      "ErrorPositions": [
+        0.0,
+        0.8076923076923077
+      ]
+    },
+    {
+      "FamilyId": 22,
+      "TargetLength": 100,
+      "NormalLength": 98,
+      "TypoLength": 99,
+      "ErrorPositions": [
+        0.15151515151515152,
+        0.30303030303030304,
+        0.898989898989899
+      ]
+    },
+    {
+      "FamilyId": 23,
+      "TargetLength": 100,
+      "NormalLength": 98,
+      "TypoLength": 98,
+      "ErrorPositions": [
+        0.07142857142857142,
+        0.3979591836734694,
+        0.8979591836734694
+      ]
+    },
+    {
+      "FamilyId": 24,
+      "TargetLength": 100,
+      "NormalLength": 103,
+      "TypoLength": 102,
+      "ErrorPositions": [
+        0.09803921568627451,
+        0.38235294117647056,
+        0.7352941176470589
+      ]
+    },
+    {
+      "FamilyId": 1,
+      "TargetLength": 200,
+      "NormalLength": 194,
+      "TypoLength": 194,
+      "ErrorPositions": [
+        0.08762886597938144
+      ]
+    },
+    {
+      "FamilyId": 2,
+      "TargetLength": 200,
+      "NormalLength": 197,
+      "TypoLength": 197,
+      "ErrorPositions": [
+        0.03553299492385787
+      ]
+    },
+    {
+      "FamilyId": 3,
+      "TargetLength": 200,
+      "NormalLength": 193,
+      "TypoLength": 192,
+      "ErrorPositions": [
+        0.08854166666666667
+      ]
+    },
+    {
+      "FamilyId": 4,
+      "TargetLength": 200,
+      "NormalLength": 205,
+      "TypoLength": 204,
+      "ErrorPositions": [
+        0.05392156862745098
+      ]
+    },
+    {
+      "FamilyId": 5,
+      "TargetLength": 200,
+      "NormalLength": 199,
+      "TypoLength": 200,
+      "ErrorPositions": [
+        0.04
+      ]
+    },
+    {
+      "FamilyId": 6,
+      "TargetLength": 200,
+      "NormalLength": 201,
+      "TypoLength": 201,
+      "ErrorPositions": [
+        0.05970149253731343
+      ]
+    },
+    {
+      "FamilyId": 7,
+      "TargetLength": 200,
+      "NormalLength": 200,
+      "TypoLength": 200,
+      "ErrorPositions": [
+        0.48
+      ]
+    },
+    {
+      "FamilyId": 8,
+      "TargetLength": 200,
+      "NormalLength": 201,
+      "TypoLength": 201,
+      "ErrorPositions": [
+        0.527363184079602
+      ]
+    },
+    {
+      "FamilyId": 9,
+      "TargetLength": 200,
+      "NormalLength": 202,
+      "TypoLength": 201,
+      "ErrorPositions": [
+        0.4925373134328358
+      ]
+    },
+    {
+      "FamilyId": 10,
+      "TargetLength": 200,
+      "NormalLength": 208,
+      "TypoLength": 207,
+      "ErrorPositions": [
+        0.5024154589371981
+      ]
+    },
+    {
+      "FamilyId": 11,
+      "TargetLength": 200,
+      "NormalLength": 203,
+      "TypoLength": 204,
+      "ErrorPositions": [
+        0.5392156862745098
+      ]
+    },
+    {
+      "FamilyId": 12,
+      "TargetLength": 200,
+      "NormalLength": 197,
+      "TypoLength": 197,
+      "ErrorPositions": [
+        0.47715736040609136
+      ]
+    },
+    {
+      "FamilyId": 13,
+      "TargetLength": 200,
+      "NormalLength": 200,
+      "TypoLength": 200,
+      "ErrorPositions": [
+        0.935
+      ]
+    },
+    {
+      "FamilyId": 14,
+      "TargetLength": 200,
+      "NormalLength": 200,
+      "TypoLength": 200,
+      "ErrorPositions": [
+        0.875
+      ]
+    },
+    {
+      "FamilyId": 15,
+      "TargetLength": 200,
+      "NormalLength": 200,
+      "TypoLength": 199,
+      "ErrorPositions": [
+        0.8592964824120602
+      ]
+    },
+    {
+      "FamilyId": 16,
+      "TargetLength": 200,
+      "NormalLength": 200,
+      "TypoLength": 199,
+      "ErrorPositions": [
+        0.8844221105527639
+      ]
+    },
+    {
+      "FamilyId": 17,
+      "TargetLength": 200,
+      "NormalLength": 200,
+      "TypoLength": 202,
+      "ErrorPositions": [
+        0.8960396039603961
+      ]
+    },
+    {
+      "FamilyId": 18,
+      "TargetLength": 200,
+      "NormalLength": 202,
+      "TypoLength": 202,
+      "ErrorPositions": [
+        0.8514851485148515
+      ]
+    },
+    {
+      "FamilyId": 19,
+      "TargetLength": 200,
+      "NormalLength": 201,
+      "TypoLength": 202,
+      "ErrorPositions": [
+        0.04455445544554455,
+        0.9356435643564357
+      ]
+    },
+    {
+      "FamilyId": 20,
+      "TargetLength": 200,
+      "NormalLength": 200,
+      "TypoLength": 199,
+      "ErrorPositions": [
+        0.05025125628140704,
+        0.9346733668341709
+      ]
+    },
+    {
+      "FamilyId": 21,
+      "TargetLength": 200,
+      "NormalLength": 201,
+      "TypoLength": 201,
+      "ErrorPositions": [
+        0.0,
+        0.900497512437811
+      ]
+    },
+    {
+      "FamilyId": 22,
+      "TargetLength": 200,
+      "NormalLength": 200,
+      "TypoLength": 201,
+      "ErrorPositions": [
+        0.07462686567164178,
+        0.48756218905472637,
+        0.9502487562189055
+      ]
+    },
+    {
+      "FamilyId": 23,
+      "TargetLength": 200,
+      "NormalLength": 200,
+      "TypoLength": 200,
+      "ErrorPositions": [
+        0.035,
+        0.365,
+        0.95
+      ]
+    },
+    {
+      "FamilyId": 24,
+      "TargetLength": 200,
+      "NormalLength": 200,
+      "TypoLength": 199,
+      "ErrorPositions": [
+        0.05025125628140704,
+        0.5226130653266332,
+        0.864321608040201
+      ]
+    },
+    {
+      "FamilyId": 1,
+      "TargetLength": 400,
+      "NormalLength": 399,
+      "TypoLength": 399,
+      "ErrorPositions": [
+        0.042606516290726815
+      ]
+    },
+    {
+      "FamilyId": 2,
+      "TargetLength": 400,
+      "NormalLength": 400,
+      "TypoLength": 400,
+      "ErrorPositions": [
+        0.0175
+      ]
+    },
+    {
+      "FamilyId": 3,
+      "TargetLength": 400,
+      "NormalLength": 400,
+      "TypoLength": 399,
+      "ErrorPositions": [
+        0.042606516290726815
+      ]
+    },
+    {
+      "FamilyId": 4,
+      "TargetLength": 400,
+      "NormalLength": 401,
+      "TypoLength": 400,
+      "ErrorPositions": [
+        0.0275
+      ]
+    },
+    {
+      "FamilyId": 5,
+      "TargetLength": 400,
+      "NormalLength": 397,
+      "TypoLength": 398,
+      "ErrorPositions": [
+        0.020100502512562814
+      ]
+    },
+    {
+      "FamilyId": 6,
+      "TargetLength": 400,
+      "NormalLength": 402,
+      "TypoLength": 402,
+      "ErrorPositions": [
+        0.029850746268656716
+      ]
+    },
+    {
+      "FamilyId": 7,
+      "TargetLength": 400,
+      "NormalLength": 399,
+      "TypoLength": 399,
+      "ErrorPositions": [
+        0.47869674185463656
+      ]
+    },
+    {
+      "FamilyId": 8,
+      "TargetLength": 400,
+      "NormalLength": 408,
+      "TypoLength": 408,
+      "ErrorPositions": [
+        0.5098039215686274
+      ]
+    },
+    {
+      "FamilyId": 9,
+      "TargetLength": 400,
+      "NormalLength": 400,
+      "TypoLength": 399,
+      "ErrorPositions": [
+        0.49874686716791977
+      ]
+    },
+    {
+      "FamilyId": 10,
+      "TargetLength": 400,
+      "NormalLength": 399,
+      "TypoLength": 398,
+      "ErrorPositions": [
+        0.49748743718592964
+      ]
+    },
+    {
+      "FamilyId": 11,
+      "TargetLength": 400,
+      "NormalLength": 404,
+      "TypoLength": 405,
+      "ErrorPositions": [
+        0.5209876543209877
+      ]
+    },
+    {
+      "FamilyId": 12,
+      "TargetLength": 400,
+      "NormalLength": 400,
+      "TypoLength": 400,
+      "ErrorPositions": [
+        0.485
+      ]
+    },
+    {
+      "FamilyId": 13,
+      "TargetLength": 400,
+      "NormalLength": 400,
+      "TypoLength": 400,
+      "ErrorPositions": [
+        0.9675
+      ]
+    },
+    {
+      "FamilyId": 14,
+      "TargetLength": 400,
+      "NormalLength": 400,
+      "TypoLength": 400,
+      "ErrorPositions": [
+        0.9375
+      ]
+    },
+    {
+      "FamilyId": 15,
+      "TargetLength": 400,
+      "NormalLength": 400,
+      "TypoLength": 399,
+      "ErrorPositions": [
+        0.9298245614035088
+      ]
+    },
+    {
+      "FamilyId": 16,
+      "TargetLength": 400,
+      "NormalLength": 400,
+      "TypoLength": 399,
+      "ErrorPositions": [
+        0.9423558897243107
+      ]
+    },
+    {
+      "FamilyId": 17,
+      "TargetLength": 400,
+      "NormalLength": 400,
+      "TypoLength": 402,
+      "ErrorPositions": [
+        0.9477611940298507
+      ]
+    },
+    {
+      "FamilyId": 18,
+      "TargetLength": 400,
+      "NormalLength": 400,
+      "TypoLength": 400,
+      "ErrorPositions": [
+        0.925
+      ]
+    },
+    {
+      "FamilyId": 19,
+      "TargetLength": 400,
+      "NormalLength": 403,
+      "TypoLength": 404,
+      "ErrorPositions": [
+        0.022277227722772276,
+        0.9678217821782178
+      ]
+    },
+    {
+      "FamilyId": 20,
+      "TargetLength": 400,
+      "NormalLength": 400,
+      "TypoLength": 399,
+      "ErrorPositions": [
+        0.02506265664160401,
+        0.9674185463659147
+      ]
+    },
+    {
+      "FamilyId": 21,
+      "TargetLength": 400,
+      "NormalLength": 401,
+      "TypoLength": 401,
+      "ErrorPositions": [
+        0.0,
+        0.9501246882793017
+      ]
+    },
+    {
+      "FamilyId": 22,
+      "TargetLength": 400,
+      "NormalLength": 400,
+      "TypoLength": 401,
+      "ErrorPositions": [
+        0.03740648379052369,
+        0.4463840399002494,
+        0.9750623441396509
+      ]
+    },
+    {
+      "FamilyId": 23,
+      "TargetLength": 400,
+      "NormalLength": 400,
+      "TypoLength": 400,
+      "ErrorPositions": [
+        0.0175,
+        0.4375,
+        0.975
+      ]
+    },
+    {
+      "FamilyId": 24,
+      "TargetLength": 400,
+      "NormalLength": 411,
+      "TypoLength": 410,
+      "ErrorPositions": [
+        0.024390243902439025,
+        0.4975609756097561,
+        0.9
+      ]
+    },
+    {
+      "FamilyId": 1,
+      "TargetLength": 800,
+      "NormalLength": 802,
+      "TypoLength": 802,
+      "ErrorPositions": [
+        0.02119700748129676
+      ]
+    },
+    {
+      "FamilyId": 2,
+      "TargetLength": 800,
+      "NormalLength": 804,
+      "TypoLength": 804,
+      "ErrorPositions": [
+        0.008706467661691543
+      ]
+    },
+    {
+      "FamilyId": 3,
+      "TargetLength": 800,
+      "NormalLength": 807,
+      "TypoLength": 806,
+      "ErrorPositions": [
+        0.02109181141439206
+      ]
+    },
+    {
+      "FamilyId": 4,
+      "TargetLength": 800,
+      "NormalLength": 802,
+      "TypoLength": 801,
+      "ErrorPositions": [
+        0.01373283395755306
+      ]
+    },
+    {
+      "FamilyId": 5,
+      "TargetLength": 800,
+      "NormalLength": 797,
+      "TypoLength": 798,
+      "ErrorPositions": [
+        0.010025062656641603
+      ]
+    },
+    {
+      "FamilyId": 6,
+      "TargetLength": 800,
+      "NormalLength": 799,
+      "TypoLength": 799,
+      "ErrorPositions": [
+        0.015018773466833541
+      ]
+    },
+    {
+      "FamilyId": 7,
+      "TargetLength": 800,
+      "NormalLength": 798,
+      "TypoLength": 798,
+      "ErrorPositions": [
+        0.4824561403508772
+      ]
+    },
+    {
+      "FamilyId": 8,
+      "TargetLength": 800,
+      "NormalLength": 804,
+      "TypoLength": 804,
+      "ErrorPositions": [
+        0.4975124378109453
+      ]
+    },
+    {
+      "FamilyId": 9,
+      "TargetLength": 800,
+      "NormalLength": 803,
+      "TypoLength": 802,
+      "ErrorPositions": [
+        0.5124688279301746
+      ]
+    },
+    {
+      "FamilyId": 10,
+      "TargetLength": 800,
+      "NormalLength": 812,
+      "TypoLength": 811,
+      "ErrorPositions": [
+        0.4969173859432799
+      ]
+    },
+    {
+      "FamilyId": 11,
+      "TargetLength": 800,
+      "NormalLength": 795,
+      "TypoLength": 796,
+      "ErrorPositions": [
+        0.5062814070351759
+      ]
+    },
+    {
+      "FamilyId": 12,
+      "TargetLength": 800,
+      "NormalLength": 799,
+      "TypoLength": 799,
+      "ErrorPositions": [
+        0.49436795994993743
+      ]
+    },
+    {
+      "FamilyId": 13,
+      "TargetLength": 800,
+      "NormalLength": 802,
+      "TypoLength": 802,
+      "ErrorPositions": [
+        0.983790523690773
+      ]
+    },
+    {
+      "FamilyId": 14,
+      "TargetLength": 800,
+      "NormalLength": 797,
+      "TypoLength": 797,
+      "ErrorPositions": [
+        0.9686323713927227
+      ]
+    },
+    {
+      "FamilyId": 15,
+      "TargetLength": 800,
+      "NormalLength": 798,
+      "TypoLength": 797,
+      "ErrorPositions": [
+        0.9648682559598495
+      ]
+    },
+    {
+      "FamilyId": 16,
+      "TargetLength": 800,
+      "NormalLength": 819,
+      "TypoLength": 818,
+      "ErrorPositions": [
+        0.9535452322738386
+      ]
+    },
+    {
+      "FamilyId": 17,
+      "TargetLength": 800,
+      "NormalLength": 800,
+      "TypoLength": 802,
+      "ErrorPositions": [
+        0.9738154613466334
+      ]
+    },
+    {
+      "FamilyId": 18,
+      "TargetLength": 800,
+      "NormalLength": 800,
+      "TypoLength": 800,
+      "ErrorPositions": [
+        0.9625
+      ]
+    },
+    {
+      "FamilyId": 19,
+      "TargetLength": 800,
+      "NormalLength": 800,
+      "TypoLength": 801,
+      "ErrorPositions": [
+        0.011235955056179775,
+        0.9837702871410736
+      ]
+    },
+    {
+      "FamilyId": 20,
+      "TargetLength": 800,
+      "NormalLength": 800,
+      "TypoLength": 799,
+      "ErrorPositions": [
+        0.012515644555694618,
+        0.983729662077597
+      ]
+    },
+    {
+      "FamilyId": 21,
+      "TargetLength": 800,
+      "NormalLength": 801,
+      "TypoLength": 801,
+      "ErrorPositions": [
+        0.0,
+        0.9750312109862672
+      ]
+    },
+    {
+      "FamilyId": 22,
+      "TargetLength": 800,
+      "NormalLength": 802,
+      "TypoLength": 803,
+      "ErrorPositions": [
+        0.0186799501867995,
+        0.47696139476961397,
+        0.987546699875467
+      ]
+    },
+    {
+      "FamilyId": 23,
+      "TargetLength": 800,
+      "NormalLength": 800,
+      "TypoLength": 800,
+      "ErrorPositions": [
+        0.00875,
+        0.48875,
+        0.9875
+      ]
+    },
+    {
+      "FamilyId": 24,
+      "TargetLength": 800,
+      "NormalLength": 811,
+      "TypoLength": 810,
+      "ErrorPositions": [
+        0.012345679012345678,
+        0.4802469135802469,
+        0.9493827160493827
+      ]
+    }
+  ]
+}
