@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -6,13 +7,11 @@ using System.Text.Json.Nodes;
 
 namespace TypoDetectionBenchmark;
 
-public record TestCase(int Id, bool IsTypo, string Category, string Text);
-
-public class PromptOptimizationV3
+public class DecisionBenchmarkOptimized
 {
     private static readonly TestCase[] TestCases =
     [
-        // 正常文 15件
+        // --- 正常文 15件 ---
         new(1, false, "業務連絡",
             "来週月曜日に予定されている第3四半期の全社キックオフミーティングですが、会場の都合により開始時刻が10時から10時半へと変更となりました。参加予定の皆様におかれましては、各自スケジュールの再確認をお願いいたします。資料は事前に共有フォルダへ格納済みです。"),
         new(2, false, "製品サポート",
@@ -44,7 +43,7 @@ public class PromptOptimizationV3
         new(15, false, "リリース告知",
             "モバイルアプリの最新版バージョン2.0をApp StoreおよびGoogle Playにて公開いたしました。本アップデートではダークモードへの対応と起動速度の大幅な改善が含まれております。ユーザーの皆様には自動更新または手動でのアップデートを推奨いたします。"),
 
-        // 誤字文 15件
+        // --- 誤字文 15件 ---
         new(16, true, "誤変換（同音異義語）",
             "来週月曜日に予定されている第3四半期の全社キックオフミーティングですが、会場の都合により開始時刻が10時から10時半へと変更となりました。参加予定の皆様におかれましては、各自スケジュールの再確認をお願い足します。資料は事前に共有フォルダへ格納済みです。"),
         new(17, true, "脱字（助詞抜け）",
@@ -77,36 +76,20 @@ public class PromptOptimizationV3
             "モバイルアプリの最新版バージョン2.0をApp StoreおよびGoogle Playにて公開いたしました。本アップデートではダークモードへの対応と起動速度の台幅な改善が含まれております。ユーザーの皆様には自動更新または手動でのアップデートを推奨いたします。")
     ];
 
-    // 精緻に改良したプロンプト (Prompt v3)
-    private const string OptimizedSystemPromptV3 = """
-あなたは最高精度の日本語校正スペシャリストです。
-入力文章を精査し、【客観的な誤字・脱字・変換ミス・文法エラー】のみをピンポイントで修正してください。
-
-【修正すべき対象（これらは確実に修正すること）】
-1. 明らかなタイポ・誤字・カナ誤り:
-   - 促音や長音の抜け（例: 「アプリケション」➡「アプリケーション」）
-   - 文字の入れ替わり（例: 「サトイ」➡「サイト」）
-   - 濁音・半濁音の誤変換（例: 不具合修正の文脈における「修正バッチ」➡「修正パッチ」）
-   - 送りがな・捨て仮名の誤り（例: 「ご返信下り」➡「ご返信ください」、「となつております」➡「となっております」）
-2. 脱字・文法崩壊:
-   - 文字や語尾の脱落（例: 「能性がある」➡「可能性がある」、「存じま」➡「存じます」）
-   - 助詞の脱落による文法不成立（例: 「機器冗長化切り替え」➡「機器の冗長化切り替え」）
-   - 不要な重複（例: 「がが」➡「が」、「経理部前経理部前」➡「経理部前」）
-3. 明らかな同音異義語の誤変換・誤用:
-   - 文脈に明らかに合わない漢字誤り（例: 「お願い足します」➡「お願いいたします」、「見張り等」➡「見積もり等」、「受項」➡「受講」、「台幅な」➡「大幅な」、「批評的な課題」➡「致命的な課題」または「重大な課題」）
-
-【絶対に修正してはならない対象（厳守ルール）】
-1. 表記の好み・ゆれの維持:
-   - 「予定通り」と「予定どおり」、「すべて」と「全て」など、どちらも日本語として正しい表記ゆれは絶対に変更しないこと。
-   - 半角スペースの有無（「OAuth2.0」と「OAuth 2.0」など）や、句読点（読点）の勝手な追加・削除は禁止。
-2. 意訳・推敲・言い換えの禁止:
-   - 意味が完全に通っている自然な語彙を、別の同義語に言い換えてはならない（例: 「獲得」を「取得」に変える、「各自」を「各自の」に変える等の推敲は厳禁）。
-3. 原則完全一致:
-   - 上記の「修正すべき対象」に該当する明確な誤りがない文章は、一文字も変更せず入力文章のまま完全一致で出力すること。
-
-【出力形式】
-解説・前置き・引用符などは一切出力せず、修正後（または完全一致）の本文のみを出力してください。
+    // 最適化したOpenAI Decisions API instructions
+    private const string OptimizedOpenAiInstructions = """
+この日本語の文章に、客観的な【誤字・脱字・同音異義語の誤変換・濁音半濁音ミス・カナ打ち間違い・助詞の脱落や重複】が含まれているかを厳格に判定してください。
+【誤りとする対象の例】「お願い足します」「修正バッチ（パッチの誤り）」「アプリケション」「機器冗長化（の抜け）」「批評的な課題（重大な課題の誤り）」「がが」「存じま」「サトイ」「となつております」などの客観的誤字脱字。
+【誤りとしない対象】「予定通り/予定どおり」等の正当な表記ゆれ、専門用語（OAuth2.0, PDF, API, VPN等）、半角スペースの有無、文体や表現の好み。これらは誤りではありません。
 """;
+
+    // 最適化したTypeSafe AI criteria
+    private const string OptimizedTypeSafeInstructions = "Does this Japanese text contain objective typos, omitted particles or characters, wrong homophones, phonetic/katakana errors, or duplicated words?";
+    private static readonly object OptimizedTypeSafeCriteria = new
+    {
+        @true = "Contains objective typos, omitted particles (such as missing 'no' between nouns like '機器冗長化'), katakana/phonetic errors ('アプリケション', '修正バッチ' for patch, 'サトイ', 'となつて'), wrong kanji homophones ('お願い足します', '見張り等', '受項', '台幅な', '批評的な課題'), or duplicates ('がが', '経理部前経理部前').",
+        @false = "Correct, standard Japanese text without errors. Valid orthographic variations (e.g. '予定通り' vs '予定どおり'), technical terms ('OAuth2.0', 'PDF', 'VPN', 'API'), spacing, and stylistic choices are completely valid and must NOT be considered typos."
+    };
 
     public static async Task Main(string[] args)
     {
@@ -115,98 +98,131 @@ public class PromptOptimizationV3
             ?? Environment.GetEnvironmentVariable("OPENAI_API_KEY", EnvironmentVariableTarget.User)
             ?? throw new InvalidOperationException("OPENAI_API_KEY not found.");
 
-        using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(60) };
+        string typeSafeKey = Environment.GetEnvironmentVariable("TYPESAFE_API_KEY")
+            ?? Environment.GetEnvironmentVariable("TYPESAFE_API_KEY", EnvironmentVariableTarget.User)
+            ?? throw new InvalidOperationException("TYPESAFE_API_KEY not found.");
+
+        using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(30) };
 
         Console.WriteLine("================================================================================");
-        Console.WriteLine(" Prompt v3 検証: gpt-6-luna & gpt-5.6-luna (正常文100%維持 & 誤字修正率向上)");
+        Console.WriteLine(" 第1部 高速判定ベンチマーク最適化検証 (Instructions / Criteria 精緻化テスト)");
         Console.WriteLine("================================================================================");
 
-        await RunTest(http, openAiKey, "gpt-6-luna");
-        await RunTest(http, openAiKey, "gpt-5.6-luna");
-    }
+        var oResults = new List<(TestCase tc, double prob, long latency)>();
+        var tResults = new List<(TestCase tc, double prob, long latency)>();
 
-    private static async Task RunTest(HttpClient http, string apiKey, string model)
-    {
-        Console.WriteLine($"\n■ モデル: {model} (Prompt v3 測定中...)");
-        var results = new List<(TestCase tc, string output, bool modified, long latency)>();
-
+        Console.WriteLine("\n[1/2] OpenAI Decisions API (最適化指示) 測定開始...");
         for (int i = 0; i < TestCases.Length; i++)
         {
             var tc = TestCases[i];
             Console.Write($"[{i + 1:D2}/30] ID:{tc.Id:D2} (Typo={tc.IsTypo, -5}) ... ");
-
-            using var req = new HttpRequestMessage(HttpMethod.Post, "https://api.openai.com/v1/chat/completions");
-            req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
-            var body = new
-            {
-                model = model,
-                messages = new[]
-                {
-                    new { role = "system", content = OptimizedSystemPromptV3 },
-                    new { role = "user", content = tc.Text }
-                }
-            };
-            req.Content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
-
-            var sw = Stopwatch.StartNew();
-            using var res = await http.SendAsync(req);
-            sw.Stop();
-
-            if (!res.IsSuccessStatusCode)
-            {
-                Console.WriteLine($"Error: {res.StatusCode}");
-                continue;
-            }
-
-            var json = await res.Content.ReadAsStringAsync();
-            var doc = JsonNode.Parse(json);
-            var reply = doc?["choices"]?[0]?["message"]?["content"]?.ToString().Trim() ?? "";
-
-            bool modified = !string.Equals(tc.Text.Trim(), reply, StringComparison.Ordinal);
-            results.Add((tc, reply, modified, sw.ElapsedMilliseconds));
-
-            Console.WriteLine($"{sw.ElapsedMilliseconds,4}ms | Mod={modified}");
+            var (prob, lat) = await EvalOpenAi(http, openAiKey, tc.Text);
+            oResults.Add((tc, prob, lat));
+            Console.WriteLine($"Prob: {prob:F3} | Lat: {lat,4}ms");
             await Task.Delay(100);
         }
 
-        var normals = results.Where(x => !x.tc.IsTypo).ToList();
-        var typos = results.Where(x => x.tc.IsTypo).ToList();
-
-        int normalPreserved = normals.Count(x => !x.modified);
-        int typoModified = typos.Count(x => x.modified);
-
-        Console.WriteLine($"\n--- 結果サマリー ({model}) ---");
-        Console.WriteLine($"  正常文の維持率 (過剰修正なし) : {(double)normalPreserved / normals.Count:P1} ({normalPreserved}/{normals.Count})");
-        Console.WriteLine($"  誤字文の修正着手率 (変更検知) : {(double)typoModified / typos.Count:P1} ({typoModified}/{typos.Count})");
-        Console.WriteLine($"  平均レスポンスタイム          : {results.Average(x => x.latency):F1} ms");
-
-        var changedNormals = normals.Where(x => x.modified).ToList();
-        if (changedNormals.Count > 0)
+        Console.WriteLine("\n[2/2] TypeSafe AI System One (最適化Criteria) 測定開始...");
+        for (int i = 0; i < TestCases.Length; i++)
         {
-            Console.WriteLine("  [過剰修正された正常文]:");
-            foreach (var cn in changedNormals)
+            var tc = TestCases[i];
+            Console.Write($"[{i + 1:D2}/30] ID:{tc.Id:D2} (Typo={tc.IsTypo, -5}) ... ");
+            var (prob, lat) = await EvalTypeSafe(http, typeSafeKey, tc.Text);
+            tResults.Add((tc, prob, lat));
+            Console.WriteLine($"Prob: {prob:F3} | Lat: {lat,4}ms");
+            await Task.Delay(100);
+        }
+
+        Console.WriteLine("\n=== 最適化後の集計サマリー ===");
+        PrintSummary("OpenAI Decisions (最適化 instructions)", oResults);
+        PrintSummary("TypeSafe AI System One (最適化 criteria)", tResults);
+    }
+
+    private static async Task<(double prob, long latency)> EvalOpenAi(HttpClient http, string apiKey, string text)
+    {
+        using var req = new HttpRequestMessage(HttpMethod.Post, "https://api.openai.com/v1/decisions");
+        req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+        var body = new
+        {
+            model = "gpt-6-luna",
+            input = text,
+            questions = new[]
             {
-                Console.WriteLine($"    ID:{cn.tc.Id:D2} 原文: {cn.tc.Text}");
-                Console.WriteLine($"           出力: {cn.output}");
+                new
+                {
+                    type = "predicate",
+                    name = "has_typo",
+                    instructions = OptimizedOpenAiInstructions
+                }
             }
-        }
-        else
+        };
+        req.Content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+
+        var sw = Stopwatch.StartNew();
+        using var res = await http.SendAsync(req);
+        sw.Stop();
+
+        if (!res.IsSuccessStatusCode) return (0, sw.ElapsedMilliseconds);
+        var json = await res.Content.ReadAsStringAsync();
+        var doc = JsonNode.Parse(json);
+        double prob = doc?["answers"]?[0]?["probability"]?.GetValue<double>() ?? 0.0;
+        return (prob, sw.ElapsedMilliseconds);
+    }
+
+    private static async Task<(double prob, long latency)> EvalTypeSafe(HttpClient http, string apiKey, string text)
+    {
+        using var req = new HttpRequestMessage(HttpMethod.Post, "https://api.typesafe.ai/v1/systemone");
+        req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+        var body = new
         {
-            Console.WriteLine("  [過剰修正された正常文]: なし (100%完全維持 🎉)");
+            model = "jev-latest",
+            state = text,
+            questions = new Dictionary<string, object>
+            {
+                ["has_typo"] = new
+                {
+                    type = "noul",
+                    instructions = OptimizedTypeSafeInstructions,
+                    criteria = OptimizedTypeSafeCriteria
+                }
+            }
+        };
+        req.Content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+
+        var sw = Stopwatch.StartNew();
+        using var res = await http.SendAsync(req);
+        sw.Stop();
+
+        if (!res.IsSuccessStatusCode) return (0, sw.ElapsedMilliseconds);
+        var json = await res.Content.ReadAsStringAsync();
+        var doc = JsonNode.Parse(json);
+        double prob = doc?["answers"]?["has_typo"]?["noul"]?.GetValue<double>() ?? 0.0;
+        return (prob, sw.ElapsedMilliseconds);
+    }
+
+    private static void PrintSummary(string name, List<(TestCase tc, double prob, long latency)> list)
+    {
+        Console.WriteLine("--------------------------------------------------------------------------------");
+        Console.WriteLine($"■ {name}");
+        Console.WriteLine("--------------------------------------------------------------------------------");
+
+        foreach (var th in new[] { 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 })
+        {
+            int tp = list.Count(x => x.tc.IsTypo && x.prob >= th);
+            int fp = list.Count(x => !x.tc.IsTypo && x.prob >= th);
+            int tn = list.Count(x => !x.tc.IsTypo && x.prob < th);
+            int fn = list.Count(x => x.tc.IsTypo && x.prob < th);
+
+            double acc = (double)(tp + tn) / list.Count;
+            double prec = (tp + fp) > 0 ? (double)tp / (tp + fp) : 0;
+            double rec = (tp + fn) > 0 ? (double)tp / (tp + fn) : 0;
+            double f1 = (prec + rec) > 0 ? 2 * (prec * rec) / (prec + rec) : 0;
+
+            Console.WriteLine($"  閾値 {th:F1} => 正解率: {acc:P1} ({tp + tn}/30), 再現率: {rec:P1} ({tp}/15), 適合率: {prec:P1}, F1: {f1:F3} [TP:{tp}, FP:{fp}, TN:{tn}, FN:{fn}]");
         }
 
-        var uncorrectedTypos = typos.Where(x => !x.modified).ToList();
-        if (uncorrectedTypos.Count > 0)
-        {
-            Console.WriteLine("  [未修正の誤字文]:");
-            foreach (var ut in uncorrectedTypos)
-            {
-                Console.WriteLine($"    ID:{ut.tc.Id:D2} 原文: {ut.tc.Text}");
-            }
-        }
-        else
-        {
-            Console.WriteLine("  [未修正の誤字文]: なし (全15件100%修正達成 🎉)");
-        }
+        Console.WriteLine($"  平均レスポンス: {list.Average(x => x.latency):F1} ms");
     }
 }
+
+public record TestCase(int Id, bool IsTypo, string Category, string Text);
