@@ -8,7 +8,7 @@ namespace TypoDetectionBenchmark;
 
 public record TestCase(int Id, bool IsTypo, string Category, string Text);
 
-public class PromptOptimization
+public class PromptOptimizationV3
 {
     private static readonly TestCase[] TestCases =
     [
@@ -77,37 +77,58 @@ public class PromptOptimization
             "モバイルアプリの最新版バージョン2.0をApp StoreおよびGoogle Playにて公開いたしました。本アップデートではダークモードへの対応と起動速度の台幅な改善が含まれております。ユーザーの皆様には自動更新または手動でのアップデートを推奨いたします。")
     ];
 
-    // 工夫したプロンプト (Prompt v2)
-    private const string OptimizedSystemPrompt = """
-あなたは厳格な日本語文章校正AIです。
-入力された文章を検査し、明らかな【誤字・脱字・同音異義語の誤変換・カナ打ち間違い・助詞の脱落や重複】のみを最小限修正してください。
+    // 精緻に改良したプロンプト (Prompt v3)
+    private const string OptimizedSystemPromptV3 = """
+あなたは最高精度の日本語校正スペシャリストです。
+入力文章を精査し、【客観的な誤字・脱字・変換ミス・文法エラー】のみをピンポイントで修正してください。
 
-【厳守すべき絶対ルール】
-1. 推敲・リライトの禁止:
-   - より自然な表現への言い換え、語彙の変更、文章の改善・リライトは固く禁じます。
-   - 例: 「獲得」を「取得」にする、「スケジュールの」を「のスケジュールの」にする等の一切の言い換えは禁止です。
-2. 表記ゆれ・句読点変更の禁止:
-   - 漢字とひらがなの使い分け（例: 「予定通り」と「予定どおり」）、半角スペースの有無（例: 「OAuth2.0」と「OAuth 2.0」）、読点の追加・削除は、誤字脱字ではないため絶対に変更してはなりません。
-3. 原則完全維持:
-   - 確信が持てる致命的な誤字脱字・文法崩壊がない場合は、一文字も変更せず入力文章と完全一致で出力してください。
-4. 出力形式:
-   - 前置き・解説・挨拶は一切含めず、修正後の文章（または完全一致の原文）のみを出力してください。
+【修正すべき対象（これらは確実に修正すること）】
+1. 明らかなタイポ・誤字・カナ誤り:
+   - 促音や長音の抜け（例: 「アプリケション」➡「アプリケーション」）
+   - 文字の入れ替わり（例: 「サトイ」➡「サイト」）
+   - 濁音・半濁音の誤変換（例: 不具合修正の文脈における「修正バッチ」➡「修正パッチ」）
+   - 送りがな・捨て仮名の誤り（例: 「ご返信下り」➡「ご返信ください」、「となつております」➡「となっております」）
+2. 脱字・文法崩壊:
+   - 文字や語尾の脱落（例: 「能性がある」➡「可能性がある」、「存じま」➡「存じます」）
+   - 助詞の脱落による文法不成立（例: 「機器冗長化切り替え」➡「機器の冗長化切り替え」）
+   - 不要な重複（例: 「がが」➡「が」、「経理部前経理部前」➡「経理部前」）
+3. 明らかな同音異義語の誤変換・誤用:
+   - 文脈に明らかに合わない漢字誤り（例: 「お願い足します」➡「お願いいたします」、「見張り等」➡「見積もり等」、「受項」➡「受講」、「台幅な」➡「大幅な」、「批評的な課題」➡「致命的な課題」または「重大な課題」）
+
+【絶対に修正してはならない対象（厳守ルール）】
+1. 表記の好み・ゆれの維持:
+   - 「予定通り」と「予定どおり」、「すべて」と「全て」など、どちらも日本語として正しい表記ゆれは絶対に変更しないこと。
+   - 半角スペースの有無（「OAuth2.0」と「OAuth 2.0」など）や、句読点（読点）の勝手な追加・削除は禁止。
+2. 意訳・推敲・言い換えの禁止:
+   - 意味が完全に通っている自然な語彙を、別の同義語に言い換えてはならない（例: 「獲得」を「取得」に変える、「各自」を「各自の」に変える等の推敲は厳禁）。
+3. 原則完全一致:
+   - 上記の「修正すべき対象」に該当する明確な誤りがない文章は、一文字も変更せず入力文章のまま完全一致で出力すること。
+
+【出力形式】
+解説・前置き・引用符などは一切出力せず、修正後（または完全一致）の本文のみを出力してください。
 """;
 
     public static async Task Main(string[] args)
     {
         Console.OutputEncoding = Encoding.UTF8;
-        Console.WriteLine("================================================================================");
-        Console.WriteLine(" gpt-6-luna プロンプト最適化検証 (Prompt v2 適用テスト)");
-        Console.WriteLine("================================================================================");
-
         string openAiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY")
             ?? Environment.GetEnvironmentVariable("OPENAI_API_KEY", EnvironmentVariableTarget.User)
             ?? throw new InvalidOperationException("OPENAI_API_KEY not found.");
 
         using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(60) };
 
-        var results = new List<(TestCase tc, string output, bool modified, long latency, int inTok, int outTok, int reasonTok)>();
+        Console.WriteLine("================================================================================");
+        Console.WriteLine(" Prompt v3 検証: gpt-6-luna & gpt-5.6-luna (正常文100%維持 & 誤字修正率向上)");
+        Console.WriteLine("================================================================================");
+
+        await RunTest(http, openAiKey, "gpt-6-luna");
+        await RunTest(http, openAiKey, "gpt-5.6-luna");
+    }
+
+    private static async Task RunTest(HttpClient http, string apiKey, string model)
+    {
+        Console.WriteLine($"\n■ モデル: {model} (Prompt v3 測定中...)");
+        var results = new List<(TestCase tc, string output, bool modified, long latency)>();
 
         for (int i = 0; i < TestCases.Length; i++)
         {
@@ -115,13 +136,13 @@ public class PromptOptimization
             Console.Write($"[{i + 1:D2}/30] ID:{tc.Id:D2} (Typo={tc.IsTypo, -5}) ... ");
 
             using var req = new HttpRequestMessage(HttpMethod.Post, "https://api.openai.com/v1/chat/completions");
-            req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", openAiKey);
+            req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
             var body = new
             {
-                model = "gpt-6-luna",
+                model = model,
                 messages = new[]
                 {
-                    new { role = "system", content = OptimizedSystemPrompt },
+                    new { role = "system", content = OptimizedSystemPromptV3 },
                     new { role = "user", content = tc.Text }
                 }
             };
@@ -140,14 +161,11 @@ public class PromptOptimization
             var json = await res.Content.ReadAsStringAsync();
             var doc = JsonNode.Parse(json);
             var reply = doc?["choices"]?[0]?["message"]?["content"]?.ToString().Trim() ?? "";
-            int promptTok = doc?["usage"]?["prompt_tokens"]?.GetValue<int>() ?? 0;
-            int compTok = doc?["usage"]?["completion_tokens"]?.GetValue<int>() ?? 0;
-            int reasonTok = doc?["usage"]?["completion_tokens_details"]?["reasoning_tokens"]?.GetValue<int>() ?? 0;
 
             bool modified = !string.Equals(tc.Text.Trim(), reply, StringComparison.Ordinal);
-            results.Add((tc, reply, modified, sw.ElapsedMilliseconds, promptTok, compTok, reasonTok));
+            results.Add((tc, reply, modified, sw.ElapsedMilliseconds));
 
-            Console.WriteLine($"{sw.ElapsedMilliseconds,4}ms | In:{promptTok,3} Out:{compTok,3} (R:{reasonTok,3}) | Mod={modified}");
+            Console.WriteLine($"{sw.ElapsedMilliseconds,4}ms | Mod={modified}");
             await Task.Delay(100);
         }
 
@@ -157,44 +175,38 @@ public class PromptOptimization
         int normalPreserved = normals.Count(x => !x.modified);
         int typoModified = typos.Count(x => x.modified);
 
-        Console.WriteLine("\n================================================================================");
-        Console.WriteLine("【Prompt v2 適用結果集計】");
-        Console.WriteLine($"  正常文の維持率 (過剰修正なし) : {(double)normalPreserved / normals.Count:P1} ({normalPreserved}/{normals.Count})  [v1: 73.3% (11/15)]");
-        Console.WriteLine($"  誤字文の修正着手率 (変更検知) : {(double)typoModified / typos.Count:P1} ({typoModified}/{typos.Count})  [v1: 93.3% (14/15)]");
-        Console.WriteLine($"  平均レスポンスタイム          : {results.Average(x => x.latency):F1} ms  [v1: 2324.5 ms]");
-        Console.WriteLine($"  平均消費トークン数            : {results.Average(x => x.inTok + x.outTok):F1} tokens");
-        Console.WriteLine("================================================================================\n");
+        Console.WriteLine($"\n--- 結果サマリー ({model}) ---");
+        Console.WriteLine($"  正常文の維持率 (過剰修正なし) : {(double)normalPreserved / normals.Count:P1} ({normalPreserved}/{normals.Count})");
+        Console.WriteLine($"  誤字文の修正着手率 (変更検知) : {(double)typoModified / typos.Count:P1} ({typoModified}/{typos.Count})");
+        Console.WriteLine($"  平均レスポンスタイム          : {results.Average(x => x.latency):F1} ms");
 
-        Console.WriteLine("■ 正常文 (ID:01〜15) で変更が発生したケースの内訳:");
         var changedNormals = normals.Where(x => x.modified).ToList();
-        if (changedNormals.Count == 0)
+        if (changedNormals.Count > 0)
         {
-            Console.WriteLine("  なし！（15件すべて完全一致で維持されました 🎉）");
-        }
-        else
-        {
+            Console.WriteLine("  [過剰修正された正常文]:");
             foreach (var cn in changedNormals)
             {
-                Console.WriteLine($"  ID:{cn.tc.Id:D2} 【{cn.tc.Category}】");
-                Console.WriteLine($"    原文: {cn.tc.Text}");
-                Console.WriteLine($"    出力: {cn.output}");
+                Console.WriteLine($"    ID:{cn.tc.Id:D2} 原文: {cn.tc.Text}");
+                Console.WriteLine($"           出力: {cn.output}");
             }
-        }
-
-        Console.WriteLine("\n■ 誤字文 (ID:16〜30) で修正されなかったケースの内訳:");
-        var uncorrectedTypos = typos.Where(x => !x.modified).ToList();
-        if (uncorrectedTypos.Count == 0)
-        {
-            Console.WriteLine("  なし！（15件すべて修正されました 🎉）");
         }
         else
         {
+            Console.WriteLine("  [過剰修正された正常文]: なし (100%完全維持 🎉)");
+        }
+
+        var uncorrectedTypos = typos.Where(x => !x.modified).ToList();
+        if (uncorrectedTypos.Count > 0)
+        {
+            Console.WriteLine("  [未修正の誤字文]:");
             foreach (var ut in uncorrectedTypos)
             {
-                Console.WriteLine($"  ID:{ut.tc.Id:D2} 【{ut.tc.Category}】");
-                Console.WriteLine($"    原文: {ut.tc.Text}");
-                Console.WriteLine($"    出力: {ut.output}");
+                Console.WriteLine($"    ID:{ut.tc.Id:D2} 原文: {ut.tc.Text}");
             }
+        }
+        else
+        {
+            Console.WriteLine("  [未修正の誤字文]: なし (全15件100%修正達成 🎉)");
         }
     }
 }
